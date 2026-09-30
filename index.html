@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What’s in my bag? · Suhani Tiwari</title>
+<meta name="description" content="Everything I carry around, and what each thing says about me. Tap the bag.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,600&family=Caveat:wght@500;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+    <a class="me" href="https://suhanitiwari.com">Suhani <i>Tiwari</i></a>
+    <p class="mono">MIS + Psychology · UT Austin</p>
+</header>
+
+<main>
+    <section class="intro">
+        <h1><span class="q">what’s in</span> <em>my bag?</em></h1>
+        <p class="lede">I carry my whole life in this backpack. Tap it and everything falls out. Tap anything that falls out and it’ll tell you something about me.</p>
+    </section>
+
+    <section class="stage" id="stage" aria-label="My backpack and everything in it">
+        <!-- tiny doodles scattered on the page, like stickers -->
+        <div class="doodles" aria-hidden="true"></div>
+
+        <button class="bag" id="bag" type="button" aria-expanded="false" aria-controls="items">
+            <span class="bag-art" id="bag-art"></span>
+            <span class="bag-hint hand" id="bag-hint">tap to open ↓</span>
+        </button>
+
+        <ul class="items" id="items" aria-label="Things in my bag"></ul>
+    </section>
+
+    <p class="after mono" id="after" hidden>✦ Everything’s out. Tap anything. <button type="button" id="repack" class="link">Pack it back up</button></p>
+</main>
+
+<footer class="foot">
+    <p class="hand">thanks for going through my bag. that’s kind of personal, but i’ll allow it.</p>
+    <p class="mono">© 2026 Suhani Tiwari · <a href="https://suhanitiwari.com">suhanitiwari.com</a></p>
+</footer>
+
+<!-- one sheet, filled by whatever you picked up -->
+<dialog class="sheet" id="sheet">
+    <div class="sheet-bar"><span class="mono" id="sheet-label"></span><button class="x" type="button" data-close aria-label="Put it back">×</button></div>
+    <div class="sheet-body" id="sheet-body"></div>
+</dialog>
+
+<div class="tint" id="tint" aria-hidden="true"></div>
+<div class="toast hand" id="toast" role="status" aria-live="polite"></div>
+
+<script src="items.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
