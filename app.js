@@ -278,14 +278,23 @@ function hairView(state) {
             <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
             <path d="M92 190 h36 v40 q-18 10 -36 0z" fill="#C68E6A" stroke="#3A2626" stroke-width="2.5"/>
             <g class="h-down">
-                <path d="M110 22 C62 22 46 62 50 110 C52 150 40 180 34 214 C28 246 38 270 52 280 C60 270 66 284 76 276 C84 288 96 278 104 286 C114 278 124 290 134 280 C144 288 156 276 164 282 C176 270 186 252 184 222 C180 186 168 150 170 110 C174 62 158 22 110 22Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
-                <path d="M84 40 C70 90 76 130 64 170 C56 200 62 236 60 266 M110 30 C104 90 112 150 104 200 C100 230 108 258 104 280 M136 40 C148 90 142 130 154 170 C162 200 156 236 162 266" fill="none" stroke="#4A3127" stroke-width="2.4" stroke-linecap="round"/>
-                <path d="M70 200 q-8 16 2 30 q8 12 0 26 M150 200 q8 16 -2 30 q-8 12 0 26" fill="none" stroke="#5A3C30" stroke-width="2" stroke-linecap="round"/></g>
+                <path d="M110 20 C72 20 55 48 55 88 C55 112 51 128 45 146 C38 164 49 177 43 195 C37 213 47 227 41 245 C38 256 43 266 49 275 L55 268 L58 285 L66 271 L71 291 L80 275 L85 293 L94 277 L101 295 L110 279 L119 293 L126 277 L135 292 L141 274 L149 289 L154 270 L161 283 L166 268 L171 276 C178 266 183 256 179 244 C173 226 183 212 177 194 C171 176 181 164 175 146 C169 128 165 112 165 88 C165 48 148 20 110 20Z" fill="#2E1C14" stroke="#24150F" stroke-width="2.5" stroke-linejoin="round"/>
+                <g fill="none" stroke-linecap="round">
+                    <path d="M110 22 V58" stroke="#5C3A2A" stroke-width="1.6" opacity=".8"/>
+                    <path d="M100 26 C88 60 90 98 82 128 C74 158 90 178 80 206 C72 232 84 250 76 282" stroke="#4A2C1E" stroke-width="2.4"/>
+                    <path d="M120 26 C132 62 130 98 138 126 C146 156 130 178 140 206 C148 232 136 252 144 284" stroke="#4A2C1E" stroke-width="2.4"/>
+                    <path d="M88 34 C72 70 74 104 64 132 C56 158 70 178 60 204 C54 222 62 238 56 262" stroke="#41271B" stroke-width="2"/>
+                    <path d="M132 34 C148 72 146 104 156 134 C164 160 150 180 160 206 C166 224 158 242 164 264" stroke="#41271B" stroke-width="2"/>
+                    <path d="M108 60 C104 100 112 130 102 160 C94 186 110 208 100 236 C96 254 104 270 98 290" stroke="#4A2C1E" stroke-width="2"/>
+                    <path d="M114 62 C120 100 112 132 122 160 C130 188 116 210 124 238 C128 256 120 272 126 288" stroke="#3E2418" stroke-width="2"/>
+                    <path d="M84 110 C80 140 94 156 86 184 M138 112 C142 140 128 158 136 186 M70 150 C64 170 76 184 70 204" stroke="#5C3324" stroke-width="1.8" opacity=".55"/>
+                    <path d="M66 46 q-7 -7 -12 -4 M74 36 q-4 -8 -10 -8 M150 40 q8 -7 13 -4 M144 32 q5 -8 11 -7 M50 118 q-7 1 -10 -3 M170 150 q7 0 9 -6 M42 196 q-6 3 -9 -1 M178 214 q6 2 8 -3 M52 264 q-4 6 -2 12 M168 266 q4 6 2 11" stroke="#3A2418" stroke-width="1"/>
+                </g></g>
             <g class="h-up">
-                <path d="M110 22 C64 22 50 58 54 104 C56 140 74 176 110 186 C146 176 164 140 166 104 C170 58 156 22 110 22Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M110 22 C64 22 50 58 54 104 C56 140 74 176 110 186 C146 176 164 140 166 104 C170 58 156 22 110 22Z" fill="#2E1C14" stroke="#3A2626" stroke-width="3"/>
                 <path d="M74 50 C88 70 100 86 110 98 M146 50 C132 70 120 86 110 98 M110 26 V98 M64 90 C80 96 96 100 110 102 M156 90 C140 96 124 100 110 102" fill="none" stroke="#4A3127" stroke-width="2" stroke-linecap="round"/></g>
             <g class="h-pony">
-                <path d="M100 104 C84 140 80 180 92 214 C98 234 88 252 98 270 C104 260 112 272 116 262 C124 246 116 228 124 206 C134 176 132 138 120 104Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M100 104 C84 140 92 168 84 196 C78 218 92 232 86 254 L94 262 L96 276 L104 264 L110 280 L114 264 L122 274 L122 258 C130 240 118 224 126 204 C134 176 128 140 120 104Z" fill="#2E1C14" stroke="#3A2626" stroke-width="3"/>
                 <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
                 <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
 
@@ -293,9 +302,9 @@ function hairView(state) {
                 <path d="M60 120 c10 -8 18 8 8 12 c-10 4 -14 -10 -4 -14 c12 -4 16 12 6 16"/><path d="M150 140 c-10 -8 -20 6 -10 12 c10 6 16 -8 6 -12 c-12 -4 -18 12 -6 16"/>
                 <path d="M96 190 c8 -10 22 -2 14 8 c-8 10 -20 0 -12 -8 c8 -8 22 2 14 10"/><path d="M70 230 c10 -6 18 6 8 10 c-10 4 -12 -8 -2 -10"/><path d="M146 220 c-8 -8 -18 4 -8 10 c10 6 14 -8 4 -10"/>
                 <path d="M48 160 l-10 -6 M44 190 l-12 2 M170 170 l12 -4 M176 200 l10 6 M58 250 l-10 8 M164 250 l10 8" stroke="#2A1C17"/></g>
-            <g class="h-braid" id="braid">${Array.from({ length: 9 }, (_, k) => `<g class="seg" data-k="${k}" transform="translate(${110 + (k % 2 ? 7 : -7)} ${118 + k * 16}) rotate(${k % 2 ? -32 : 32})"><ellipse rx="13" ry="9.5" fill="#2A1C17" stroke="#3A2626" stroke-width="2"/><path d="M-7 -2 q7 -6 14 0" fill="none" stroke="#5A3C30" stroke-width="2"/></g>`).join('')}
-                <g class="braid-tie">${window.SCRUNCHIE(110, 262, 11, ...window.SCR_PINK)}</g><path class="braid-end" d="M104 272 q6 14 2 22 M110 272 q2 14 6 20 M116 272 q4 10 0 20" fill="none" stroke="#2A1C17" stroke-width="5" stroke-linecap="round"/></g>
-            <g class="h-comb"><g id="combdrag" transform="translate(0 40)">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 240 100">', '<svg x="38" y="0" width="144" height="60" viewBox="0 0 240 100">')}</g></g>
+            <g class="h-braid" id="braid">${Array.from({ length: 9 }, (_, k) => `<g class="seg" data-k="${k}" transform="translate(${110 + (k % 2 ? 7 : -7)} ${118 + k * 16}) rotate(${k % 2 ? -32 : 32})"><ellipse rx="13" ry="9.5" fill="#2E1C14" stroke="#3A2626" stroke-width="2"/><path d="M-7 -2 q7 -6 14 0" fill="none" stroke="#5A3C30" stroke-width="2"/></g>`).join('')}
+                <g class="braid-tie">${window.SCRUNCHIE(110, 262, 11, ...window.SCR_PINK)}</g><path class="braid-end" d="M104 272 q6 14 2 22 M110 272 q2 14 6 20 M116 272 q4 10 0 20" fill="none" stroke="#2E1C14" stroke-width="5" stroke-linecap="round"/></g>
+            <g class="h-comb"><g id="combdrag" transform="translate(0 40)"><g transform="rotate(-45 110 40)">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 150 150">', '<svg x="50" y="-20" width="120" height="120" viewBox="0 0 150 150">')}</g></g></g>
             <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
         <div class="row hair-btns">
@@ -375,6 +384,37 @@ async function loadWeather() {
     } catch { return null; }
 }
 
+
+/* fairy-gold glitter: a burst of sparkles from a point, drifting down across the whole screen */
+function fairyDust(x, y) {
+    if (reduce) return;
+    const cv = document.createElement('canvas'), d = devicePixelRatio || 1;
+    cv.style.cssText = 'position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:2147483647';
+    cv.width = innerWidth * d; cv.height = innerHeight * d;
+    (sheet.open ? sheet : document.body).appendChild(cv);
+    const ctx = cv.getContext('2d'); ctx.scale(d, d);
+    const cols = ['#F6D365', '#FFE9A8', '#E7B44A', '#FFF6D5', '#F2C14E', '#FFD98A'];
+    const ps = Array.from({ length: 170 }, () => {
+        const a = -Math.PI / 2 - .9 + (Math.random() - .5) * 2.6, v = 3 + Math.random() * 9;
+        return { x, y, vx: Math.cos(a) * v * (Math.random() < .5 ? 1 : 1.4), vy: Math.sin(a) * v, s: .8 + Math.random() * 2.6, c: cols[(Math.random() * cols.length) | 0], star: Math.random() < .35, life: 0, max: 90 + Math.random() * 70, tw: Math.random() * 6 };
+    });
+    const star = (p, r) => { ctx.beginPath(); for (let k = 0; k < 8; k++) { const rr = k % 2 ? r * .35 : r * 1.6, an = k * Math.PI / 4; ctx.lineTo(p.x + Math.cos(an) * rr, p.y + Math.sin(an) * rr); } ctx.closePath(); ctx.fill(); };
+    let f = 0;
+    const step = () => {
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        let alive = 0;
+        for (const p of ps) {
+            if (p.life > p.max) continue; alive++;
+            p.life++; p.vx *= .97; p.vy = p.vy * .97 + .09; p.x += p.vx; p.y += p.vy;
+            const a = Math.max(0, 1 - p.life / p.max) * (.6 + .4 * Math.sin(p.tw + p.life * .3));
+            ctx.globalAlpha = a; ctx.fillStyle = p.c; ctx.shadowColor = '#FFE9A8'; ctx.shadowBlur = 6;
+            if (p.star) star(p, p.s); else { ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2); ctx.fill(); }
+        }
+        if (alive && ++f < 400) requestAnimationFrame(step); else cv.remove();
+    };
+    requestAnimationFrame(step);
+}
+
 /* ---------- picking something up ---------- */
 function pickUp(it) {
     sheetLabel.textContent = it.name;
@@ -393,7 +433,8 @@ const VIEWS = {
         <h2>My <em>perfume</em></h2>
         <p class="note">philosophy amazing grace, ballet rose. front pocket, always.</p>
         <div class="pf-bottle" id="pf-bottle">${ITEMS.find(i => i.id === 'perfume').art}<span class="mist" id="mist" aria-hidden="true">${Array.from({ length: 14 }, (_, k) => `<i style="--k:${k}"></i>`).join('')}</span></div>
-        <div class="row"><button class="btn solid" type="button" id="spritz">Spritz</button></div>`,
+        <p class="hand" style="text-align:center; color:var(--plum); margin:0">press the nozzle ✨</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="spritz">Spritz</button></div>`,
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
         <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
@@ -567,7 +608,7 @@ const VIEWS = {
                 <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip it" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span></button>
                 <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
                 <div class="vgusset"></div>
-                <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>made in italy</small></span></div>
+                <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>LOUIS VUITTON<br>PARIS<br>made in Italy</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
                 <button type="button" class="vbills" id="vbills" aria-label="Bill compartment: take the cash out" aria-pressed="false">${[
                     ['₹500', '#B9B4A8', '#4E4A40'], ['₹200', '#EBC76A', '#6A4A08'], ['₹100', '#B9A9DC', '#3E2E70'], ['$20', '#B7CFAE', '#24401F'], ['$1', '#CFDCC6', '#33502D']
@@ -643,12 +684,14 @@ const VIEWS = {
 
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:200px; height:200px; margin:214px auto 14px; perspective:700px">
+            <p class="cp-hint hand">drag the lid up or down</p>
             <div style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#EDEFF2; overflow:hidden; box-shadow: inset 0 0 0 10px #141011">
                 <img src="assets/img/me.jpg" alt="Me, in the mirror" style="width:100%; height:100%; object-fit:cover; opacity:.92; filter: saturate(.9)">
                 <span style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.55), transparent 45%)"></span>
             </div>
-            <div id="lid" style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#141011; transform-origin:50% 0; transition: transform 1s cubic-bezier(.2,.8,.2,1); display:grid; place-items:center">
-                <span style="width:34%; aspect-ratio:1; border-radius:50%; border:5px solid #E9E4DF"></span>
+            <div id="lid" class="cp-lid">
+                <div class="cp-out"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M27 8 a12 12 0 1 0 0 24" fill="none" stroke="#E9E4DF" stroke-width="4"/><path d="M33 8 a12 12 0 1 1 0 24" fill="none" stroke="#E9E4DF" stroke-width="4"/></svg></div>
+                <div class="cp-in"><span></span></div>
             </div>
         </div>
         <h2>Mirror, mirror: <em>the real me</em></h2>
@@ -876,29 +919,38 @@ function penView({ title, note, list, front, pen, pick }) {
    Names and colors match mine; no numbers, no logos. */
 const VC_CHIP = (x, y) => `<rect x="${x}" y="${y}" width="10" height="8" rx="1.6" fill="#E3C46E" stroke="#8A6A2A" stroke-width=".5"/><path d="M${x} ${y + 4} h10 M${x + 5} ${y} v8" stroke="#A88A3E" stroke-width=".4"/>`;
 const VC_TAP = (x, y, c) => `<path d="M${x} ${y} q2 2.5 0 5 M${x + 2} ${y - 1} q3 3.5 0 7 M${x + 4} ${y - 2} q4 4.5 0 9" fill="none" stroke="${c}" stroke-width=".8" stroke-linecap="round"/>`;
+const BOFA_FLAG = (x, y, c, w = 1) => `<g transform="translate(${x} ${y}) scale(${w})" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"><path d="M0 6 l5 -6 h9"/><path d="M3 9 l5 -6 h9"/><path d="M6 12 l5 -6 h9"/></g>`;
 const VCARD = {
-    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F5FC9"/><stop offset=".55" stop-color="#3D86E6"/><stop offset="1" stop-color="#1A4FAE"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vab)"/><circle cx="24" cy="44" r="17" fill="#8DBDF4" opacity=".35"/><circle cx="24" cy="44" r="12" fill="none" stroke="#C9E0FB" stroke-width=".6" opacity=".6"/>
-        ${VC_CHIP(30, 12)}<text transform="translate(9 10) rotate(90)" font-family="Instrument Sans" font-size="4" fill="#EAF3FF" letter-spacing=".4">SUHANI TIWARI</text>
-        <text transform="translate(44 44) rotate(90)" font-family="Bodoni Moda, serif" font-weight="600" font-size="6" fill="#fff" letter-spacing=".3">AMERICAN</text><text transform="translate(37 48) rotate(90)" font-family="Bodoni Moda, serif" font-weight="600" font-size="6" fill="#fff" letter-spacing=".3">EXPRESS</text>
-        <text x="8" y="78" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(30, 72, '#EAF3FF')}</svg>`,
-    amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B8963E"/><stop offset=".45" stop-color="#E4CB7C"/><stop offset="1" stop-color="#B08A33"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 L40 0 L8 46 L0 40Z" fill="#fff" opacity=".18"/><path d="M8 46 L40 0 L54 0 L54 18Z" fill="#8A6A2A" opacity=".14"/>
-        ${VC_CHIP(32, 14)}<text transform="translate(9 8) rotate(90)" font-family="Instrument Sans" font-size="4" fill="#3A2C10" letter-spacing=".4">SUHANI TIWARI</text>
-        <text transform="translate(46 32) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="4.6" fill="#2E2410" letter-spacing=".5">AMERICAN EXPRESS</text>
-        <text transform="translate(39 46) rotate(90)" font-family="Bodoni Moda, serif" font-size="5.6" fill="#2E2410" letter-spacing=".6">SKYMILES</text><text transform="translate(39 36) rotate(90)" font-family="Instrument Sans" font-size="3" fill="#2E2410">DELTA</text>
-        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(30, 74, '#3A2C10')}</svg>`,
-    bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A9ADB4"/><stop offset=".5" stop-color="#E2E4E8"/><stop offset="1" stop-color="#9DA1A8"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 30 L54 10 V24 L0 44Z" fill="#fff" opacity=".22"/>
-        ${VC_CHIP(32, 12)}<circle cx="12" cy="10" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/>
-        <text transform="translate(16 30) rotate(90)" font-family="Instrument Sans" font-size="3.6" fill="#33373D" letter-spacing=".8">BANK OF AMERICA</text>
-        <text x="40" y="78" font-family="Instrument Sans" font-style="italic" font-size="3" fill="#33373D" text-anchor="middle">Signature</text>${VC_TAP(10, 74, '#33373D')}</svg>`,
+    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1857C4"/><stop offset=".5" stop-color="#2E80E3"/><stop offset="1" stop-color="#1A55BE"/></linearGradient><radialGradient id="vabm" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#9CCBF7"/><stop offset="1" stop-color="#5FA2EC"/></radialGradient></defs>
+        <rect width="54" height="86" fill="url(#vab)"/>
+        <circle cx="24" cy="44" r="18" fill="url(#vabm)" opacity=".9"/><circle cx="24" cy="44" r="18" fill="none" stroke="#CFE5FB" stroke-width=".6"/>
+        <g fill="#2E80E3" opacity=".75"><path d="M17 56 c0 -8 3 -13 8 -14 c2 -4 7 -6 10 -2 c-3 0 -4 2 -4 4 c3 2 3 7 0 10 c2 2 1 4 -1 4z"/><path d="M24 42 c-1 -8 4 -14 12 -13 c-4 2 -6 5 -6 8 z"/><path d="M27 33 c3 -6 9 -8 13 -6 c-5 1 -8 3 -10 7z"/></g>
+        ${VC_CHIP(32, 9)}<text transform="translate(8 9) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#EAF3FF" letter-spacing=".5">SUHANI TIWARI</text>
+        <rect x="38.5" y="44" width="11" height="36" fill="none" stroke="#fff" stroke-width=".5" opacity=".7"/>
+        <text transform="translate(46.5 46) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.6" fill="#fff" letter-spacing=".2">AMERICAN</text><text transform="translate(41.5 48) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.6" fill="#fff" letter-spacing=".4">EXPRESS</text>
+        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(28, 76, '#EAF3FF')}</svg>`,
+    amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
+        ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
+        <text transform="translate(47 30) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#2A200C" letter-spacing=".3">AMERICAN EXPRESS</text>
+        <path d="M41 30 l3 -4.5 3 4.5z" fill="#C0272D" transform="translate(-2 0)"/><text transform="translate(41 33) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="3.2" fill="#2A200C">DELTA</text>
+        <text transform="translate(41 47) rotate(90)" font-family="Instrument Sans" font-size="5" fill="#2A200C" letter-spacing=".8">SKYMILES</text>
+        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}</svg>`,
+    bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A6AAB1"/><stop offset=".5" stop-color="#E4E6EA"/><stop offset="1" stop-color="#9A9EA6"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 34 L54 14 V26 L0 46Z" fill="#fff" opacity=".22"/>
+        ${VC_CHIP(32, 12)}<circle cx="11" cy="9" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/><path d="M9.6 9 h2.8 M11 7.6 v2.8" stroke="#5E646C" stroke-width=".5"/>
+        ${BOFA_FLAG(16, 24, '#4A4F57', 1.1)}
+        <text transform="translate(20 40) rotate(90)" font-family="Instrument Sans" font-weight="600" font-size="3" fill="#33373D" letter-spacing=".9">BANK OF AMERICA</text>
+        <text transform="translate(44 62) rotate(90)" font-family="Instrument Sans" font-weight="800" font-style="italic" font-size="6" fill="#1A1F71">VISA</text><text transform="translate(39 62) rotate(90)" font-family="Instrument Sans" font-style="italic" font-size="2.6" fill="#33373D">Signature</text>
+        ${VC_TAP(10, 76, '#33373D')}</svg>`,
     bofadebit: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C21F2B"/><stop offset=".5" stop-color="#E2403C"/><stop offset="1" stop-color="#B51C27"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vbr)"/><path d="M54 0 L0 60 V40 L36 0Z" fill="#fff" opacity=".07"/>
-        ${VC_CHIP(22, 12)}${VC_TAP(36, 14, '#fff')}
-        <text x="27" y="44" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="3.8" fill="#fff" letter-spacing=".8">BANK OF AMERICA</text>
-        <text x="44" y="66" text-anchor="end" font-family="Instrument Sans" font-weight="600" font-size="4.4" fill="#fff">debit</text>
-        <circle cx="10" cy="76" r="3.4" fill="none" stroke="#fff" stroke-width=".7"/><path d="M8.5 76 l1.5 -1.5 1.5 1.5" fill="none" stroke="#fff" stroke-width=".6"/></svg>`
+        ${VC_CHIP(22, 11)}${VC_TAP(36, 13, '#fff')}
+        ${BOFA_FLAG(18, 32, '#fff', 1.05)}
+        <text x="27" y="52" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="3.6" fill="#fff" letter-spacing=".8">BANK OF AMERICA</text>
+        <text x="46" y="66" text-anchor="end" font-family="Instrument Sans" font-weight="600" font-size="4.6" fill="#fff">debit</text>
+        <circle cx="38" cy="76" r="4.4" fill="#EB001B"/><circle cx="44" cy="76" r="4.4" fill="#F79E1B" opacity=".9"/><path d="M41 72.6 a4.4 4.4 0 0 1 0 6.8 a4.4 4.4 0 0 1 0 -6.8z" fill="#FF5F00"/>
+        <path d="M8 74 l2 -3 2 3 M13 75 l-1 3 -3 0 M7 76 l1 3 h3" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"/></svg>`
 };
 
 function cardHTML(c, i) {
@@ -963,7 +1015,18 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
-    perfume: () => { let n = 0; $('#spritz').onclick = () => { const m = $('#mist'); m.classList.remove('go'); void m.offsetWidth; m.classList.add('go'); n++; toast(n === 1 ? 'ballet rose ♡ you smell that?' : n < 4 ? 'one more. for good luck.' : 'okay that’s enough, it’s a small elevator'); }; },
+    perfume: () => {
+        let n = 0;
+        const bottle = $('#pf-bottle'), cap = bottle.querySelector('svg rect');
+        const spritz = () => {
+            cap.style.transition = 'transform .12s'; cap.style.transform = 'translateY(4px)';
+            setTimeout(() => { cap.style.transform = ''; }, 160);
+            const r = bottle.getBoundingClientRect();
+            fairyDust(r.left + r.width * .38, r.top + r.height * .04);
+            n++; toast(n === 1 ? 'ballet rose ♡ and a little fairy dust' : n < 4 ? 'one more. for good luck ✨' : 'okay that’s enough, it’s a small elevator');
+        };
+        $('#spritz').onclick = spritz; bottle.onclick = spritz; bottle.style.cursor = 'pointer';
+    },
     boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
     padfolio: () => { $('#bc').onclick = () => { const f = $('#bc').classList.toggle('flip'); if (f) toast('take one. seriously ♡'); }; },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
@@ -1432,7 +1495,17 @@ const AFTER = {
         });
     },
 
-    mirror: () => setTimeout(() => { const lid = $('#lid'); if (lid) lid.style.transform = 'rotateX(170deg)'; }, reduce ? 0 : 450),
+    mirror: () => {
+        const lid = $('#lid'), cp = $('#compact');
+        let ang = 0, drag = null;
+        const setAng = (a, anim) => { ang = Math.max(0, Math.min(170, a)); lid.style.transition = anim ? 'transform .9s cubic-bezier(.2,.8,.2,1)' : 'none'; lid.style.transform = `rotateX(${ang}deg)`; };
+        setTimeout(() => setAng(170, true), reduce ? 0 : 450);
+        cp.style.touchAction = 'none';
+        cp.addEventListener('pointerdown', e => { drag = { y: e.clientY, a: ang }; try { cp.setPointerCapture(e.pointerId); } catch {} });
+        cp.addEventListener('pointermove', e => { if (drag) setAng(drag.a + (drag.y - e.clientY) * .9); });
+        const up = () => { if (!drag) return; drag = null; if (ang < 12) { setAng(0, true); toast('snap. closed.'); } else if (ang > 160) setAng(170, true); };
+        cp.addEventListener('pointerup', up); cp.addEventListener('pointercancel', up);
+    },
 
     sitara: () => {
         const chat = $('#chat');

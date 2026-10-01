@@ -1276,3 +1276,11 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 #braid .braid-tie, #braid .braid-end { opacity: 0; transition: opacity .3s; }
 .hairdo.braided #braid .braid-tie, .hairdo.braided #braid .braid-end { opacity: 1; }
 .hair-hint { min-height: 1.4em; margin: 0; text-align: center; color: var(--plum); font-size: 1.15rem; }
+
+/* Chanel compact: drag the lid open and closed; the inside of the lid is a mirror too */
+.cp-lid { position: absolute; inset: 0; transform-origin: 50% 0; transform-style: preserve-3d; cursor: grab; }
+.cp-out, .cp-in { position: absolute; inset: 0; border-radius: 22%; border: 3px solid var(--ink); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.cp-out { background: #141011; display: grid; place-items: center; } .cp-out svg { width: 46%; }
+.cp-in { transform: rotateX(180deg); background: #141011; padding: 10px; }
+.cp-in span { display: block; width: 100%; height: 100%; border-radius: 18%; background: linear-gradient(135deg, #F4F6F8 0%, #C9CED4 45%, #EEF1F4 60%, #B9BFC6 100%); }
+.cp-hint { position: absolute; top: -206px; left: 50%; transform: translateX(-50%); white-space: nowrap; color: var(--plum); font-size: 1.05rem; margin: 0; opacity: .8; }
