@@ -1546,7 +1546,12 @@ const VIEWS = {
 
     sitara: () => `
         <h2>Hi, I’m <em>Sitara</em></h2>
-        <p class="note">suhani’s AI guide, and the charm on her bag</p>
+        <p class="note">suhani’s AI guide, and the charm on her bag. there’s a cozy vanilla almond hand sanitizer inside. go ahead, squirt some.</p>
+        <div class="sani" id="sani">
+            <button type="button" class="sani-charm" id="sani-charm" aria-label="Squeeze the hand sanitizer">${BAG.charm}</button>
+            <svg class="sani-hand" viewBox="0 0 200 110" aria-hidden="true"><path d="M14 70 C10 50 40 44 60 50 C90 58 120 58 150 50 C172 44 192 52 188 70 C182 96 140 106 100 106 C60 106 18 96 14 70Z" fill="#E9B998" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M40 66 C70 80 130 80 160 66" fill="none" stroke="#CF9877" stroke-width="2" stroke-linecap="round"/><ellipse id="sani-pool" cx="100" cy="72" rx="0" ry="0" fill="#EAF6FF" stroke="#B9D6EC" stroke-width="1.5" opacity=".9"/><ellipse id="sani-shine" cx="92" cy="68" rx="0" ry="0" fill="#fff"/></svg>
+        </div>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="sani-go">Squirt some</button><button class="btn" type="button" id="sani-rub" hidden>Rub it in</button></div>
         <div class="chat" id="chat" aria-live="polite"></div>
         <div class="row" id="chips">
             <button class="btn" type="button" data-q="0">What does she actually do?</button>
@@ -2543,6 +2548,35 @@ const AFTER = {
     },
 
     sitara: () => {
+        // the sanitizer inside my charm: squeeze, a glob drops into your hand, rub it in
+        let globs = 0;
+        const squirt = () => {
+            const charm = $('#sani-charm'), hand = sheetBody.querySelector('.sani-hand'), sani = $('#sani');
+            if (globs >= 4) return toast('your hands are clean. like, medically clean. stop.');
+            charm.classList.remove('squeeze'); void charm.offsetWidth; charm.classList.add('squeeze');
+            const c = charm.getBoundingClientRect(), h = hand.getBoundingClientRect(), b = sani.getBoundingClientRect();
+            const drop = document.createElement('span'); drop.className = 'sani-drop';
+            drop.style.left = (c.left + c.width * .49 - b.left) + 'px'; drop.style.top = (c.top + c.height * .93 - b.top) + 'px';
+            drop.style.setProperty('--fall', (h.top + h.height * .6 - (c.top + c.height * .93)) + 'px');
+            sani.appendChild(drop);
+            setTimeout(() => {
+                drop.remove(); globs++;
+                const pool = $('#sani-pool'), shine = $('#sani-shine');
+                pool.setAttribute('rx', 10 + globs * 7); pool.setAttribute('ry', 4 + globs * 2.2); shine.setAttribute('rx', 2 + globs); shine.setAttribute('ry', 1 + globs * .5);
+                $('#sani-rub').hidden = false;
+                toast(['squish. cozy vanilla almond ✨', 'a little more never hurt', 'okay that’s a generous amount', 'that’s a puddle. rub it in.'][globs - 1]);
+            }, reduce ? 0 : 520);
+        };
+        $('#sani-go').onclick = squirt; $('#sani-charm').onclick = squirt;
+        $('#sani-rub').onclick = () => {
+            const hand = sheetBody.querySelector('.sani-hand');
+            hand.classList.remove('rub'); void hand.getBoundingClientRect(); hand.classList.add('rub');
+            setTimeout(() => {
+                $('#sani-pool').setAttribute('rx', 0); $('#sani-pool').setAttribute('ry', 0); $('#sani-shine').setAttribute('rx', 0); $('#sani-shine').setAttribute('ry', 0);
+                const r = hand.getBoundingClientRect(); fairyDust(r.left + r.width / 2, r.top + r.height / 2);
+                globs = 0; $('#sani-rub').hidden = true; toast('clean hands, smelling like a vanilla latte ♡');
+            }, reduce ? 0 : 900);
+        };
         const chat = $('#chat');
         const answers = [
             'She studies why people choose what they choose, then builds around it. MIS and Psychology at UT Austin, with internships at Oracle, Acacia Advisors and Outlier.',
