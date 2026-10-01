@@ -264,14 +264,16 @@ window.ITEMS = [
         open: 'haircomb'
     },
     {
-        id: 'cap', name: 'my brown cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
-        art: `<svg viewBox="0 0 160 110"><path d="M28 72 C26 26 70 8 104 18 C128 26 140 46 138 70Z" fill="#5C4535" ${S}/>
-            <path d="M82 13 C84 34 84 54 82 72 M58 18 C52 36 50 54 52 72 M112 22 C120 38 124 54 124 70" fill="none" stroke="#4A3628" stroke-width="2"/>
-            <circle cx="84" cy="13" r="4" fill="#5C4535" stroke="#3A2626" stroke-width="2"/><circle cx="66" cy="34" r="1.8" fill="#3A2A20"/><circle cx="104" cy="34" r="1.8" fill="#3A2A20"/>
-            <path d="M70 44 q10 -10 20 0" fill="none" stroke="#4A3628" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
-            <path d="M18 72 Q80 86 146 70 Q150 92 96 100 Q38 102 18 72Z" fill="#4E3A2C" ${S}/>
-            <path d="M30 78 Q80 90 136 76 M38 84 Q82 95 128 82" fill="none" stroke="#6B5444" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <path d="M40 30 q16 -14 36 -16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".12"/></svg>`,
+        id: 'cap', name: 'my pink ny cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
+        art: `<svg viewBox="0 0 180 128"><defs><linearGradient id="capg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F7D3D4"/><stop offset=".6" stop-color="#F2C2C4"/><stop offset="1" stop-color="#E9AFB2"/></linearGradient></defs>
+            <path d="M42 80 C34 42 64 14 104 15 C142 16 168 40 167 76 C150 71 122 67 94 67 C72 67 54 72 42 80Z" fill="url(#capg)" ${S}/>
+            <path d="M104 16 C98 34 94 50 93 67 M104 16 C126 26 140 46 146 70 M104 16 C80 22 60 38 50 62" fill="none" stroke="#DFA2A6" stroke-width="1.8"/>
+            <circle cx="104" cy="16" r="4" fill="#F2C2C4" stroke="#3A2626" stroke-width="2"/><circle cx="74" cy="34" r="1.4" fill="#C98E92"/><circle cx="128" cy="30" r="1.4" fill="#C98E92"/>
+            <g transform="translate(76 56) rotate(-6)" font-family="Bodoni Moda, Georgia, serif" font-weight="700" font-style="italic" font-size="34"><g fill="#D99A9F" transform="translate(1.2 1.6)"><text x="0" y="0">N</text><text x="15" y="5">Y</text></g><g fill="#FFF8EE" stroke="#CDB39E" stroke-width=".9"><text x="0" y="0">N</text><text x="15" y="5">Y</text></g></g>
+            <text x="156" y="66" font-family="Instrument Sans" font-weight="700" font-size="7" fill="#FBF3EA" transform="rotate(-8 156 66)">47</text>
+            <path d="M42 80 C62 70 112 66 152 75 C146 96 112 112 74 115 C46 117 22 112 12 106 C18 96 30 86 42 80Z" fill="#F4C9CB" ${S}/>
+            <path d="M24 102 C44 92 96 82 142 80 M30 107 C52 97 100 88 138 86 M36 111 C58 102 102 94 132 92" fill="none" stroke="#E2A9AD" stroke-width="1.1" stroke-dasharray="3 2.5"/>
+            <path d="M56 26 q20 -12 46 -10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".45"/></svg>`,
         open: 'cap'
     },
     {
