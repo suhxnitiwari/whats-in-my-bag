@@ -157,7 +157,12 @@ window.SKIN = {
         <path d="M10 46 h90 l-4 40 q-1 8 -9 8 h-64 q-8 0 -9 -8z" fill="#F6E4E4" stroke="#3A2626" stroke-width="2.4"/><path d="M14 74 l10 20 M30 78 l6 16 M80 78 l-6 16 M96 74 l-10 20 M14 74 h82" stroke="#E2CACA" stroke-width="1.4" fill="none"/>
         <text x="55" y="62" text-anchor="middle" font-family="Bodoni Moda" font-size="9.5" fill="#9A7414" letter-spacing=".8">SUPREMŸA</text><text x="55" y="71" text-anchor="middle" font-family="Bodoni Moda" font-size="5.2" fill="#9A7414" letter-spacing=".6">LA NUIT</text>
         <g class="top"><rect x="8" y="22" width="94" height="26" rx="3" fill="url(#sksy)" stroke="#3A2626" stroke-width="2.4"/>${Array.from({ length: 9 }, (_, k) => `<path d="M10 ${25 + k * 2.6} h90" stroke="#fff" stroke-width=".5" opacity=".35"/>`).join('')}</g>
-        <ellipse class="dab" cx="55" cy="47" rx="40" ry="4" fill="#FBF1EE"/></svg>`
+        <ellipse class="dab" cx="55" cy="47" rx="40" ry="4" fill="#FBF1EE"/></svg>`,
+    mask: `<svg viewBox="0 0 130 80"><defs><linearGradient id="skmk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBF7EC"/><stop offset="1" stop-color="#EAE1CC"/></linearGradient></defs>
+        <path d="M22 26 C34 6 96 6 108 26" fill="none" stroke="#EFE6D2" stroke-width="7" stroke-linecap="round"/><path d="M22 26 C34 6 96 6 108 26" fill="none" stroke="#D8CCB2" stroke-width="7" stroke-dasharray="2 3" stroke-linecap="round"/>
+        <path d="M10 40 C10 22 40 20 65 26 C90 20 120 22 120 40 C120 60 100 72 84 70 C76 69 70 60 65 58 C60 60 54 69 46 70 C30 72 10 60 10 40Z" fill="url(#skmk)" stroke="#3A2626" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M15 40 C15 26 40 25 65 30 C90 25 115 26 115 40 C115 56 99 66 85 65 C77 64 71 56 65 54 C59 56 53 64 45 65 C31 66 15 56 15 40Z" fill="none" stroke="#D9CDB4" stroke-width="1.6"/>
+        <path d="M30 36 q8 -4 18 -2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/></svg>`
 };
 
 /* my jewelry: drawn from the real pieces */

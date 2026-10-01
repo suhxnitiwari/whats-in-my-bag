@@ -2372,3 +2372,8 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .bk-s { flex: 1; line-height: 1.5; }
 .bk-pg { position: absolute; bottom: 9px; font-size: .68rem; color: var(--muted); letter-spacing: .04em; }
 .bk-pg.l { left: 18px; } .bk-pg.r { right: 18px; }
+
+/* skincare: brighter under-eyes after la mer, then the eye mask photo as the last step */
+.face .face-lamer, .face .face-mask { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .9s ease; }
+.face.lamer .face-lamer, .face.masked .face-mask { opacity: 1; }
+.face.masked [data-fx="lashes"] { opacity: 0 !important; }

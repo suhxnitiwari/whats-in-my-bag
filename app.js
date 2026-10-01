@@ -944,16 +944,18 @@ const SKIN_INFO = {
     lamer: ['La Mer The Eye Concentrate', 'lid off, a tap with the little wand.', 'la mer'],
     sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley'],
     lash: ['Grande Cosmetics GrandeLASH-MD Lash Enhancing Serum', 'one swipe along my lash line.', 'grandelash'],
-    laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige']
+    laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige'],
+    mask: ['Olivia von Halle Audrey Aspen Eye Mask, ivory cashmere', 'ivory cashmere. lights out.', 'eye mask']
 };
 // my night routine, in order. patches go on clean, dry skin first and come off before the rest
-const ROUTINE = ['patches', 'pinkpump', 'dropper', 'lash', 'goldpump', 'laneige', 'lamer', 'sisley'];
+const ROUTINE = ['patches', 'pinkpump', 'dropper', 'lash', 'goldpump', 'laneige', 'lamer', 'sisley', 'mask'];
 // what each one does when it lands on me
 const SKIN_FX = {
     dropper: [null, 'eye activator on. a drop under each eye, patted in.'], pinkpump: [null, 'skin activator serum on. patted in.'], goldpump: [null, 'suprême c on. vitamin c, patted in.'],
     lamer: [null, 'la mer under both eyes, with the little spoon. as it should be.'], sisley: [null, 'sisley on. night cream, all over.'],
     lash: ['lashes', 'grandelash on. lashes, but more.'],
-    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy. tap them on my face to peel them off.']
+    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy. tap them on my face to peel them off.'],
+    mask: [null, 'eye mask on. ivory cashmere. goodnight ✨']
 };
 // amaira's cards, redrawn: her words, her spelling, her colors
 const KM = 'font-family="Kalam, Caveat, cursive"';
@@ -1110,7 +1112,7 @@ const VIEWS = {
         <p class="note">another victoria’s secret pouch, just for skincare. here’s everything in it ↓</p>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['patches', 120, -147, -35, 0, -34], ['pinkpump', 190, -105, -25, 0, -6], ['dropper', 172, -63, -15, 0, 0], ['lash', 176, -21, -5, 0, 0], ['goldpump', 190, 21, 5, 0, 0], ['laneige', 64, 63, 15, 0, -40], ['lamer', 84, 108, 25, 0, -40], ['sisley', 86, 155, 35, 0, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['patches', 120, -168, -36, 0, -34], ['pinkpump', 190, -126, -27, 0, -6], ['dropper', 172, -84, -18, 0, 0], ['lash', 176, -42, -9, 0, 0], ['goldpump', 190, 0, 0, 0, 0], ['laneige', 64, 42, 9, 0, -40], ['lamer', 84, 84, 18, 0, -40], ['sisley', 86, 126, 27, 0, -40], ['mask', 64, 170, 36, 0, -30]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -1130,7 +1132,7 @@ const VIEWS = {
         <div class="routine-wrap">
             <ol class="routine" id="routine">${ROUTINE.map(k => `<li data-step="${k}">${SKIN_INFO[k][0]}</li>`).join('')}</ol>
             <div class="face" id="face">
-                <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-patched" src="assets/img/me-skin-patches.jpg" alt="" aria-hidden="true"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true">
+                <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-patched" src="assets/img/me-skin-patches.jpg" alt="" aria-hidden="true"><img class="face-lamer" src="assets/img/me-skin-lamer.jpg" alt="" aria-hidden="true"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true"><img class="face-mask" src="assets/img/me-skin-mask.jpg" alt="" aria-hidden="true">
                 <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
                         <filter id="fx-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
                         <filter id="fx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
@@ -2004,11 +2006,13 @@ const AFTER = {
             if (fx) face.querySelector(`[data-fx="${fx}"]`).classList.add('on');
             else { const r = face.getBoundingClientRect(); fairyDust(r.left + r.width * .42, r.top + r.height * .52); }
             if (k === 'patches') { patchesOn = true; face.classList.add('patched'); }
+            if (k === 'lamer') face.classList.add('lamer');   // under-eyes brighter after la mer
+            if (k === 'mask') face.classList.add('masked');   // and the eye mask goes on last
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
             refresh();
             toast(line);
             // last step done: lights out
-            if (applied.size === ROUTINE.length) { clearTimeout(face.zzz); face.zzz = setTimeout(() => { face.classList.add('asleep'); toast('and… i’m out. goodnight 💤'); }, reduce ? 0 : 1800); }
+            if (applied.size === ROUTINE.length) { clearTimeout(face.zzz); face.zzz = setTimeout(() => toast('and… i’m out. goodnight 💤'), reduce ? 0 : 1800); }
         };
         // la mer goes on with its little spoon, under my eyes only
         const spoon = $('#lm-spoon'), touched = new Set();
@@ -2093,7 +2097,7 @@ const AFTER = {
             const k = b.dataset.sk, used = b.classList.toggle('use');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const lbl = $('#swatch-label'), sw = $('#swatch');
-            $('#swipe').setAttribute('stroke', { dropper: '#F7D3DD', pinkpump: '#FBEDE6', goldpump: '#E8C9A8', patches: '#E2B23A', lamer: '#F1E9DD', sisley: '#F7E6E2' }[k]);
+            $('#swipe').setAttribute('stroke', { dropper: '#F7D3DD', pinkpump: '#FBEDE6', goldpump: '#E8C9A8', patches: '#E2B23A', lamer: '#F1E9DD', sisley: '#F7E6E2', mask: '#EFE6D2' }[k]);
             $('#swipe').setAttribute('stroke-width', 16);
             lbl.textContent = `${SKIN_INFO[k][0]} · ${used ? SKIN_INFO[k][1] : 'back on.'}`; lbl.style.color = 'var(--plum)';
             sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on');
