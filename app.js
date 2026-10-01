@@ -275,6 +275,7 @@ const VIEWS = {
         <div class="fob" id="fob">${ITEMS.find(i => i.id === 'keys').art}</div>
         <h2>My BMW keys</h2>
         <p class="note" style="font-size:1.8rem">whoops, i’m just a girl 🎀</p>
+        <p class="note" style="margin-top:-12px">(it’s the curb’s fault. it came out of nowhere.)</p>
         <div class="fob-btns">
             <button class="btn" type="button" data-fob="lock">🔒 Lock</button>
             <button class="btn" type="button" data-fob="unlock">🔓 Unlock</button>
