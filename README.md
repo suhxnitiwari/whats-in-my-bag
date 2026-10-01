@@ -10,8 +10,8 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Sketchbook | A flip-through of my digital art |
 | Westman Atelier lipstick (Glögg), Lancôme Lash Idôle, Victoria's Secret makeup pouch | Makeup loves and skips (Morphe brushes included) |
 | Wallet | Pops open to my cards: my UT Austin student ID, Oracle, Acacia Advisors, Outlier, Girls Who Code |
-| Mildliner pouch | Highlighters that fan out: every tool I use (Python, SQL, C#, JavaScript, Snowflake, Tableau, Power BI, Excel) |
-| Paper Mate pouch | Gel pens: my top five CliftonStrengths |
+| Mildliner pouch | The full 25-pack: one highlighter for every tool on my résumé |
+| Paper Mate pouch | InkJoy Gel 30-pack: one pen per strength (CliftonStrengths, DISC, RIASEC), plus my BIC mechanical pencils |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
@@ -20,7 +20,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Cable knit sweater | Because I get cold easily |
-| Bath & Body Works caramel frappuccino charm | Sitara, my AI guide, lives in it |
+| Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
 
 ## Built with
 

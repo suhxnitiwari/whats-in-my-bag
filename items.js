@@ -33,7 +33,8 @@ window.BAG = {
         <rect x="140" y="170" width="20" height="132" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
         <path d="M140 208 h20 M140 284 h20" stroke="#D23B3B" stroke-width="4"/>
     </svg>`,
-    /* my bag charm: a Bath & Body Works caramel frappuccino with whipped cream, and it smiles back */
+    /* my bag charm: a Bath & Body Works caramel frappuccino PocketBac holder (whipped cream, smiles back),
+       with a White Barn Cozy Vanilla Almond hand sanitizer inside, gold cap poking out the bottom */
     charm: `<svg viewBox="0 0 90 120" aria-hidden="true">
         <circle cx="45" cy="8" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
         <path d="M45 15 v10" stroke="#B9BCC2" stroke-width="4"/>
@@ -45,7 +46,7 @@ window.BAG = {
         <path d="M70 56 q16 0 16 14 q0 14 -16 14" fill="none" stroke="#F4F2F0" stroke-width="2"/>
         <circle cx="34" cy="66" r="2.6" fill="${INK}"/><circle cx="54" cy="66" r="2.6" fill="${INK}"/>
         <path d="M36 76 q8 7 16 0" fill="none" ${S} stroke-width="2.5"/>
-        <rect x="20" y="96" width="48" height="16" rx="6" fill="#D8B48A" ${S} stroke-width="2.5"/>
+        <rect x="22" y="80" width="44" height="18" rx="4" fill="#E2A257" opacity=".55"/><g fill="#5B3A20" opacity=".6"><circle cx="30" cy="88" r="1.3"/><circle cx="44" cy="84" r="1.1"/><circle cx="56" cy="90" r="1.3"/><circle cx="38" cy="93" r="1"/></g><path d="M20 96 h48 v8 c0 8 -8 12 -24 12 c-16 0 -24 -4 -24 -12z" fill="#C8994E" ${S} stroke-width="2.5"/><path d="M28 100 q8 -3 16 0" fill="none" stroke="#F1D49A" stroke-width="2" stroke-linecap="round"/>
     </svg>`
 };
 
@@ -83,12 +84,12 @@ window.ITEMS = [
     },
     {
         id: 'pouch', name: 'my mildliner pouch', l: 10, t: 81, w: 9.5, r: -10,
-        art: `<svg viewBox="0 0 130 170"><g>${['#F7D54A', '#B9A3E8', '#F29B6B', '#F4A7B9', '#8FD19E', '#8CC4F0'].map((c, i) => `<g transform="rotate(${(i - 2.5) * 9} 65 120)"><rect x="58" y="10" width="14" height="110" rx="4" fill="#FFFDF9" ${S} stroke-width="2"/><rect x="58" y="4" width="14" height="18" rx="4" fill="${c}" ${S} stroke-width="2"/></g>`).join('')}</g><path d="M14 74 C14 64 116 64 116 74 L110 158 C108 166 22 166 20 158Z" fill="#F7F4F1" ${S}/><path d="M14 74 C40 84 90 84 116 74" fill="none" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 74 C40 84 90 84 116 74" fill="none" ${S} stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="42" cy="122" r="11" fill="#8E2D6E" ${S} stroke-width="2"/><circle cx="38" cy="119" r="1.6" fill="#fff"/><circle cx="46" cy="119" r="1.6" fill="#fff"/><path d="M37 125 q5 5 10 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M112 78 l6 10" ${S} stroke-width="2"/><rect x="113" y="86" width="8" height="12" rx="3" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
+        art: `<svg viewBox="0 0 130 170"><g>${['#F7E06B', '#B9A3E8', '#F29B6B', '#F4A7B9', '#8FD19E', '#8CC4F0', '#E8A1C4', '#F2C572', '#9ED3C3'].map((c, i) => `<g transform="rotate(${(i - 4) * 6.5} 65 120)"><rect x="58" y="10" width="14" height="110" rx="4" fill="#FFFDF9" ${S} stroke-width="2"/><rect x="58" y="4" width="14" height="18" rx="4" fill="${c}" ${S} stroke-width="2"/></g>`).join('')}</g><path d="M14 74 C14 64 116 64 116 74 L110 158 C108 166 22 166 20 158Z" fill="#F7F4F1" ${S}/><path d="M14 74 C40 84 90 84 116 74" fill="none" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 74 C40 84 90 84 116 74" fill="none" ${S} stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="42" cy="122" r="11" fill="#8E2D6E" ${S} stroke-width="2"/><circle cx="38" cy="119" r="1.6" fill="#fff"/><circle cx="46" cy="119" r="1.6" fill="#fff"/><path d="M37 125 q5 5 10 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M112 78 l6 10" ${S} stroke-width="2"/><rect x="113" y="86" width="8" height="12" rx="3" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
         open: 'mildliners'
     },
     {
         id: 'penpouch', name: 'my paper mate pouch', l: 23, t: 84, w: 14, r: 5,
-        art: `<svg viewBox="0 0 230 110"><g>${['#2E4A7A', '#D9467A', '#B36FD1', '#E86CA5', '#7FC6E8', '#8E3BA8'].map((c, i) => `<rect x="${34 + i * 22}" y="${4 + (i % 3) * 5}" width="12" height="40" rx="5" fill="${c}" ${S} stroke-width="2"/>`).join('')}</g><rect x="10" y="30" width="210" height="74" rx="18" fill="#F6CFD6" ${S}/><path d="M160 30 C190 30 214 40 220 60 L220 44 C220 36 214 30 206 30Z" fill="#F8E7A9" opacity=".9"/><path d="M150 32 q30 10 70 32" fill="none" stroke="#F8E7A9" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M26 44 H204" ${S} stroke-dasharray="5 5"/><rect x="150" y="76" width="48" height="16" rx="2" fill="#FFFBF2" ${S} stroke-width="1.5"/><text x="174" y="87" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="${INK}" letter-spacing=".5">CICIMELON</text><circle cx="212" cy="46" r="5" fill="#C9CCD2" ${S} stroke-width="1.5"/></svg>`,
+        art: `<svg viewBox="0 0 230 110"><g>${['#E63F7A', '#7B4FD1', '#1F6FD1', '#18A39A', '#F0592B', '#D6336C', '#9B59D0', '#2E86DE'].map((c, i) => `<rect x="${30 + i * 16}" y="${4 + (i % 3) * 5}" width="12" height="40" rx="5" fill="${c}" ${S} stroke-width="2"/>`).join('')}</g><g>${['#7FC6E8', '#F4A7B9', '#B9A3E8'].map((c, i) => `<g transform="rotate(${-14 + i * 7} ${170 + i * 12} 40)"><rect x="${166 + i * 12}" y="2" width="8" height="44" rx="3" fill="${c}" fill-opacity=".55" ${S} stroke-width="1.8"/><rect x="${166 + i * 12}" y="-4" width="8" height="8" rx="2" fill="#FFFDF9" ${S} stroke-width="1.8"/></g>`).join('')}</g><rect x="10" y="30" width="210" height="74" rx="18" fill="#F6CFD6" ${S}/><path d="M160 30 C190 30 214 40 220 60 L220 44 C220 36 214 30 206 30Z" fill="#F8E7A9" opacity=".9"/><path d="M150 32 q30 10 70 32" fill="none" stroke="#F8E7A9" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M26 44 H204" ${S} stroke-dasharray="5 5"/><rect x="150" y="76" width="48" height="16" rx="2" fill="#FFFBF2" ${S} stroke-width="1.5"/><text x="174" y="87" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="${INK}" letter-spacing=".5">CICIMELON</text><circle cx="212" cy="46" r="5" fill="#C9CCD2" ${S} stroke-width="1.5"/></svg>`,
         open: 'gelpens'
 
     },
@@ -187,24 +188,67 @@ window.CARDS = [
 ];
 
 /* my pencil pouch: every pen is a tool I actually use */
+/* my Mildliner pouch: the full 25-pack, one highlighter for every tool on my résumé */
 window.PENS = [
-    { name: 'Python', c: '#F7D54A', note: 'Listening History’s pipeline and the Saturday in Austin planner.' },
+    { name: 'Python', c: '#F7E06B', note: 'Listening History’s pipeline and the Saturday in Austin planner.' },
     { name: 'SQL', c: '#F4A7B9', note: 'CTEs, window functions, stored procedures. The streak finder. My favorite highlighter.' },
-    { name: 'C#', c: '#B9A3E8', note: 'RideFlow, Bevo’s Tacos, and my whole portfolio site in ASP.NET Core.' },
+    { name: 'C#', c: '#B9A3E8', note: 'RideFlow, Bevo’s Tacos, and my whole portfolio site.' },
     { name: 'JavaScript', c: '#8FD19E', note: 'Every interaction you’ve touched on this page.' },
-    { name: 'Snowflake', c: '#8CC4F0', note: 'Where my ride-share database runs, rollbacks and all.' },
-    { name: 'Tableau', c: '#F29B6B', note: 'For when a number needs to be a picture.' },
+    { name: 'HTML/CSS', c: '#F6B48C', note: 'This page is hand-written HTML and CSS. No framework.' },
+    { name: 'R', c: '#9CC9E8', note: 'Statistics, the R way.' },
+    { name: 'ASP.NET Core', c: '#D7A6D9', note: 'What suhanitiwari.com runs on.' },
+    { name: 'Azure', c: '#7FB3E0', note: 'The $1M Azure AI go-to-market I built at Acacia.' },
+    { name: 'Snowflake', c: '#A9DCEB', note: 'Where my ride-share database runs, rollbacks and all.' },
+    { name: 'MongoDB', c: '#A8D8A0', note: 'Documents instead of tables, for data that won’t sit still.' },
+    { name: 'ETL', c: '#F2C572', note: 'Extract, clean, load: 182K Spotify plays.' },
     { name: 'Power BI', c: '#F7D54A', note: 'Dashboards, the business-school way.' },
-    { name: 'Excel', c: '#A7D8C9', note: 'Pivot tables and VLOOKUPs. Still undefeated.' }
+    { name: 'Tableau', c: '#F29B6B', note: 'For when a number needs to be a picture.' },
+    { name: 'Excel', c: '#B5D99C', note: 'Still undefeated.' },
+    { name: 'Pivot Tables', c: '#E8A1C4', note: 'The fastest answer in any spreadsheet.' },
+    { name: 'VLOOKUP', c: '#C9B6E4', note: 'Yes, I know about XLOOKUP. I still love her.' },
+    { name: 'Docker', c: '#86C5D8', note: 'My portfolio ships in a container to Render.' },
+    { name: 'Git/GitHub', c: '#D9B38C', note: 'Including this repo.' },
+    { name: 'LLM Evaluation', c: '#F5A3A3', note: '1,000+ AI responses graded at Outlier.' },
+    { name: 'Prompt Engineering', c: '#B3A6E0', note: 'I wrote Sitara’s guardrails.' },
+    { name: 'AI Strategy', c: '#9ED3C3', note: 'Repositioning Acacia’s AI and cloud services.' },
+    { name: 'Oracle NetSuite', c: '#F0A58F', note: 'What I matched $20M–$200M companies to at Oracle.' },
+    { name: 'PowerPoint', c: '#F3B6C9', note: 'Strategy decks that lead with the answer.' },
+    { name: 'Word', c: '#A7C4E8', note: 'Essays, reports and first drafts.' },
+    { name: 'Canva', c: '#C7E3A1', note: 'Posters, decks and social graphics.' }
 ];
 
-/* my Paper Mate pouch: my top five CliftonStrengths, one gel pen each */
+/* my Paper Mate pouch: the InkJoy Gel 30-pack, 0.7mm. One gel pen for every strength from my How I Work page. */
 window.GELPENS = [
-    { name: 'Relator', c: '#D9467A', note: 'I build close, genuine relationships and love working hard alongside people toward a shared goal.' },
-    { name: 'Empathy', c: '#B36FD1', note: 'I sense what people are feeling by putting myself in their shoes, often before they say a word.' },
-    { name: 'Individualization', c: '#2E4A7A', note: 'I notice what makes each person unique, and how different people can work together best.' },
-    { name: 'Developer', c: '#E86CA5', note: 'I see the potential in people and get real satisfaction from helping them grow.' },
-    { name: 'Communication', c: '#7FC6E8', note: 'I put thoughts into words easily, whether it’s a conversation or a presentation.' }
+    { name: 'Relator', c: '#E63F7A', note: 'CliftonStrengths #1 · I build close, genuine relationships and love working hard alongside people toward a shared goal.' },
+    { name: 'Empathy', c: '#7B4FD1', note: 'CliftonStrengths #2 · I sense what people are feeling by putting myself in their shoes, often before they say a word.' },
+    { name: 'Individualization', c: '#1F6FD1', note: 'CliftonStrengths #3 · I notice what makes each person unique, and how different people can work together best.' },
+    { name: 'Developer', c: '#18A39A', note: 'CliftonStrengths #4 · I see the potential in people and get real satisfaction from helping them grow.' },
+    { name: 'Communication', c: '#F0592B', note: 'CliftonStrengths #5 · I put thoughts into words easily, whether it’s a conversation or a presentation.' },
+    { name: 'Assertive', c: '#D6336C', note: 'DISC trait · Rarely hesitates when confronted with challenges and is eager to take charge.' },
+    { name: 'Goal-Oriented', c: '#9B59D0', note: 'DISC trait · Sets ambitious goals and works diligently toward achieving them.' },
+    { name: 'Challenge-Driven', c: '#2E86DE', note: 'DISC trait · Views challenges as opportunities to prove myself.' },
+    { name: 'Decisive', c: '#27AE60', note: 'DISC trait · Analyzes situations rapidly, identifies the best course of action, and implements it.' },
+    { name: 'Self-Reliant', c: '#E84393', note: 'DISC trait · Takes ownership of my work from start to finish.' },
+    { name: 'Leadership', c: '#6C5CE7', note: 'DISC strength · Sees the big picture, sets long-term goals, and inspires others to follow.' },
+    { name: 'Resilience', c: '#0984E3', note: 'DISC strength · Thrives in high-stakes environments where quick thinking and determination are required.' },
+    { name: 'Strategic Thinking', c: '#00B894', note: 'DISC strength · Focuses on what truly matters and eliminates distractions or obstacles.' },
+    { name: 'Problem Solving', c: '#E17055', note: 'DISC strength · Identifies and fixes problems before others even notice them.' },
+    { name: 'Ownership', c: '#B83280', note: 'What motivates me · Ownership and autonomy.' },
+    { name: 'Recognition', c: '#8E44AD', note: 'What motivates me · Recognition and achievement.' },
+    { name: 'A Real Challenge', c: '#3867D6', note: 'What motivates me · Give me the hard problem.' },
+    { name: 'Clear', c: '#20BF6B', note: 'How I communicate · Clear and to the point.' },
+    { name: 'Outcome-Focused', c: '#FA8231', note: 'How I communicate · Focused on outcomes.' },
+    { name: 'Persuasive', c: '#C2185B', note: 'How I communicate · Persuasive and action-oriented.' },
+    { name: 'Artistic', c: '#5F27CD', note: 'RIASEC: A, 91.7 · Driven by self-expression and originality. I do my best work with creative freedom and variety.' },
+    { name: 'Social', c: '#2D98DA', note: 'RIASEC: S, 67.5 · I care about people and love helping wherever I can.' },
+    { name: 'Enterprising', c: '#0FB9B1', note: 'RIASEC: E, 66.7 · I step into leadership when it’s needed and enjoy having real influence on the outcome.' },
+    { name: 'Original Thinking', c: '#EB3B5A', note: 'RIASEC strength · Original thinking.' },
+    { name: 'Expression', c: '#A55EEA', note: 'RIASEC strength · Visual and verbal expression.' },
+    { name: 'Ideation', c: '#4B7BEC', note: 'RIASEC strength · Brainstorming and ideation.' },
+    { name: 'Adaptability', c: '#26DE81', note: 'RIASEC strength · Adaptability to new approaches.' },
+    { name: 'Creative Freedom', c: '#FD9644', note: 'What energizes me · Creative freedom.' },
+    { name: 'Variety', c: '#D63031', note: 'What energizes me · Variety.' },
+    { name: 'Helping People', c: '#341F97', note: 'What energizes me · Helping people.' }
 ];
 
 /* my laptop: projects as file folders */

@@ -153,13 +153,13 @@ const VIEWS = {
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`,
 
     mildliners: () => penView({
-        title: 'My <em>Mildliner</em> pouch', note: 'a whole pouch just for highlighters. each one is a tool i actually use.',
+        title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. one highlighter for every tool on my résumé.',
         list: PENS, front: ITEMS.find(i => i.id === 'pouch').art, pick: 'pick a highlighter',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="5" y="30" width="24" height="132" rx="5" fill="#FFFDF9" stroke="#3A2626" stroke-width="3"/><rect x="5" y="4" width="24" height="32" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="5" y="158" width="24" height="28" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><path d="M11 50 h12 M11 142 h12" stroke="${c}" stroke-width="3"/></svg>`
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'my gel pens. each one is one of my top five CliftonStrengths.',
+        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel, the 30-pack. one pen for every strength i’ve got.',
         list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
@@ -319,13 +319,16 @@ function penView({ title, note, list, front, pen, pick }) {
         <h2>${title}</h2>
         <p class="note">${note}</p>
         <div class="pouch-scene">
-            <div class="pens" id="pens" data-pick="${pick}">${list.map((p, i) => `
+            <div class="pens${list.length > 12 ? ' many' : ''}" id="pens" data-pick="${pick}" style="--step:${Math.min(11, 150 / Math.max(1, list.length - 1))}deg">${list.map((p, i) => `
                 <button class="pen" type="button" style="--i:${i}; --mid:${(list.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
                     ${pen(p.c)}<span class="lbl">${p.name}</span>
                 </button>`).join('')}</div>
             <div class="pouch-front">${front}</div>
         </div>
-        <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>`;
+        <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
+        ${list === GELPENS ? `<div class="in-pencil"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
+            <div><p class="mono" style="margin:0 0 4px; color:var(--plum)">Plus my BIC Xtra-Smooth mechanical pencils</p>
+            <p style="margin:0">For anything still in draft. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>` : ''}`;
 }
 
 function cardHTML(c, i) {
@@ -459,7 +462,7 @@ const AFTER = {
             if (me || reduce) { b.textContent = text; return Promise.resolve(); }
             return type(b, text);
         };
-        say('Hi! I’m Sitara ✦ I live in Suhani’s caramel frappuccino charm (whipped cream included). Ask me anything about her.');
+        say('Hi! I’m Sitara ✦ I live in Suhani’s caramel frappuccino charm, right next to her Cozy Vanilla Almond hand sanitizer. Ask me anything about her.');
         $('#chips').onclick = async e => {
             const b = e.target.closest('[data-q]'); if (!b) return;
             await say(b.textContent, true);
