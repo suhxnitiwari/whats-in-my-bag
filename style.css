@@ -630,3 +630,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .dl-fields > span { white-space: nowrap; }
 .dl-fields i { margin-right: 1.2cqw; }
 .dl-fine { font-size: 3.4cqw; white-space: nowrap; }
+
+.dl-fields { line-height: 1.18; }
+.card.dl { padding-top: 4%; padding-bottom: 3.5%; }

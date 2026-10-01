@@ -586,7 +586,9 @@ function cardHTML(c, i) {
                 <span class="dl-fields">
                     <span><i>name</i> Suhani Tiwari</span>
                     <span><i>dob</i> a lady never tells</span>
+                    <span><i>hgt</i> 5′6″</span>
                     <span><i>weight</i> don’t ask</span>
+                    <span><i>eyes</i> dreamy</span>
                     <span><i>address</i> wouldn’t you wanna knowwww</span>
                     <span><i>class</i> C (for cute)</span>
                     <span><i>restr</i> curbs</span>
