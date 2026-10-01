@@ -1540,3 +1540,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .bag .bag-hint:empty { display: none; }
 @keyframes nudge2 { 50% { transform: translateX(6px); } }
 @media (max-width: 760px) { .bag .bag-hint { right: auto; left: 50%; top: 102%; transform: translateX(-50%); animation: none; } }
+
+.kc-card.kc-real { padding: 8px; background: #fff; aspect-ratio: auto; width: min(340px, 90%); }
+.kc-real img { width: 100%; max-height: 420px; object-fit: contain; display: block; border-radius: 2px; }
