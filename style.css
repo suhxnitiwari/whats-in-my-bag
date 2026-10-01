@@ -2335,3 +2335,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 /* la mer's spoon: keep it out of the face overlay's full-size svg rule so it's actually grabbable */
 .face .lm-spoon { width: 34px; }
 .face .lm-spoon svg { position: static; inset: auto; width: 100%; height: auto; pointer-events: none; }
+
+/* drag something back onto the backpack: it lights up to say "drop it here" */
+#bag.drop-here { filter: drop-shadow(0 0 18px rgba(230, 63, 122, .55)); }
+#bag.drop-here #bag-art { transform: scale(1.03); transition: transform .2s; }

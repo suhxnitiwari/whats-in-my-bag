@@ -6,6 +6,7 @@ const stage = $('#stage'), bagBtn = $('#bag'), bagArt = $('#bag-art'), list = $(
 const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-label');
 const phone = () => matchMedia('(max-width: 760px)').matches;
 const moved = {};   // things you've dragged somewhere else on the table
+const stowed = new Set();   // things you've put back in their pocket (the pocket stays open)
 
 /* ---------- the line under the title changes every 5 seconds ---------- */
 const LEDES = [
@@ -250,7 +251,7 @@ function shelf(list, x0, x1, y0, gap = 2.2) {
 }
 function relayout() {
     if (phone()) return;
-    let items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip)).map(sizeOf);
+    let items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip) && !stowed.has(i.id)).map(sizeOf);
     items.sort((a, b) => b.w * b.h - a.w * a.h);
     if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
     const bands = {
@@ -294,17 +295,23 @@ function relayout() {
         const li = e.target.closest('.item.out'); if (!li || phone() || e.button) return;
         d = { li, x: e.clientX, y: e.clientY, on: false, id: li.id.slice(5) };
     });
+    const overBag = e => { const r = bagBtn.getBoundingClientRect(); return e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom; };
+    let hinted = false;
     addEventListener('pointermove', e => {
         if (!d) return;
         const dx = e.clientX - d.x, dy = e.clientY - d.y;
         if (!d.on && Math.hypot(dx, dy) < 7) return;
         if (!d.on) { d.on = true; d.li.classList.add('dragging'); d.li.style.zIndex = ++zTop; }
         d.li.style.translate = `${dx}px ${dy}px`;
+        bagBtn.classList.toggle('drop-here', overBag(e));
     });
-    addEventListener('pointerup', () => {
+    addEventListener('pointerup', e => {
         if (!d) return;
         const { li, on, id } = d; d = null;
+        bagBtn.classList.remove('drop-here');
         if (!on) return;
+        if (overBag(e)) { skip = true; return stow(id); }
+        if (!hinted) { hinted = true; setTimeout(() => toast('drop anything on the backpack to put it back in its pocket'), 400); }
         const r = stage.getBoundingClientRect(), [tx, ty] = (li.style.translate || '0px 0px').split(' ').map(parseFloat);
         const l = parseFloat(li.style.getPropertyValue('--l')) + tx / r.width * 100, t = parseFloat(li.style.getPropertyValue('--t')) + (ty || 0) / r.height * 100;
         li.style.translate = ''; li.classList.remove('dragging');
@@ -314,11 +321,35 @@ function relayout() {
     list.addEventListener('click', e => { if (skip) { skip = false; e.stopPropagation(); e.preventDefault(); } }, true);
 }
 
+function stow(id) {
+    const it = ITEMS.find(i => i.id === id), pk = BAG.pockets.find(p => p.id === it.zip), li = document.getElementById('item-' + id);
+    if (!pk || !li) return;
+    stowed.add(id); delete moved[id];
+    const done = () => {
+        li.style.translate = ''; li.classList.remove('out', 'dragging'); li.querySelector('button').tabIndex = -1;
+        relayout();
+        const left = ITEMS.filter(i => i.zip === pk.id && !stowed.has(i.id));
+        if (!left.length) { toast(`all back in ${POCKET_NAME[pk.id]}. zipped ♡`); zipUp(pk); }
+        else toast(`back in ${POCKET_NAME[pk.id]} ♡`);
+    };
+    if (reduce) return done();
+    // aim for the middle of that pocket's zipper
+    const { path, len } = pk.el, p = path.getPointAtLength(len / 2), m = path.getScreenCTM();
+    const tx = m.a * p.x + m.c * p.y + m.e, ty = m.b * p.x + m.d * p.y + m.f, box = li.getBoundingClientRect();
+    const dx = tx - (box.left + box.width / 2), dy = ty - (box.top + box.height / 2), base = phone() ? '' : 'translate(-50%, -50%) ';
+    li.animate([
+        { transform: `${base}rotate(${it.r}deg)`, opacity: 1 },
+        { transform: `${base}translate(${dx * .6}px, ${dy * .6 - 30}px) scale(.6) rotate(${it.r * 3}deg)`, opacity: 1, offset: .6 },
+        { transform: `${base}translate(${dx}px, ${dy}px) scale(.1) rotate(${it.r * 4}deg)`, opacity: 0 }
+    ], { duration: 480, easing: 'steps(6, end)' }).finished.then(done, done);
+}
+
 let busy = Promise.resolve();
 function unzip(pk, from = 0) {
     busy = busy.then(async () => {
         if (open.has(pk.id)) return;
         open.add(pk.id);
+        ITEMS.forEach(i => { if (i.zip === pk.id) stowed.delete(i.id); });
         stage.classList.remove('idle');
         pk.el.pull.setAttribute('aria-pressed', 'true');
         pk.el.pull.setAttribute('aria-label', `Zip up: ${pk.label}`);
@@ -360,6 +391,7 @@ function zipUp(pk, from = 1) {
         });
         await slide(pk, from, 0);
         open.delete(pk.id);
+        ITEMS.forEach(i => { if (i.zip === pk.id) stowed.delete(i.id); });
         relayout();
         pk.el.g.classList.remove('open');
         pk.el.pull.setAttribute('aria-pressed', 'false');
@@ -1312,6 +1344,7 @@ const VIEWS = {
                 <li><b>MAC Sleek Satin lipstick, Espresso Yourself.</b> In the makeup bag.</li>
                 <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the grab-it pocket.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
+                <li><b>Westman Atelier Face Trace Cream Contour Stick, Biscuit.</b> Cool beige coffee. My contour.</li>
                 <li><b>Estée Lauder Futurist Aqua Brilliance Watery Glow Primer.</b> My primer. Goes on before the foundation.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
                 <li><b>Hourglass Vanish Airbrush Concealer.</b> My favorite concealer. Full coverage, no creasing.</li>
@@ -1349,19 +1382,21 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-126px; --a:-36deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
-                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-42px; --a:-12deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
-                <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:0px; --a:0deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
-                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:42px; --a:12deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
-                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:126px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
-                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-84px; --a:-24deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
-                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:84px; --a:24deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
+                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-147px; --a:-36deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
+                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-21px; --a:-5deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
+                <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:21px; --a:5deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
+                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:63px; --a:15deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
+                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:147px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
+                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-105px; --a:-26deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
+                <button type="button" class="mk" data-mk="contour" style="--h:172px; --rise:-34px; --x:-63px; --a:-15deg; --d:135ms" aria-label="Westman Atelier Face Trace Cream Contour Stick, Biscuit">${ITEMS.find(i => i.id === 'contour').art}<span>contour</span></button>
+                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:105px; --a:26deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vs2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#F7C9D6"/><rect width="11" height="22" fill="#F29BB6"/></pattern></defs>
                     <path d="M14 34 C14 14 286 14 286 34 L274 154 C272 166 28 166 26 154Z" fill="url(#vs2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
                     <path class="mzip" d="M28 34 H272" stroke="#3A2626" stroke-width="3" stroke-dasharray="6 6"/>
                     <path class="mgap" d="M28 34 H272" stroke="#2A1E22" stroke-width="10" stroke-linecap="round"/>
+                    <text x="150" y="112" text-anchor="middle" font-family="Bodoni Moda" font-size="20" letter-spacing="5" fill="#7E2246">MAKEUP</text>
                 </svg>
                 <button type="button" class="mpull" id="mpull" aria-label="Unzip the makeup pouch"><span></span></button>
             </div>
@@ -2475,6 +2510,7 @@ const AFTER = {
             const SH = {
                 lipstick: ['#6E3A2E', 'MAC Sleek Satin · Espresso Yourself', 'lipstick'],
                 blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
+                contour: ['#9A7462', 'Westman Atelier · Face Trace, Biscuit', null],
                 mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
                 primer: ['#E3C3BA', 'Estée Lauder Futurist Aqua Brilliance · watery glow', null],
