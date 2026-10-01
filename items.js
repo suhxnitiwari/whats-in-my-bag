@@ -209,9 +209,6 @@ window.ITEMS = [
                 <button type="button" class="study-hp" id="study-hp" aria-label="Put my headphones on me">${ITEMS_HP_ART()}</button>
             </div>
             <p class="hand study-say" id="study-say">i’m studying. drag my headphones onto me.</p>
-            <div class="eq" aria-hidden="true">${'<i></i>'.repeat(18)}</div>
-            <div class="stats"><div><b>182K</b><span>plays cleaned</span></div><div><b>21</b><span>days in a row on one song</span></div><div><b>7</b><span>SQL views</span></div></div>
-            <div class="shot"><img src="assets/img/listening.jpg" alt="Listening History, the app"></div>
             <div class="row"><a class="btn solid" href="https://listening-history.onrender.com/" target="_blank" rel="noopener">Open Listening History ↗</a><a class="btn" href="https://github.com/suhxnitiwari/listening-history" target="_blank" rel="noopener">Code ↗</a></div>`
     },
     {
