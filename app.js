@@ -1341,6 +1341,8 @@ const VIEWS = {
     stanley: () => `
         <h2>My pink <em>Stanley</em></h2>
         <p class="note">the all day slim bottle, in the bow print. do i drink enough water? no.</p>
+        <div class="stan-big" id="stan-big" role="button" tabindex="0" aria-label="My Stanley: tap the lid to unscrew it">${ITEMS.find(i => i.id === 'stanley').art.replace(/(<rect x="21" y="6"[^>]*\/>)/, '<g class="lid">$1</g>')}</div>
+        <p class="hand stan-say" id="stan-say">tap the lid to take it off</p>
         <p class="mono" style="color:var(--plum); margin:18px 0 8px">Today’s water, honestly</p>
         <div class="cups" id="cups" style="display:flex; gap:8px; flex-wrap:wrap">${Array.from({ length: 8 }, (_, i) => `<span class="cup${i < 2 ? ' full' : ''}" style="width:34px; height:44px; border:2.5px solid var(--ink); border-radius:4px 4px 10px 10px; background:${i < 2 ? 'var(--pink)' : 'var(--paper)'}; transition:background .4s"></span>`).join('')}</div>
         <p class="hand" id="cup-note" style="font-size:1.4rem; color:var(--plum); margin:10px 0 0">2 of 8. we’re working on it.</p>
@@ -2422,7 +2424,16 @@ const AFTER = {
 
     stanley: () => {
         let n = 2;
+        const big = $('#stan-big'), lid = big.querySelector('.lid');
+        const flipLid = () => {
+            if (big.classList.contains('lid-open')) {
+                big.classList.remove('lid-open'); lid.classList.add('closing'); setTimeout(() => lid.classList.remove('closing'), 850);
+                $('#stan-say').textContent = 'lid’s back on. no spills ♡';
+            } else { lid.classList.remove('closing'); big.classList.add('lid-open'); $('#stan-say').textContent = 'lid’s off. now take a sip for me ↓'; }
+        };
+        big.onclick = flipLid; big.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipLid(); } };
         $('#sip').onclick = () => {
+            if (!big.classList.contains('lid-open')) return toast('lid’s still on. tap it first.');
             if (n >= 8) return toast('fully hydrated. screenshot this, it won’t happen again.');
             const cups = document.querySelectorAll('#cups .cup');
             cups[n].style.background = 'var(--pink)'; n++;

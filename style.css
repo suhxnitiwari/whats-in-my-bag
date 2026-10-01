@@ -2062,3 +2062,11 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .sani-hand ellipse { transition: rx .3s, ry .3s; }
 .sani-drop { position: absolute; width: 14px; height: 18px; margin-left: -7px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: radial-gradient(circle at 35% 30%, #fff, #DDF0FF 55%, #B9D6EC); border: 1.5px solid #9EC3DE; animation: sani-fall .52s cubic-bezier(.5,0,.9,.6) forwards; pointer-events: none; }
 @keyframes sani-fall { 0% { transform: scale(.3); } 25% { transform: scale(1, 1.2); } 100% { transform: translateY(var(--fall)) scale(1.1, .8); } }
+
+/* the Stanley in its own sheet: the lid unscrews and sets down next to the bottle */
+.stan-big { width: 84px; margin: 10px auto 0; cursor: pointer; padding-right: 60px; box-sizing: content-box; }
+.stan-big svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 8px 8px rgba(59,21,36,.2)); }
+.stan-big .lid { transform-box: view-box; transform-origin: 21px 25px; }
+.stan-big.lid-open .lid { animation: unscrew-off .9s cubic-bezier(.45,.05,.4,1) forwards; }
+.stan-big .lid.closing { animation: rescrew-on .8s cubic-bezier(.45,.05,.4,1) forwards; }
+.stan-say { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 6px 0 10px; }
