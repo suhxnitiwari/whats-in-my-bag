@@ -1045,16 +1045,17 @@ const VIEWS = {
                     <span class="bc-f"><b>Suhani Tiwari</b><i>MIS + Psychology · UT Austin</i><em>product · brand · technology</em><span class="bc-heart">♡</span></span>
                     <span class="bc-b"><a href="https://suhanitiwari.com" target="_blank" rel="noopener">suhanitiwari.com ↗</a><a href="https://www.linkedin.com/in/suhxnitiwari" target="_blank" rel="noopener">linkedin.com/in/suhxnitiwari ↗</a><a href="https://www.instagram.com/hifromhani/" target="_blank" rel="noopener">instagram @hifromhani ↗</a><a href="mailto:suhanitiwari@utexas.edu">suhanitiwari@utexas.edu ✉</a><em>let’s get coffee ☕</em></span>
                 </span></div>
-                <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 30 150">
+                <button type="button" class="pf-pen" id="pf-pen" aria-label="My baby pink pen: pick it up to write on the legal pad"><svg viewBox="0 0 30 150">
                     <path d="M15 8 c-6 -7 -13 -4 -10 1 c2 3 7 2 10 -1 c3 3 8 4 10 1 c3 -5 -4 -8 -10 -1z" fill="#F7A8C0" stroke="#3A2626" stroke-width="1.2"/><circle cx="15" cy="8" r="2" fill="#E57A9E" stroke="#3A2626" stroke-width="1"/>
                     <rect x="10" y="10" width="10" height="8" rx="2" fill="#FBD3DF" stroke="#3A2626" stroke-width="1.2"/>
                     <rect x="9" y="17" width="12" height="86" rx="5" fill="#F9C4D3" stroke="#3A2626" stroke-width="1.4"/>
                     <path d="M20 20 h3 v40 l-2.5 3 h-.5z" fill="#F3B0C4" stroke="#3A2626" stroke-width="1"/><path d="M21.5 52 c-1.6 -1.6 -3.6 0 -1.4 2.2 l1.4 1.4 1.4 -1.4 c2.2 -2.2 .2 -3.8 -1.4 -2.2z" fill="#E0568F"/>
                     <rect x="9" y="102" width="12" height="22" rx="2" fill="#F7D9E2" stroke="#3A2626" stroke-width="1.2"/><path d="M10 106 h10 M10 110 h10 M10 114 h10 M10 118 h10" stroke="#E7A9BC" stroke-width="1"/>
                     <path d="M9 124 L15 140 L21 124Z" fill="#F9C4D3" stroke="#3A2626" stroke-width="1.2"/><path d="M15 140 v5" stroke="#8A8A90" stroke-width="1.2"/>
-                    <path d="M12 24 v74" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg></span>
+                    <path d="M12 24 v74" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg></button>
             </div>
-            <div class="pf-right"><div class="pf-legal" aria-label="My legal pad: the roles I'm going for">
+            <div class="pf-right"><div class="pf-pad" id="pf-pad">
+                <div class="pf-sheet" style="--z:9"><div class="pf-legal" aria-label="My legal pad: the roles I'm going for">
                 <p>roles i’m going for:</p>
                 <p>♡ product marketing manager</p>
                 <p>♡ product manager</p>
@@ -1065,6 +1066,10 @@ const VIEWS = {
                 <p class="pf-u">→ work where technology meets people</p>
                 <p style="margin-top:14px">dream companies:</p>
                 <p>☆ netflix ☆ spotify ☆ duolingo</p>
+                </div><canvas class="pf-ink" aria-hidden="true"></canvas></div>
+                ${[8, 7, 6, 5, 4, 3].map(z => `<div class="pf-sheet" style="--z:${z}"><div class="pf-legal"></div><canvas class="pf-ink" aria-hidden="true"></canvas></div>`).join('')}
+                <button type="button" class="pf-curl" id="pf-next" aria-label="Flip this page up to the next one">flip ↑</button>
+                <button type="button" class="pf-prev mono" id="pf-prev" hidden>↓ last page</button>
             </div></div>
         </div>`,
     cap: () => `
@@ -1532,7 +1537,7 @@ function penView({ title, note, list, front, pen, pick }) {
         ${list === GELPENS_AND_PENCILS ? `<div class="desk">
             <div class="desk-tools">
                 <button type="button" class="dtool" data-tool="eraser" aria-label="My Tombow MONO eraser: erases pencil only">${MONO_SVG}<span>mono eraser</span></button>
-                <button type="button" class="dtool" data-tool="whiteout" aria-label="Whiteout: covers pen">${WHITEOUT_SVG}<span>whiteout</span></button>
+                <button type="button" class="dtool" data-tool="whiteout" aria-label="My pink Alopuxi correction tape: covers pen">${WHITEOUT_SVG}<span>correction tape</span></button>
                 <button type="button" class="desk-erase btn" id="desk-erase" hidden>Erase</button>
                 <button type="button" class="desk-clear" id="desk-clear">new page</button>
             </div>
@@ -1749,6 +1754,32 @@ const AFTER = {
         };
     },
     padfolio: () => {
+        // the pink pen: pick it up, write on the legal pad, flip the page up for a fresh one
+        const pfx = sheetBody.querySelector('.pf'), pad = $('#pf-pad'), sheets = [...pad.querySelectorAll('.pf-sheet')];
+        let at = 0, held = false, last = null;
+        const topSheet = () => sheets[at];
+        const fit = c => { if (c.width) return; const r = c.getBoundingClientRect(), d = devicePixelRatio || 1; c.width = r.width * d; c.height = r.height * d; const x = c.getContext('2d'); x.scale(d, d); x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = '#C2386E'; x.lineWidth = 2.2; };
+        $('#pf-pen').onclick = () => {
+            held = !held; pfx.classList.toggle('pen-held', held);
+            $('#pf-pen').setAttribute('aria-label', held ? 'Put my pen back' : 'My baby pink pen: pick it up to write on the legal pad');
+            toast(held ? 'pen in hand. write me something ♡' : 'pen’s back in its loop.');
+        };
+        sheets.forEach(sh => {
+            const c = sh.querySelector('.pf-ink');
+            const pt = e => { const r = c.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+            c.addEventListener('pointerdown', e => { if (!held) return; e.preventDefault(); fit(c); try { c.setPointerCapture(e.pointerId); } catch {} last = pt(e); const x = c.getContext('2d'); x.beginPath(); x.arc(last.x, last.y, 1.1, 0, 7); x.fillStyle = '#C2386E'; x.fill(); });
+            c.addEventListener('pointermove', e => { if (!last) return; const p = pt(e), x = c.getContext('2d'); x.beginPath(); x.moveTo(last.x, last.y); x.lineTo(p.x, p.y); x.stroke(); last = p; });
+            const stop = () => { last = null; }; c.addEventListener('pointerup', stop); c.addEventListener('pointercancel', stop);
+        });
+        const show = () => { sheets.forEach((sh, i) => sh.classList.toggle('up', i < at)); $('#pf-prev').hidden = at === 0; $('#pf-next').hidden = at === sheets.length - 1; };
+        $('#pf-next').onclick = () => { if (at < sheets.length - 1) { at++; show(); if (at === 1) toast('fresh page. the pen’s right there →'); } };
+        $('#pf-prev').onclick = () => { if (at > 0) { at--; show(); } };
+        // or grab the bottom of the page and flip it up
+        let fy = null;
+        pad.addEventListener('pointerdown', e => { if (held || e.target.closest('button')) return; const r = pad.getBoundingClientRect(); if (e.clientY > r.bottom - r.height * .3) fy = e.clientY; });
+        pad.addEventListener('pointermove', e => { if (fy !== null && fy - e.clientY > 40) { fy = null; $('#pf-next').click(); } });
+        pad.addEventListener('pointerup', () => { fy = null; });
+        show();
         const pf = sheetBody.querySelector('.pf'), res = $('#pf-resume');
         const pull = e => { if (e.target.closest('.pf-open')) return; const out = pf.classList.toggle('res-out'); res.setAttribute('aria-label', out ? 'My résumé: tap to tuck it back in' : 'My résumé: tap to pull it out'); res.querySelector('.pf-take').textContent = out ? 'tuck it back ↓' : 'pull it out ↑'; if (out) toast('take one. seriously ♡'); };
         res.onclick = pull; res.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pull(e); } };
@@ -2464,7 +2495,8 @@ const GELPENS_AND_PENCILS = [...GELPENS, ...[['Pencil · Blue', '#5DA9E9'], ['Pe
 const PENCIL_SVG = c => `<svg viewBox="0 0 34 190"><rect x="8" y="20" width="18" height="138" rx="3" fill="${c}" opacity=".85" stroke="#3A2626" stroke-width="3"/><rect x="11" y="26" width="4" height="124" rx="2" fill="#fff" opacity=".45"/><rect x="9" y="4" width="16" height="18" rx="3" fill="#F7F3EE" stroke="#3A2626" stroke-width="2.5"/><rect x="23" y="22" width="4" height="50" rx="2" fill="#fff" stroke="#3A2626" stroke-width="2"/><path d="M8 158 L17 182 L26 158Z" fill="#E4E4E2" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 178 h2 v8 h-2z" fill="#555"/></svg>`;
 // Tombow MONO: white body, the blue / white / black sleeve
 const MONO_SVG = `<svg viewBox="0 0 120 52" aria-hidden="true"><rect x="4" y="8" width="112" height="36" rx="5" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.4"/><rect x="30" y="8" width="70" height="36" fill="#1D4E9E"/><rect x="30" y="20" width="70" height="12" fill="#fff"/><rect x="30" y="32" width="70" height="12" fill="#151517"/><rect x="30" y="8" width="70" height="36" fill="none" stroke="#3A2626" stroke-width="2"/><text x="65" y="29.6" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="800" font-size="9" letter-spacing="1.5" fill="#151517">MONO</text></svg>`;
-const WHITEOUT_SVG = `<svg viewBox="0 0 120 52" aria-hidden="true"><path d="M6 26 L22 18 V34Z" fill="#C9CCD2" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="12" width="78" height="28" rx="10" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.4"/><rect x="96" y="14" width="20" height="24" rx="6" fill="#2F6FD6" stroke="#3A2626" stroke-width="2.2"/><text x="60" y="30" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="800" font-size="8.5" letter-spacing=".8" fill="#2F6FD6">WHITEOUT</text></svg>`;
+// my Alopuxi correction tape: pen-length pink body, a clear pink reel head, a metal tip
+const WHITEOUT_SVG = `<svg viewBox="0 0 200 60" aria-hidden="true"><path d="M3 26 h14 v8 h-14z" fill="#D9DBE0" stroke="#3A2626" stroke-width="1.6"/><path d="M5 28 h10 M5 32 h10" stroke="#9EA2AA" stroke-width="1"/><rect x="16" y="19" width="118" height="22" rx="6" fill="#F4A9C4" stroke="#3A2626" stroke-width="2"/><rect x="16" y="19" width="10" height="22" rx="3" fill="#E893B3" stroke="#3A2626" stroke-width="1.4"/><path d="M30 24 h96" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".5"/><text x="74" y="35" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="8" fill="#fff" letter-spacing=".6">Alopuxi</text><circle cx="162" cy="30" r="27" fill="#F28DB4" fill-opacity=".72" stroke="#3A2626" stroke-width="2"/><circle cx="162" cy="30" r="19" fill="none" stroke="#fff" stroke-width="1.2" opacity=".6"/><circle cx="162" cy="30" r="11" fill="#EE7DA8" stroke="#C0507E" stroke-width="1.4"/><circle cx="162" cy="30" r="4" fill="#fff" stroke="#C0507E" stroke-width="1.2"/><path d="M162 22 v-3 M170 30 h3 M162 38 v3 M154 30 h-3" stroke="#C0507E" stroke-width="1.4"/><circle cx="140" cy="30" r="2.4" fill="#F7C4D8" stroke="#3A2626" stroke-width="1"/></svg>`;
 function zipperPouch(pf, pens, btn, note) {
     const pull = pf.querySelector('.cc-pull'), svg = pf.querySelector('svg'), list = [...pens.querySelectorAll('.pen')], N = list.length;
     const TRACK = 176, CLOSED_X = 201;   // the pull travels from x=201 (zipped) to x=25 (open) in the pouch art
@@ -2508,17 +2540,20 @@ function setupDesk() {
     size();
     let tool = null, last = null, warned = false;
     const dot = (c, r) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='${r * 2 + 4}' height='${r * 2 + 4}'><circle cx='${r + 2}' cy='${r + 2}' r='${r}' fill='${c}' stroke='%233A2626' stroke-width='1'/></svg>`).replace(/%253A/g, '%3A')}") ${r + 2} ${r + 2}, crosshair`;
-    const label = t => t.kind === 'eraser' ? 'my tombow mono eraser' : t.kind === 'whiteout' ? 'whiteout' : t.name.toLowerCase() + (t.kind === 'pen' ? ' gel pen' : '');
+    const label = t => t.kind === 'eraser' ? 'my tombow mono eraser' : t.kind === 'whiteout' ? 'my pink correction tape' : t.name.toLowerCase() + (t.kind === 'pen' ? ' gel pen' : '');
     const setTool = t => {
         tool = t;
-        gr.style.cursor = t.kind === 'eraser' ? dot('#FBFBF9', 8) : t.kind === 'whiteout' ? dot('#FFFFFF', 6) : dot(t.c, 2.5);
+        // the eraser and the whiteout leave the tray and become your cursor
+        const ERASER_CUR = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='26'><g transform='rotate(-18 24 13)'><rect x='4' y='6' width='40' height='14' rx='2.5' fill='#FBFBF9' stroke='#3A2626' stroke-width='1.6'/><rect x='13' y='6' width='26' height='14' fill='#1D4E9E'/><rect x='13' y='11' width='26' height='4' fill='#fff'/><rect x='13' y='15' width='26' height='5' fill='#111'/></g></svg>`)}") 8 18, crosshair`;
+        const WHITEOUT_CUR = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='48' height='26'><g transform='rotate(-24 24 13)'><rect x='1' y='11' width='5' height='4' fill='#D9DBE0' stroke='#3A2626' stroke-width='1'/><rect x='6' y='9' width='26' height='8' rx='2.5' fill='#F4A9C4' stroke='#3A2626' stroke-width='1.2'/><circle cx='38' cy='13' r='8' fill='#F28DB4' fill-opacity='.8' stroke='#3A2626' stroke-width='1.2'/><circle cx='38' cy='13' r='3' fill='#fff'/></g></svg>`)}") 4 18, crosshair`;
+        gr.style.cursor = t.kind === 'eraser' ? ERASER_CUR : t.kind === 'whiteout' ? WHITEOUT_CUR : dot(t.c, 2.5);
         sheetBody.querySelectorAll('.dtool').forEach(b => b.classList.toggle('on', b.dataset.tool === t.kind));
         sheetBody.querySelectorAll('.pen').forEach(b => b.classList.toggle('held', (t.kind === 'pen' || t.kind === 'pencil') && GELPENS_AND_PENCILS[+b.dataset.pen].name === t.name));
         erase.hidden = t.kind !== 'pencil';
         now.textContent = `holding: ${label(t)}`;
     };
     $('#pens').desk = { hold: p => setTool({ kind: p.pencil ? 'pencil' : 'pen', c: p.c, name: p.name }) };
-    sheetBody.querySelectorAll('.dtool').forEach(b => b.onclick = () => setTool({ kind: b.dataset.tool }));
+    sheetBody.querySelectorAll('.dtool').forEach(b => b.onclick = () => { setTool({ kind: b.dataset.tool }); toast(b.dataset.tool === 'eraser' ? 'got the eraser. scrub away the pencil.' : 'correction tape in hand. it covers pen.'); });
     erase.onclick = () => setTool({ kind: 'eraser' });
     $('#desk-clear').onclick = () => { ix.clearRect(0, 0, ink.width, ink.height); gx.clearRect(0, 0, gr.width, gr.height); hint.hidden = false; toast('fresh page ♡'); };
     const pt = e => { const b = gr.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
@@ -2526,7 +2561,7 @@ function setupDesk() {
         const k = tool.kind;
         if (k === 'pen') { ix.globalCompositeOperation = 'source-over'; ix.strokeStyle = tool.c; ix.lineWidth = 2.4; ix.beginPath(); ix.moveTo(a.x, a.y); ix.lineTo(b.x, b.y); ix.stroke(); }
         if (k === 'pencil') { gx.globalCompositeOperation = 'source-over'; gx.strokeStyle = tool.c; gx.globalAlpha = .75; gx.lineWidth = 1.6; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalAlpha = 1; }
-        if (k === 'eraser') { gx.globalCompositeOperation = 'destination-out'; gx.lineWidth = 16; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalCompositeOperation = 'source-over'; }
+        if (k === 'eraser') { gx.globalCompositeOperation = 'destination-out'; gx.lineWidth = 22; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalCompositeOperation = 'source-over'; }
         if (k === 'whiteout') {
             // whiteout paints over the ink (you can write on top of it again) and covers pencil too
             ix.globalCompositeOperation = 'source-over'; ix.strokeStyle = '#FFFFFF'; ix.lineWidth = 12; ix.beginPath(); ix.moveTo(a.x, a.y); ix.lineTo(b.x, b.y); ix.stroke();
@@ -2589,6 +2624,28 @@ function toast(msg) {
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2400);
 }
 $('#put-back').addEventListener('click', () => { $('#ending').hidden = true; $('#repack').click(); toast('everything back where it belongs. mostly.'); });
+
+// scrolled right past the bag without opening a single pocket? she noticed
+{
+    const SASS = ['um. the bag is up there. you just scrolled past my whole life ↑', 'nothing down here but a copyright. the good stuff is in the bag ↑', 'okay, so we’re just not going to open it? bold.'];
+    let said = 0, cool = 0;
+    addEventListener('scroll', () => {
+        if (said >= SASS.length || Date.now() < cool || document.querySelector('.item.out') || sheet.open) return;
+        const b = bagBtn.getBoundingClientRect();
+        if (b.bottom < innerHeight * .35) { toast(SASS[said++]); cool = Date.now() + 9000; }
+    }, { passive: true });
+}
+
+// heading for the tab bar with my stuff still all over the table? excuse me
+{
+    const BYE = ['leaving already? my stuff is EVERYWHERE. you’re just going to leave it like that?', 'wow. you went through my bag and you’re not even putting it back?', 'fine. leave. i’ll clean it up. i always do.'];
+    let n = 0, cool = 0;
+    document.addEventListener('mouseout', e => {
+        if (e.relatedTarget || e.clientY > 8 || n >= BYE.length || Date.now() < cool) return;
+        if (!document.querySelector('.item.out')) return;
+        toast(BYE[n++]); cool = Date.now() + 12000;
+    });
+}
 
 // "pull me" sits next to the first zipper's pull, and actually pulls it
 $('#bag-hint').addEventListener('click', e => { e.stopPropagation(); unzip(BAG.pockets[0]); });
