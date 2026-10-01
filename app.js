@@ -903,6 +903,59 @@ const SKIN_FX = {
     lash: ['lashes', 'grandelash on. lashes, but more.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy.']
 };
+// amaira's cards, redrawn: her words, her spelling, her colors
+const KM = 'font-family="Kalam, Caveat, cursive"';
+const letters = (str, x, y, size, colors, gap) => [...str].map((ch, k) => `<text x="${x + k * gap}" y="${y}" ${KM} font-weight="700" font-size="${size}" fill="${colors[k % colors.length]}">${ch}</text>`).join('');
+const stick = (x, y, s, extra = '') => `<g transform="translate(${x} ${y}) scale(${s})" fill="none" stroke="#6E6A68" stroke-width="1.6" stroke-linecap="round"><path d="M-12 -40 q-4 30 -2 52 M12 -40 q4 30 2 52"/><circle cx="0" cy="-30" r="12" fill="#fff"/><circle cx="-4" cy="-32" r="2.6"/><circle cx="4" cy="-32" r="2.6"/><path d="M-4 -24 q4 3 8 0"/><path d="M-8 -16 h16 v30 h-16z" fill="#fff"/><path d="M-4 14 v30 M4 14 v30 M-8 44 h6 M2 44 h6"/>${extra}</g>`;
+const DIGI_CARDS = {
+    welcome: `<svg viewBox="0 0 420 300" role="img" aria-label="Welcome back Didi card: a cup that says I love you, and the two of us">
+        <rect x="4" y="4" width="412" height="292" rx="4" fill="#FFFFFF" stroke="#D8D2CA" stroke-width="2"/><path d="M210 6 V294" stroke="#E6E0D8" stroke-width="2"/>
+        ${letters('Welcome', 20, 62, 40, ['#A24FB8', '#7C6BD6', '#4FA0D8', '#D96AA8'], 27)}
+        ${letters('Back', 22, 118, 46, ['#F2A3BE', '#56B8C8'], 30)}
+        ${letters('DIDI!!!', 26, 168, 34, ['#8E3FAE', '#5C7CD6', '#F28DB4', '#56B8C8', '#3A2626', '#3A2626', '#3A2626'], 22)}
+        <g transform="translate(52 196) rotate(-14)"><path d="M0 0 h78 l-10 92 h-58z" fill="#F57E86" stroke="#3A2626" stroke-width="2.2"/><rect x="-6" y="-14" width="90" height="16" rx="5" fill="#fff" stroke="#3A2626" stroke-width="2.2"/><path d="M6 -12 v12 M18 -12 v12 M30 -12 v12 M42 -12 v12 M54 -12 v12 M66 -12 v12" stroke="#F57E86" stroke-width="2"/>
+            <text x="12" y="30" ${KM} font-size="18" font-weight="700" fill="#3A2626">I</text><path d="M30 22 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 8z" fill="#8E1E2E"/><text x="54" y="30" ${KM} font-size="18" font-weight="700" fill="#3A2626">U</text>
+            <rect x="6" y="38" width="66" height="22" fill="#fff"/><path d="M10 44 h56 M10 50 h50 M10 56 h44" stroke="#3A2626" stroke-width="1.2"/><text x="24" y="84" ${KM} font-size="16" font-weight="700" fill="#3A2626">Didi</text></g>
+        <text x="238" y="58" ${KM} font-size="38" font-weight="700" fill="#F2A3BE">I</text><path d="M268 40 c-12 -16 8 -28 16 -12 c8 -16 28 -4 16 12 l-16 18z" fill="#F28DA4"/><text x="318" y="58" ${KM} font-size="38" font-weight="700" fill="#F2A3BE">U</text>
+        ${stick(286, 194, 1.25, '<rect x="-24" y="2" width="12" height="14" fill="#fff"/><text x="-23" y="13" font-size="4" font-family="Kalam">lulu</text><rect x="14" y="0" width="14" height="16" fill="#fff"/><text x="14.5" y="10" font-size="4" font-family="Kalam">Aritzia</text>')}
+        ${stick(366, 230, .9, '<path d="M-18 -4 h6 l-1 8 h-4z" fill="#fff"/><path d="M-10 14 l-6 24 h28 l-6 -24" fill="#fff"/>')}
+        <ellipse cx="334" cy="112" rx="26" ry="13" fill="#fff" stroke="#6E6A68" stroke-width="1.4"/><text x="334" y="116" text-anchor="middle" ${KM} font-size="10" fill="#6E6A68">obviously</text>
+        <ellipse cx="380" cy="160" rx="26" ry="18" fill="#fff" stroke="#6E6A68" stroke-width="1.4"/><text x="380" y="157" text-anchor="middle" ${KM} font-size="8" fill="#6E6A68">I’ll hold</text><text x="380" y="167" text-anchor="middle" ${KM} font-size="8" fill="#6E6A68">ur coffee</text></svg>`,
+    ut: `<svg viewBox="0 0 300 420" role="img" aria-label="Amaira wants to go to UT Austin and be a business woman">
+        <path d="M150 10 C60 10 14 70 14 150 C14 210 60 252 90 300 H210 C240 252 286 210 286 150 C286 70 240 10 150 10Z" fill="#FFFFFF" stroke="#3A2626" stroke-width="2.4"/>
+        <clipPath id="kc-bal"><path d="M150 10 C60 10 14 70 14 150 C14 210 60 252 90 300 H210 C240 252 286 210 286 150 C286 70 240 10 150 10Z"/></clipPath>
+        <g clip-path="url(#kc-bal)"><rect x="0" y="134" width="300" height="170" fill="#9CC6E4" opacity=".7"/>${Array.from({ length: 22 }, (_, k) => `<path d="M0 ${140 + k * 7} q75 -4 150 0 t150 0" stroke="#7FB2DA" stroke-width="1" fill="none" opacity=".6"/>`).join('')}
+            <rect x="0" y="82" width="300" height="5" fill="#F2B6C9"/></g>
+        <text x="64" y="64" ${KM} font-size="26" fill="#E8A65A">UT Austin</text><path d="M232 44 c-16 -20 10 -34 20 -14 c10 -20 36 -6 20 14 l-20 22z" fill="#F0A64E" opacity=".85"/>
+        <path d="M14 92 H286 M14 132 H286" stroke="#3A2626" stroke-width="1.6"/><text x="70" y="124" ${KM} font-size="34" fill="#2E2A2C">Amaira</text><path d="M126 96 c-3 -4 2 -7 4 -3 c2 -4 7 -1 4 3 l-4 4z" fill="#2E2A2C"/>
+        <g transform="translate(150 196)"><path d="M-14 -26 q-14 14 -10 40 M14 -26 q14 14 10 40" stroke="#B9967A" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="0" cy="-22" r="12" fill="#F4E4D8" stroke="#3A2626" stroke-width="1.4"/><path d="M-5 -16 q5 6 10 0" fill="#C0272D"/>
+            <rect x="-10" y="-8" width="20" height="24" fill="#DDEFD8" stroke="#3A2626" stroke-width="1.2"/><path d="M-14 16 h28 l6 18 h-40z" fill="#2E2A2C"/><path d="M-6 20 l4 6 M4 22 l4 8" stroke="#6FAE7A" stroke-width="3"/><path d="M-6 34 v18 M6 34 v18" stroke="#3A2626" stroke-width="2"/><ellipse cx="-7" cy="54" rx="5" ry="3" fill="#6FAE7A"/><ellipse cx="7" cy="54" rx="5" ry="3" fill="#6FAE7A"/></g>
+        <path d="M84 300 h132 l-8 112 h-116z" fill="#E9D7C8" stroke="#3A2626" stroke-width="2"/>${[318, 346, 374, 400].map(y => `<path d="M94 ${y + 4} h112" stroke="#2E2A2C" stroke-width="1"/>`).join('')}
+        <text x="150" y="316" text-anchor="middle" ${KM} font-size="14" fill="#2E2A2C">bussiness women</text>
+        <text x="150" y="344" text-anchor="middle" ${KM} font-size="13" fill="#2E2A2C">I want to go</text><text x="150" y="372" text-anchor="middle" ${KM} font-size="13" fill="#2E2A2C">to UT Austin and</text>
+        <text x="150" y="398" text-anchor="middle" ${KM} font-size="12" fill="#2E2A2C">I want to be a bussiness women</text></svg>`,
+    sisters: `<svg viewBox="0 0 420 380" role="img" aria-label="Amaira and Suhani forever, two sisters in pink dresses">
+        <rect x="4" y="4" width="412" height="372" rx="4" fill="#FFFFFF" stroke="#D8D2CA" stroke-width="2"/>
+        <text x="40" y="70" ${KM} font-weight="700" font-size="40" fill="#5A2C7E" letter-spacing="3">AMAIRA</text><text x="300" y="92" ${KM} font-weight="700" font-size="40" fill="#5A2C7E">Suhani</text>
+        <path d="M236 30 c-30 30 -16 70 -6 82 c20 -14 40 -46 30 -80z" fill="#E8A3B4" stroke="#7A2350" stroke-width="3"/><path d="M296 30 c-14 -22 18 -34 26 -12 c10 -22 42 -8 26 14 l-26 30z" fill="#1F2E8F"/><path d="M176 90 c-6 -10 6 -16 10 -6 c4 -10 16 -4 10 6 l-10 12z" fill="#3B3F9E"/>
+        <path d="M14 152 C60 140 80 110 110 124 C140 140 160 108 200 112 C240 116 260 140 300 128 C340 116 380 150 406 140" fill="none" stroke="#A8784E" stroke-width="2"/>
+        <path d="M30 184 c-10 -14 6 -22 12 -10 c6 -12 22 -4 12 10 l-12 14z" fill="#B9DDF0" stroke="#5A2C7E" stroke-width="2"/><text x="14" y="232" ${KM} font-size="15" fill="#7A2350">forever</text>
+        ${[[150, 150], [290, 140]].map(([x, y]) => `<g transform="translate(${x} ${y})"><path d="M-22 6 q-8 40 -4 74 M22 6 q8 40 4 74" stroke="#9A6B44" stroke-width="12" fill="none" stroke-linecap="round"/><ellipse cx="0" cy="24" rx="16" ry="22" fill="#E9C9A6" stroke="#9A6B44" stroke-width="2"/><circle cx="-6" cy="22" r="2.4" fill="#3A2626"/><circle cx="6" cy="22" r="2.4" fill="#3A2626"/><path d="M-4 34 q4 3 8 0" stroke="#C0272D" stroke-width="1.6" fill="none"/>
+            <path d="M-8 50 L-70 222 H70 L8 50Z" fill="#F7C7D3" stroke="#E79AB0" stroke-width="2"/>${Array.from({ length: 10 }, (_, k) => `<path d="M${-60 + k * 13} 214 l${18 - k * 2} -150" stroke="#F2AFC2" stroke-width="1" opacity=".7"/>`).join('')}</g>`).join('')}
+        <path d="M212 268 c-6 -10 6 -16 10 -6 c4 -10 16 -4 10 6 l-10 12z" fill="#7A2350"/>
+        <g fill="none" stroke="#F2AFC2" stroke-width="2">${[[140, 108], [380, 220]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8"/><circle cx="${x + 12}" cy="${y}" r="8"/><circle cx="${x + 6}" cy="${y - 10}" r="8"/><circle cx="${x + 6}" cy="${y + 10}" r="8"/>`).join('')}</g>
+        <text x="50" y="300" ${KM} font-size="40" fill="#56B8A8">A</text><text x="364" y="330" ${KM} font-size="40" fill="#56B8A8">S</text></svg>`,
+    sparkle: `<svg viewBox="0 0 440 320" role="img" aria-label="Dear Suhini, you are best sister ever and make eyes sparkle">
+        <g transform="rotate(-6 110 160)"><rect x="10" y="20" width="200" height="290" rx="4" fill="#F4E8C8" stroke="#D8C8A0" stroke-width="2"/>
+            ${[[40, 80, '#F2A3BE'], [150, 60, '#F6C64E'], [80, 200, '#E58FA4'], [170, 240, '#F2A3BE'], [30, 290, '#F6C64E'], [140, 150, '#7FC4B8']].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="22" fill="${c}" opacity=".7"/><circle cx="${x}" cy="${y}" r="10" fill="#fff" opacity=".5"/>`).join('')}
+            <rect x="26" y="40" width="160" height="250" rx="3" fill="#F28DB4"/>
+            ${[[50, 70, '#5BC0A0'], [140, 90, '#5A2C7E'], [90, 230, '#2E5AAE'], [160, 200, '#E8C34E'], [56, 150, '#6E6A68']].map(([x, y, c]) => `<path d="M${x} ${y - 8} l2.4 5.6 6 .6 -4.6 4 1.4 6 -5.2 -3.2 -5.2 3.2 1.4 -6 -4.6 -4 6 -.6z" fill="${c}"/>`).join('')}
+            <path d="M70 130 c-28 -30 10 -54 36 -26 c26 -28 64 -4 36 26 l-36 40z" fill="none" stroke="#C0272D" stroke-width="3"/><text x="106" y="128" text-anchor="middle" ${KM} font-size="13" fill="#7A2350">Suhani &amp;</text><text x="106" y="144" text-anchor="middle" ${KM} font-size="13" fill="#7A2350">Amaira ♡</text>
+            <path d="M84 250 c-10 -12 6 -20 12 -8 c6 -12 22 -4 12 8 l-12 14z" fill="#3B3F9E"/></g>
+        <rect x="216" y="12" width="214" height="298" rx="3" fill="#F7F9F6" stroke="#D8D2CA" stroke-width="2"/>
+        <g ${KM} fill="#8A8A8A"><text x="232" y="48" font-size="22">Dear Suhini</text><text x="232" y="92" font-size="36">You are</text><text x="236" y="136" font-size="32">best sister</text><text x="238" y="176" font-size="32">ever. and</text><text x="246" y="216" font-size="32">make</text><text x="244" y="256" font-size="32">“eyes</text><text x="244" y="296" font-size="32">Sparkle”</text></g></svg>`
+};
+
 const VIEWS = {
     mailbox: () => `
         <h2>My <em>mailbox</em></h2>
@@ -1937,14 +1990,15 @@ const AFTER = {
     todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [
-            ['img:assets/img/amaira-welcome.jpg', '', '“welcome back didi!!!” with a cup that says “i ♡ u” and two little us, one of us holding my aritzia bag. obviously.'],
-            ['img:assets/img/amaira-ut.jpg?v=1790828881', '', 'she wants to go to UT Austin and be a “bussiness women.” she’s already got the hookup.'],
-            ['img:assets/img/amaira-sisters.jpg?v=1790828881', '', 'amaira ♡ suhani, forever. matching pink dresses, obviously.'],
-            ['img:assets/img/amaira-card.jpg?v=1790828881', '', '“you are the best sister ever and make eyes sparkle.” her words. i’m keeping it forever.'],
+            ['svg:welcome', '', '“welcome back didi!!!” with a cup that says “i ♡ u” and two little us, one of us holding my aritzia bag. obviously.'],
+            ['svg:ut', '', 'she wants to go to UT Austin and be a “bussiness women.” she’s already got the hookup.'],
+            ['svg:sisters', '', 'amaira ♡ suhani, forever. matching pink dresses, obviously.'],
+            ['svg:sparkle', '', '“you are the best sister ever and make eyes sparkle.” her words. i’m keeping it forever.'],
 ['Happy Bithday Didi!','#F6C6D3','a birthday card. spelling: hers. didi means big sister.'],['I love you! you\'re the sweetest sister ever! I\'ll miss you!','#FFFDF8','she wrote “i’ll miss you.” enough said.'],['Two Starbucks Girls','#FBF6EA','us. at starbucks. she drew the cups very accurately.'],['Two Little Girls Walking on the Street','#EAF4EC','a house, two girls, a walk. peak art.'],['Merry Christmas and Happy New Year!','#FCE8E5','a christmas card with a gingerbread friend.'],['Girl boss','#EEF0FB','she thinks i run the world. i\'m not correcting her.']];
         let i = 0;
         const draw = () => {
             const [t, bg, n] = C[i];
+            if (t.startsWith('svg:')) { $('#kc').innerHTML = `<div class="kc-card kc-real kc-dig">${DIGI_CARDS[t.slice(4)]}</div>`; $('#kc-n').textContent = `${i + 1} / ${C.length}`; $('#kc-note').textContent = n; $('#kc').firstChild.classList.add('in'); return; }
             if (t.startsWith('img:')) { $('#kc').innerHTML = `<div class="kc-card kc-real"><img src="${t.slice(4)}" alt="A drawing my little sister made me"></div>`; $('#kc-n').textContent = `${i + 1} / ${C.length}`; $('#kc-note').textContent = n; $('#kc').firstChild.classList.add('in'); return; }
             $('#kc').innerHTML = `<div class="kc-card" style="background:${bg}"><p class="kc-t">${t}</p><svg viewBox="0 0 160 70" aria-hidden="true"><path d="M30 60 c-14 -16 8 -30 16 -14 c8 -16 30 -2 16 14 l-16 14z" fill="#E0457E" opacity=".85"/><g fill="none" stroke="#7A4E2E" stroke-width="2.4" stroke-linecap="round"><circle cx="104" cy="22" r="8" fill="#F2D2B8"/><path d="M104 30 v20 M104 36 l-10 8 M104 36 l10 8 M104 50 l-7 14 M104 50 l7 14"/><circle cx="134" cy="28" r="6" fill="#F2D2B8"/><path d="M134 34 v16 M134 40 l-8 6 M134 40 l8 6 M134 50 l-6 12 M134 50 l6 12"/></g><path d="M96 16 q8 -10 16 0 M128 23 q6 -8 12 0" stroke="#5A3A26" stroke-width="3" fill="none"/></svg><p class="kc-from">— amaira</p></div>`;
             $('#kc-n').textContent = `${i + 1} / ${C.length}`; $('#kc-note').textContent = n;

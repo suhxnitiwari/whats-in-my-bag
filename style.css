@@ -2163,3 +2163,5 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .lm-spoon.held { opacity: .2; animation: none; }
 @keyframes lm-nudge { 50% { transform: translateY(-6px) rotate(-6deg); } }
 .lm-ghost { width: 26px; transform: translate(-50%, -8%) rotate(-28deg); transform-origin: 50% 8%; }
+/* amaira's cards, redrawn */
+.kc-dig svg { display: block; width: 100%; height: auto; max-height: 440px; }
