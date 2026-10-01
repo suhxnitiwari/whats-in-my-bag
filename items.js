@@ -345,6 +345,12 @@ window.ITEMS = [
         open: 'sunglasses'
     },
     {
+        // black frames with the little gold bees on the corners
+        id: 'readers', name: 'my reading glasses', zip: 'shades', l: 0, t: 0, w: 12.5, r: 4,
+        art: `<img src="assets/img/reading-glasses.png" alt="" draggable="false" style="display:block; width:100%; height:auto">`,
+        open: 'readers'
+    },
+    {
         id: 'jewelry', name: 'my little jewelry box', zip: 'shades', l: 0, t: 0, w: 9.4, r: -5,
         art: `<svg viewBox="0 0 120 84"><defs><pattern id="jwq" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#F4C3CF"/><path d="M0 0 H10 M0 0 V10" stroke="#E7A9B9" stroke-width="1"/></pattern></defs>
             <rect x="6" y="10" width="108" height="68" rx="12" fill="url(#jwq)" ${S}/><path d="M6 46 H114" ${S} stroke-width="2"/><path d="M14 16 h92" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/>

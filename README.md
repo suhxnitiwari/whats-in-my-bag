@@ -15,6 +15,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Paper Mate pouch | 20 InkJoy Gel pens: pick one and type in its color (switch mid-sentence), plus my BIC mechanical pencils: an erasable sketch pad |
 | Phone (iPhone 18 Pro Max, pink case) | Photos, Instagram, LinkedIn, Spotify, YouTube, Netflix, Prime, Google Calendar and Duolingo |
 | Sunglasses | How I see things (and they tint the whole page) |
+| Reading glasses (black, gold bees) | A note that's a blur until you put them on |
 | Car keys + apartment fob | The truth about my driving, and the way home |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
 | iPad | Pinterest (my board), Procreate (my art), and a folder of things I built |

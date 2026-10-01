@@ -1503,6 +1503,12 @@ const VIEWS = {
         pen: (c, p) => p && p.pencil ? PENCIL_SVG(c) : `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
 
+    readers: () => `
+        <h2>My <em>reading</em> glasses</h2>
+        <p class="note">black frames, little gold bees on the corners. for reading, and for screens at 2am.</p>
+        <div class="rg-big"><img src="assets/img/reading-glasses.png" alt="My black reading glasses with gold bees on the corners"></div>
+        <p class="rg-text" id="rg-text">if you can read this, you’re wearing my glasses. hi ♡ the rom-com is still on chapter one, the to-do list is still overdue, and i still think i’ll get to both tonight.</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="rg-on" aria-pressed="false">Put them on</button></div>`,
     sunglasses: () => `
         <h2>How I <em>see</em> things</h2>
         <p class="note">chanel square sunglasses. black and beige, brown gradient lenses. they don't block the sun, they fix the plot.</p>
@@ -1919,6 +1925,16 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    readers: () => {
+        // everything's a blur until the glasses go on
+        const t = $('#rg-text'), btn = $('#rg-on');
+        btn.onclick = () => {
+            const on = t.classList.toggle('sharp');
+            btn.textContent = on ? 'Take them off' : 'Put them on';
+            btn.setAttribute('aria-pressed', on);
+            sheetBody.querySelector('.rg-big').classList.toggle('worn', on);
+        };
+    },
     haircomb: () => {
         // drag the comb down: everything above it is combed, everything below is still frizz.
         // the comb only goes one way: combed hair never frizzes back up
