@@ -1035,6 +1035,7 @@ const VIEWS = {
                     <button type="button" class="papp" data-app="calendar"><span class="ic ic-gcal"><svg viewBox="0 0 40 40"><rect x="5" y="5" width="30" height="30" rx="4" fill="#fff"/><path d="M8 8 h24 v20" fill="none" stroke="#4285F4" stroke-width="4"/><path d="M32 28 l-6 6 h-18" fill="none" stroke="#34A853" stroke-width="4"/><path d="M8 34 v-26" fill="none" stroke="#FBBC04" stroke-width="4"/><path d="M26 34 l6 -6 h-6z" fill="#EA4335"/><text x="20" y="25.5" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="11" fill="#4285F4" id="gcal-day">${new Date().toLocaleDateString('en-US', { day: 'numeric', timeZone: 'America/Chicago' })}</text></svg></span><span class="plabel">Google Calendar</span></button>
                     <button type="button" class="papp" data-app="duolingo"><span class="ic ic-duo"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="12" ry="11" fill="#fff"/><circle cx="15.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="24.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="16" cy="21.5" r="2" fill="#3C3C3C"/><circle cx="24" cy="21.5" r="2" fill="#3C3C3C"/><path d="M18 26 l2 2.5 2 -2.5z" fill="#FFC800"/></svg></span>Duolingo</button>
                     <button type="button" class="papp" data-app="contacts"><span class="ic ic-ct"><svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="6" fill="#fff"/><path d="M9 31 c1 -7 6 -10 11 -10 s10 3 11 10z" fill="#fff"/></svg></span>Contacts</button>
+                    <button type="button" class="papp" data-app="notes"><span class="ic ic-notes"><svg viewBox="0 0 40 40"><rect x="7" y="7" width="26" height="26" rx="4" fill="#fff"/><rect x="7" y="7" width="26" height="8" rx="4" fill="#F7C744"/><rect x="7" y="11" width="26" height="4" fill="#F7C744"/><path d="M12 21 h16 M12 26 h16 M12 31 h10" stroke="#C9C6BE" stroke-width="1.6"/></svg></span>Notes</button>
                 </div>
                 <div class="app-view" id="app-view" hidden></div>
             </div>
@@ -1369,6 +1370,26 @@ const AFTER = {
                     <div class="yt-feed"></div></div>`;
                 view.querySelectorAll('.yt-chips button').forEach(c => c.onclick = () => render(c.dataset.f));
                 render('all');
+            } else if (b.dataset.app === 'notes') {
+                const NOTES = [
+                    ['roles i’m going for', 'product marketing manager\nproduct manager\nbrand strategist\ntechnology consultant\n\n→ work where technology meets people'],
+                    ['medici', 'vanilla latte. every day.\nbuy 10, get 1 free.'],
+                    ['gift card balances', 'aritzia: ?\nchanel: ?\nsephora: ?\n(a mystery)'],
+                    ['in my backpack rn', 'T.D. ♡\namaira’s cards\na speeding ticket (we don’t talk about it)\nan overdue to-do list']
+                ];
+                const list = () => {
+                    view.innerHTML = back + `<div class="nt"><p class="nt-h">Notes</p>${NOTES.map(([t, b], i) => `<button type="button" class="nt-row" data-n="${i}"><b>${t}</b><span>${b.split('\n')[0]}</span></button>`).join('')}<button type="button" class="nt-new" id="nt-new">✎ new note</button></div>`;
+                    $('#back').onclick = () => { view.hidden = true; home.hidden = false; };
+                    view.querySelectorAll('[data-n]').forEach(r => r.onclick = () => openNote(+r.dataset.n));
+                    $('#nt-new').onclick = () => openNote(-1);
+                };
+                const openNote = i => {
+                    const [t, b] = i < 0 ? ['', ''] : NOTES[i];
+                    view.innerHTML = `<button type="button" class="back mono" id="nt-back">‹ notes</button><div class="nt-page"><p class="nt-title" ${i < 0 ? 'contenteditable="true" data-ph="title"' : ''}>${t}</p><div class="nt-body" ${i < 0 ? 'contenteditable="true" data-ph="leave me a note (it isn’t saved)"' : ''}>${b.replace(/\n/g, '<br>')}</div></div>`;
+                    $('#nt-back').onclick = list;
+                    if (i < 0) view.querySelector('.nt-title').focus();
+                };
+                list(); view.hidden = false; home.hidden = true; return;
             } else if (b.dataset.app === 'contacts') {
                 view.innerHTML = back + `
                     <div class="ct">

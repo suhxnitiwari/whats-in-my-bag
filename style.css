@@ -1501,3 +1501,16 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .kc-t { font: 700 1.5rem/1.15 "Caveat", cursive; color: #B13A6A; margin: 0; }
 .kc-card svg { width: 100%; margin-top: auto; }
 .kc-from { font: 600 1.1rem "Caveat", cursive; color: #6A4FB0; text-align: right; margin: 0; }
+
+/* phone: Notes */
+.ic-notes { background: #fff; }
+.nt { font-family: var(--sans); padding: 2px; }
+.nt-h { font-weight: 700; font-size: 1.3rem; margin: 2px 0 8px; }
+.nt-row { display: flex; flex-direction: column; gap: 1px; width: 100%; text-align: left; background: #fff; border: 0; border-bottom: 1px solid #ECECEF; padding: 8px 10px; cursor: pointer; font-family: var(--sans); }
+.nt-row:first-of-type { border-radius: 10px 10px 0 0; } .nt-row:last-of-type { border-radius: 0 0 10px 10px; }
+.nt-row b { font-size: .82rem; color: #1C1C1E; } .nt-row span { font-size: .7rem; color: #8A8A8E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nt-new { margin-top: 10px; border: 0; background: none; color: #D9A200; font: 600 .82rem var(--sans); cursor: pointer; }
+.nt-page { background: #FFFDF6; border-radius: 10px; padding: 12px; min-height: 260px; font-family: var(--sans); }
+.nt-title { font-weight: 700; font-size: 1.05rem; margin: 0 0 8px; outline: none; }
+.nt-body { font-size: .85rem; line-height: 1.5; color: #2A2A2E; outline: none; min-height: 180px; }
+.nt-page [contenteditable]:empty::before { content: attr(data-ph); color: #B5B5BA; }
