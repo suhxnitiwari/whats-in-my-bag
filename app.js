@@ -1438,7 +1438,8 @@ const VIEWS = {
                 <span class="bbb-tag mono" id="bbb-tag">before</span>
                 <div class="bbb-dust" id="bbb-dust" aria-hidden="true"></div>
             </div>
-            <button type="button" class="btn solid bbb-wand" id="bbb-wand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 L14 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M17 3 l1.1 2.9 2.9 1.1 -2.9 1.1 -1.1 2.9 -1.1 -2.9 -2.9 -1.1 2.9 -1.1Z" fill="currentColor"/></svg><span id="bbb-word">bibbidi bobbidi boo</span></button>
+            <div class="bbb-btns"><button type="button" class="btn solid bbb-wand" id="bbb-wand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 L14 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M17 3 l1.1 2.9 2.9 1.1 -2.9 1.1 -1.1 2.9 -1.1 -2.9 -2.9 -1.1 2.9 -1.1Z" fill="currentColor"/></svg><span id="bbb-word">bibbidi bobbidi boo</span></button>
+            <button type="button" class="btn bbb-zoom" id="bbb-zoom" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 L14 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M17 3 l1.1 2.9 2.9 1.1 -2.9 1.1 -1.1 2.9 -1.1 -2.9 -2.9 -1.1 2.9 -1.1Z" fill="currentColor"/></svg><span id="bbb-zword">zoom in</span></button></div>
             <p class="bbb-cap hand" aria-live="polite">pretty both ways, right?</p>
         </div>
 `,
@@ -1919,11 +1920,14 @@ function cardHTML(c, i) {
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
     haircomb: () => {
-        // drag the comb down: everything above it is combed, everything below is still frizz
+        // drag the comb down: everything above it is combed, everything below is still frizz.
+        // the comb only goes one way: combed hair never frizzes back up
         const hair = $('#hair'), comb = $('#hair-comb');
-        let done = false, drag = false;
+        let done = false, drag = false, combed = 0;
         const set = f => {
-            f = Math.max(0, Math.min(1, f));
+            f = Math.max(combed, Math.max(0, Math.min(1, f)));
+            if (f > .97) f = 1;
+            combed = f;
             hair.style.setProperty('--comb', f);
             $('#hair-tag').textContent = f > .97 ? 'after' : f < .03 ? 'before' : 'combing…';
             if (f > .97 && !done) { done = true; $('#hair-note').textContent = 'see? smooth. the comb stays in the bag.'; $('#hair-braid').hidden = false; }
@@ -1935,7 +1939,7 @@ const AFTER = {
         const end = () => { drag = false; hair.classList.remove('dragging'); };
         hair.addEventListener('pointerup', end); hair.addEventListener('pointercancel', end);
         comb.onkeydown = e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); set((+hair.style.getPropertyValue('--comb') || 0) + (e.key === 'ArrowDown' ? .1 : -.1)); } };
-        comb.onclick = e => { if (e.detail) return; set((+hair.style.getPropertyValue('--comb') || 0) > .5 ? 0 : 1); };
+        comb.onclick = e => { if (e.detail) return; set(1); };
         // combed out, then one long braid for bed. while it's braided the comb stays put.
         $('#hair-braid').onclick = () => {
             const on = hair.classList.toggle('braided');
@@ -2634,6 +2638,12 @@ const AFTER = {
         });
         // bibbidi bobbidi boo: a wave of the wand, a burst of sparkles, and everything in the pouch is on. wave again to take it off.
         const bbb = $('#bbb'), dust = $('#bbb-dust');
+        // the second wand zooms in on my face so you can actually see the makeup, then back out
+        if (bbb) $('#bbb-zoom').onclick = () => {
+            const z = bbb.classList.toggle('zoom');
+            $('#bbb-zword').textContent = z ? 'zoom out' : 'zoom in';
+            $('#bbb-zoom').setAttribute('aria-pressed', z);
+        };
         if (bbb) $('#bbb-wand').onclick = () => {
             const on = bbb.classList.toggle('after');
             $('#bbb-tag').textContent = on ? 'after' : 'before';
