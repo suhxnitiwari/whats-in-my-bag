@@ -119,10 +119,10 @@ window.ITEMS = [
         open: 'sketchbook'
     },
     {
-        id: 'lipstick', name: 'mac sleek satin lipstick', zip: 'makeup', l: 62.5, t: 86, w: 3.8, r: 16,
+        id: 'lipstick', name: 'mac sleek satin, espresso yourself', zip: 'makeup', l: 62.5, t: 86, w: 3.8, r: 16,
         art: `<svg viewBox="0 0 70 150"><rect x="13" y="64" width="44" height="82" rx="3" fill="#141214" ${S}/><path d="M18 72 v66" stroke="#3A383C" stroke-width="3" stroke-linecap="round"/>
             <rect x="15" y="56" width="40" height="10" rx="2" fill="#2A282C" ${S} stroke-width="2.2"/><rect x="21" y="36" width="28" height="22" rx="2" fill="#1E1C20" ${S} stroke-width="2.2"/>
-            <path d="M23 37 V16 C23 8 31 6 35 10 L47 24 V37Z" fill="#A85A5E" ${S} stroke-width="2.4"/><path d="M27 18 q3 -5 7 -5" fill="none" stroke="#D08A8E" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M23 37 V16 C23 8 31 6 35 10 L47 24 V37Z" fill="#6E3A2E" ${S} stroke-width="2.4"/><path d="M27 18 q3 -5 7 -5" fill="none" stroke="#9A5E4E" stroke-width="2.4" stroke-linecap="round"/>
             <text x="35" y="112" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="9" letter-spacing="1.6" fill="#F2F0EC" transform="rotate(-90 35 106)">M·A·C</text></svg>`,
         open: 'makeup'
     },

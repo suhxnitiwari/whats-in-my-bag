@@ -1529,3 +1529,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vslot .card.picked { transform: translateY(-128%); }
 .vw.has-pick { transition: margin-top .55s cubic-bezier(.2,.8,.2,1); }
 .vslot .card { cursor: grab; }
+/* the perfume cap comes off and lies on its side next to the bottle (no clipping) */
+.pf-bottle svg { overflow: visible; }
+.pf-bottle .pcap { transform-box: fill-box; transform-origin: 50% 50%; }
+.pf-bottle.capoff .pcap { transform: translate(92px, 116px) rotate(90deg); }

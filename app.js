@@ -704,7 +704,7 @@ const VIEWS = {
         <p class="note">all of it lives in my victoria’s secret makeup pouch</p>
         <div class="lists">
             <div class="love"><h3>always in my bag</h3><ul>
-                <li><b>MAC Sleek Satin lipstick.</b> In the makeup bag.</li>
+                <li><b>MAC Sleek Satin lipstick, Espresso Yourself.</b> In the makeup bag.</li>
                 <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the grab-it pocket.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
@@ -743,7 +743,7 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-105px; --a:-34deg; --d:0ms" aria-label="MAC Sleek Satin lipstick">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
+                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-105px; --a:-34deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
                 <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-21px; --a:-7deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
                 <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:21px; --a:7deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
                 <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:105px; --a:34deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
@@ -1497,7 +1497,7 @@ const AFTER = {
         bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
             // tap one: it swipes on in its real shade, and its name gets written underneath in that shade
             const SH = {
-                lipstick: ['#A85A5E', 'MAC Sleek Satin lipstick', 'lipstick'],
+                lipstick: ['#6E3A2E', 'MAC Sleek Satin · Espresso Yourself', 'lipstick'],
                 blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
                 mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
