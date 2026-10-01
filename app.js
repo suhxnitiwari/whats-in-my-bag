@@ -322,7 +322,7 @@ const VIEWS = {
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color, then write on the notepad.',
+        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color and type. switch pens mid-sentence.',
         list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
@@ -564,10 +564,14 @@ function penView({ title, note, list, front, pen, pick }) {
             <div class="pouch-front">${front}</div>
         </div>
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
-        ${list === GELPENS ? `<div class="pad"><canvas id="pad-canvas" aria-label="Notepad: write or draw with the pen you picked"></canvas><span class="pad-hint" id="pad-hint">write anything…</span><button type="button" class="pad-clear mono" id="pad-clear">clear</button></div>` : ''}
-        ${list === GELPENS ? `<div class="in-pencil"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
+        ${list === GELPENS ? `<div class="pad"><div id="pad-text" class="pad-text" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Notepad: type in the pen color you picked" data-placeholder="pick a pen, then type anything…"></div></div>` : ''}
+        ${list === GELPENS ? `<div class="in-pencil">
+            <div class="pencil-top"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
             <div><p class="mono" style="margin:0 0 4px; color:var(--plum)">Plus my BIC Xtra-Smooth mechanical pencils</p>
-            <p style="margin:0">For anything still in draft. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>` : ''}`;
+            <p style="margin:0">For anything still in draft, so it’s all erasable. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>
+            <div class="sketch-tools"><button type="button" class="on" data-tool="pencil">✏️ pencil</button><button type="button" data-tool="eraser">◻︎ eraser</button><button type="button" data-tool="clear">clear</button></div>
+            <div class="pad pencil-pad"><canvas id="pencil-canvas" aria-label="Sketch pad: draw in pencil, then erase"></canvas><span class="pad-hint" id="pencil-hint">sketch something, then erase it…</span></div>
+        </div>` : ''}`;
 }
 
 function cardHTML(c, i) {
@@ -606,15 +610,12 @@ function cardHTML(c, i) {
                     <span><i>dob</i> a lady never tells</span>
                     <span><i>hgt</i> 5′6″</span>
                     <span><i>weight</i> don’t ask</span>
-                    <span><i>sex</i> F</span>
                     <span><i>eyes</i> dreamy</span>
                     <span><i>hair</i> dark, long, and always done</span>
                     <span><i>address</i> wouldn’t you wanna knowwww</span>
                     <span><i>class</i> C (for cute)</span>
-                    <span><i>restr</i> curbs</span>
                 </span>
             </span>
-            <span class="dl-fine">not an actual ID ♡ no curbs were harmed (mostly)</span>
         </button>`;
     if (c.kind === 'id') return `
         <button class="card id" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
@@ -938,7 +939,7 @@ function setupPad() {
     let drawing = false, last = null;
     const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
     cv.addEventListener('pointerdown', e => {
-        e.preventDefault(); cv.setPointerCapture(e.pointerId);
+        e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (_) {}
         drawing = true; last = pt(e); hint.hidden = true;
         ctx.strokeStyle = ink; ctx.lineWidth = 2.6;
         ctx.beginPath(); ctx.arc(last.x, last.y, 1.3, 0, Math.PI * 2); ctx.fillStyle = ink; ctx.fill();
@@ -953,9 +954,35 @@ function setupPad() {
     cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
     $('#pad-clear').onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); hint.hidden = false; };
 }
+// the BIC pencils: draw in graphite, erase with the pink end
+function setupPencil() {
+    const cv = $('#pencil-canvas'); if (!cv) return;
+    const ctx = cv.getContext('2d'), hint = $('#pencil-hint');
+    const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
+    cv.width = r.width * d; cv.height = r.height * d; ctx.scale(d, d); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    let tool = 'pencil', drawing = false, last = null;
+    const pt = e => { const b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
+    cv.addEventListener('pointerdown', e => { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (_) {} drawing = true; last = pt(e); hint.hidden = true; });
+    cv.addEventListener('pointermove', e => {
+        if (!drawing) return;
+        const p = pt(e);
+        ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = 'rgba(70, 70, 72, .82)'; ctx.lineWidth = tool === 'eraser' ? 16 : 1.8;
+        ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
+    });
+    const stop = () => { drawing = false; };
+    cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
+    sheetBody.querySelector('.sketch-tools').onclick = e => {
+        const b = e.target.closest('[data-tool]'); if (!b) return;
+        if (b.dataset.tool === 'clear') { ctx.clearRect(0, 0, cv.width, cv.height); hint.hidden = false; return; }
+        tool = b.dataset.tool;
+        sheetBody.querySelectorAll('.sketch-tools [data-tool]').forEach(x => x.classList.toggle('on', x === b));
+        cv.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+    };
+}
 function pensAfter(list) {
     const pens = $('#pens'), note = $('#pen-note');
-    setupPad();
+    setupPencil();
     setTimeout(() => { pens.classList.add('open'); note.textContent = pens.dataset.pick; }, reduce ? 0 : 400);
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
@@ -966,7 +993,11 @@ function pensAfter(list) {
             : p.note
             ? `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`
             : `writing in <span style="color:${p.c}; font-size:1.7rem">${p.name.toLowerCase()}</span>`;
-        if (!p.note && !p.full) ink = p.c;
+        if (!p.note && !p.full) {
+            ink = p.c;
+            const t = $('#pad-text');
+            if (t) { t.focus(); document.execCommand('styleWithCSS', false, true); document.execCommand('foreColor', false, p.c); t.style.caretColor = p.c; }
+        }
     };
 }
 

@@ -12,7 +12,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
 | Wallet (LV Victorine) | Opens into the raspberry trifold: cards tucked in the slots (UT ID, a joke Texas license, BofA credit and debit, Delta Gold, Amex Blue Cash Everyday; no numbers, ever), and rupees + dollars in the zip pocket |
 | Mildliner pouch | The full 25-pack: every color is a class I took at UT Austin, highlighted when you pick it |
-| Paper Mate pouch | 20 InkJoy Gel pens: pick one and write by hand on the notepad, plus my BIC mechanical pencils |
+| Paper Mate pouch | 20 InkJoy Gel pens: pick one and type in its color (switch mid-sentence), plus my BIC mechanical pencils: an erasable sketch pad |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Phone (iPhone 18 Pro Max, pink case) | Photos, Instagram, LinkedIn, Spotify, YouTube, Netflix, Prime, Google Calendar and Duolingo |
 | Sunglasses | How I see things (and they tint the whole page) |

@@ -792,3 +792,15 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 /* the real lid is landscape */
 .lid-wrap { max-width: 480px; }
+
+/* pens: a typing notepad where every pen types in its own color */
+.pad-text { min-height: 136px; padding: 4px 16px; font-family: var(--hand); font-size: 1.7rem; line-height: 34px; outline: none; color: #3A2626; }
+.pad-text:empty::before { content: attr(data-placeholder); color: rgba(58,38,38,.32); }
+/* pencils: an erasable sketch pad */
+.in-pencil { display: block; }
+.pencil-top { display: flex; gap: 16px; align-items: center; }
+.sketch-tools { display: flex; gap: 6px; margin: 12px 0 8px; }
+.sketch-tools button { padding: 5px 12px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--paper); cursor: pointer; font: 500 .8rem var(--sans); }
+.sketch-tools button.on { background: var(--ink); color: var(--cream); }
+.pencil-pad { background: #FDFBF7; }
+.pencil-pad canvas { height: 150px; }
