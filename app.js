@@ -392,8 +392,21 @@ const VIEWS = {
 
     passport: () => `
         <h2>My <em>passport</em></h2>
-        <p class="note">stamps only. the domestic trips live in my itineraries.</p>
-        <div class="stamps">${Array.from({ length: 6 }, (_, i) => `<span class="stamp" style="--r:${(i % 3 - 1) * 8}deg"><span class="todo">add a country</span></span>`).join('')}</div>
+        <p class="note">six countries so far. the domestic trips live in my itineraries.</p>
+        <div class="stamps">${[
+            ['Thailand', '#C2185B', 'circle', '<path d="M0 -14 L-10 8 h20 Z M-4 -4 h8 M-6 2 h12" fill="none"/><path d="M0 -20 v6"/>'],
+            ['Malaysia', '#1F6FD1', 'rect', '<path d="M-8 12 V-8 l2 -6 2 6 V12 M4 12 V-8 l2 -6 2 6 V12 M-4 -2 h8"/>'],
+            ['Switzerland', '#D63031', 'oval', '<path d="M-16 10 L-6 -8 L0 2 L6 -10 L16 10Z" fill="none"/><path d="M-3 -2 h6 M0 -5 v6"/>'],
+            ['France', '#2E4A7A', 'rect', '<path d="M0 -16 L-8 12 M0 -16 L8 12 M-5 2 h10 M-7 8 h14"/>'],
+            ['Italy', '#18A39A', 'circle', '<rect x="-5" y="-14" width="10" height="26" rx="2" transform="rotate(5)" fill="none"/><path d="M-5 -6 h10 M-5 2 h10" transform="rotate(5)"/>'],
+            ['Mexico', '#F0592B', 'oval', '<path d="M0 12 V-12 M0 -2 h-7 v-6 M0 4 h7 v-8" fill="none"/>']
+        ].map(([n, c, shape, icon], i) => `<span class="stamp real" style="--r:${[-8, 6, -3, 9, -6, 4][i]}deg; --c:${c}">
+            <svg viewBox="0 0 120 92" aria-label="${n}">
+                ${shape === 'circle' ? '<circle cx="60" cy="46" r="40"/><circle cx="60" cy="46" r="34"/>' : shape === 'oval' ? '<ellipse cx="60" cy="46" rx="54" ry="38"/><ellipse cx="60" cy="46" rx="48" ry="32"/>' : '<rect x="8" y="8" width="104" height="76" rx="6"/><rect x="14" y="14" width="92" height="64" rx="4"/>'}
+                <g transform="translate(60 ${shape === 'rect' ? 40 : 42}) scale(.85)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
+                <text x="60" y="${shape === 'rect' ? 72 : 66}" text-anchor="middle" style="font-size:${n.length > 8 ? 9 : 10.5}px">${n.toUpperCase()}</text>
+                <text x="60" y="${shape === 'rect' ? 24 : 27}" text-anchor="middle" class="small">ADMITTED</text>
+            </svg></span>`).join('')}</div>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`,
 
     sitara: () => `
