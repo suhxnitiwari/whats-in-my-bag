@@ -352,113 +352,40 @@ list.addEventListener('click', e => {
 
 /* my hair things: two silk scrunchies, a wooden claw clip, a wide-tooth comb. Try each one on. */
 function hairView(state) {
+    const st = state === 'claw' || state === 'pony' ? 'pink' : state === 'comb' ? 'pony' : state;
     return `
         <h2>My <em>hair</em> stuff</h2>
         <p class="note">two silk scrunchies and a wide-tooth comb. dark, long, and always done.</p>
         <p class="hair-hint hand" id="hair-hint"></p>
-        <p class="comb-dots" id="comb-dots" aria-hidden="true"><i></i><i></i><i></i></p>
-        <div class="hair-stage"><svg viewBox="0 0 220 330" class="hairdo" id="hairdo" data-state="${state}">
-            <path d="M8 330 V300 C10 246 48 222 110 222 C172 222 210 246 212 300 V330Z" fill="#F3A9BB" stroke="#3A2626" stroke-width="3"/>
-            <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
-            <path d="M92 190 h36 v40 q-18 10 -36 0z" fill="#C68E6A" stroke="#3A2626" stroke-width="2.5"/>
-            <g class="h-down" transform="translate(0 -3) scale(1 1.12)">
-                <path d="M110 20 C72 20 55 48 55 88 C55 112 51 128 45 146 C38 164 49 177 43 195 C37 213 47 227 41 245 C38 256 43 266 49 275 L55 268 L58 285 L66 271 L71 291 L80 275 L85 293 L94 277 L101 295 L110 279 L119 293 L126 277 L135 292 L141 274 L149 289 L154 270 L161 283 L166 268 L171 276 C178 266 183 256 179 244 C173 226 183 212 177 194 C171 176 181 164 175 146 C169 128 165 112 165 88 C165 48 148 20 110 20Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2.5" stroke-linejoin="round"/>
-                <g fill="none" stroke-linecap="round">
-                    <path d="M110 22 V58" stroke="#7A4E2E" stroke-width="1.6" opacity=".8"/>
-                    <path d="M100 26 C88 60 90 98 82 128 C74 158 90 178 80 206 C72 232 84 250 76 282" stroke="#6B4329" stroke-width="2.4"/>
-                    <path d="M120 26 C132 62 130 98 138 126 C146 156 130 178 140 206 C148 232 136 252 144 284" stroke="#6B4329" stroke-width="2.4"/>
-                    <path d="M88 34 C72 70 74 104 64 132 C56 158 70 178 60 204 C54 222 62 238 56 262" stroke="#5E3A24" stroke-width="2"/>
-                    <path d="M132 34 C148 72 146 104 156 134 C164 160 150 180 160 206 C166 224 158 242 164 264" stroke="#5E3A24" stroke-width="2"/>
-                    <path d="M108 60 C104 100 112 130 102 160 C94 186 110 208 100 236 C96 254 104 270 98 290" stroke="#6B4329" stroke-width="2"/>
-                    <path d="M114 62 C120 100 112 132 122 160 C130 188 116 210 124 238 C128 256 120 272 126 288" stroke="#3E2418" stroke-width="2"/>
-                    <path d="M84 110 C80 140 94 156 86 184 M138 112 C142 140 128 158 136 186 M70 150 C64 170 76 184 70 204" stroke="#8A5A34" stroke-width="1.8" opacity=".55"/>
-                    <path d="M92 60 C86 96 94 124 86 150 M128 62 C134 98 126 126 134 152 M76 170 C70 190 80 204 74 224 M144 176 C150 196 140 210 146 232" stroke="#B9824B" stroke-width="3.2" opacity=".55"/>
-                    <path d="M100 120 C96 140 104 156 98 176 M120 126 C124 146 116 162 122 182" stroke="#C9935A" stroke-width="2.2" opacity=".45"/>
-                    <path d="M66 46 q-7 -7 -12 -4 M74 36 q-4 -8 -10 -8 M150 40 q8 -7 13 -4 M144 32 q5 -8 11 -7 M50 118 q-7 1 -10 -3 M170 150 q7 0 9 -6 M42 196 q-6 3 -9 -1 M178 214 q6 2 8 -3 M52 264 q-4 6 -2 12 M168 266 q4 6 2 11" stroke="#4A2D1C" stroke-width="1"/>
-                </g></g>
-            <g class="h-up"><ellipse cx="57" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/><ellipse cx="163" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/>
-                <path d="M110 22 C68 22 54 54 56 96 C58 132 74 160 92 176 L128 176 C146 160 162 132 164 96 C166 54 152 22 110 22Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2.5"/>
-                <g fill="none" stroke-linecap="round"><path d="M72 60 C84 74 98 84 108 90 M148 60 C136 74 122 84 112 90 M110 26 V88 M62 104 C78 100 94 96 108 94 M158 104 C142 100 126 96 112 94 M70 150 C84 130 98 110 108 96 M150 150 C136 130 122 110 112 96" stroke="#6B4329" stroke-width="1.8"/>
-                    <path d="M90 40 C98 60 104 76 108 88 M130 40 C122 60 116 76 112 88" stroke="#8A5A34" stroke-width="1.3" opacity=".6"/>
-                    <path d="M66 52 q-7 -6 -11 -2 M154 52 q7 -6 11 -2" stroke="#4A2D1C" stroke-width="1"/></g></g>
-            <g class="h-pony">
-                <path d="M96 104 C82 128 92 150 80 174 C70 196 86 216 76 240 C70 256 80 272 72 290 C70 300 76 310 72 318 L80 312 C84 300 80 292 86 284 C94 270 86 254 94 240 Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M124 104 C138 128 128 152 140 176 C150 198 134 218 144 242 C150 258 140 274 148 292 C150 302 144 312 148 320 L140 314 C136 302 140 294 134 286 C126 272 134 256 126 242 Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M100 100 C90 126 104 148 94 172 C86 194 102 214 94 238 C88 256 100 272 94 290 C92 300 98 310 96 322 L104 312 C106 300 102 290 108 280 C114 266 104 252 110 238 C116 222 106 206 112 190 C118 174 108 156 114 140 C118 126 116 112 120 100Z" fill="#553420" stroke="#2C1A10" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M106 102 C118 128 106 150 118 172 C128 192 114 212 122 234 C128 252 118 270 124 288 C126 298 120 308 124 318 L116 312 C114 300 118 292 112 282 C106 268 116 252 108 238 Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2" stroke-linejoin="round"/>
-                <g fill="none" stroke-linecap="round"><path d="M88 150 C82 170 94 186 86 206 M132 156 C138 176 126 192 134 212 M100 200 C94 222 106 238 98 262 M120 206 C126 226 114 244 120 266" stroke="#8A5A34" stroke-width="1.6" opacity=".6"/>
-                    <path d="M98 130 C92 146 100 160 94 176 M118 130 C124 148 116 162 122 178" stroke="#6B4329" stroke-width="1.4"/>
-                    <path d="M74 236 q-8 2 -10 -4 M146 244 q8 2 10 -4 M80 290 q-6 4 -6 10 M142 296 q6 4 6 10 M96 322 q-2 5 1 8 M124 318 q3 5 0 8" stroke="#4A2D1C" stroke-width=".9"/></g>
-                <g fill="none" stroke="#4A2D1C" stroke-width=".9" stroke-linecap="round"><path d="M58 100 q-4 -6 -2 -11 M162 100 q4 -6 2 -11 M62 124 q-5 2 -6 7 M158 124 q5 2 6 7 M96 176 q-2 6 1 10 M124 176 q2 6 -1 10 M86 26 q-3 -7 -9 -8 M134 26 q3 -7 9 -8"/></g>
-                <g class="scr-on">${window.SCRUNCHIE(110, 96, 16, ...window.SCR_PINK)}</g></g>
-
-            <g class="h-tangle" id="tangle" fill="none" stroke-linecap="round">
-                <g class="t1"><path d="M56 60 q-4 -2.7 -8.2 -0.8 M165 69 q4 -3.8 8.5 -2.6 M55 78 q-4 -2.0 -9.3 -1.4 M166 87 q4 -2.7 10.0 -0.2 M54 96 q-4 -4.5 -7.9 0.8 M167 105 q4 -2.5 8.5 2.2 M53 114 q-4 -3.6 -9.0 1.0 M168 123 q4 -2.2 9.0 0.5 M52 132 q-4 -2.9 -6.1 2.2 M169 141 q4 -3.4 8.9 2.3 M51 150 q-4 -4.1 -9.7 -0.6 M170 159 q4 -4.4 7.8 2.6 M50 168 q-4 -4.6 -6.4 -2.2 M171 177 q4 -2.7 9.9 -0.4 M48 186 q-4 -3.9 -7.2 0.0 M172 195 q4 -3.2 7.4 0.5 M47 204 q-4 -3.8 -9.6 1.1 M173 213 q4 -4.8 9.4 2.9 M46 222 q-4 -4.0 -6.7 2.2 M174 231 q4 -4.9 9.6 0.4 M45 240 q-4 -4.1 -6.8 2.0 M175 249 q4 -3.7 7.1 -2.6 M44 258 q-4 -4.6 -10.0 -2.5 M176 267 q4 -4.4 7.6 -2.1 M43 276 q-4 -2.9 -9.1 2.2 M178 285 q4 -2.1 8.5 -2.7" stroke="#5E3A24" stroke-width="1"/><path d="M84 30 q-2 -6 -4.4 -7 M96 24 q-1 -6 -2.2 -7 M108 22 q0.5 -6 1.1 -7 M120 23 q1.5 -6 3.3 -7 M134 28 q2.5 -6 5.5 -7" stroke="#5E3A24" stroke-width="1"/></g>
-                <g class="t2"><path d="M66 110 C90.5 120 89.0 133.0 99.0 139.0 S120 158 132 168" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M69 114 C92.5 124 91.0 137.0 101.0 143.0 S122 162 134 172" stroke="#6B4329" stroke-width="1.2" opacity=".7"/><path d="M150 118 C142.5 128 109.0 148.0 119.0 154.0 S76 180 88 190" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M153 122 C144.5 132 111.0 152.0 121.0 158.0 S78 184 90 194" stroke="#6B4329" stroke-width="1.2" opacity=".7"/><path d="M72 170 C97.0 180 96.0 197.0 106.0 203.0 S128 226 140 236" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M75 174 C99.0 184 98.0 201.0 108.0 207.0 S130 230 142 240" stroke="#6B4329" stroke-width="1.2" opacity=".7"/><path d="M146 180 C138.0 190 104.0 210.0 114.0 216.0 S70 242 82 252" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M149 184 C140.0 194 106.0 214.0 116.0 220.0 S72 246 84 256" stroke="#6B4329" stroke-width="1.2" opacity=".7"/><path d="M96 140 C117.5 150 113.0 167.0 123.0 173.0 S138 196 150 206" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M99 144 C119.5 154 115.0 171.0 125.0 177.0 S140 200 152 210" stroke="#6B4329" stroke-width="1.2" opacity=".7"/><path d="M120 210 C115.5 220 85.0 234.0 95.0 240.0 S58 260 70 270" stroke="#8A5A34" stroke-width="1.5" opacity=".75"/><path d="M123 214 C117.5 224 87.0 238.0 97.0 244.0 S60 264 72 274" stroke="#6B4329" stroke-width="1.2" opacity=".7"/></g>
-                <g class="t3"><path d="M44 262 C40 276 46 288 40 300 M58 270 C54 286 62 296 56 312 M78 278 C74 294 82 304 76 318 M146 276 C150 292 142 302 148 316 M164 268 C170 282 162 294 168 306 M178 258 C184 272 178 284 184 296" stroke="#4A2D1C" stroke-width="3.4"/>
-                    <path d="M52 296 q10 -6 20 2 M150 300 q10 -8 20 0" stroke="#6B4329" stroke-width="1.2"/></g></g>
-            <g class="h-braid" id="braid"><ellipse cx="57" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/><ellipse cx="163" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/>
-                <path d="M110 22 C68 22 54 54 56 96 C58 132 76 162 98 182 L122 182 C144 162 162 132 164 96 C166 54 152 22 110 22Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="2.5"/>
-                <g fill="none" stroke-linecap="round"><path d="M110 23 V62" stroke="#7A4E2E" stroke-width="1.5"/>
-                    <path d="M104 26 C90 70 94 130 108 182 M116 26 C130 70 126 130 112 182 M88 34 C70 80 80 140 106 182 M132 34 C150 80 140 140 114 182 M72 52 C58 100 76 150 104 182 M148 52 C162 100 144 150 116 182" stroke="#6B4329" stroke-width="2"/>
-                    <path d="M96 40 C86 90 92 140 108 180 M124 40 C134 90 128 140 112 180" stroke="#8A5A34" stroke-width="1.4" opacity=".55"/>
-                    <path d="M62 44 q-7 -6 -11 -2 M156 46 q7 -6 12 -3 M54 120 q-6 2 -9 -3 M166 124 q6 1 8 -4" stroke="#4A2D1C" stroke-width="1"/></g>
-                <g class="loose" fill="none" stroke-linecap="round"><path d="M102 184 C94 214 108 236 98 262 C92 284 102 300 98 324" stroke="#4A2D1C" stroke-width="10"/><path d="M110 184 C116 214 102 238 112 264 C118 284 106 302 112 326" stroke="#553420" stroke-width="10"/><path d="M118 184 C128 212 116 236 124 260 C130 280 120 300 124 322" stroke="#4A2D1C" stroke-width="10"/></g>
-                ${[46, 46, 45, 43, 41, 38, 34, 30, 25, 20, 15, 11].map((w, k) => { const y = 190 + k * 10.6, side = k % 2 ? 1 : -1, h = Math.max(6, 12.5 - k * .55); const fz = [[-w / 2 + 2, -2, -5, -3], [w / 2 - 3, 1, 5, -2], [-2, -h + 1, -2, -4]].slice(0, k % 3 + 1).map(([x, yy, dx, dy]) => `M${x} ${yy} l${dx} ${dy}`).join(' '); return `<g class="seg" data-k="${k}" transform="translate(${110 + side * (6.5 - k * .45)} ${y}) rotate(${side * -30})"><path d="M${-w / 2} 0 Q0 ${-h} ${w / 2} 0 Q0 ${h} ${-w / 2} 0Z" fill="#4A2D1C" stroke="#2C1A10" stroke-width="1.5"/><path d="M${-w / 2 + 4} -1 Q0 ${-h / 2 - 1} ${w / 2 - 4} -1 M${-w / 2 + 5} 2 Q0 ${-h / 4} ${w / 2 - 5} 2" fill="none" stroke="#6B4329" stroke-width="1.2"/><path d="M${-w / 2 + 6} -3 Q-2 ${-h / 2 - 2} ${w / 5} ${-h / 2}" fill="none" stroke="#B07E4A" stroke-width="1" opacity=".55"/><path d="${fz}" fill="none" stroke="#4A2D1C" stroke-width=".8" stroke-linecap="round"/></g>`; }).join('')}
-                <path class="wisp" d="M92 196 q-9 5 -8 13 M128 206 q9 4 8 12 M96 232 q-8 4 -8 11 M124 250 q7 3 7 9 M56 104 q-5 -5 -3 -11 M164 104 q5 -5 3 -11 M60 126 q-5 3 -5 8 M160 126 q5 3 5 8 M100 178 q-3 6 0 10 M120 178 q3 6 0 10" fill="none" stroke="#4A2D1C" stroke-width=".9" stroke-linecap="round"/>
-                <g class="braid-tie">${window.SCRUNCHIE(110, 312, 7, ...window.SCR_PINK)}</g>
-                <path class="braid-end" d="M108 318 q-4 5 -1 10 M110 319 q2 5 -1 10 M112 318 q4 4 2 9" fill="none" stroke="#4A2D1C" stroke-width="2" stroke-linecap="round"/></g>
-            <g class="h-comb"><g id="combdrag" transform="translate(0 40)"><g transform="rotate(-45 110 40)">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 150 150">', '<svg x="50" y="-20" width="120" height="120" viewBox="0 0 150 150">')}</g></g></g>
-            <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
-        </svg></div>
+        <div class="hair-pic" id="hairpic" data-state="${st}">
+            ${['pink', 'brown', 'pony', 'braid'].map(k => `<img src="assets/img/hair-${k}.jpg?v=1790828952" data-k="${k}" alt="">`).join('')}
+            <div class="hp-comb" id="hp-comb" aria-hidden="true">${ITEMS.find(i => i.id === 'comb').art}</div>
+            <span class="hp-shine" aria-hidden="true"></span>
+        </div>
         <div class="row hair-btns">
-            <button class="btn" type="button" data-hair="pony" data-scr="pink">Pink scrunchie</button>
-            <button class="btn" type="button" data-hair="pony" data-scr="brown">Brown scrunchie</button>
-            <button class="btn" type="button" data-hair="comb">Comb it out</button>
+            <button class="btn" type="button" data-hair="pink">Pink scrunchie</button>
+            <button class="btn" type="button" data-hair="brown">Brown scrunchie</button>
+            <button class="btn" type="button" data-hair="pony">Ponytail</button>
             <button class="btn" type="button" data-hair="braid">Braid it</button>
         </div>`;
 }
 function hairAfter(state) {
-    const svg = $('#hairdo'), hint = $('#hair-hint');
-    const lines = { pony: 'ponytail. silk, so no creases ♡' };
-    let passes = 0, twists = 0;
-    const tangle = $('#tangle'), comb = $('#combdrag'), segs = [...svg.querySelectorAll('#braid .seg')];
-    const set = (st, scr) => {
-        if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 96, 16, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
-        svg.dataset.state = st;
-        sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === st && (!scr || b.dataset.scr === scr)));
-        $('#comb-dots').style.display = st === 'comb' ? 'flex' : 'none';
-        if (st === 'comb') { passes = 0; tangle.style.opacity = ''; tangle.dataset.p = 0; svg.classList.remove('smooth'); $('#comb-dots').dataset.p = 0; comb.setAttribute('transform', 'translate(0 40)'); hint.textContent = 'tangled from sleep and humidity. drag the comb down through it ↓'; }
-        else if (st === 'braid') { twists = 0; segs.forEach(g => g.classList.remove('on')); svg.classList.remove('braided'); hint.textContent = 'tap the hair to cross one strand over. keep going ↓'; }
-        else hint.textContent = '';
-    };
-    // combing: drag the comb down through the hair; three good passes and the tangles are gone
-    let drag = null;
-    svg.style.touchAction = 'none';
-    const yAt = e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()).y; };
-    svg.addEventListener('pointerdown', e => {
-        if (svg.dataset.state === 'braid') {
-            if (twists >= segs.length) return;
-            segs[twists++].classList.add('on');
-            if (twists === segs.length) { svg.classList.add('braided'); hint.textContent = 'braided ♡ tied off with the pink scrunchie'; toast('look at that braid ♡'); }
-            else hint.textContent = `${twists} of ${segs.length}. ${twists % 2 ? 'right over the middle' : 'left over the middle'}…`;
-            return;
-        }
-        if (svg.dataset.state !== 'comb') return;
-        drag = { y0: yAt(e), last: yAt(e) }; try { svg.setPointerCapture(e.pointerId); } catch {}
+    const pic = $('#hairpic'), hint = $('#hair-hint'), comb = $('#hp-comb');
+    const lines = { pink: 'pink silk scrunchie. no creases ♡', brown: 'the brown one. goes with the cap.', pony: 'high pony. running late energy.', braid: 'braided and tied off with the pink one ♡' };
+    const set = k => { pic.dataset.state = k; sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === k)); hint.textContent = 'drag the comb down through it ↓'; };
+    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair); toast(lines[b.dataset.hair]); });
+    // comb it: drag the wide-tooth comb down the hair; a few passes and it shines
+    let d = null, passes = 0; pic.style.touchAction = 'none';
+    pic.addEventListener('pointerdown', e => { const r = pic.getBoundingClientRect(); d = { y0: e.clientY, r }; try { pic.setPointerCapture(e.pointerId); } catch {} });
+    pic.addEventListener('pointermove', e => {
+        if (!d) return; const y = Math.max(0, Math.min(d.r.height - 40, e.clientY - d.r.top - 30));
+        comb.style.transform = `translateY(${y}px) rotate(-45deg)`; comb.style.transition = 'none';
+        if (e.clientY - d.y0 > d.r.height * .55) { d.y0 = 1e9; passes++; pic.classList.remove('shiny'); void pic.offsetWidth; pic.classList.add('shiny');
+            hint.textContent = passes < 3 ? `${3 - passes} more…` : 'silky. no knots ♡'; if (passes === 3) toast('wide teeth, no breakage. we love to see it'); }
     });
-    svg.addEventListener('pointermove', e => {
-        if (!drag) return;
-        const y = Math.max(20, Math.min(250, yAt(e) - 20));
-        comb.setAttribute('transform', `translate(0 ${y})`);
-        if (y - drag.y0 > 140) { drag.y0 = 9999; passes = Math.min(3, passes + 1); tangle.dataset.p = passes; $('#comb-dots').dataset.p = passes;
-            if (passes >= 3) { svg.classList.add('smooth'); hint.textContent = 'tangle-free ♡ wide teeth, no breakage'; toast('silky. no knots. we love to see it'); }
-            else hint.textContent = passes === 1 ? 'frizz is calming down… keep going ↓' : 'sections are separating. one more for the ends ↓'; }
-    });
-    const up = () => { if (!drag) return; drag = null; comb.setAttribute('transform', 'translate(0 40)'); };
-    svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
-    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair, b.dataset.scr); if (lines[b.dataset.hair]) toast(lines[b.dataset.hair]); });
-    set(state, state === 'pony' ? 'pink' : null);
+    const up = () => { if (!d) return; d = null; comb.style.transition = ''; comb.style.transform = ''; };
+    pic.addEventListener('pointerup', up); pic.addEventListener('pointercancel', up);
+    set(pic.dataset.state);
 }
 
 
@@ -1233,6 +1160,7 @@ const AFTER = {
     todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [
+            ['img:assets/img/amaira-welcome.jpg', '', '“welcome back didi!!!” with a cup that says “i ♡ u” and two little us, one of us holding my aritzia bag. obviously.'],
             ['img:assets/img/amaira-ut.jpg?v=1790828881', '', 'she wants to go to UT Austin and be a “bussiness women.” she’s already got the hookup.'],
             ['img:assets/img/amaira-sisters.jpg?v=1790828881', '', 'amaira ♡ suhani, forever. matching pink dresses, obviously.'],
             ['img:assets/img/amaira-card.jpg?v=1790828881', '', '“you are the best sister ever and make eyes sparkle.” her words. i’m keeping it forever.'],
