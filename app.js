@@ -914,14 +914,14 @@ const SKIN_INFO = {
     lash: ['Grande Cosmetics GrandeLASH-MD Lash Enhancing Serum', 'one swipe along my lash line.', 'grandelash'],
     laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige']
 };
-// my night routine, in order
-const ROUTINE = ['pinkpump', 'goldpump', 'dropper', 'lamer', 'sisley', 'lash', 'laneige', 'patches'];
+// my night routine, in order. patches go on clean, dry skin first and come off before the rest
+const ROUTINE = ['patches', 'pinkpump', 'dropper', 'lash', 'goldpump', 'laneige', 'lamer', 'sisley'];
 // what each one does when it lands on me
 const SKIN_FX = {
     dropper: [null, 'eye activator on. a drop under each eye, patted in.'], pinkpump: [null, 'skin activator serum on. patted in.'], goldpump: [null, 'suprême c on. vitamin c, patted in.'],
     lamer: [null, 'la mer under both eyes, with the little spoon. as it should be.'], sisley: [null, 'sisley on. night cream, all over.'],
     lash: ['lashes', 'grandelash on. lashes, but more.'],
-    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy.']
+    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy. tap them on my face to peel them off.']
 };
 // amaira's cards, redrawn: her words, her spelling, her colors
 const KM = 'font-family="Kalam, Caveat, cursive"';
@@ -1067,7 +1067,7 @@ const VIEWS = {
         <p class="note">another victoria’s secret pouch, just for skincare. here’s everything in it ↓</p>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['pinkpump', 190, -147, -35, 0, 0], ['goldpump', 190, -105, -25, 0, 0], ['dropper', 172, -63, -15, 0, 0], ['lamer', 84, -21, -5, 0, -40], ['sisley', 86, 21, 5, 0, -40], ['lash', 176, 63, 15, 0, 0], ['laneige', 64, 108, 25, 0, -40], ['patches', 120, 155, 35, 0, -34]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['patches', 120, -147, -35, 0, -34], ['pinkpump', 190, -105, -25, 0, -6], ['dropper', 172, -63, -15, 0, 0], ['lash', 176, -21, -5, 0, 0], ['goldpump', 190, 21, 5, 0, 0], ['laneige', 64, 63, 15, 0, -40], ['lamer', 84, 108, 25, 0, -40], ['sisley', 86, 155, 35, 0, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -1083,7 +1083,7 @@ const VIEWS = {
         <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden></button></p>
         <p class="pen-note" id="mk-note">pull the zipper</p>
         <h3 class="routine-h">my night routine</h3>
-        <p class="routine-sub hand" id="routine-next">step 1: skin activator serum. tap it in the pouch ↑</p>
+        <p class="routine-sub hand" id="routine-next">step 1: ${SKIN_INFO[ROUTINE[0]][2]}. tap them in the pouch ↑</p>
         <div class="routine-wrap">
             <ol class="routine" id="routine">${ROUTINE.map(k => `<li data-step="${k}">${SKIN_INFO[k][0]}</li>`).join('')}</ol>
             <div class="face" id="face">
@@ -1885,40 +1885,47 @@ const AFTER = {
         setTimeout(() => sheetBody.querySelector('#routine li') && sheetBody.querySelector('#routine li').classList.add('now'), 0);
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
         const face = $('#face'), applied = new Set();
+        let patchesOn = false;
         // products come out of the pouch in the order i put them on: everything done stays out, the next one pops up, the rest wait inside
         const stage = () => {
             const n = ROUTINE.findIndex(r => !applied.has(r));
             sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => {
                 const i = ROUTINE.indexOf(b.dataset.sk);
-                b.classList.toggle('later', n >= 0 && i > n); b.classList.toggle('next', i === n);
+                b.classList.toggle('later', n >= 0 && (i > n || (patchesOn && i === n))); b.classList.toggle('next', i === n && !patchesOn);
             });
+        };
+        const refresh = () => {
+            const N = ROUTINE.length, nx = ROUTINE.find(r => !applied.has(r));
+            $('#face-hint').textContent = patchesOn ? 'tap the patches to peel them off ↑' : applied.size >= N ? 'routine done ♡' : `${applied.size} of ${N} done`;
+            sheetBody.querySelectorAll('#routine li').forEach(li => { li.classList.toggle('done', applied.has(li.dataset.step) && !(li.dataset.step === 'patches' && patchesOn)); li.classList.toggle('now', patchesOn ? li.dataset.step === 'patches' : li.dataset.step === nx); });
+            $('#routine-next').textContent = patchesOn ? 'patches off before the rest. tap them on my face ↓'
+                : nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch ↑` : 'night routine done. goodnight ♡';
+            stage();
         };
         stage();
         const apply = k => {
             const [fx, line] = SKIN_FX[k];
+            // the patches come back off before anything else goes on
+            if (k === 'patches' && patchesOn) {
+                patchesOn = false; face.querySelector('[data-fx="patches"]').classList.remove('on'); face.classList.remove('patched');
+                refresh();
+                return toast(`patches off. glowing. now step 2: ${SKIN_INFO[ROUTINE[1]][2]}.`);
+            }
+            if (patchesOn) return toast('patches off first, babe. tap them on my face.');
             // in order, please
             const next = ROUTINE.find(r => !applied.has(r));
-            if (k !== 'patches' || !applied.has('patches')) {
-                if (applied.has(k)) return toast('already on ♡');
-                if (k !== next) return toast(`not yet, babe. step ${ROUTINE.indexOf(next) + 1} is ${SKIN_INFO[next][2]}.`);
-            }
-            if (k === 'patches' && applied.has('patches')) {
-                applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); clearTimeout(face.zzz); clearTimeout(face.wake); face.classList.remove('asleep', 'patched');
-                stage();
-                return toast('patches off. i’m up. glowing.');
-            }
+            if (applied.has(k)) return toast('already on ♡');
+            if (k !== next) return toast(`not yet, babe. step ${ROUTINE.indexOf(next) + 1} is ${SKIN_INFO[next][2]}.`);
             applied.add(k);
             // only laneige (lips), grandelash (lashes) and the patches change how i look. everything else just sinks in
             if (fx) face.querySelector(`[data-fx="${fx}"]`).classList.add('on');
             else { const r = face.getBoundingClientRect(); fairyDust(r.left + r.width * .42, r.top + r.height * .52); }
-            if (k === 'patches') { face.classList.add('patched'); clearTimeout(face.zzz); face.zzz = setTimeout(() => { if (applied.has('patches')) { face.classList.add('asleep'); toast('and… i’m out. sleepy. bye bye 💤'); } }, reduce ? 0 : 1800); clearTimeout(face.wake); face.wake = setTimeout(() => { if (applied.has('patches')) pg.dispatchEvent(new Event('click')); }, 9000); }
+            if (k === 'patches') { patchesOn = true; face.classList.add('patched'); }
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
-            const N = ROUTINE.length; $('#face-hint').textContent = applied.size >= N ? 'routine done ♡' : `${applied.size} of ${N} done`;
-            sheetBody.querySelectorAll('#routine li').forEach(li => { li.classList.toggle('done', applied.has(li.dataset.step)); li.classList.toggle('now', li.dataset.step === ROUTINE.find(r => !applied.has(r))); });
-            const nx = ROUTINE.find(r => !applied.has(r));
-            $('#routine-next').textContent = nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch ↑` : 'night routine done. goodnight ♡';
-            stage();
+            refresh();
             toast(line);
+            // last step done: lights out
+            if (applied.size === ROUTINE.length) { clearTimeout(face.zzz); face.zzz = setTimeout(() => { face.classList.add('asleep'); toast('and… i’m out. goodnight 💤'); }, reduce ? 0 : 1800); }
         };
         // la mer goes on with its little spoon, under my eyes only
         const spoon = $('#lm-spoon'), touched = new Set();
@@ -1963,7 +1970,7 @@ const AFTER = {
         // tap the patches on my face to peel them off; my eyes open again
         const pg = face.querySelector('[data-fx="patches"]');
         pg.addEventListener('click', () => {
-            if (!applied.has('patches') || pg.classList.contains('peel')) return;
+            if (!patchesOn || pg.classList.contains('peel')) return;
             pg.classList.add('peel');
             setTimeout(() => { pg.classList.remove('peel'); apply('patches'); }, reduce ? 0 : 450);
         });
