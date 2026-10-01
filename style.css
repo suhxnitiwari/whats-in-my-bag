@@ -1533,3 +1533,10 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pf-bottle svg { overflow: visible; }
 .pf-bottle .pcap { transform-box: fill-box; transform-origin: 50% 50%; }
 .pf-bottle.capoff .pcap { transform: translate(92px, 116px) rotate(90deg); }
+
+#unzip-all[hidden] { display: none !important; }
+/* "pull me" points at the first zipper pull and works as a button */
+.bag .bag-hint { left: auto; right: 104%; top: 21%; transform: none; margin: 0; background: none; border: 0; padding: 0; cursor: pointer; color: var(--plum); font-size: 1.5rem; white-space: nowrap; animation: nudge2 1.6s ease-in-out infinite; z-index: 6; }
+.bag .bag-hint:empty { display: none; }
+@keyframes nudge2 { 50% { transform: translateX(6px); } }
+@media (max-width: 760px) { .bag .bag-hint { right: auto; left: 50%; top: 102%; transform: translateX(-50%); animation: none; } }

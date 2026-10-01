@@ -312,7 +312,7 @@ function zipUp(pk, from = 1) {
         pk.el.pull.setAttribute('aria-pressed', 'false');
         pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
         syncAllBtn();
-        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull me ↓'; stage.classList.add('idle'); stage.style.aspectRatio = ''; bagBtn.style.top = ''; }
+        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull me →'; stage.classList.add('idle'); stage.style.aspectRatio = ''; bagBtn.style.top = ''; }
     });
     return busy;
 }
@@ -1943,6 +1943,8 @@ function toast(msg) {
     t.textContent = msg; t.classList.add('on');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2400);
 }
-})();
-
 $('#put-back').addEventListener('click', () => { $('#ending').hidden = true; $('#repack').click(); toast('everything back where it belongs. mostly.'); });
+
+// "pull me" sits next to the first zipper's pull, and actually pulls it
+$('#bag-hint').addEventListener('click', e => { e.stopPropagation(); unzip(BAG.pockets[0]); });
+})();
