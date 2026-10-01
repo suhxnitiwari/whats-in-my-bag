@@ -385,8 +385,13 @@ window.ITEMS = [
         open: 'bear'
     },
     {
-        id: 'todo', name: 'an overdue to-do list', zip: 'shades', l: 0, t: 0, w: 9.4, r: 8,
-        art: `<svg viewBox="0 0 110 120"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
+        id: 'todo', name: 'an overdue to-do list', zip: 'shades', l: 0, t: 0, w: 6.6, r: 8,
+        art: `<svg viewBox="0 0 100 100"><path d="M22 30 L40 14 L62 18 L80 28 L86 50 L78 72 L58 86 L34 84 L16 66 L12 46Z" fill="#FFFDF6" ${S} stroke-width="2.2"/>
+    <g stroke="#C9D6EE" stroke-width="1.2" fill="none"><path d="M18 44 L46 40 L84 48"/><path d="M16 58 L50 56 L80 64"/><path d="M28 74 L54 70 L72 78"/></g><path d="M30 20 L32 84" stroke="#F0A7B6" stroke-width="1.2"/>
+    <g stroke="#B9B0A2" stroke-width="1.2" fill="none" stroke-linejoin="round"><path d="M40 14 L46 40 L22 30"/><path d="M62 18 L46 40 L80 28"/><path d="M86 50 L58 52 L46 40"/><path d="M58 52 L78 72"/><path d="M58 52 L58 86"/><path d="M58 52 L34 64 L16 66"/><path d="M34 64 L34 84"/><path d="M34 64 L12 46"/></g>
+    <g fill="#E8E2D6" opacity=".6"><path d="M46 40 L62 18 L80 28Z"/><path d="M58 52 L78 72 L58 86Z"/><path d="M34 64 L16 66 L12 46Z"/></g>
+    <path d="M52 30 q4 -2 8 0 M40 52 q5 -2 9 0" stroke="#2C3E7A" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M66 60 q3 2 6 0" stroke="#C0392B" stroke-width="1.6" fill="none"/></svg>`,
+        flat: `<svg viewBox="0 0 110 120"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
     <g stroke="#C9D6EE" stroke-width="1">${[24,34,44,54,64,74,84,94,104].map(y => `<path d="M12 ${y} L100 ${y - 2}"/>`).join('')}</g><path d="M24 8 L22 114" stroke="#F0A7B6" stroke-width="1.2"/>
     <path d="M30 20 L70 30 M60 4 L52 40 M80 60 L104 62 M20 70 L44 96" stroke="#E8E2D6" stroke-width="1.2"/>
     <g fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round"><path d="M30 31 q6 -3 12 0 t12 0 t12 0"/><path d="M30 41 q8 -3 16 0 t16 0"/><path d="M30 51 q6 -3 12 0 t12 0 t12 0 t10 0"/><path d="M30 61 q8 -3 16 0"/><path d="M30 71 q6 -3 12 0 t12 0 t12 0"/></g>

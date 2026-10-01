@@ -582,8 +582,8 @@ const VIEWS = {
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>`,
     todo: () => `
         <h2>an <em>overdue</em> to-do list</h2>
-        <div class="big-obj">${ITEMS.find(i => i.id === 'todo').art}</div>
-        <p class="note">tucked away so it can’t make eye contact with me.</p>`,
+        <div class="crumple" id="crumple"><div class="cr-ball">${ITEMS.find(i => i.id === 'todo').art}</div><div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}</div></div>
+        <p class="note" id="cr-note" style="text-align:center">crumpled up at the bottom of the junk pocket. tap to smooth it out.</p>`,
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
@@ -1221,6 +1221,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up at the bottom of the junk pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [['Happy Bithday Didi!','#F6C6D3','a birthday card. spelling: hers. didi means big sister.'],['I love you! you\'re the sweetest sister ever! I\'ll miss you!','#FFFDF8','she wrote “i’ll miss you.” enough said.'],['Two Starbucks Girls','#FBF6EA','us. at starbucks. she drew the cups very accurately.'],['Two Little Girls Walking on the Street','#EAF4EC','a house, two girls, a walk. peak art.'],['Merry Christmas and Happy New Year!','#FCE8E5','a christmas card with a gingerbread friend.'],['Girl boss','#EEF0FB','she thinks i run the world. i\'m not correcting her.']];
         let i = 0;
