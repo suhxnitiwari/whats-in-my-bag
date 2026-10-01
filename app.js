@@ -1433,8 +1433,8 @@ const VIEWS = {
         <h3 class="routine-h">bibbidi bobbidi boo</h3>
         <div class="bbb" id="bbb">
             <div class="bbb-photo">
-                <img src="assets/img/me-makeup-before.jpg" alt="Me before makeup">
-                <img class="bbb-after" src="assets/img/me-makeup-after.jpg" alt="Me after makeup: Westman blush, MAC Espresso Yourself, Lash Idôle" aria-hidden="true">
+                <img src="assets/img/me-makeup-before.jpg?v=2" alt="Me before makeup">
+                <img class="bbb-after" src="assets/img/me-makeup-after.jpg?v=2" alt="Me after makeup: Westman blush, MAC Espresso Yourself, Lash Idôle" aria-hidden="true">
                 <span class="bbb-tag mono" id="bbb-tag">before</span>
                 <div class="bbb-dust" id="bbb-dust" aria-hidden="true"></div>
             </div>
