@@ -2320,7 +2320,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .jw:not(.open) .jw-base { visibility: hidden; }
 .jw:not(.open) { min-height: 180px; }
 
-/* skincare pouch: products come out in routine order. the next one bobs, the rest wait inside */
+/* skincare pouch: products line up in routine order. the next one glows and bobs */
 .mbag.skin.open .mk.later { opacity: 0; transform: translateX(calc(-50% + var(--x, 0px))) rotate(calc(var(--a) * .2)) translateY(70%); pointer-events: none; }
 .mbag.skin.open .mk.later svg *, .mbag.skin.open .mk.later span { pointer-events: none; }
 .mbag.skin.open .mk.next svg { filter: drop-shadow(0 0 10px rgba(230, 63, 122, .55)); animation: sk-bob 1.4s ease-in-out infinite; }

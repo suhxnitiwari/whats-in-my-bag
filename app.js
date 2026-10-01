@@ -1955,12 +1955,12 @@ const AFTER = {
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
         const face = $('#face'), applied = new Set();
         let patchesOn = false;
-        // products come out of the pouch in the order i put them on: everything done stays out, the next one pops up, the rest wait inside
+        // everything comes out of the pouch, lined up in the order i put it on; the next step glows
         const stage = () => {
             const n = ROUTINE.findIndex(r => !applied.has(r));
             sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => {
                 const i = ROUTINE.indexOf(b.dataset.sk);
-                b.classList.toggle('later', n >= 0 && (i > n || (patchesOn && i === n))); b.classList.toggle('next', i === n && !patchesOn);
+                b.classList.toggle('next', i === n && !patchesOn);
             });
         };
         const refresh = () => {
