@@ -525,7 +525,7 @@ function fairyDust(x, y) {
 const POCKET_SAY = {
     devices: 'the actually important pocket.',
     main: 'the “i might need this” pocket. (i always do.)',
-    shades: 'the grab-it-fast pocket. also where the junk lives.',
+    shades: 'the pocket for things i grab all day, and things i don’t want to deal with.',
     front: 'the girl pocket.'
 };
 const dumping = () => bagBtn.classList.contains('tip');
@@ -583,11 +583,11 @@ const VIEWS = {
     todo: () => `
         <h2>an <em>overdue</em> to-do list</h2>
         <div class="crumple" id="crumple"><div class="cr-ball">${ITEMS.find(i => i.id === 'todo').art}</div><div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}</div></div>
-        <p class="note" id="cr-note" style="text-align:center">crumpled up at the bottom of the junk pocket. tap to smooth it out.</p>`,
+        <p class="note" id="cr-note" style="text-align:center">crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.</p>`,
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
-        <p class="note">see also: my car keys, right next to it in the junk pocket. and the curb. the curb knows what it did.</p>`,
+        <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>`,
     giftcards: () => `
         <h2>some <em>gift cards</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'giftcards').art}</div>
@@ -1221,7 +1221,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
-    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up at the bottom of the junk pocket. tap to smooth it out.'; }; },
+    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [['Happy Bithday Didi!','#F6C6D3','a birthday card. spelling: hers. didi means big sister.'],['I love you! you\'re the sweetest sister ever! I\'ll miss you!','#FFFDF8','she wrote “i’ll miss you.” enough said.'],['Two Starbucks Girls','#FBF6EA','us. at starbucks. she drew the cups very accurately.'],['Two Little Girls Walking on the Street','#EAF4EC','a house, two girls, a walk. peak art.'],['Merry Christmas and Happy New Year!','#FCE8E5','a christmas card with a gingerbread friend.'],['Girl boss','#EEF0FB','she thinks i run the world. i\'m not correcting her.']];
         let i = 0;
