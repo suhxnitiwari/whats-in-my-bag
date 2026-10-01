@@ -923,7 +923,11 @@ const VIEWS = {
                     <ellipse cx="297" cy="317" rx="35" ry="16" fill="url(#lidL)"/><path d="M262 316 Q297 334 333 315" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M272 322 l-3 6 M284 326 l-2 6 M297 327 l0 6 M310 326 l2 6 M322 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
                     <ellipse cx="431" cy="316" rx="42" ry="17" fill="url(#lidR)"/><path d="M390 315 Q431 335 473 314" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M402 322 l-3 6 M416 326 l-2 6 M431 328 l0 6 M446 326 l2 6 M460 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
                 </g>
-                <g class="fx" data-fx="patches"><path d="M262 344 C272 360 318 364 336 342 C346 352 338 378 310 384 C284 388 260 372 262 344Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.5" opacity=".95"/><path d="M392 342 C412 364 456 362 474 340 C480 368 458 388 430 386 C404 384 388 366 392 342Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.5" opacity=".95"/><path d="M280 360 l10 6 M300 370 l8 -4 M412 362 l10 5 M440 372 l10 -4" stroke="#FFF1B0" stroke-width="2" opacity=".7"/></g>
+                <g class="fx" data-fx="patches" filter="url(#fx-soft)">
+                    <path d="M344 333 C320 343 284 341 252 326 C236 352 244 396 280 404 C314 410 340 382 344 333Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
+                    <path d="M386 333 C410 343 450 341 482 324 C498 352 490 396 452 404 C416 410 390 382 386 333Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
+                    <path d="M262 346 C262 370 278 390 300 392 M472 344 C474 370 458 390 436 392" fill="none" stroke="#FFF3BF" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+                    <path d="M290 360 l12 4 M314 374 l10 -2 M420 360 l-12 4 M446 374 l-10 -2" stroke="#B8891A" stroke-width="1.2" opacity=".5"/></g>
             </svg>
             <span class="face-hint hand" id="face-hint">drop products here ↓</span>
         </div>
