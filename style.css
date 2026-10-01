@@ -1357,3 +1357,28 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .tele .tele-sleeve { transition: transform .7s cubic-bezier(.3,1.2,.5,1); }
 .tele-front.down .tele-sleeve { transform: translateY(66px); }
 .pens.open .pen { transition-delay: calc(.25s + var(--i) * 12ms); }
+
+/* iPad on the Magic Keyboard: closed flat with the Pencil on top, lifts and floats open like the real one */
+.mk-wrap { perspective: 1400px; padding: 10px 0 0; }
+.mk-stage { position: relative; width: min(560px, 100%); margin: 0 auto; transform-style: preserve-3d; }
+.mk-base { position: relative; z-index: 1; background: #1E1E21; border: 3px solid var(--ink); border-radius: 14px; padding: 16px 18px 14px; transform: rotateX(28deg); transform-origin: 50% 0; box-shadow: 0 18px 24px -14px rgba(0,0,0,.5); }
+.mk-keys { display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px; }
+.mk-keys i { height: 18px; border-radius: 4px; background: #2C2C30; box-shadow: inset 0 -2px 0 #141416; }
+.mk-pad { width: 44%; height: 70px; margin: 12px auto 0; border-radius: 8px; background: #26262A; border: 1px solid #111; }
+.mk-lid { position: relative; z-index: 2; transform-style: preserve-3d; transform-origin: 50% 100%; transform: translateY(100%) rotateX(-90deg) translateY(0); transition: transform 1.3s cubic-bezier(.4,0,.2,1); }
+.mk-wrap.open .mk-lid { transform: rotateX(12deg); }
+.mk-front, .mk-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.mk-back { position: absolute; inset: 0; transform: rotateY(180deg) rotateZ(180deg); background: #232326; border: 3px solid var(--ink); border-radius: 22px; }
+.mk-back::after { content: ""; position: absolute; left: 0; right: 0; top: 46%; height: 2px; background: #333; }
+.mk-cam { position: absolute; left: 14px; top: 14px; width: 34px; height: 34px; border-radius: 10px; background: #2E2E32; border: 2px solid #444; }
+.mk-front { position: relative; }
+.mk-front .ipad-big { border-radius: 22px; background: #1B1B1E; }
+.mk-pencil { position: absolute; left: 22%; right: 26%; top: -11px; height: 11px; border-radius: 6px 3px 3px 6px; background: linear-gradient(#FFFFFF, #E9E9E6); border: 2px solid var(--ink); z-index: 3; }
+.mk-pencil::before { content: ""; position: absolute; left: -12px; top: 1px; border: 3.5px solid transparent; border-right: 10px solid #F2F2EF; }
+.mk-wrap:not(.open) .ipad-screen > * { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .mk-lid { transition: none; } }
+/* closed: the iPad folds forward and lies flat on the keyboard, back up, Pencil along the top edge */
+.mk-lid { transform: rotateX(-150deg); }
+.mk-wrap.open .mk-lid { transform: rotateX(12deg); }
+.mk-back .mk-pencil-b { position: absolute; left: 24%; right: 22%; bottom: -12px; height: 11px; border-radius: 3px 6px 6px 3px; background: linear-gradient(#FFFFFF, #E9E9E6); border: 2px solid var(--ink); }
+.mk-wrap:not(.open) .mk-front .mk-pencil { visibility: hidden; }

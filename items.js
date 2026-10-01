@@ -325,12 +325,11 @@ window.ITEMS = [
         open: 'perfume'
     },
     {
-        id: 'journal', name: 'my ideas & thoughts journal', zip: 'main', l: 0, t: 0, w: 11.8, r: 5,
-        art: `<svg viewBox="0 0 125 176"><defs><pattern id="pinklinen" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#F2B8C6"/><path d="M0 1 h4 M1 0 v4" stroke="#E9A6B7" stroke-width=".5"/></pattern></defs>
-            <rect x="3" y="3" width="119" height="170" rx="5" fill="url(#pinklinen)" ${S}/>
-            <rect x="14" y="56" width="97" height="58" rx="3" fill="none" stroke="#C99A3E" stroke-width="1.2"/>
-            <g text-anchor="middle" fill="#B8862F" font-family="Bodoni Moda, Georgia, serif"><text x="62.5" y="80" font-size="14" font-style="italic">ideas</text><text x="62.5" y="91" font-size="7">&amp;</text><text x="62.5" y="104" font-size="14" font-style="italic">thoughts</text></g>
-            <path d="M104 3 v34 l4 -4 4 4 v-34" fill="#E26A8D" stroke="#3A2626" stroke-width="1.2"/></svg>`,
+        id: 'journal', name: 'my “believing in herself” journal', zip: 'main', l: 0, t: 0, w: 11.8, r: 5,
+        art: `<svg viewBox="0 0 125 176"><path d="M14 3 q-6 -2 -10 6" fill="none" stroke="#C2306A" stroke-width="2.4"/>
+            <rect x="3" y="3" width="119" height="170" rx="6" fill="#E0457E" ${S}/><path d="M6 6 v164" stroke="#C9356C" stroke-width="2"/>
+            <g font-family="Caveat, cursive" fill="#FFF6F2" text-anchor="middle"><text x="62" y="40" font-size="20">her</text><text x="60" y="60" font-size="20">greatest</text><text x="62" y="80" font-size="20">power is</text><text x="62" y="101" font-size="22">believing</text><text x="58" y="120" font-size="18">in</text></g>
+            <text x="62" y="141" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="22" fill="#D9AE52">herself</text><path d="M30 146 q34 -2 70 -10" fill="none" stroke="#D9AE52" stroke-width="1.4"/><path d="M98 128 c-1.4 -1.6 -3.4 .2 -1.6 2 l1.6 1.4 1.6 -1.4 c1.8 -1.8 -.2 -3.6 -1.6 -2z" fill="#D9AE52"/></svg>`,
         open: 'journal'
     },
     {

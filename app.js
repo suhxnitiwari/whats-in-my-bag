@@ -515,8 +515,8 @@ sheet.addEventListener('click', e => {
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
     journal: () => `
-        <h2>My <em>ideas &amp; thoughts</em> journal</h2>
-        <p class="note">pink, small, always on me. for the ideas that show up at the worst times.</p>
+        <h2><em>her greatest power is believing in herself</em></h2>
+        <p class="note">my pink journal. small, always on me, for the ideas that show up at the worst times.</p>
         <div class="jr"><div class="jr-cover">${ITEMS.find(i => i.id === 'journal').art}</div>
             <div class="jr-page" id="jr-page" contenteditable="true" spellcheck="false" aria-label="A page of the journal: leave an idea"></div></div>
         <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 0">leave an idea on the page. it stays between us (it isn’t saved).</p>`,
@@ -896,6 +896,12 @@ const VIEWS = {
     ipad: () => `
         <h2>My <em>iPad</em></h2>
         <p class="note">mostly pinterest and procreate, honestly</p>
+        <div class="mk-wrap" id="mk-wrap">
+          <div class="mk-stage" id="mk-stage">
+            <div class="mk-lid" id="mk-lid">
+              <div class="mk-back"><span class="mk-cam"></span><span class="mk-pencil-b"></span></div>
+              <div class="mk-front">
+                <span class="mk-pencil" aria-hidden="true"></span>
         <div class="ipad-big"><div class="ipad-screen">
             <div class="ipad-home" id="ipad-home">
                 <button type="button" class="papp" data-ip="pinterest"><span class="ic" style="background:#E60023"><svg viewBox="0 0 40 40"><path d="M20 9 c-8 0 -11 6 -9 10 c1 2 2 2 2 1 c-1 -3 1 -7 7 -7 c5 0 6 3 5 6 c-1 4 -3 5 -5 5 c-2 0 -2 -2 -1 -3 l1 -4 m0 0 l-3 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></span>Pinterest</button>
@@ -903,7 +909,13 @@ const VIEWS = {
                 <button type="button" class="papp" data-ip="made"><span class="ic folder-ic">${['#F4A7B9', '#8FD19E', '#F7D54A', '#B9A3E8'].map(c => `<i style="background:${c}"></i>`).join('')}</span>Made by me</button>
             </div>
             <div class="ipad-view" id="ipad-view" hidden></div>
-        </div></div>`,
+        </div></div>
+              </div>
+            </div>
+            <div class="mk-base"><div class="mk-keys"><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 3"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 3"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 6"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i></div><div class="mk-pad"></div></div>
+          </div>
+        </div>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="mk-toggle">Close it</button></div>`,
 
     phone: () => `
         <h2>My <em>phone</em></h2>
@@ -1340,6 +1352,10 @@ const AFTER = {
         $('#see-makeup2').onclick = () => pickUp({ id: 'makeup', name: 'my makeup', open: 'makeup' });
     },
     ipad: () => {
+        const wrap = $('#mk-wrap'), btn = $('#mk-toggle');
+        const setOpen = o => { wrap.classList.toggle('open', o); btn.textContent = o ? 'Close it' : 'Open it'; };
+        btn.onclick = () => { const o = !wrap.classList.contains('open'); setOpen(o); toast(o ? 'click. it floats ♡' : 'closed, pencil still clinging on'); };
+        setTimeout(() => setOpen(true), reduce ? 0 : 450);
         const view = $('#ipad-view'), home = $('#ipad-home');
         const back = '<button type="button" class="back mono" id="ip-back">‹ home</button>';
         sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {

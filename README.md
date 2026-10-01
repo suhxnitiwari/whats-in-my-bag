@@ -29,7 +29,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | iPhone: Contacts app | "do you wanna connect with me?" — add your name + number (sends to me by email), or save my contact card |
 | philosophy amazing grace ballet rose (front pocket) | Spritz it |
 | Boarding pass (front pocket) | Destination: wherever's next |
-| Pink ideas & thoughts journal (B6) | Leave an idea on the page |
+| Pink “her greatest power is believing in herself” journal (B6) | Leave an idea on the page |
 | McCombs padfolio | Résumés in the pocket (links to my résumé), a pen, a legal pad you can write on |
 | Two silk scrunchies and a wide-tooth comb | Try each one on |
 | Pink Ralph Lauren cable knit sweater | Because I get cold easily |
