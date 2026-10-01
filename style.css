@@ -1552,3 +1552,11 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .hp-shine { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(170deg, transparent 30%, rgba(255,240,220,.45) 45%, transparent 60%); opacity: 0; }
 .hair-pic.shiny .hp-shine { animation: shine 1s ease-out; }
 @keyframes shine { 0% { opacity: 1; transform: translateY(-60%); } 100% { opacity: 0; transform: translateY(60%); } }
+
+/* braiding in progress: the loose ponytail underneath, the braid revealed from the top down */
+@property --p { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+.hair-pic[data-state="braiding"] img[data-k="brown"], .hair-pic[data-state="braiding"] img[data-k="braid"] { opacity: 1; }
+.hair-pic[data-state="braiding"] img[data-k="braid"] { z-index: 1; transition: --p .7s ease, opacity .3s;
+    -webkit-mask-image: linear-gradient(#000 calc(var(--p) - 8%), transparent var(--p)); mask-image: linear-gradient(#000 calc(var(--p) - 8%), transparent var(--p)); }
+/* center the backpack + its side bottle sleeve as one shape */
+@media (min-width: 761px) { .stage .bag { margin-left: -1.2%; } }

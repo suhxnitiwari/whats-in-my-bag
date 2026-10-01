@@ -373,7 +373,23 @@ function hairAfter(state) {
     const pic = $('#hairpic'), hint = $('#hair-hint'), comb = $('#hp-comb');
     const lines = { pink: 'pink silk scrunchie. no creases ♡', brown: 'the brown one. goes with the cap.', pony: 'high pony. running late energy.', braid: 'braided and tied off with the pink one ♡' };
     const set = k => { pic.dataset.state = k; sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === k)); hint.textContent = 'drag the comb down through it ↓'; };
-    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair); toast(lines[b.dataset.hair]); });
+    // braiding, step by step: the braid weaves down from the nape a little more with every tap
+    const STEPS = ['gather it all at the nape', 'split it into three', 'right strand over the middle', 'left strand over the middle', 'keep going…', 'almost there…', 'tie it off with the pink scrunchie ♡'];
+    let step = -1;
+    const braidImg = pic.querySelector('img[data-k="braid"]');
+    const braidStep = () => {
+        if (pic.dataset.state !== 'braiding') { step = -1; pic.dataset.state = 'braiding'; sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === 'braid')); }
+        step = Math.min(STEPS.length - 1, step + 1);
+        const done = step === STEPS.length - 1;
+        braidImg.style.setProperty('--p', done ? '120%' : `${12 + step * 13}%`);
+        hint.textContent = done ? 'braided ♡' : `step ${step + 1} of ${STEPS.length}: ${STEPS[step]}. tap “braid it” again →`;
+        if (done) { setTimeout(() => { pic.dataset.state = 'braid'; braidImg.style.removeProperty('--p'); }, 650); toast('braided and tied off ♡'); }
+    };
+    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => {
+        if (b.dataset.hair === 'braid' && pic.dataset.state !== 'braid') return braidStep();
+        if (b.dataset.hair === 'braid') { step = -1; return braidStep(); }
+        set(b.dataset.hair); toast(lines[b.dataset.hair]);
+    });
     // comb it: drag the wide-tooth comb down the hair; a few passes and it shines
     let d = null, passes = 0; pic.style.touchAction = 'none';
     pic.addEventListener('pointerdown', e => { const r = pic.getBoundingClientRect(); d = { y0: e.clientY, r }; try { pic.setPointerCapture(e.pointerId); } catch {} });
