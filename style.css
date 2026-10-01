@@ -1404,3 +1404,48 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .jb-back { transform: rotateY(180deg); border-radius: 8px 2px 2px 8px; }
 .jb-corner { position: absolute; right: 6px; bottom: 6px; font: 600 .8rem var(--hand); color: #FFF6F2; background: rgba(0,0,0,.15); padding: 1px 6px; border-radius: 999px; animation: nudge 1.6s ease-in-out infinite; }
 @keyframes nudge { 50% { transform: translate(2px, 2px); } }
+
+/* sweater v2: one connected garment; fold = sleeves cross over the chest, then the bottom folds up */
+.sw2 { display: block; width: min(360px, 100%); margin: 10px auto 6px; overflow: visible; }
+.sw2 .sl, .sw2 .bot { transform-box: view-box; transition: transform .7s cubic-bezier(.45,.05,.25,1); }
+.sw2 .sl-l { transform-origin: 100px 54px; } .sw2 .sl-r { transform-origin: 260px 54px; }
+.sw2 .bot { transform-origin: 180px 167px; }
+.sw2.folded .sl-l { transform: rotate(-68deg) scale(.66); }
+.sw2.folded .sl-r { transform: rotate(68deg) scale(.66); }
+.sw2.folded .bot { transform: scaleY(-1); transition-delay: .6s; }
+.sw2:not(.folded) .sl { transition-delay: .6s; }
+
+/* Mildliners: class names show on hover/tap, not on every pen */
+.pens.many .pen .lbl { opacity: 0; transition: opacity .2s; }
+.pens.many .pen:hover .lbl, .pens.many .pen:focus-visible .lbl { opacity: 1; }
+.pens.many .pen { width: 20px; margin-left: -10px; }
+
+/* CICIMELON pouch: the pull runs along the top to unzip; the top opens back and pens fan out */
+.cc-front svg { overflow: visible; }
+.cc-front .cc-pull { transition: transform .6s cubic-bezier(.4,0,.2,1); }
+.cc-front.unzipped .cc-pull { transform: translateX(-176px); }
+.cc-front path[stroke-dasharray="1.6 1.6"] { transition: stroke .3s .3s; }
+.cc-front.unzipped path[stroke-dasharray="1.6 1.6"] { stroke: #3A2626; }
+.pens:not(.many) .pen { transition-delay: calc(.35s + var(--i) * 20ms); }
+
+/* each Erin Condren opens on its own: the cover swings back over the spiral, the page shows */
+.ecb-row { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; perspective: 1600px; margin: 10px 0; }
+.ecb { position: relative; width: 190px; aspect-ratio: 170 / 220; cursor: pointer; transition: margin-left .9s cubic-bezier(.45,.05,.25,1); }
+.ecb.open { margin-left: 190px; }
+.ecb-page { position: absolute; inset: 0; margin: 0; overflow: hidden; }
+.ecb-cover { position: absolute; inset: 0; transform-origin: 6% 50%; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.45,.05,.25,1); z-index: 2; }
+.ecb.open .ecb-cover { transform: rotateY(-178deg); }
+.ecb-front, .ecb-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.ecb-front svg { width: 100%; height: 100%; display: block; }
+.ecb-back { transform: rotateY(180deg); background: #FBF7F1 repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.25) 21px 22px); border: 2px solid var(--ink); border-radius: 8px 2px 2px 8px; }
+@media (max-width: 760px) { .ecb { width: 150px; } .ecb.open { margin-left: 150px; } }
+/* Stanley All Day Slim: ~27 cm tall next to the 32 cm backpack (a bit taller than the padfolio) */
+.bottle { width: 22.5%; }
+
+/* the backpack stays big when it's open */
+.stage .bag, .stage.idle .bag { width: 40%; }
+/* Stanley: a bit taller than the padfolio; its pocket is sewn onto the backpack's side seam */
+.bottle { width: 22%; right: -5%; bottom: 5%; z-index: 1; }
+.bottle .holder { left: -34%; right: -14%; border-left: 2.5px solid #3A2626; border-radius: 4px 14px 20px 6px; }
+.bottle .holder::before { box-shadow: -6px 0 0 -2px #1A181C; }
+.bag-art { z-index: 2; }

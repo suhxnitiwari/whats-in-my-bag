@@ -153,7 +153,12 @@ window.ITEMS = [
     },
     {
         id: 'penpouch', name: 'my cicimelon pen pouch', zip: 'main', l: 89.3, t: 61.5, w: 23.2, r: 2,
-        art: `<svg viewBox="0 0 240 100"><path d="M10 34 h220 a8 8 0 0 1 8 8 v40 a14 14 0 0 1 -14 14 H16 a14 14 0 0 1 -14 -14 v-40 a8 8 0 0 1 8 -8z" fill="#F4C6CD" ${S} stroke-width="2.5"/><path d="M8 34 C8 18 24 10 40 10 H200 C216 10 232 18 232 34Z" fill="#F7D1D7" ${S} stroke-width="2.5"/><path d="M14 30 C18 20 28 16 40 16 H200 C212 16 222 20 226 30" fill="none" stroke="#3A2626" stroke-width="2.6" stroke-dasharray="1.6 1.6"/><path d="M6 58 H234" stroke="#E7AEB8" stroke-width="1.4"/><circle cx="16" cy="38" r="6" fill="none" stroke="#B9BEC4" stroke-width="2.6"/><rect x="18" y="26" width="10" height="8" rx="2" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.2"/><rect x="182" y="70" width="38" height="14" rx="2" fill="#FFFDF9" stroke="#CDB4B9" stroke-width="1"/><text x="201" y="79.6" text-anchor="middle" font-family="Instrument Sans" font-size="5.4" letter-spacing=".6" fill="#8E6A72">CICIMELON</text><path d="M24 44 q60 -6 120 -2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/></svg>`,
+        art: `<svg viewBox="0 0 240 104"><path d="M14 30 C14 22 20 18 28 18 H212 C220 18 226 22 226 30 V84 C226 94 218 100 206 100 H34 C22 100 14 94 14 84Z" fill="#F2C3C8" ${S} stroke-width="2.5"/>
+            <path d="M14 46 H226" stroke="#3A2626" stroke-width="2"/><path d="M16 46 H224" stroke="#D9A7AE" stroke-width="5" stroke-dasharray="1.6 1.6"/>
+            <path d="M14 40 C14 30 20 24 30 24 H210 C220 24 226 30 226 40" fill="none" stroke="#E7AFB6" stroke-width="1.2" stroke-dasharray="3 2"/>
+            <g class="cc-pull"><rect x="196" y="40" width="10" height="12" rx="2" fill="#D8DADE" stroke="#3A2626" stroke-width="1.4"/><circle cx="201" cy="58" r="5" fill="none" stroke="#C9CDD3" stroke-width="2.4"/></g>
+            <rect x="150" y="70" width="44" height="16" rx="2" fill="#FFFDF9" stroke="#CDB4B9" stroke-width="1"/><text x="172" y="80.8" text-anchor="middle" font-family="Instrument Sans" font-size="6" letter-spacing=".6" fill="#8E6A72">CICIMELON</text>
+            <path d="M26 58 q60 -4 120 -2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'gelpens'
 
     },

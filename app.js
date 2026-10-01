@@ -202,7 +202,7 @@ bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '
 
 /* ---------- live layout: whatever is out of the bag gets spread evenly around it, at real size ----------
    1 cm = 0.94% of the table width (the 32 cm backpack is 30%). Table is 106.4 cm wide; height grows if needed. */
-const CM = 0.94, TW = 100 / CM, BAG_CY = 73;
+const CM = 0.94, TW = 100 / CM, BAG_CY = 75;
 const sizeOf = it => {
     const w = it.w / CM, m = (it.art || '').match(/viewBox="([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)"/);
     const h = m ? w * (+m[4] / +m[3]) : w;
@@ -229,9 +229,9 @@ function relayout() {
     if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
     const bands = {
         top: { x0: 2, x1: TW - 2, y0: 2, y1: 45, list: [], cap: (TW - 4) * 43 },
-        left: { x0: 2, x1: 29, y0: 47, y1: 99, list: [], cap: 27 * 52 },
-        right: { x0: 77, x1: TW - 2, y0: 47, y1: 99, list: [], cap: 27.4 * 52 },
-        bottom: { x0: 2, x1: TW - 2, y0: 101, y1: 999, list: [], cap: (TW - 4) * 45 }
+        left: { x0: 2, x1: 29, y0: 47, y1: 103, list: [], cap: 27 * 56 },
+        right: { x0: 83, x1: TW - 2, y0: 47, y1: 103, list: [], cap: 21.4 * 56 },
+        bottom: { x0: 2, x1: TW - 2, y0: 105, y1: 999, list: [], cap: (TW - 4) * 45 }
     };
     const used = k => bands[k].list.reduce((a, b) => a + b.w * b.h, 0) / bands[k].cap;
     for (const b of items) {
@@ -250,7 +250,7 @@ function relayout() {
     }
     const bot = shelf(bands.bottom.list.sort((a, b) => b.h - a.h), bands.bottom.x0, bands.bottom.x1, bands.bottom.y0);
     placed.push(...bot.out);
-    const H = Math.max(110, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 101);
+    const H = Math.max(114, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 105);
     stage.style.aspectRatio = `${TW} / ${H}`;
     bagBtn.style.top = `${BAG_CY / H * 100}%`;
     for (const b of placed) {
@@ -717,7 +717,7 @@ const VIEWS = {
     mildliners: () => penView({
         title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. every color is a class i took at ut austin.',
         list: PENS, front: ITEMS.find(i => i.id === 'pouch').front, pick: 'pick a highlighter, see the class',
-        pen: c => `<svg viewBox="0 0 34 190"><rect x="6" y="30" width="22" height="130" rx="4" fill="#FFFDF9" stroke="#3A2626" stroke-width="2.5"/><rect x="5" y="4" width="24" height="34" rx="6" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M24 8 h4 v24 l-2 3 h-2z" fill="${c}" stroke="#3A2626" stroke-width="1.4"/><rect x="5" y="154" width="24" height="30" rx="6" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M6 44 h22 M6 146 h22" stroke="${c}" stroke-width="3"/><text x="17" y="60" font-family="Instrument Sans" font-size="7" font-weight="600" letter-spacing="1.2" fill="#3A2626" opacity=".55" transform="rotate(90 17 60)">MILDLINER</text></svg>`
+        pen: c => `<svg viewBox="0 0 34 190"><rect x="9" y="44" width="16" height="112" rx="2" fill="#F7F7F4" stroke="#3A2626" stroke-width="1.8"/><rect x="11" y="46" width="3" height="108" fill="#fff" opacity=".9"/><path d="M8 4 Q8 2 10 2 H24 Q26 2 26 4 V46 H8Z" fill="${c}" stroke="#3A2626" stroke-width="1.8"/><rect x="10" y="4" width="4" height="40" fill="#fff" opacity=".35"/><path d="M8 40 H26" stroke="#3A2626" stroke-width="1" opacity=".35"/><path d="M8 154 H26 V180 Q26 184 22 184 H12 Q8 184 8 180Z" fill="${c}" stroke="#3A2626" stroke-width="1.8"/><path d="M8 162 H26" stroke="#3A2626" stroke-width="1" opacity=".35"/><text x="17" y="62" font-family="Instrument Sans" font-size="5.6" font-weight="600" letter-spacing="1.4" fill="#8A8A8E" transform="rotate(90 17 62)">MILDLINER</text><text x="17" y="118" font-family="Instrument Sans" font-size="4.4" font-weight="800" letter-spacing=".8" fill="#3A3A3E" transform="rotate(90 17 118)">ZEBRA</text><rect x="13" y="140" width="8" height="6" rx="1" fill="${c}" opacity=".9"/></svg>`
     }),
 
     gelpens: () => penView({
@@ -806,31 +806,38 @@ const VIEWS = {
     sweater: () => `
         <h2>My pink Ralph Lauren <em>cable knit</em></h2>
         <p class="note">pink, cable knit, always in my bag. i get cold easily.</p>
-        <div class="sw folded" id="sw" role="img" aria-label="My pink cable knit V-neck sweater">
-            <span class="sw-sl l"></span><span class="sw-top"></span><span class="sw-bot"></span><span class="sw-sl r"></span>
-            <svg class="sw-neck" viewBox="0 0 76 78" aria-hidden="true"><path d="M2 2 L38 74 L74 2" fill="none" stroke="#3A2626" stroke-width="3"/><path d="M10 2 L38 60 L66 2" fill="#FBEFF2" stroke="#3A2626" stroke-width="2.5"/><path d="M4 4 L38 70 L72 4" fill="none" stroke="#D27C93" stroke-width="5" stroke-dasharray="1.5 2.5"/></svg>
-            <svg class="sw-pony" viewBox="0 0 18 16" aria-hidden="true"><path d="M2 12 q3 -5 8 -5 l3 -3 2 1 -2 2 q2 2 1 5 M5 12 v3 M12 12 v3 M8 7 l1 -5 M9 2 l3 2" fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <svg class="sw2 folded" id="sw" viewBox="0 0 360 300" role="img" aria-label="My pink cable knit V-neck sweater">
+            <defs><pattern id="cable2" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/><path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#D9849C" stroke-width="2.6"/><path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#DE8CA2" stroke-width="2.2"/><path d="M19 0 v28" stroke="#E395A9" stroke-width="1.6" stroke-dasharray="2 2"/></pattern>
+                <pattern id="rib2" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern></defs>
+            <path class="top" d="M100 46 Q100 30 116 28 L150 22 L180 72 L210 22 L244 28 Q260 30 260 46 L260 168 L100 168 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M150 22 L180 72 L210 22 L200 20 L180 56 L160 20 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2"/>
+            <path d="M162 20 L180 54 L198 20 Z" fill="#FBEFF2"/>
+            <path d="M214 50 q3 -5 8 -5 l3 -3 2 1 -2 2 q2 2 1 5 M216 50 v3 M223 50 v3" fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round"/>
+            <g class="sl sl-l"><path d="M100 46 L100 126 L66 244 L36 236 L76 54 Q86 42 100 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M66 244 L36 236 L30 258 L60 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+            <g class="sl sl-r"><path d="M260 46 L260 126 L294 244 L324 236 L284 54 Q274 42 260 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M294 244 L324 236 L330 258 L300 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+            <g class="bot"><rect x="100" y="166" width="160" height="88" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><rect x="100" y="250" width="160" height="24" rx="3" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+        </svg>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
         <div class="row"><button class="btn" type="button" id="sw-fold">Unfold it</button><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
     notebooks: () => `
         <h2>My <em>Erin Condren</em> notebooks</h2>
         <p class="note">two custom ones. yes, i still take notes by hand.</p>
-        <div class="ec-pair">
-            <div class="ec-one">
-                ${window.EC(['#5E7486', '#F3EDE3', '#C2407A', '#F4C6D2'])}
-                <div class="ec-page"><p class="hand ec-h">my classes</p><ul class="hand">
+        <div class="ecb-row">
+            <div class="ecb" data-ecb>
+                <div class="ecb-page ec-page"><p class="hand ec-h">my classes</p><ul class="hand">
                     <li>Web App Development</li><li>Full-Stack Web App Development</li><li>Database Management</li>
                     <li>Problem Solving &amp; Programming</li><li>Strategic IT Management</li><li>Intro to IT Management</li>
                     <li>Intro to Data Science</li><li>Intro to Decision Science</li><li>Statistics for Business</li>
                 </ul></div>
+                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']])}</div><div class="ecb-back"></div></div>
             </div>
-            <div class="ec-one">
-                ${window.EC(['#C2407A', '#F4C6D2', '#8A9AA6', '#F3EDE3'])}
-                <div class="ec-page"><p class="hand ec-h">notebook no. 2</p><p><span class="todo">what’s in this one?</span></p></div>
+            <div class="ecb" data-ecb>
+                <div class="ecb-page ec-page"><p class="hand ec-h">notebook no. 2</p><p><span class="todo">what’s in this one?</span></p></div>
+                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']])}</div><div class="ecb-back"></div></div>
             </div>
         </div>
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap a notebook to open it. tap again to close.</p>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
 
     binder: () => `
@@ -1007,8 +1014,9 @@ function penView({ title, note, list, front, pen, pick }) {
                 <button class="pen" type="button" style="--i:${i}; --mid:${(list.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
                     ${pen(p.c)}<span class="lbl">${p.name}</span>
                 </button>`).join('')}</div>
-            <div class="pouch-front${list === PENS ? ' tele-front' : ''}" id="pouch-front">${front}</div>
+            <div class="pouch-front${list === PENS ? ' tele-front' : ' cc-front'}" id="pouch-front">${front}</div>
         </div>
+        ${list === GELPENS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="cc-btn">Unzip it</button></div>' : ''}
         ${list === PENS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="tele-btn">Push it down</button></div>' : ''}
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
         ${list === GELPENS ? `<div class="pad"><div id="pad-text" class="pad-text" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Notepad: type in the pen color you picked" data-placeholder="pick a pen, then type anything…"></div></div>` : ''}
@@ -1122,6 +1130,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    notebooks: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     journal: () => {
         const jb = $('#jb'), cover = $('#jb-cover'), hint = $('#jb-hint');
         cover.querySelector('.jb-front').onclick = e => {
@@ -1730,7 +1739,10 @@ function pensAfter(list) {
     const tele = $('#tele-btn'), pf = $('#pouch-front');
     const setTele = up => { pf.classList.toggle('down', up); pens.classList.toggle('open', up); if (tele) tele.textContent = up ? 'Pull it back up' : 'Push it down'; note.textContent = up ? pens.dataset.pick : 'zipped and standing tall'; };
     if (tele) { tele.onclick = () => setTele(!pens.classList.contains('open')); pf.onclick = () => setTele(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
-    setTimeout(() => { if (tele) setTele(true); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);
+    const cc = $('#cc-btn');
+    const setZip = o => { pf.classList.toggle('unzipped', o); pens.classList.toggle('open', o); cc.textContent = o ? 'Zip it' : 'Unzip it'; note.textContent = o ? pens.dataset.pick : 'zipped. three compartments of pens in there'; };
+    if (cc) { cc.onclick = () => setZip(!pens.classList.contains('open')); pf.onclick = () => setZip(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
+    setTimeout(() => { if (tele) setTele(true); else if (cc) setZip(true); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
         const p = list[+b.dataset.pen];
