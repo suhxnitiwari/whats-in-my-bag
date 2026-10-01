@@ -887,7 +887,7 @@ const fileIcon = (n, ic) => ic.startsWith('img:')
 // my skincare: what each one is, what it does when you tap it, its short label
 const SKIN = window.SKIN;
 const SKIN_INFO = {
-    dropper: ['Westman Atelier, the gold dropper', 'one drop. the dropper comes up pink.', 'gold dropper'],
+    dropper: ['Westman Atelier Eye Activator Serum', 'one drop under each eye. the dropper comes up pink.', 'eye activator'],
     pinkpump: ['Westman Atelier, the pink pump', 'one pump.', 'pink pump'],
     goldpump: ['Westman Atelier, the gold pump', 'one pump.', 'gold pump'],
     patches: ['24K gold under-eye patches', 'gold under my eyes. instant “i slept” energy.', 'eye patches'],
@@ -897,7 +897,7 @@ const SKIN_INFO = {
 };
 // what each one does when it lands on me
 const SKIN_FX = {
-    dropper: ['dew', 'serum on. dewy.'], pinkpump: ['glow', 'one pump. glowing.'], goldpump: ['glow2', 'another pump. glowing more.'],
+    dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'one pump. glowing.'], goldpump: ['glow2', 'another pump. glowing more.'],
     lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. do not disturb.']
 };
@@ -914,7 +914,7 @@ const VIEWS = {
                 <linearGradient id="lidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6957F"/><stop offset="1" stop-color="#D2A390"/></linearGradient>
                 <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D873"/><stop offset=".45" stop-color="#D8A82A"/><stop offset=".7" stop-color="#F3D06A"/><stop offset="1" stop-color="#C9961E"/></linearGradient>
             </defs>
-                <g class="fx" data-fx="dew" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="330" cy="400" rx="60" ry="40" fill="#fff" opacity=".35"/><ellipse cx="490" cy="390" rx="70" ry="45" fill="#fff" opacity=".3"/><ellipse cx="350" cy="190" rx="90" ry="40" fill="#fff" opacity=".25"/><ellipse cx="330" cy="420" rx="22" ry="10" fill="#fff" opacity=".6"/></g>
+                <g class="fx" data-fx="eyeserum" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="298" cy="352" rx="38" ry="15" fill="#FFF0EC" opacity=".5"/><ellipse cx="434" cy="350" rx="44" ry="15" fill="#FFF0EC" opacity=".5"/><ellipse cx="292" cy="348" rx="12" ry="5" fill="#fff" opacity=".7"/><ellipse cx="428" cy="346" rx="13" ry="5" fill="#fff" opacity=".7"/></g>
                 <g class="fx" data-fx="glow" filter="url(#fx-blur)" style="mix-blend-mode:soft-light"><ellipse cx="375" cy="390" rx="140" ry="190" fill="#FFE2C8" opacity=".55"/></g>
                 <g class="fx" data-fx="glow2" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="375" cy="390" rx="130" ry="180" fill="#FFE9D6" opacity=".2"/></g>
                 <g class="fx" data-fx="bright" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="300" cy="350" rx="40" ry="16" fill="#FFE8DA" opacity=".55"/><ellipse cx="435" cy="348" rx="46" ry="16" fill="#FFE8DA" opacity=".55"/></g>
