@@ -789,3 +789,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vread .card.big .dl-fine { font-size: 3.2cqw; }
 .vread .card.big .dl-state { font-size: 5cqw; }
 .vread .card.big .t { font-size: 3cqw; }
+
+/* the real lid is landscape */
+.lid-wrap { max-width: 480px; }

@@ -57,7 +57,7 @@ window.BAG = {
 
 window.ITEMS = [
     {
-        id: 'headphones', name: 'my airpods max', zip: 'devices', l: 53, t: 13, w: 16, r: -6,
+        id: 'headphones', name: 'my airpods max', zip: 'devices', l: 61, t: 12, w: 14, r: -8,
         art: `<svg viewBox="0 0 220 200"><defs>
             <pattern id="mesh" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#EFE6D6"/><circle cx="2.5" cy="2.5" r=".9" fill="#DDD0B8"/></pattern>
             <linearGradient id="cup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3EADB"/><stop offset=".55" stop-color="#E2D4BC"/><stop offset="1" stop-color="#CDBB9E"/></linearGradient></defs>
@@ -135,12 +135,12 @@ window.ITEMS = [
 
     },
     {
-        id: 'sunglasses', name: 'my sunglasses', zip: 'shades', l: 71, t: 8, w: 12, r: -6,
+        id: 'sunglasses', name: 'my sunglasses', zip: 'shades', l: 76, t: 8, w: 12, r: -6,
         art: `<svg viewBox="0 0 240 110"><defs><linearGradient id="lens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2226"/><stop offset="1" stop-color="#9C979C"/></linearGradient></defs><path d="M8 26 L-2 12" ${S} stroke-width="6"/><path d="M232 26 L242 12" ${S} stroke-width="6"/><rect x="8" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="136" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="18" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><rect x="146" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><path d="M104 40 Q120 28 136 40" fill="none" ${S} stroke-width="8"/><path d="M104 40 Q120 28 136 40" fill="none" stroke="#1E1414" stroke-width="4"/><rect x="4" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><rect x="228" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><path d="M26 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/><path d="M154 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/></svg>`,
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my keys', zip: 'shades', l: 90, t: 10, w: 13, r: 4,
+        id: 'keys', name: 'my keys', zip: 'shades', l: 91, t: 10, w: 13, r: 4,
         get art() { return window.KEYRING(false); },
         open: 'keys'
     },
@@ -206,17 +206,17 @@ window.ITEMS = [
         open: 'binder'
     },
     {
-        id: 'ipad', name: 'my ipad', zip: 'devices', l: 30, t: 11, w: 20, r: 4,
+        id: 'ipad', name: 'my ipad', zip: 'devices', l: 41, t: 12, w: 19, r: 4,
         art: `<svg viewBox="0 0 220 160"><rect x="4" y="4" width="212" height="152" rx="16" fill="#2A2629" ${S}/><rect x="14" y="14" width="192" height="132" rx="8" fill="#F7E9EC"/><rect x="58" y="46" width="40" height="40" rx="10" fill="#E60023" ${S} stroke-width="2"/><path d="M78 56 c-10 0 -13 8 -11 13 c1 3 3 3 3 1 c-1 -4 1 -9 8 -9 c6 0 8 4 7 8 c-1 5 -4 7 -6 6 c-2 0 -2 -2 -1 -4 l1 -5 m0 0 l-4 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><rect x="122" y="46" width="40" height="40" rx="10" fill="#1B1B1F" ${S} stroke-width="2"/><path d="M132 78 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="133" cy="78" r="3" fill="#B9A3E8"/><text x="78" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Pinterest</text><text x="142" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Procreate</text></svg>`,
         open: 'ipad'
     },
     {
-        id: 'pencil', name: 'my apple pencil pro', zip: 'devices', l: 30, t: 23, w: 15.5, r: -3,
+        id: 'pencil', name: 'my apple pencil pro', zip: 'devices', l: 41, t: 25, w: 15.5, r: -2,
         art: `<svg viewBox="0 0 330 26"><path d="M14 13 L2 13" stroke="#3A2626" stroke-width="2"/><path d="M30 4 H318 a7 9 0 0 1 0 18 H30 L6 15 a2 2 0 0 1 0 -4 Z" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M40 8 H300" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M40 18 H312" stroke="#D9D9D6" stroke-width="2" stroke-linecap="round"/><text x="250" y="16" font-family="Instrument Sans" font-size="7" fill="#9A9A96">Pencil Pro</text></svg>`,
         open: 'pencil'
     },
     {
-        id: 'phone', name: 'my iphone', zip: 'shades', l: 82, t: 25, w: 7.3, r: -8,
+        id: 'phone', name: 'my iphone', zip: 'shades', l: 84, t: 25, w: 7.3, r: -8,
         art: `<svg viewBox="0 0 94 190"><defs><linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F5F6"/><stop offset=".55" stop-color="#E2E4E7"/><stop offset="1" stop-color="#CED1D5"/></linearGradient></defs>
             <rect x="3" y="3" width="88" height="184" rx="16" fill="#F2C6C8" ${S}/><rect x="5" y="6" width="84" height="54" rx="13" fill="#E9AFB4" stroke="#3A2626" stroke-width="1.2"/>
             <rect x="8" y="9" width="78" height="48" rx="10" fill="url(#silver)" stroke="#3A2626" stroke-width="1.6"/>
@@ -247,7 +247,7 @@ window.ITEMS = [
         open: 'passport'
     },
     {
-        id: 'laptop', name: 'my macbook pro', zip: 'devices', l: 10, t: 19, w: 18, r: -6,
+        id: 'laptop', name: 'my macbook pro', zip: 'devices', l: 15, t: 14, w: 29, r: -3,
         get art() { return window.LID(false); },
         open: 'laptop'
     }
@@ -256,29 +256,30 @@ window.ITEMS = [
 
 /* the stickers on my laptop, where they actually are. Each one opens something. */
 window.STICKERS = [
-    { id: 'music', label: 'the music heart → Listening History', x: 40, y: 46, go: 'headphones',
+    { id: 'music', label: 'the music heart → Listening History', x: 262, y: 44, go: 'headphones',
       svg: `<path d="M0 22 C-34 0 -30 -26 -12 -26 C-4 -26 0 -18 0 -14 C0 -18 4 -26 12 -26 C30 -26 34 0 0 22Z" fill="#F6F1E6" stroke="#fff" stroke-width="7" stroke-linejoin="round"/><path d="M0 22 C-34 0 -30 -26 -12 -26 C-4 -26 0 -18 0 -14 C0 -18 4 -26 12 -26 C30 -26 34 0 0 22Z" fill="#F6F1E6" ${S} stroke-width="1.6"/><circle cx="-14" cy="-12" r="4" fill="none" ${S} stroke-width="1.4"/><circle cx="10" cy="-10" r="3" fill="${INK}"/><path d="M-6 2 l3 -8 3 8 M-18 2 h6 M6 4 l6 -4" ${S} stroke-width="1.4" fill="none"/><text x="2" y="12" font-size="6" font-family="JetBrains Mono" fill="${INK}">13</text>` },
-    { id: 'books', label: 'the pink books → my children’s book', x: 160, y: 38, go: 'book',
+    { id: 'books', label: 'the pink books → my children’s book', x: 262, y: 166, go: 'book',
       svg: `<g stroke="#fff" stroke-width="7" stroke-linejoin="round"><rect x="-26" y="-20" width="52" height="40" rx="3" fill="#E75D8A"/></g><rect x="-26" y="-20" width="16" height="40" rx="2" fill="#E75D8A" ${S} stroke-width="1.6"/><rect x="-10" y="-20" width="18" height="40" rx="2" fill="#F08DAA" ${S} stroke-width="1.6"/><rect x="8" y="-20" width="18" height="40" rx="2" fill="#D9486F" ${S} stroke-width="1.6"/><path d="M-30 -2 q-8 -10 0 -12 q6 0 8 8 q2 -8 8 -8 q8 2 0 12 z" fill="#F7B7C8" ${S} stroke-width="1.4"/>` },
-    { id: 'cowgirl', label: 'the cowgirl hat & boot → Owala Austin Marathon', x: 100, y: 92, go: 'owala',
+    { id: 'cowgirl', label: 'the cowgirl hat & boot → Owala Austin Marathon', x: 212, y: 104, go: 'owala',
       svg: `<ellipse cx="-4" cy="-8" rx="30" ry="9" fill="#E07A5F" stroke="#fff" stroke-width="7"/><ellipse cx="-4" cy="-8" rx="30" ry="9" fill="#E07A5F" ${S} stroke-width="1.6"/><path d="M-18 -10 C-16 -30 10 -30 12 -10Z" fill="#E88B70" ${S} stroke-width="1.6"/><path d="M-2 0 v22 h24 q4 -8 -6 -10 v-12z" fill="#F7C9D0" ${S} stroke-width="1.6"/><path d="M2 6 q6 4 10 0 M2 12 q6 4 10 0" fill="none" stroke="#6C8BD6" stroke-width="1.6"/>` },
-    { id: 'texas', label: '“tradition starts here” → my coursework', x: 42, y: 116, href: 'https://suhanitiwari.com/home/study#coursework',
+    { id: 'texas', label: '“tradition starts here” → my coursework', x: 188, y: 44, href: 'https://suhanitiwari.com/home/study#coursework',
       svg: `<path d="M-24 -26 h14 v14 h20 l6 6 h8 l4 10 -8 12 -8 4 -6 12 -8 -8 -4 -8 -10 -6 -8 -12z" fill="#FFF7F0" stroke="#fff" stroke-width="7" stroke-linejoin="round"/><path d="M-24 -26 h14 v14 h20 l6 6 h8 l4 10 -8 12 -8 4 -6 12 -8 -8 -4 -8 -10 -6 -8 -12z" fill="#FFF7F0" stroke="#D9713A" stroke-width="2.2" stroke-linejoin="round"/><text x="-2" y="-2" text-anchor="middle" font-family="Caveat" font-size="8" fill="#D9713A">tradition</text><text x="-2" y="7" text-anchor="middle" font-family="Caveat" font-size="8" fill="#D9713A">starts here</text>` },
-    { id: 'cupcake', label: 'the Mozart’s cupcake → Starbucks app', x: 160, y: 100, go: 'starbucks',
+    { id: 'cupcake', label: 'the Mozart’s cupcake → Starbucks app', x: 196, y: 166, go: 'starbucks',
       svg: `<rect x="-28" y="-26" width="56" height="52" rx="12" fill="#E7C6F2" stroke="#fff" stroke-width="7"/><path d="M-12 4 h24 l-4 18 h-16z" fill="#B7A3E8" ${S} stroke-width="1.6"/><path d="M-16 4 C-18 -12 18 -12 16 4Z" fill="#FFF8EE" ${S} stroke-width="1.6"/><circle cx="0" cy="-14" r="4" fill="#D23B3B" ${S} stroke-width="1.4"/><g fill="#F4A7B9"><circle cx="-6" cy="-2" r="1.2"/><circle cx="6" cy="-4" r="1.2"/><circle cx="2" cy="0" r="1.2"/></g>` },
-    { id: 'flower', label: '“just as you are” → my sketchbook', x: 42, y: 184, go: 'sketchbook',
+    { id: 'flower', label: '“just as you are” → my sketchbook', x: 118, y: 40, go: 'sketchbook',
       svg: `<g fill="#A9C3A0" stroke="#fff" stroke-width="7">${[0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="0" cy="-15" rx="10" ry="13" transform="rotate(${a})"/>`).join('')}</g><g fill="#A9C3A0" ${S} stroke-width="1.4">${[0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="0" cy="-15" rx="10" ry="13" transform="rotate(${a})"/>`).join('')}</g><circle r="11" fill="#F2B27A" ${S} stroke-width="1.4"/><text y="2" text-anchor="middle" font-family="Caveat" font-size="6" fill="${INK}">just as you are</text><circle cx="-10" cy="12" r="3.5" fill="#E75D8A"/>` },
-    { id: 'latte', label: '“love you a latte” → Saturday in Austin', x: 42, y: 256, go: 'saturday',
+    { id: 'latte', label: '“love you a latte” → Saturday in Austin', x: 44, y: 40, go: 'saturday',
       svg: `<circle r="26" fill="#FFFDF8" stroke="#fff" stroke-width="7"/><circle r="26" fill="#FFFDF8" ${S} stroke-width="1.6"/><circle r="17" fill="#D79B62" ${S} stroke-width="1.4"/><path d="M0 10 C-12 2 -10 -10 -3 -9 C0 -8 0 -5 0 -3 C0 -5 0 -8 3 -9 C10 -10 12 2 0 10Z" fill="#FFF3E2"/><path d="M22 -10 q10 0 10 8 q0 8 -10 8" fill="none" ${S} stroke-width="2"/><text y="34" text-anchor="middle" font-family="Caveat" font-size="7" fill="${INK}">love you a latte</text>` }
 ];
 
-window.LID = (big) => `<svg viewBox="0 0 210 300" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
-    <rect x="3" y="3" width="204" height="294" rx="14" fill="#CDD0D5" ${S}/>
-    <rect x="3" y="3" width="204" height="294" rx="14" fill="url(#brushed)" opacity=".5"/>
+window.LID = (big) => `<svg viewBox="0 0 300 210" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
     <defs><linearGradient id="brushed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#9DA2A9" stop-opacity=".35"/></linearGradient></defs>
+    <rect x="3" y="3" width="294" height="204" rx="14" fill="#D4D7DB" ${S}/>
+    <rect x="3" y="3" width="294" height="204" rx="14" fill="url(#brushed)" opacity=".5"/>
+    <path d="M128 92 c-8 0 -13 6 -12 14 c1 10 7 17 12 17 c3 0 4 -2 7 -2 c3 0 4 2 7 2 c5 0 11 -7 12 -17 c1 -8 -4 -14 -12 -14 c-3 0 -5 2 -7 2 c-2 0 -4 -2 -7 -2z M136 88 c1 -5 5 -8 9 -8 c-1 5 -5 8 -9 8z" fill="#1E1A1C"/>
     ${window.STICKERS.map(k => big
-        ? `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}" transform="translate(${k.x} ${k.y})"><g class="stk-in">${k.svg}</g></g>`
-        : `<g transform="translate(${k.x} ${k.y})">${k.svg}</g>`).join('')}
+        ? `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}" transform="translate(${k.x} ${k.y}) scale(1.2)"><g class="stk-in">${k.svg}</g></g>`
+        : `<g transform="translate(${k.x} ${k.y}) scale(1.2)">${k.svg}</g>`).join('')}
 </svg>`;
 
 
