@@ -237,7 +237,7 @@ body.shades .tint { opacity: 1; }
 .shades-note { font-family: var(--hand); font-size: 1.4rem; color: var(--plum); }
 
 /* ---------- keys ---------- */
-.fob { width: 140px; margin: 0 auto; }
+.fob { width: 220px; margin: 0 auto; }
 .fob-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
 .record { border: 2px solid var(--ink); border-radius: 16px; padding: 14px 18px; background: var(--cream); }
 .record li { margin: 4px 0; }

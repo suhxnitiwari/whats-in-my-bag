@@ -273,7 +273,7 @@ const VIEWS = {
 
     keys: () => `
         <div class="fob" id="fob">${ITEMS.find(i => i.id === 'keys').art}</div>
-        <h2>My BMW keys</h2>
+        <h2>My BMW keys <span class="mono" style="font-size:.7rem; color:var(--muted)">+ apartment fob</span></h2>
         <p class="note" style="font-size:1.8rem">whoops, i’m just a girl 🎀</p>
         <p class="note" style="margin-top:-12px">(it’s the curb’s fault. it came out of nowhere.)</p>
         <div class="fob-btns">
@@ -281,6 +281,7 @@ const VIEWS = {
             <button class="btn" type="button" data-fob="unlock">🔓 Unlock</button>
             <button class="btn" type="button" data-fob="trunk">Trunk</button>
             <button class="btn solid" type="button" data-fob="panic">Panic</button>
+            <button class="btn" type="button" data-fob="home">🏠 Apartment</button>
         </div>
         <div class="record"><p class="mono" style="margin:0 0 6px; color:var(--plum)">My driving record, honestly</p><ul>
             <li>Parallel parking: working on it</li>
@@ -549,7 +550,8 @@ const AFTER = {
             lock: 'locked. probably. let me press it again.',
             unlock: 'unlocked… now which car was it?',
             trunk: 'the trunk is open. i did not mean to do that.',
-            panic: 'beep beep beep. sorry, Austin.'
+            panic: 'beep beep beep. sorry, Austin.',
+            home: 'beep. door’s open. this one i can handle.'
         };
         sheetBody.querySelector('.fob-btns').onclick = e => {
             const b = e.target.closest('[data-fob]'); if (!b) return;

@@ -104,8 +104,19 @@ window.ITEMS = [
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my car keys', zip: 'shades', l: 88, t: 13, w: 6, r: 14,
-        art: `<svg viewBox="0 0 150 170"><circle cx="40" cy="30" r="24" fill="none" stroke="#D9A441" stroke-width="7"/><circle cx="40" cy="30" r="24" fill="none" ${S} stroke-width="2"/><rect x="40" y="56" width="70" height="104" rx="30" fill="#2A2226" ${S}/><circle cx="75" cy="84" r="13" fill="#C9CDD3" ${S} stroke-width="2.5"/><circle cx="75" cy="84" r="7" fill="#E8EDF2" ${S} stroke-width="1.5"/><rect x="60" y="108" width="30" height="10" rx="5" fill="#5E5559"/><rect x="60" y="124" width="30" height="10" rx="5" fill="#5E5559"/><rect x="60" y="140" width="30" height="10" rx="5" fill="#5E5559"/><path d="M10 50 q-6 20 10 30" fill="none" stroke="#F4A7B9" stroke-width="6" stroke-linecap="round"/><path d="M14 80 l6 -4 4 8z" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
+        id: 'keys', name: 'my car keys', zip: 'shades', l: 88, t: 13, w: 10, r: 12,
+        art: `<svg viewBox="0 0 240 130"><path d="M24 54 C40 54 46 74 44 94 C42 116 6 116 4 94 C2 74 8 54 24 54Z" fill="#2B2C30" ${S} stroke-width="2.5"/><rect x="16" y="60" width="16" height="7" rx="3.5" fill="#FAF1EF" ${S} stroke-width="1.5"/><path d="M14 74 q6 -5 14 -4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".18"/><circle cx="30" cy="38" r="20" fill="none" stroke="#B9BCC2" stroke-width="6"/><circle cx="30" cy="38" r="20" fill="none" ${S} stroke-width="1.5"/>
+            <path d="M44 52 L78 22 H210 L228 42 V82 L212 106 H62 L40 84Z" fill="#141416" ${S}/>
+            <clipPath id="fobclip"><path d="M44 52 L78 22 H210 L228 42 V82 L212 106 H62 L40 84Z"/></clipPath>
+            <g clip-path="url(#fobclip)"><path d="M46 96 L84 28 H226" fill="none" stroke="#2A5BD7" stroke-width="7"/><path d="M52 100 L90 34 H226" fill="none" stroke="#8CC4F0" stroke-width="5" transform="translate(-8 -14)"/></g>
+            <path d="M92 40 C120 34 170 32 206 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".12"/>
+            <circle cx="168" cy="56" r="16" fill="#1F2933" stroke="#D8DCE1" stroke-width="4"/><circle cx="168" cy="56" r="9" fill="#2B3A47"/>
+            <path d="M118 52 h10 v8 h-10z M120 52 v-3 a3 3 0 0 1 6 0 v3" fill="none" stroke="#C9D3DD" stroke-width="1.6"/>
+            <g fill="#26272B" ${S} stroke-width="1.5"><rect x="92" y="84" width="34" height="16" rx="3"/><rect x="130" y="84" width="34" height="16" rx="3"/><rect x="168" y="84" width="34" height="16" rx="3"/></g>
+            <path d="M101 92 h4 l5 -4 v8 l-5 -4 M113 89 q3 3 0 6" fill="none" stroke="#8CC4F0" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M136 96 h22 l-3 -5 h-6 l-3 -3 h-6 z" fill="none" stroke="#C9D3DD" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M180 90 h10 v7 h-10z M182 90 v-3 a3 3 0 0 1 6 0" fill="none" stroke="#C9D3DD" stroke-width="1.5"/>
+        </svg>`,
         open: 'keys'
     },
     {
