@@ -2083,3 +2083,12 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .tk.flip .tk-f { transform: rotateY(-180deg); }
 .tk.flip .tk-b { transform: rotateY(0); }
 .tk-say { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 6px 0 10px; }
+
+/* skincare pouch: tap something to use it. caps lift, pumps press, a little product appears */
+.mbag.skin .mk .top { transition: transform .45s cubic-bezier(.3,1.3,.5,1); transform-box: view-box; }
+.mbag.skin .mk .dab { opacity: 0; transition: opacity .3s .15s; }
+.mbag.skin .mk.use .dab { opacity: 1; }
+.mbag.skin .mk[data-sk="dropper"].use .top, .mbag.skin .mk[data-sk="lamer"].use .top, .mbag.skin .mk[data-sk="sisley"].use .top { transform: translateY(-26px) rotate(-6deg); }
+.mbag.skin .mk[data-sk="pinkpump"].use .top, .mbag.skin .mk[data-sk="goldpump"].use .top { transform: translateY(6px); }
+.mbag.skin .mk[data-sk="patches"].use .top { transform: translateY(-40px) scale(1.15); }
+.mbag.skin .mk svg { overflow: visible; }

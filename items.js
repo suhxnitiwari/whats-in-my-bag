@@ -13,7 +13,7 @@ window.BAG = {
         { id: 'devices', label: 'laptop, ipad, headphones, wallet & passport', d: 'M52 104 C52 40 248 40 248 104' },
         { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
         { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'makeup, hair & the little things', d: 'M80 196 C84 176 216 176 220 196' }
+        { id: 'front', label: 'makeup, skincare, hair & the little things', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
@@ -112,6 +112,45 @@ window.CHARGERS = (() => {
     };
     return { list: C, at, cable, N };
 })();
+
+/* my skincare, drawn from the real packaging. the .top group is whatever comes off or presses down */
+const GOLDG = id => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D9C9A0"/><stop offset=".35" stop-color="#F6EDD6"/><stop offset=".55" stop-color="#EADCB8"/><stop offset="1" stop-color="#C9B58A"/></linearGradient>`;
+const SILVG = id => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E9198"/><stop offset=".4" stop-color="#F2F3F5"/><stop offset=".7" stop-color="#B9BCC2"/><stop offset="1" stop-color="#7C8087"/></linearGradient>`;
+const WA = (x, y, c) => `<text transform="translate(${x} ${y}) rotate(-90)" font-family="Instrument Sans" font-size="5.2" letter-spacing="1.4" fill="${c}">WESTMAN ATELIER</text>`;
+window.SKIN = {
+    dropper: `<svg viewBox="0 0 60 170"><defs>${GOLDG('skg1')}</defs>
+        <rect x="10" y="52" width="40" height="114" rx="4" fill="url(#skg1)" stroke="#3A2626" stroke-width="2.4"/><rect x="27" y="52" width="6" height="114" fill="#8C7A4E" opacity=".75"/>${WA(22, 150, '#F7E3E6')}
+        <g class="top"><rect x="10" y="20" width="40" height="34" rx="4" fill="url(#skg1)" stroke="#3A2626" stroke-width="2.4"/><rect x="16" y="6" width="28" height="16" rx="4" fill="url(#skg1)" stroke="#3A2626" stroke-width="2.4"/><rect x="27" y="6" width="6" height="48" fill="#8C7A4E" opacity=".75"/>
+            <rect x="26" y="54" width="8" height="58" rx="3" fill="#F6E6EA" opacity=".85" stroke="#B9AFB4" stroke-width="1"/><rect x="27" y="80" width="6" height="30" rx="2" fill="#F4C9D3" opacity=".9"/><circle cx="30" cy="114" r="3.2" fill="#F8E4EA" stroke="#B9AFB4" stroke-width="1"/></g>
+        <circle class="dab" cx="30" cy="124" r="4.5" fill="#F7D3DD"/></svg>`,
+    pinkpump: `<svg viewBox="0 0 60 190"><defs>${SILVG('sks1')}</defs>
+        <rect x="9" y="48" width="42" height="138" rx="5" fill="#F7E6E6" stroke="#3A2626" stroke-width="2.4"/><path d="M14 54 v124" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/>${WA(33, 150, '#C9B9B9')}
+        <rect x="14" y="42" width="32" height="7" rx="2" fill="#E2C47A" stroke="#3A2626" stroke-width="1.6"/>
+        <g class="top"><rect x="16" y="14" width="28" height="30" rx="3" fill="url(#sks1)" stroke="#3A2626" stroke-width="2.2"/><rect x="42" y="18" width="7" height="8" rx="2" fill="#F4F4F6" stroke="#3A2626" stroke-width="1.4"/></g>
+        <ellipse class="dab" cx="54" cy="24" rx="5" ry="3.5" fill="#FBF3EE"/></svg>`,
+    goldpump: `<svg viewBox="0 0 60 190"><defs>${GOLDG('skg2')}${SILVG('sks2')}</defs>
+        <rect x="9" y="48" width="42" height="138" rx="5" fill="url(#skg2)" stroke="#3A2626" stroke-width="2.4"/><rect x="27" y="48" width="6" height="138" fill="#8C7A4E" opacity=".7"/>${WA(22, 150, '#6E5A2E')}
+        <rect x="14" y="42" width="32" height="7" rx="2" fill="#FBFBFB" stroke="#3A2626" stroke-width="1.6"/>
+        <g class="top"><rect x="16" y="14" width="28" height="30" rx="3" fill="url(#sks2)" stroke="#3A2626" stroke-width="2.2"/><rect x="42" y="18" width="7" height="8" rx="2" fill="#F4F4F6" stroke="#3A2626" stroke-width="1.4"/></g>
+        <ellipse class="dab" cx="54" cy="24" rx="5" ry="3.5" fill="#E8C9A8"/></svg>`,
+    patches: `<svg viewBox="0 0 90 120"><defs><linearGradient id="skgp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3D36B"/><stop offset=".5" stop-color="#D9A928"/><stop offset="1" stop-color="#F0CC5A"/></linearGradient></defs>
+        <rect x="6" y="6" width="78" height="110" rx="6" fill="#FFFFFF" fill-opacity=".55" stroke="#3A2626" stroke-width="2.4"/><path d="M6 20 h78" stroke="#3A2626" stroke-width="1.6" stroke-dasharray="3 3"/>
+        <g class="top"><path d="M16 46 C14 32 34 26 42 36 C44 46 40 62 30 66 C22 68 16 58 16 46Z" fill="url(#skgp)" stroke="#9A7414" stroke-width="1.6"/><path d="M74 46 C76 32 56 26 48 36 C46 46 50 62 60 66 C68 68 74 58 74 46Z" fill="url(#skgp)" stroke="#9A7414" stroke-width="1.6"/>
+            <path d="M22 42 l6 4 M28 52 l5 -3 M62 42 l-6 4 M60 54 l-5 -3" stroke="#FFF2B8" stroke-width="1.2" opacity=".8"/></g>
+        <text x="45" y="92" text-anchor="middle" font-family="Bodoni Moda" font-size="9" fill="#9A7414" letter-spacing="1">24K GOLD</text><text x="45" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#9A7414" letter-spacing="1.2">EYE MASK</text></svg>`,
+    lamer: `<svg viewBox="0 0 110 100"><defs><linearGradient id="sklm" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2F4A1E"/><stop offset=".45" stop-color="#5C7A34"/><stop offset="1" stop-color="#26401A"/></linearGradient><linearGradient id="sklc" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4C40"/><stop offset=".35" stop-color="#E9D5CA"/><stop offset=".7" stop-color="#4A2F28"/><stop offset="1" stop-color="#2E1C18"/></linearGradient></defs>
+        <path d="M14 92 L22 22" stroke="#3A2626" stroke-width="7" stroke-linecap="round"/><path d="M14 92 L22 22" stroke="#5E7E2C" stroke-width="4" stroke-linecap="round"/><ellipse cx="23" cy="16" rx="6" ry="8" fill="url(#sklc)" stroke="#3A2626" stroke-width="1.8"/>
+        <rect x="30" y="52" width="74" height="44" rx="7" fill="url(#sklm)" stroke="#3A2626" stroke-width="2.4"/>
+        <path d="M42 66 q14 -6 28 -2 q10 -3 22 1 l-2 10 q-14 -3 -24 1 q-14 2 -24 -2z" fill="#E8D7BE"/><text x="67" y="74" text-anchor="middle" font-family="Bodoni Moda" font-size="10" fill="#2F5A2A" letter-spacing=".6">LA MER</text>
+        <text x="67" y="86" text-anchor="middle" font-family="Instrument Sans" font-size="4.2" fill="#E8D7BE" letter-spacing=".6">THE EYE CONCENTRATE</text>
+        <g class="top"><path d="M30 54 v-14 q0 -10 10 -10 h54 q10 0 10 10 v14z" fill="url(#sklc)" stroke="#3A2626" stroke-width="2.4"/><path d="M32 46 h70" stroke="#C9AEA2" stroke-width="1.2" opacity=".7"/></g>
+        <ellipse class="dab" cx="67" cy="54" rx="28" ry="4" fill="#F4EEE4"/></svg>`,
+    sisley: `<svg viewBox="0 0 110 100"><defs><linearGradient id="sksy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B08A3E"/><stop offset=".3" stop-color="#F1DCA0"/><stop offset=".55" stop-color="#C9A55A"/><stop offset=".8" stop-color="#EBD08E"/><stop offset="1" stop-color="#A5803A"/></linearGradient></defs>
+        <path d="M10 46 h90 l-4 40 q-1 8 -9 8 h-64 q-8 0 -9 -8z" fill="#F6E4E4" stroke="#3A2626" stroke-width="2.4"/><path d="M14 74 l10 20 M30 78 l6 16 M80 78 l-6 16 M96 74 l-10 20 M14 74 h82" stroke="#E2CACA" stroke-width="1.4" fill="none"/>
+        <text x="55" y="62" text-anchor="middle" font-family="Bodoni Moda" font-size="9.5" fill="#9A7414" letter-spacing=".8">SUPREMŸA</text><text x="55" y="71" text-anchor="middle" font-family="Bodoni Moda" font-size="5.2" fill="#9A7414" letter-spacing=".6">LA NUIT</text>
+        <g class="top"><rect x="8" y="22" width="94" height="26" rx="3" fill="url(#sksy)" stroke="#3A2626" stroke-width="2.4"/>${Array.from({ length: 9 }, (_, k) => `<path d="M10 ${25 + k * 2.6} h90" stroke="#fff" stroke-width=".5" opacity=".35"/>`).join('')}</g>
+        <ellipse class="dab" cx="55" cy="47" rx="40" ry="4" fill="#FBF1EE"/></svg>`
+};
 
 window.ITEMS = [
     {
@@ -250,6 +289,11 @@ window.ITEMS = [
             <path d="M14 22 C26 12 50 10 70 12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".22"/><path d="M8 60 C8 40 10 28 18 18" fill="none" stroke="#fff" stroke-width="1.6" opacity=".14"/>
             <g transform="translate(60 60)"><g fill="none" stroke-linecap="butt"><circle cx="0" cy="0" r="17" fill="#0B0A0B" stroke="#C9CDD2" stroke-width="2.2"/><circle cx="0" cy="0" r="14.6" fill="none" stroke="#5A5D62" stroke-width=".8"/><path d="M-1.2 -6.8 A7.6 7.6 0 1 0 -1.2 6.8" stroke="#F4F2EE" stroke-width="2.4"/><path d="M1.2 -6.8 A7.6 7.6 0 1 1 1.2 6.8" stroke="#F4F2EE" stroke-width="2.4"/></g></g></svg>`,
         open: 'mirror'
+    },
+    {
+        id: 'skin-pouch', name: 'my victoria’s secret skincare pouch', zip: 'front', l: 0, t: 0, w: 19, r: 3,
+        get art() { return `<svg viewBox="0 0 200 130"><defs><pattern id="vsk" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#FFF5F3"/><rect width="8" height="16" fill="#F6D3DB"/></pattern></defs><g transform="translate(40 -6) scale(.55)">${window.SKIN.dropper.replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g><g transform="translate(118 18) scale(.5)">${window.SKIN.sisley.replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g><path d="M14 40 C14 22 186 22 186 40 L178 116 C176 124 24 124 22 116Z" fill="url(#vsk)" ${S}/><path d="M22 40 H178" ${S} stroke-dasharray="5 5"/><rect x="164" y="30" width="18" height="16" rx="4" fill="#D9A441" ${S} stroke-width="2.5"/><path d="M173 46 v16" ${S} stroke-width="2.5"/><circle cx="173" cy="66" r="5" fill="#fff" ${S} stroke-width="2"/><text x="100" y="90" text-anchor="middle" font-family="Bodoni Moda" font-size="13" letter-spacing="3" fill="#C98A9C">SKINCARE</text></svg>`; },
+        open: 'skinbag'
     },
     {
         id: 'makeup-pouch', name: 'my victoria’s secret makeup pouch', zip: 'front', l: 86.5, t: 49.9, w: 20.7, r: -4,

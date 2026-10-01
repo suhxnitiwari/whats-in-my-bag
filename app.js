@@ -884,7 +884,37 @@ const fileIcon = (n, ic) => ic.startsWith('img:')
     ? `<img src="assets/img/${ic.slice(4)}.jpg" alt="">`
     : `<svg viewBox="0 0 40 48" aria-hidden="true"><path d="M4 2 h22 l10 10 v34 h-32z" fill="#fff" stroke="#C9C6C2" stroke-width="1.5"/><path d="M26 2 v10 h10" fill="#EEE" stroke="#C9C6C2" stroke-width="1.5"/><rect x="4" y="30" width="32" height="10" fill="${ic}"/><text x="20" y="38" text-anchor="middle" font-size="7" font-family="system-ui" font-weight="700" fill="#fff">${(n.match(/\.(\w+)$/) || [, 'APP'])[1].toUpperCase()}</text></svg>`;
 
+// my skincare: what each one is, what it does when you tap it, its short label
+const SKIN = window.SKIN;
+const SKIN_INFO = {
+    dropper: ['Westman Atelier, the gold dropper', 'one drop. the dropper comes up pink.', 'gold dropper'],
+    pinkpump: ['Westman Atelier, the pink pump', 'one pump.', 'pink pump'],
+    goldpump: ['Westman Atelier, the gold pump', 'one pump.', 'gold pump'],
+    patches: ['24K gold under-eye patches', 'gold under my eyes. instant “i slept” energy.', 'eye patches'],
+    lamer: ['La Mer The Eye Concentrate', 'lid off, a tap with the little wand.', 'la mer'],
+    sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley']
+};
 const VIEWS = {
+    skinbag: () => `
+        <h2>My <em>skincare</em> pouch</h2>
+        <p class="note">another victoria’s secret pouch, just for skincare. unzip it.</p>
+        <div class="mbag skin" id="mbag">
+            <div class="mbag-inside" aria-live="polite">
+                ${[['patches', 130, -105, -34, 0, -30], ['pinkpump', 205, -63, -21, 90, 0], ['dropper', 185, -21, -7, 180, 0], ['goldpump', 205, 21, 7, 270, 0], ['lamer', 90, 72, 18, 360, -54], ['sisley', 92, 132, 30, 450, -16]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+            </div>
+            <div class="mbag-front">
+                <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
+                    <path d="M14 34 C14 14 286 14 286 34 L274 154 C272 166 28 166 26 154Z" fill="url(#vsk2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+                    <path class="mzip" d="M28 34 H272" stroke="#3A2626" stroke-width="3" stroke-dasharray="6 6"/>
+                    <path class="mgap" d="M28 34 H272" stroke="#2A1E22" stroke-width="10" stroke-linecap="round"/>
+                    <text x="150" y="112" text-anchor="middle" font-family="Bodoni Moda" font-size="20" letter-spacing="5" fill="#C98A9C">SKINCARE</text>
+                </svg>
+                <button type="button" class="mpull" id="mpull" aria-label="Unzip the skincare pouch"><span></span></button>
+            </div>
+        </div>
+        <div class="swatch" id="swatch" aria-live="polite"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#D2A27E" stroke-width="16" stroke-linecap="round"/></svg><span class="hand" id="swatch-label"></span></div>
+        <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden></button></p>
+        <p class="pen-note" id="mk-note">pull the zipper</p>`,
     chargers: () => `
         <h2>My <em>chargers</em></h2>
         <p class="note">macbook, iphone, headphones. always at the very bottom of my bag. always one knot.</p>
@@ -1620,6 +1650,19 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    skinbag: () => {
+        AFTER.makeupbag();
+        $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
+        sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => b.onclick = () => {
+            const k = b.dataset.sk, used = b.classList.toggle('use');
+            b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
+            const lbl = $('#swatch-label'), sw = $('#swatch');
+            $('#swipe').setAttribute('stroke', { dropper: '#F7D3DD', pinkpump: '#FBEDE6', goldpump: '#E8C9A8', patches: '#E2B23A', lamer: '#F1E9DD', sisley: '#F7E6E2' }[k]);
+            $('#swipe').setAttribute('stroke-width', 16);
+            lbl.textContent = `${SKIN_INFO[k][0]} · ${used ? SKIN_INFO[k][1] : 'back on.'}`; lbl.style.color = 'var(--plum)';
+            sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on');
+        });
+    },
     chargers: () => {
         const svg = $('#chg-svg'), CH = window.CHARGERS, note = $('#chg-note');
         // the knot: headphone cable on top, then the iphone one, the macbook brick at the very bottom
