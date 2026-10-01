@@ -375,13 +375,14 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
     21%  { transform: translate(0, -22px) scaleX(.12); }
     28%  { transform: translate(0, -30px) scaleX(1); }
     55%  { transform: translate(0, -150px) scaleX(1); }
-    72%  { transform: translate(-64px, -150px); }
-    92%  { transform: translate(-64px, 10px); }
-    96%  { transform: translate(-64px, 2px); }
-    100% { transform: translate(-64px, 6px); }
+    72%  { transform: translate(-52px, -150px); }
+    92%  { transform: translate(-52px, 10px); }
+    96%  { transform: translate(-52px, 2px); }
+    100% { transform: translate(-52px, 6px); }
 }
-@media (prefers-reduced-motion: reduce) { .mascara-big.out .wand { animation: none; transform: translate(-64px, 6px); } }
-.mascara-big .tube { transform: translate(18px, 0); }
+@media (prefers-reduced-motion: reduce) { .mascara-big.out .wand { animation: none; transform: translate(-52px, 6px); } }
+.mascara-big .tube { transform: translate(26px, 0); }
+.mascara-big .wand { translate: 26px 0; }
 /* thin things (mascara, lipstick) get a wider invisible tap area */
 .item button::before { content: ""; position: absolute; inset: -6px -14px; }
 
