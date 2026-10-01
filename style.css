@@ -2148,3 +2148,4 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .face [data-fx="patches"].on { opacity: 0; }
 .face.asleep [data-fx="patches"].on { opacity: 1; }
 .face.smooth .face-patched { filter: contrast(.96) brightness(1.03) saturate(1.05); }
+.face.asleep [data-fx="lips"] { transform: translate(1px, -3px); transform-box: view-box; }
