@@ -588,7 +588,8 @@ function cardHTML(c, i) {
                     <span><i>dob</i> a lady never tells</span>
                     <span><i>weight</i> don’t ask</span>
                     <span><i>address</i> wouldn’t you wanna knowwww</span>
-                    <span><i>class</i> C (for cute) <i>restr</i> curbs</span>
+                    <span><i>class</i> C (for cute)</span>
+                    <span><i>restr</i> curbs</span>
                 </span>
             </span>
             <span class="dl-fine">not an actual ID ♡ no curbs were harmed (mostly)</span>
