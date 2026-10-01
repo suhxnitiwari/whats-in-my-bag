@@ -1295,3 +1295,28 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .notes3 b { display: block; font: 600 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--plum); }
 .notes3 span { font-size: .85rem; }
 @media (max-width: 760px) { .notes3 { grid-template-columns: 1fr; } }
+
+/* the braid: its own pulled-back hair, plaits cross down from the nape */
+.hairdo[data-state="braid"] .h-up { opacity: 0 !important; }
+.hairdo .h-braid { opacity: 0; }
+.hairdo[data-state="braid"] .h-braid { opacity: 1; }
+#braid .seg { opacity: 0; transform-box: fill-box; transition: opacity .3s; }
+#braid .seg.on { opacity: 1; }
+#braid .loose { transition: opacity .4s; }
+.hairdo.braided #braid .loose { opacity: 0; }
+
+/* fix: plaits keep their own SVG transforms */
+#braid .seg { transform-box: view-box; }
+/* combing: each pass clears one layer (frizz, then knots, then flyaways) */
+#tangle g { transition: opacity .5s; }
+#tangle[data-p="1"] .t1, #tangle[data-p="2"] .t1, #tangle[data-p="2"] .t2, #tangle[data-p="3"] g { opacity: 0; }
+.comb-dots { display: none; justify-content: center; gap: 6px; margin: 2px 0 0; }
+.hairdo-wrap { position: relative; }
+.comb-dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--plum); }
+.comb-dots[data-p="1"] i:nth-child(1), .comb-dots[data-p="2"] i:nth-child(-n+2), .comb-dots[data-p="3"] i { background: var(--plum); }
+
+/* zipping the makeup pouch closed: the rightmost thing goes back in first, then leftward with the pull */
+.mbag:not(.open) .mk { transition-delay: calc(450ms - var(--d)) !important; }
+/* wallet: tap the bottom-left of the open wallet to fold it closed */
+.vw.open .p1 { cursor: pointer; }
+.vw.open .p1 .vslot .card { cursor: pointer; }

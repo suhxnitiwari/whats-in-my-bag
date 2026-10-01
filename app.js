@@ -273,6 +273,7 @@ function hairView(state) {
         <h2>My <em>hair</em> stuff</h2>
         <p class="note">two silk scrunchies and a wide-tooth comb. dark, long, and always done.</p>
         <p class="hair-hint hand" id="hair-hint"></p>
+        <p class="comb-dots" id="comb-dots" aria-hidden="true"><i></i><i></i><i></i></p>
         <div class="hair-stage"><svg viewBox="0 0 220 300" class="hairdo" id="hairdo" data-state="${state}">
             <path d="M8 300 C10 246 48 222 110 222 C172 222 210 246 212 300Z" fill="#F3A9BB" stroke="#3A2626" stroke-width="3"/>
             <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
@@ -290,20 +291,31 @@ function hairView(state) {
                     <path d="M84 110 C80 140 94 156 86 184 M138 112 C142 140 128 158 136 186 M70 150 C64 170 76 184 70 204" stroke="#5C3324" stroke-width="1.8" opacity=".55"/>
                     <path d="M66 46 q-7 -7 -12 -4 M74 36 q-4 -8 -10 -8 M150 40 q8 -7 13 -4 M144 32 q5 -8 11 -7 M50 118 q-7 1 -10 -3 M170 150 q7 0 9 -6 M42 196 q-6 3 -9 -1 M178 214 q6 2 8 -3 M52 264 q-4 6 -2 12 M168 266 q4 6 2 11" stroke="#3A2418" stroke-width="1"/>
                 </g></g>
-            <g class="h-up">
-                <path d="M110 22 C64 22 50 58 54 104 C56 140 74 176 110 186 C146 176 164 140 166 104 C170 58 156 22 110 22Z" fill="#2E1C14" stroke="#3A2626" stroke-width="3"/>
-                <path d="M74 50 C88 70 100 86 110 98 M146 50 C132 70 120 86 110 98 M110 26 V98 M64 90 C80 96 96 100 110 102 M156 90 C140 96 124 100 110 102" fill="none" stroke="#4A3127" stroke-width="2" stroke-linecap="round"/></g>
+            <g class="h-up"><ellipse cx="57" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/><ellipse cx="163" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/>
+                <path d="M110 22 C68 22 54 54 56 96 C58 132 74 160 92 176 L128 176 C146 160 162 132 164 96 C166 54 152 22 110 22Z" fill="#2E1C14" stroke="#24150F" stroke-width="2.5"/>
+                <g fill="none" stroke-linecap="round"><path d="M72 60 C84 74 98 84 108 90 M148 60 C136 74 122 84 112 90 M110 26 V88 M62 104 C78 100 94 96 108 94 M158 104 C142 100 126 96 112 94 M70 150 C84 130 98 110 108 96 M150 150 C136 130 122 110 112 96" stroke="#4A2C1E" stroke-width="1.8"/>
+                    <path d="M90 40 C98 60 104 76 108 88 M130 40 C122 60 116 76 112 88" stroke="#5C3324" stroke-width="1.3" opacity=".6"/>
+                    <path d="M66 52 q-7 -6 -11 -2 M154 52 q7 -6 11 -2" stroke="#3A2418" stroke-width="1"/></g></g>
             <g class="h-pony">
-                <path d="M100 104 C84 140 92 168 84 196 C78 218 92 232 86 254 L94 262 L96 276 L104 264 L110 280 L114 264 L122 274 L122 258 C130 240 118 224 126 204 C134 176 128 140 120 104Z" fill="#2E1C14" stroke="#3A2626" stroke-width="3"/>
-                <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
-                <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
+                <path d="M100 98 C86 122 96 142 86 166 C78 188 92 206 84 228 C80 242 86 254 82 264 L90 260 L92 274 L100 264 L106 278 L112 264 L120 274 L122 260 L130 264 C126 248 134 234 128 218 C120 198 134 178 126 158 C120 138 128 118 120 98Z" fill="#2E1C14" stroke="#24150F" stroke-width="2.5" stroke-linejoin="round"/>
+                <g fill="none" stroke-linecap="round"><path d="M104 104 C94 130 104 150 94 172 C88 192 100 210 92 236 C90 248 94 258 92 268" stroke="#4A2C1E" stroke-width="2"/><path d="M114 104 C122 130 112 152 120 174 C126 194 116 212 122 236 C124 248 120 258 122 268" stroke="#4A2C1E" stroke-width="2"/><path d="M109 106 C104 140 114 170 106 200 C102 222 110 244 106 270" stroke="#5C3324" stroke-width="1.5" opacity=".6"/><path d="M84 190 q-7 2 -9 -3 M130 200 q7 1 8 -4" stroke="#3A2418" stroke-width="1"/></g>
+                <g class="scr-on">${window.SCRUNCHIE(110, 96, 16, ...window.SCR_PINK)}</g></g>
 
-            <g class="h-tangle" id="tangle" fill="none" stroke="#4A3127" stroke-width="2.2" stroke-linecap="round">
-                <path d="M60 120 c10 -8 18 8 8 12 c-10 4 -14 -10 -4 -14 c12 -4 16 12 6 16"/><path d="M150 140 c-10 -8 -20 6 -10 12 c10 6 16 -8 6 -12 c-12 -4 -18 12 -6 16"/>
-                <path d="M96 190 c8 -10 22 -2 14 8 c-8 10 -20 0 -12 -8 c8 -8 22 2 14 10"/><path d="M70 230 c10 -6 18 6 8 10 c-10 4 -12 -8 -2 -10"/><path d="M146 220 c-8 -8 -18 4 -8 10 c10 6 14 -8 4 -10"/>
-                <path d="M48 160 l-10 -6 M44 190 l-12 2 M170 170 l12 -4 M176 200 l10 6 M58 250 l-10 8 M164 250 l10 8" stroke="#2A1C17"/></g>
-            <g class="h-braid" id="braid">${Array.from({ length: 9 }, (_, k) => `<g class="seg" data-k="${k}" transform="translate(${110 + (k % 2 ? 7 : -7)} ${118 + k * 16}) rotate(${k % 2 ? -32 : 32})"><ellipse rx="13" ry="9.5" fill="#2E1C14" stroke="#3A2626" stroke-width="2"/><path d="M-7 -2 q7 -6 14 0" fill="none" stroke="#5A3C30" stroke-width="2"/></g>`).join('')}
-                <g class="braid-tie">${window.SCRUNCHIE(110, 262, 11, ...window.SCR_PINK)}</g><path class="braid-end" d="M104 272 q6 14 2 22 M110 272 q2 14 6 20 M116 272 q4 10 0 20" fill="none" stroke="#2E1C14" stroke-width="5" stroke-linecap="round"/></g>
+            <g class="h-tangle" id="tangle" fill="none" stroke-linecap="round">
+                <g class="t1"><path d="M56 70 l-6 -3 M52 90 l-7 0 M50 112 l-6 3 M46 134 l-7 -2 M44 156 l-6 2 M42 180 l-7 -1 M40 204 l-6 3 M40 228 l-7 0 M42 250 l-6 4 M164 70 l6 -3 M168 90 l7 0 M170 112 l6 3 M174 134 l7 -2 M176 156 l6 2 M178 180 l7 -1 M180 204 l6 3 M180 228 l7 0 M178 250 l6 4 M80 26 l-3 -6 M96 21 l-1 -7 M124 21 l1 -7 M140 26 l3 -6" stroke="#3A2418" stroke-width="1.6"/><path d="M56 70 l-6 -3 M52 90 l-7 0 M50 112 l-6 3 M46 134 l-7 -2 M44 156 l-6 2 M42 180 l-7 -1 M40 204 l-6 3 M40 228 l-7 0 M42 250 l-6 4 M164 70 l6 -3 M168 90 l7 0 M170 112 l6 3 M174 134 l7 -2 M176 156 l6 2 M178 180 l7 -1 M180 204 l6 3 M180 228 l7 0 M178 250 l6 4 M80 26 l-3 -6 M96 21 l-1 -7 M124 21 l1 -7 M140 26 l3 -6" stroke="#2E1C14" stroke-width="1" transform="translate(-2 3)"/></g>
+                <g class="t2" stroke="#4A2C1E" stroke-width="2.2"><path d="M66 120 C76 126 84 132 94 136 M66 135 C76 130 86 124 94 119 M70 127 C78 134 86 122 92 130"/><path d="M126 142 C136 148 144 154 154 158 M126 157 C136 152 146 146 154 141 M130 149 C138 156 146 144 152 152"/><path d="M90 178 C100 184 108 190 118 194 M90 193 C100 188 110 182 118 177 M94 185 C102 192 110 180 116 188"/><path d="M62 210 C72 216 80 222 90 226 M62 225 C72 220 82 214 90 209 M66 217 C74 224 82 212 88 220"/><path d="M126 224 C136 230 144 236 154 240 M126 239 C136 234 146 228 154 223 M130 231 C138 238 146 226 152 234"/><path d="M98 244 C108 250 116 256 126 260 M98 259 C108 254 118 248 126 243 M102 251 C110 258 118 246 124 254"/></g>
+                <g class="t3"><path d="M60 60 q-10 -8 -16 -2 M160 60 q10 -8 16 -2 M46 140 q-10 4 -16 -4 M176 170 q12 2 16 -6 M44 232 q-10 6 -14 0 M178 240 q10 6 15 0 M100 24 q-4 -10 -10 -12 M122 24 q6 -10 12 -12" stroke="#3A2418" stroke-width="1.2"/></g></g>
+            <g class="h-braid" id="braid"><ellipse cx="57" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/><ellipse cx="163" cy="112" rx="6" ry="10" fill="#C68E6A" stroke="#3A2626" stroke-width="2"/>
+                <path d="M110 22 C68 22 54 54 56 96 C58 132 76 162 98 182 L122 182 C144 162 162 132 164 96 C166 54 152 22 110 22Z" fill="#2E1C14" stroke="#24150F" stroke-width="2.5"/>
+                <g fill="none" stroke-linecap="round"><path d="M110 23 V62" stroke="#5C3A2A" stroke-width="1.5"/>
+                    <path d="M104 26 C90 70 94 130 108 182 M116 26 C130 70 126 130 112 182 M88 34 C70 80 80 140 106 182 M132 34 C150 80 140 140 114 182 M72 52 C58 100 76 150 104 182 M148 52 C162 100 144 150 116 182" stroke="#4A2C1E" stroke-width="2"/>
+                    <path d="M96 40 C86 90 92 140 108 180 M124 40 C134 90 128 140 112 180" stroke="#5C3324" stroke-width="1.4" opacity=".55"/>
+                    <path d="M62 44 q-7 -6 -11 -2 M156 46 q7 -6 12 -3 M54 120 q-6 2 -9 -3 M166 124 q6 1 8 -4" stroke="#3A2418" stroke-width="1"/></g>
+                <g class="loose" fill="none" stroke-linecap="round"><path d="M104 184 C98 210 108 228 100 252 C94 270 102 282 98 296" stroke="#2E1C14" stroke-width="9"/><path d="M110 184 C114 210 104 230 112 254 C116 270 108 284 112 297" stroke="#33201A" stroke-width="9"/><path d="M116 184 C124 208 116 228 122 250 C126 266 120 282 124 294" stroke="#2E1C14" stroke-width="9"/></g>
+                ${Array.from({ length: 9 }, (_, k) => { const y = 188 + k * 10.6, w = 30 - k * 1.3, side = k % 2 ? 1 : -1; return `<g class="seg" data-k="${k}" transform="translate(${110 + side * 4.5} ${y}) rotate(${side * -30})"><path d="M${-w / 2} 0 Q0 ${-9 + k * .2} ${w / 2} 0 Q0 ${9 - k * .2} ${-w / 2} 0Z" fill="#2E1C14" stroke="#1E120C" stroke-width="1.6"/><path d="M${-w / 2 + 4} -1 Q0 -5 ${w / 2 - 4} -1 M${-w / 2 + 5} 2 Q0 -1.5 ${w / 2 - 5} 2" fill="none" stroke="#4A2C1E" stroke-width="1.3"/><path d="M${-w / 2 + 6} -3 Q-2 -6 4 -5" fill="none" stroke="#6A4030" stroke-width="1" opacity=".6"/></g>`; }).join('')}
+                <path class="wisp" d="M98 200 q-8 6 -6 14 M124 214 q8 4 6 12" fill="none" stroke="#3A2418" stroke-width="1"/>
+                <g class="braid-tie">${window.SCRUNCHIE(110, 284, 10, ...window.SCR_PINK)}</g>
+                <path class="braid-end" d="M106 292 q-4 6 0 12 M110 293 q3 6 -1 13 M114 292 q5 5 2 11" fill="none" stroke="#2E1C14" stroke-width="4" stroke-linecap="round"/></g>
             <g class="h-comb"><g id="combdrag" transform="translate(0 40)"><g transform="rotate(-45 110 40)">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 150 150">', '<svg x="50" y="-20" width="120" height="120" viewBox="0 0 150 150">')}</g></g></g>
             <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
@@ -320,10 +332,11 @@ function hairAfter(state) {
     let passes = 0, twists = 0;
     const tangle = $('#tangle'), comb = $('#combdrag'), segs = [...svg.querySelectorAll('#braid .seg')];
     const set = (st, scr) => {
-        if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 102, 13, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
+        if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 96, 16, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
         svg.dataset.state = st;
         sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === st && (!scr || b.dataset.scr === scr)));
-        if (st === 'comb') { passes = 0; tangle.style.opacity = 1; svg.classList.remove('smooth'); comb.setAttribute('transform', 'translate(0 40)'); hint.textContent = 'it’s tangled. drag the comb down through it ↓'; }
+        $('#comb-dots').style.display = st === 'comb' ? 'flex' : 'none';
+        if (st === 'comb') { passes = 0; tangle.style.opacity = ''; tangle.dataset.p = 0; svg.classList.remove('smooth'); $('#comb-dots').dataset.p = 0; comb.setAttribute('transform', 'translate(0 40)'); hint.textContent = 'frizzy and knotted. drag the comb down through it ↓'; }
         else if (st === 'braid') { twists = 0; segs.forEach(g => g.classList.remove('on')); svg.classList.remove('braided'); hint.textContent = 'tap the hair to cross one strand over. keep going ↓'; }
         else hint.textContent = '';
     };
@@ -346,9 +359,9 @@ function hairAfter(state) {
         if (!drag) return;
         const y = Math.max(20, Math.min(250, yAt(e) - 20));
         comb.setAttribute('transform', `translate(0 ${y})`);
-        if (y - drag.y0 > 140) { drag.y0 = 9999; passes++; tangle.style.opacity = Math.max(0, 1 - passes / 3);
+        if (y - drag.y0 > 140) { drag.y0 = 9999; passes = Math.min(3, passes + 1); tangle.dataset.p = passes; $('#comb-dots').dataset.p = passes;
             if (passes >= 3) { svg.classList.add('smooth'); hint.textContent = 'tangle-free ♡ wide teeth, no breakage'; toast('silky. no knots. we love to see it'); }
-            else hint.textContent = `${3 - passes} more…`; }
+            else hint.textContent = passes === 1 ? 'frizz is calming down… keep going ↓' : 'knots are out. one more for the flyaways ↓'; }
     });
     const up = () => { if (!drag) return; drag = null; comb.setAttribute('transform', 'translate(0 40)'); };
     svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
@@ -1338,6 +1351,12 @@ const AFTER = {
         };
         $('#vclose').onclick = () => vw.classList.contains('open') ? close() : open();
         vw.querySelector('.vsnap').onclick = close;
+        // tapping the bottom-left of the open wallet (below the card slots) starts closing it, like folding it with your hand
+        vw.querySelector('.p1').addEventListener('click', e => {
+            if (e.target.closest('.card')) return;
+            const r = vw.querySelector('.p1').getBoundingClientRect();
+            if (e.clientY > r.top + r.height * .45) close();
+        });
         $('#snap').onclick = open;
         // the zipper: the pull slides down, the teeth open, then the cash comes out (and the reverse)
         let zipping = false, zdrag = null, zskip = false;
