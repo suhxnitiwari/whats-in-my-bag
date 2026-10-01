@@ -799,7 +799,7 @@ const VIEWS = {
             <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>
             <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="lap-open">Open the laptop</button></div>
         </div>
-        <div class="desktop" id="desktop" hidden>
+        <div class="mbp" id="mbp" hidden><div class="mbp-screen" id="mbp-screen"><div class="desktop" id="desktop">
             <div class="menubar mono"><span></span><span id="lap-clock"></span></div>
             <div class="dfolders">${[
                 ['Listening History', 'https://listening-history.onrender.com/'],
@@ -813,8 +813,9 @@ const VIEWS = {
             ].map(([n, go]) => `<button type="button" class="dfolder" data-go="${go}">
                 <svg viewBox="0 0 100 78" aria-hidden="true"><path d="M4 12 a6 6 0 0 1 6 -6 h26 l8 8 h46 a6 6 0 0 1 6 6 v4 H4z" fill="#4E9BE0"/><rect x="4" y="18" width="92" height="56" rx="7" fill="#7EC4F5"/><rect x="4" y="18" width="92" height="56" rx="7" fill="none" stroke="#5FA9E6" stroke-width="1.2"/><path d="M8 66 h84 M8 69 h84" stroke="#6BB4EC" stroke-width="1"/></svg>
                 <span>${n}</span></button>`).join('')}</div>
-            <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close">Close the laptop</button></div>
-        </div>`,
+            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="the one helping me build this bag." aria-label="Claude" title="Claude"><span style="background:#D97757"><svg viewBox="0 0 40 40"><g stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M20 20 L29.0 20.0"/><path d="M20 20 L27.8 24.5"/><path d="M20 20 L24.5 27.8"/><path d="M20 20 L20.0 29.0"/><path d="M20 20 L15.5 27.8"/><path d="M20 20 L12.2 24.5"/><path d="M20 20 L11.0 20.0"/><path d="M20 20 L12.2 15.5"/><path d="M20 20 L15.5 12.2"/><path d="M20 20 L20.0 11.0"/><path d="M20 20 L24.5 12.2"/><path d="M20 20 L27.8 15.5"/></g></svg></span><i>Claude</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button></div>
+        </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
+        <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
 
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:200px; height:200px; margin:214px auto 14px; perspective:700px">
@@ -1016,8 +1017,8 @@ const VIEWS = {
             [`<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-data"><span class="pp-guil"></span>
                 <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
                 <span class="pp-usa">USA</span><span class="pp-photo"><img src="assets/img/me.jpg" alt=""></span>
-                <span class="pp-fields"><span><i>Type</i> <b>carry-on only</b></span><span><i>Passport No.</i> <b>NO PEEKING ♡</b></span><span><i>Surname</i> <b>TIWARI</b></span><span><i>Given names</i> <b>SUHANI M</b></span><span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span><span><i>Date of birth</i> <b>a lady never tells</b></span><span><i>Countries</i> <b>6 and counting</b></span><span><i>Expires</i> <b>never stop going</b></span></span>
-                <span class="pp-trail">✈ · · · · · · · · · · · · · next stop: ?</span></div></div></div>`,
+                <span class="pp-fields"><span><i>Type</i> <b>window seat. non-negotiable.</b></span><span><i>Passport No.</i> <b>nice try ♡</b></span><span><i>Surname</i> <b>TIWARI</b></span><span><i>Given names</i> <b>SUHANI M</b></span><span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span><span><i>Date of birth</i> <b>a lady never tells</b></span><span><i>Issued by</i> <b>my wanderlust</b></span><span><i>Countries</i> <b>6, and that’s rookie numbers</b></span><span><i>Expires</i> <b>never. never stop traveling.</b></span></span>
+                <span class="pp-trail">✈ · · · · · · · never stop traveling</span></div></div></div>`,
              visa(2, 'waves', stamp(0, 8, 22, -8) + stamp(1, 40, 56, 6))],
             [visa(3, 'waves', '<span class="pb-note">2010 · thailand & malaysia</span>'),
              visa(4, 'peaks', stamp(2, 12, 18, -3) + stamp(3, 34, 58, 9))],
@@ -1539,14 +1540,15 @@ const AFTER = {
             void vw.offsetWidth; vw.classList.remove('no-anim');
             vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1;
             await wait(120);
-            vw.classList.remove('fold-right'); setTimeout(() => vw.classList.remove('flap-back'), reduce ? 0 : 300); await wait(700);
-            vw.classList.remove('fold-left'); setTimeout(() => vw.classList.remove('p1-back'), reduce ? 0 : 300); await wait(650);
+            vw.classList.remove('fold-right'); setTimeout(() => vw.classList.remove('flap-back'), reduce ? 0 : 380); await wait(700);
+            vw.classList.remove('fold-left'); setTimeout(() => vw.classList.remove('p1-back'), reduce ? 0 : 380); await wait(650);
+            vw.classList.add('settled');
             opening = false;
         };
         const close = async () => {
             if (closing || !vw.classList.contains('open')) return;
             closing = true;
-            vw.classList.remove('cash-out', 'medici-out', 'bills-out');
+            vw.classList.remove('cash-out', 'medici-out', 'bills-out', 'settled');
             vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
             vw.classList.remove('has-pick');
             vw.classList.remove('zip-open');
@@ -1602,7 +1604,8 @@ const AFTER = {
                 await new Promise(r => setTimeout(r, reduce ? 0 : 480));
                 vw.classList.add('cash-out'); toast('my medici card ♡ a vanilla latte a day');
             } else {
-                vw.classList.remove('cash-out');
+                vw.classList.remove('cash-out', 'medici-out');
+                if (/medici/i.test(detail.textContent)) detail.innerHTML = '<p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p>';
                 await new Promise(r => setTimeout(r, reduce ? 0 : 420));
                 vw.classList.remove('zip-open'); z.setAttribute('aria-pressed', 'false'); z.setAttribute('aria-label', 'Zip pocket: unzip it');
             }
@@ -1650,11 +1653,12 @@ const AFTER = {
             card.addEventListener('pointerup', e => {
                 if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
                 if (!moved) return;
-                card.dataset.dragged = '1';
                 if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))`;
+                card.dataset.skip = '1';   // ignore the click the browser fires right after a drag
             });
         });
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {
+            if (card.dataset.skip) { delete card.dataset.skip; return; }
             const was = card.classList.contains('picked');
             tuck();
             if (was) { vw.classList.remove('has-pick'); vw.style.marginTop = ''; return; }
@@ -1725,18 +1729,37 @@ const AFTER = {
     },
 
     laptop: () => {
-        const showDesk = on => {
-            $('#lap-closed').hidden = on; $('#desktop').hidden = !on;
+        const mbp = $('#mbp'), wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+        let busyLap = false;
+        const showDesk = async on => {
+            if (busyLap) return; busyLap = true;
+            if (on) {
+                $('#lap-closed').hidden = true; mbp.hidden = false; mbp.classList.remove('open'); void mbp.offsetWidth;
+                mbp.classList.add('open'); $('#lap-close').hidden = false;
+                await wait(1100);
+            } else {
+                mbp.classList.remove('open'); $('#lap-close').hidden = true;
+                await wait(900);
+                mbp.hidden = true; $('#lap-closed').hidden = false;
+            }
+            busyLap = false;
             $('#lap-note').textContent = on ? 'my desktop. every folder is a project.' : 'the stickers are load-bearing. tap one, or open it up.';
             if (on) $('#lap-clock').textContent = new Date().toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
         };
         $('#lap-open').onclick = () => showDesk(true);
+        window.__openLap = () => showDesk(true);
         $('#lap-close').onclick = () => showDesk(false);
         sheetBody.querySelectorAll('.dfolder').forEach(f => f.onclick = () => {
             const go = f.dataset.go;
             if (go.startsWith('http')) window.open(go, '_blank', 'noopener');
-            else pickUp({ id: go, name: 'from my laptop', open: go });
+            else {
+                pickUp({ id: go, name: 'from my laptop', open: go });
+                // a way back to the desktop
+                sheetBody.insertAdjacentHTML('afterbegin', '<button type="button" class="back-desk mono" id="back-desk">‹ back to my desktop</button>');
+                $('#back-desk').onclick = () => { pickUp(ITEMS.find(i => i.id === 'laptop')); $('#lap-closed').hidden = true; $('#mbp').hidden = false; $('#mbp').classList.add('open'); $('#lap-close').hidden = false; $('#lap-note').textContent = 'my desktop. every folder is a project.'; };
+            }
         });
+        sheetBody.querySelectorAll('.dock-app').forEach(a => a.onclick = () => { a.classList.remove('bounce'); void a.offsetWidth; a.classList.add('bounce'); toast(a.dataset.say); });
         const label = $('#stk-label');
         sheetBody.querySelectorAll('.stk').forEach(g => {
             const k = STICKERS.find(x => x.id === g.dataset.sticker);

@@ -1560,3 +1560,43 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
     -webkit-mask-image: linear-gradient(#000 calc(var(--p) - 8%), transparent var(--p)); mask-image: linear-gradient(#000 calc(var(--p) - 8%), transparent var(--p)); }
 /* center the backpack + its side bottle sleeve as one shape */
 @media (min-width: 761px) { .stage .bag { margin-left: -1.2%; } }
+
+/* laptop dock + a way back from a folder */
+.dock { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 16px auto 0; padding: 7px 10px; width: fit-content; max-width: 100%; border-radius: 16px; background: rgba(255,255,255,.55); border: 1px solid rgba(58,38,38,.15); backdrop-filter: blur(6px); }
+.dock-app { position: relative; border: 0; background: none; padding: 0; cursor: pointer; transition: transform .2s; }
+.dock-app span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,.18); overflow: hidden; }
+.dock-app svg { width: 100%; height: 100%; }
+.dock-app i { position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); font: 500 .62rem var(--sans); font-style: normal; white-space: nowrap; background: #2A2224; color: #fff; padding: 2px 6px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .15s; }
+.dock-app:hover { transform: translateY(-6px) scale(1.12); } .dock-app:hover i { opacity: 1; }
+.dock-app.bounce { animation: dockb .6s ease; } @keyframes dockb { 30% { transform: translateY(-14px); } 60% { transform: translateY(0); } 80% { transform: translateY(-5px); } }
+.back-desk { display: inline-block; margin: 0 0 10px; border: 1.5px solid var(--ink); background: var(--paper); border-radius: 999px; padding: 5px 12px; cursor: pointer; font-size: .78rem; }
+
+/* MacBook opening: the screen swings up from the hinge over the keyboard deck */
+.mbp { perspective: 1600px; margin: 6px auto 0; width: 100%; }
+.mbp-screen { transform-origin: 50% 100%; transform: rotateX(-92deg); transition: transform 1.1s cubic-bezier(.3,1.05,.4,1); border: 10px solid #1B1B1E; border-radius: 14px 14px 0 0; background: #1B1B1E; box-shadow: 0 -2px 0 #C9CDD2 inset; }
+.mbp.open .mbp-screen { transform: rotateX(0); }
+.mbp-screen .desktop { border-radius: 4px; opacity: 0; transition: opacity .5s .55s; }
+.mbp.open .mbp-screen .desktop { opacity: 1; }
+.mbp-base { position: relative; height: 16px; margin: 0 -4%; background: linear-gradient(#E3E6EA, #B9BEC4); border: 2px solid var(--ink); border-radius: 0 0 16px 16px; box-shadow: 0 12px 20px -12px rgba(0,0,0,.45); }
+.mbp-notch { position: absolute; left: 50%; top: -2px; width: 16%; height: 6px; transform: translateX(-50%); background: #A9AEB5; border-radius: 0 0 8px 8px; }
+@media (prefers-reduced-motion: reduce) { .mbp-screen { transition: none; } }
+
+/* while folding, nothing shows through: cash and the medici card stay tucked, panels are solid */
+.vw.fold-left .vbills, .vw.fold-right .vbills, .vw.fold-left .medici-peek, .vw.fold-right .medici-peek, .vw.p1-back .vbills, .vw.flap-back .vbills { visibility: hidden; }
+.vw .vw-open > .p1, .vw .vw-open > .vflap { background-color: #A0244E; }
+.vw.p1-back .p1, .vw.flap-back .vflap { opacity: 1 !important; }
+
+/* the cash slot behind the flap: notes always peek out of the top; tap to fan them out */
+.vw-open > .vbills { left: 72%; width: 19%; top: -12%; height: 36%; z-index: 0; }
+.bill { transform: rotate(calc(-5deg + var(--k) * 2.5deg)) translateY(34%); }
+.vbills:hover .bill { transform: rotate(calc(-5deg + var(--k) * 2.5deg)) translateY(24%); }
+.vw.bills-out .bill { transform: rotate(calc(-16deg + var(--k) * 8deg)) translateY(-28%); }
+.vw:not(.open) .vbills { visibility: hidden; }
+.vw-open > .vbills { top: -24%; }
+
+.vw:not(.settled) .vbills { visibility: hidden !important; }
+
+/* iPad: the back panel must not swallow taps on the screen */
+.mk-back, .mk-base { pointer-events: none; }
+.mk-wrap.open .mk-front { pointer-events: auto; }
+.mk-wrap:not(.open) .mk-front { pointer-events: none; }
