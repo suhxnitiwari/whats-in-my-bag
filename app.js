@@ -960,17 +960,42 @@ const DIGI_CARDS = {
 // you deserve each other opens into every rom-com i’ll never shut up about. one book per chapter
 const ROMCOMS = [["the-hating-game","The Hating Game","Sally Thorne","Lucy and Joshua are executive assistants who share an office and can’t stand each other. Then they both go for the same promotion, and the games get complicated."],["the-unhoneymooners","The Unhoneymooners","Christina Lauren","Everyone at her twin sister’s wedding gets food poisoning except Olive and the groom’s grumpy brother Ethan. So they take the free Maui honeymoon, pretending to be newlyweds."],["people-we-meet-on-vacation","People We Meet on Vacation","Emily Henry","Best friends Poppy and Alex took a trip together every summer, until two years ago. Poppy talks him into one more vacation to fix whatever broke."],["you-deserve-each-other","You Deserve Each Other","Sarah Hogle","Naomi and Nicholas are engaged and secretly miserable. Neither wants to be the one to call it off, so each tries to make the other quit first."],["the-spanish-love-deception","The Spanish Love Deception","Elena Armas","Catalina needs a date to her sister’s wedding in Spain, and the only volunteer is Aaron, the coworker she can’t stand."],["by-a-thread","By a Thread","Lucy Score","Ally needs a steady paycheck. Dominic is the moody heir of a fashion empire. Working together at Label magazine is chaos from day one."],["the-devil-you-know","The Devil You Know","Elizabeth O’Roark","A slow burn with the one man she’s been warned about, who turns out to be exactly who she needed."],["the-ex-talk","The Ex Talk","Rachel Lynn Solomon","Public radio producer Shay and her rival Dominic get pushed to cohost a show about relationships as exes. They’ve never actually dated."],["funny-story","Funny Story","Emily Henry","Daphne’s fiancé leaves her for his best friend, so she moves in with Miles, the best friend’s ex. Then they start pretending to date."],["the-american-roommate-experiment","The American Roommate Experiment","Elena Armas","Rosie’s ceiling caves in, and she ends up sharing her apartment with Lucas, her best friend’s cousin, who’s in New York for a few weeks."],["the-worst-best-man","The Worst Best Man","Mia Sosa","Wedding planner Carolina was left at the altar. Years later she has to work with Max, the best man who talked his brother out of marrying her."],["the-love-hypothesis","The Love Hypothesis","Ali Hazelwood","To prove she’s moved on, PhD student Olive kisses the first man she sees: young, intimidating professor Adam Carlsen."]];
 // onward opens onto the rest of my business shelf
-const BIZBOOKS = [["onward", "Onward", "Howard Schultz"], ["the-design-of-everyday-things", "The Design of Everyday Things", "Don Norman"], ["inspired", "Inspired", "Marty Cagan"], ["creative-confidence", "Creative Confidence", "Tom Kelley & David Kelley"], ["the-innovators-dilemma", "The Innovator’s Dilemma", "Clayton Christensen"], ["competing-against-luck", "Competing Against Luck", "Clayton Christensen"], ["shoe-dog", "Shoe Dog", "Phil Knight"], ["creativity-inc", "Creativity, Inc.", "Ed Catmull"], ["alchemy", "Alchemy", "Rory Sutherland"], ["the-choice-factory", "The Choice Factory", "Richard Shotton"], ["decoded", "Decoded", "Phil Barden"], ["influence", "Influence", "Robert Cialdini"]];
+const BIZBOOKS = [["onward", "Onward", "Howard Schultz", "How Howard Schultz came back as Starbucks CEO in 2008 to save a company that had grown too fast and lost its way, by going back to the coffee and the experience in the store."], ["the-design-of-everyday-things", "The Design of Everyday Things", "Don Norman", "Why some doors, stoves and gadgets confuse us, and how good design makes the right action obvious: affordances, signifiers, feedback, and designing for real people."], ["inspired", "Inspired", "Marty Cagan", "How the best tech companies find products customers love: empowered product teams, fast experiments, and falling in love with the problem instead of the solution."], ["creative-confidence", "Creative Confidence", "Tom Kelley & David Kelley", "The founders of IDEO and the Stanford d.school on why everyone is creative, and how design thinking gets you past the fear of failing so you actually act on ideas."], ["the-innovators-dilemma", "The Innovator’s Dilemma", "Clayton Christensen", "Why great companies doing everything right still get disrupted: listening to their best customers makes them ignore cheaper, simpler technologies that later take over."], ["competing-against-luck", "Competing Against Luck", "Clayton Christensen", "Jobs to be done: people don’t buy products, they “hire” them to make progress in their lives. Understand the job and innovation stops being a matter of luck."], ["shoe-dog", "Shoe Dog", "Phil Knight", "Phil Knight’s memoir: from selling Japanese running shoes out of his car to building Nike, near-bankruptcies and all."], ["creativity-inc", "Creativity, Inc.", "Ed Catmull", "Pixar’s co-founder on building a culture where creative people do their best work: candor, the Braintrust, and protecting new ideas while they’re still “ugly babies.”"], ["alchemy", "Alchemy", "Rory Sutherland", "Rory Sutherland on why people aren’t purely rational, and why the most powerful ideas in business and marketing often look illogical at first."], ["the-choice-factory", "The Choice Factory", "Richard Shotton", "Twenty-five behavioral biases that shape what we buy, from social proof to the pratfall effect, each with an experiment and how marketers can use it."], ["decoded", "Decoded", "Phil Barden", "The science behind why we buy: how the brain’s fast, intuitive “autopilot” makes most purchase decisions, and how brands can speak to it."], ["influence", "Influence", "Robert Cialdini", "The principles of persuasion: reciprocity, commitment, social proof, liking, authority, scarcity and unity, and how to spot them working on you."]];
 // procreate on my ipad: my ap portfolio and my published book, as stacks
 const AP_ART = [["Image 1", "Sketch: traditionalism versus modernism. Thought of essential questions, sketched the woman, decided on the color scheme."], ["Image 2", "Background pattern mirrored on the salwar kameez illustrates how culture is an inherent part of us."], ["Image 3", "Sketch: embracing cultural identity. Essential questions, sketch, colorblocked the rose, decided on the color scheme."], ["Image 4", "Airbrushing two contrasting colors to show how different ideas blend to create an integrated sense of self."], ["Image 5", "Sketch: decided on her pose, sketched my piece, decided the background and the pattern on the blouse."], ["Image 6", "Bold paint strokes in the background to showcase cultural identity."], ["Image 7", "Symmetrical mandala design in the background, continued color blocking on skin."], ["Image 8", "Sketch: used a tripod to take a picture holding scissors and cutting my hair, to show support for Mahsa Amini."], ["Image 9", "Continued use of red to show what a powerful force culture plays in our identity."], ["Image 10", "Navigating Indian-American identity: continued to creatively showcase my Indian-American heritage."], ["Image 11", "Colorblocked skin and bow, added shadows on the cube to give it form, drew two faces of the cube."], ["Image 12", "Embracing Indian heritage: designed a pattern and repeated it on the sleeve and dupatta, drew the jewelry."], ["Image 13", "Repeated the pattern on the sleeve and dupatta to show how ingrained culture is in our identities."], ["Image 14", "Sketch: coexistence of both my worlds. Sketched the flowers, especially the two roses, facing opposite directions."], ["Image 15", "Vibrant flag colors on a bold background capture the essence of Indian-American cultural identity."]];
 // my mailbox, flooded with cards from amaira
 const MAIL_CARDS = [["assets/mail/amaira-9970.jpg", "“Two Starbucks Girls.” us, at starbucks. obviously."], ["assets/mail/amaira-9971.jpg", "“Two Littl Grils Walking on the Street.” spelling: hers."], ["assets/mail/amaira-9972.jpg", "“I’ll love you! I love you! your the sweets sister ever! I’ll miss you!”"], ["assets/mail/amaira-9973.jpg", "a hot cocoa with an S on it. for me."], ["assets/mail/amaira-9974.jpg", "the two of us, hugging. “this love is just…” she ran out of room."], ["assets/mail/amaira-9975.jpg", "“Happy Valentine’s Day.”"], ["assets/mail/amaira-9976.jpg", "“Girl boss. To: the best sister ever, Didi. From: Amaira. xoxo, Amaripop. I am lucky to have you.”"], ["assets/mail/amaira-9978.jpg", "“Thinking a latte about you.”"], ["assets/mail/amaira-9979.jpg", "a sparkly latte cup, tucked inside a card."], ["assets/mail/amaira-9980.jpg", "“Dear didi, I hope you have a nice time in college. your the sweetest sister ever! I’ll love you forever.”"], ["assets/mail/amaira-9981.jpg", "“Happy Bithday Didi!” with a heart that says suhani & amaira."], ["assets/mail/amaira-9982.jpg", "“Merry Christmas and Happy New Year!! To: Didi From: Amaira.”"], ["assets/mail/amaira-9983.jpg", "“I Love You.”"]];
+// a book you open, where every chapter is another book: [cover file, title, author, synopsis]
+function chapterBook(list, bye) {
+    const rc = $('#rc'), btn = $('#rc-read'), box = $('#rcx');
+    let ch = -1;
+    const show = () => {
+        const [f, t, au, syn] = list[ch];
+        $('#rcx-cover').src = `assets/covers/${f}.jpg`; $('#rcx-cover').alt = `${t} by ${au}`;
+        $('#rcx-ch').textContent = `chapter ${ch + 1} of ${list.length}`; $('#rcx-t').textContent = t; $('#rcx-a').textContent = au; $('#rcx-s').textContent = syn;
+        box.classList.remove('turn'); void box.offsetWidth; box.classList.add('turn');
+        $('#rcx-prev').hidden = ch === 0;
+        btn.textContent = ch === list.length - 1 ? 'Close it' : 'next chapter ›';
+    };
+    const next = () => {
+        if (!rc.classList.contains('open')) { rc.classList.add('open'); ch = 0; box.hidden = false; return setTimeout(show, reduce ? 0 : 450); }
+        if (ch === list.length - 1) { rc.classList.remove('open'); box.hidden = true; ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast(bye); }
+        ch++; show();
+    };
+    btn.onclick = next; rc.onclick = next; rc.style.cursor = 'pointer';
+    $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; show(); } };
+}
 const VIEWS = {
     onward: () => `
         <h2><em>Onward</em></h2>
-        <p class="note">howard schultz. how starbucks fought for its life without losing its soul. it sits right next to the rest of the books behind the business.</p>
-        <div class="bz-shelf" id="bz">${BIZBOOKS.map(([f, t, a], k) => `<button type="button" class="bz-book" data-bz="${k}" aria-label="${t} by ${a}"><img src="assets/covers/${f}.jpg" alt=""></button>`).join('')}</div>
-        <p class="hand bz-say" id="bz-say">pull one off the shelf</p>`,
+        <p class="note">howard schultz. how starbucks fought for its life without losing its soul. open it: every chapter is another book behind the business.</p>
+        <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'onward').art}</div></div></div>
+        <div class="rcx" id="rcx" hidden>
+            <img id="rcx-cover" alt="">
+            <div><p class="rcx-ch mono" id="rcx-ch"></p><h3 id="rcx-t"></h3><p class="rcx-a" id="rcx-a"></p><p class="rcx-s" id="rcx-s"></p></div>
+        </div>
+        <p class="hand rcx-say">how things work: the books behind how i think about products, brands and people.</p>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`,
     mailbox: () => `
         <h2>My <em>mailbox</em></h2>
         <p class="note">one gold key. it’s mostly packages i definitely needed. but every time i open it, it’s flooded with cards from my little sister.</p>
@@ -1793,15 +1818,6 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
-    onward: () => {
-        sheetBody.querySelectorAll('[data-bz]').forEach(b => b.onclick = () => {
-            const on = !b.classList.contains('out');
-            sheetBody.querySelectorAll('.bz-book').forEach(x => x.classList.remove('out'));
-            if (on) b.classList.add('out');
-            const [, t, a] = BIZBOOKS[+b.dataset.bz];
-            $('#bz-say').textContent = on ? `${t} · ${a}` : 'pull one off the shelf';
-        });
-    },
     mailbox: () => {
         const mbx = $('#mbx'), btn = $('#mbx-key');
         btn.onclick = () => {
@@ -2181,25 +2197,8 @@ const AFTER = {
         pb.tabIndex = 0; pb.onkeydown = e => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); };
         draw();
     },
-    romcom: () => {
-        const rc = $('#rc'), btn = $('#rc-read'), box = $('#rcx');
-        let ch = -1;
-        const show = () => {
-            const [f, t, au, syn] = ROMCOMS[ch];
-            $('#rcx-cover').src = `assets/covers/${f}.jpg`; $('#rcx-cover').alt = `${t} by ${au}`;
-            $('#rcx-ch').textContent = `chapter ${ch + 1} of ${ROMCOMS.length}`; $('#rcx-t').textContent = t; $('#rcx-a').textContent = au; $('#rcx-s').textContent = syn;
-            box.classList.remove('turn'); void box.offsetWidth; box.classList.add('turn');
-            $('#rcx-prev').hidden = ch === 0;
-            btn.textContent = ch === ROMCOMS.length - 1 ? 'Close it' : 'next chapter ›';
-        };
-        const next = () => {
-            if (!rc.classList.contains('open')) { rc.classList.add('open'); ch = 0; box.hidden = false; return setTimeout(show, reduce ? 0 : 450); }
-            if (ch === ROMCOMS.length - 1) { rc.classList.remove('open'); box.hidden = true; ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast('the end. (i’ll start another one tonight.)'); }
-            ch++; show();
-        };
-        btn.onclick = next; rc.onclick = next; rc.style.cursor = 'pointer';
-        $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; show(); } };
-    },
+    romcom: () => chapterBook(ROMCOMS, 'the end. (i’ll start another one tonight.)'),
+    onward: () => chapterBook(BIZBOOKS, 'the end. back on the shelf ♡'),
 
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
     phone: () => {
