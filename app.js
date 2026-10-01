@@ -431,10 +431,11 @@ sheet.addEventListener('click', e => {
 const VIEWS = {
     perfume: () => `
         <h2>My <em>perfume</em></h2>
-        <p class="note">philosophy amazing grace, ballet rose. front pocket, always.</p>
-        <div class="pf-bottle" id="pf-bottle">${ITEMS.find(i => i.id === 'perfume').art}<span class="mist" id="mist" aria-hidden="true">${Array.from({ length: 14 }, (_, k) => `<i style="--k:${k}"></i>`).join('')}</span></div>
-        <p class="hand" style="text-align:center; color:var(--plum); margin:0">press the nozzle ✨</p>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="spritz">Spritz</button></div>`,
+        <p class="note">philosophy amazing grace ballet rose, eau de parfum. front pocket, always.</p>
+        <div class="pf-bottle" id="pf-bottle">${ITEMS.find(i => i.id === 'perfume').art}</div>
+        <p class="hand pf-hint" id="pf-hint">pull the cap off ✨</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="spritz">Take the cap off</button></div>
+        <div class="notes3"><div><b>top</b><span>lychee · cassie flower</span></div><div><b>heart</b><span>dewy peony · jasmine petals · rose absolute</span></div><div><b>base</b><span>ambrette seeds · palisandre wood · ballet pink musk</span></div></div>`,
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
         <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
@@ -1017,15 +1018,19 @@ function cardHTML(c, i) {
 const AFTER = {
     perfume: () => {
         let n = 0;
-        const bottle = $('#pf-bottle'), cap = bottle.querySelector('svg rect');
+        const bottle = $('#pf-bottle'), act = bottle.querySelector('.pact'), btn = $('#spritz'), hint = $('#pf-hint');
+        const capOff = () => { bottle.classList.add('capoff'); btn.textContent = 'Spritz'; hint.textContent = 'now press the nozzle ✨'; };
         const spritz = () => {
-            cap.style.transition = 'transform .12s'; cap.style.transform = 'translateY(4px)';
-            setTimeout(() => { cap.style.transform = ''; }, 160);
+            if (!bottle.classList.contains('capoff')) return capOff();
+            act.style.transition = 'transform .12s'; act.style.transform = 'translateY(3px)';
+            setTimeout(() => { act.style.transform = ''; }, 170);
             const r = bottle.getBoundingClientRect();
-            fairyDust(r.left + r.width * .38, r.top + r.height * .04);
+            fairyDust(r.left + r.width * .44, r.top + r.height * .17);
             n++; toast(n === 1 ? 'ballet rose ♡ and a little fairy dust' : n < 4 ? 'one more. for good luck ✨' : 'okay that’s enough, it’s a small elevator');
         };
-        $('#spritz').onclick = spritz; bottle.onclick = spritz; bottle.style.cursor = 'pointer';
+        btn.onclick = spritz;
+        bottle.onclick = e => { if (e.target.closest('.pcap') && bottle.classList.contains('capoff')) { bottle.classList.remove('capoff'); btn.textContent = 'Take the cap off'; hint.textContent = 'cap’s back on ♡'; return; } spritz(); };
+        bottle.style.cursor = 'pointer';
     },
     boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
     padfolio: () => { $('#bc').onclick = () => { const f = $('#bc').classList.toggle('flip'); if (f) toast('take one. seriously ♡'); }; },

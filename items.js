@@ -309,17 +309,18 @@ window.ITEMS = [
         open: 'boarding'
     },
     {
-        id: 'perfume', name: 'my perfume', zip: 'front', l: 39.5, t: 71.1, w: 6.6, r: -4,
-        art: `<svg viewBox="0 0 100 132"><defs><linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6ECEC"/><stop offset=".5" stop-color="#F8FAFA"/><stop offset="1" stop-color="#DCE3E3"/></linearGradient><linearGradient id="chrome" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9DA3AA"/><stop offset=".45" stop-color="#F1F3F5"/><stop offset="1" stop-color="#8E949B"/></linearGradient></defs>
-            <rect x="36" y="3" width="28" height="18" rx="3" fill="url(#chrome)" stroke="#3A2626" stroke-width="2"/><rect x="34" y="19" width="32" height="9" rx="2" fill="url(#chrome)" stroke="#3A2626" stroke-width="2"/><rect x="47" y="8" width="6" height="3" rx="1" fill="#6E747B"/>
-            <rect x="9" y="28" width="82" height="100" rx="7" fill="url(#glass)" stroke="#3A2626" stroke-width="2.5"/>
-            <path d="M11 106 H89 V121 a5 5 0 0 1 -5 5 H16 a5 5 0 0 1 -5 -5Z" fill="#F4C79E" opacity=".75"/>
-            <rect x="15" y="34" width="70" height="88" rx="4" fill="none" stroke="#C9D1D1" stroke-width="1.5"/>
-            <rect x="22" y="42" width="56" height="62" fill="#F2A68E" stroke="#C9CDD3" stroke-width="2.4"/>
-            <g text-anchor="middle" fill="#3A2626"><text x="50" y="53" font-family="Bodoni Moda, Georgia, serif" font-style="italic" font-size="6">amazing</text><text x="50" y="64" font-family="Bodoni Moda, Georgia, serif" font-weight="700" font-size="13">grace</text><text x="50" y="72" font-family="Bodoni Moda, Georgia, serif" font-style="italic" font-size="6">ballet rose</text>
-                <text x="50" y="80" font-family="Instrument Sans" font-size="3"><tspan font-weight="700">philosophy:</tspan> grace lets you move</text><text x="50" y="84" font-family="Instrument Sans" font-size="3">to your own rhythm.</text>
-                <text x="50" y="92" font-family="Instrument Sans" font-weight="600" font-size="4">eau de parfum</text><text x="50" y="100" font-family="Bodoni Moda, Georgia, serif" font-size="6">philosophy</text></g>
-            <path d="M14 36 v80" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></svg>`,
+        id: 'perfume', name: 'my perfume', zip: 'front', l: 40, t: 71.1, w: 8.5, r: -4,
+        art: `<svg viewBox="0 0 120 160"><defs><linearGradient id="chrome2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8B9198"/><stop offset=".22" stop-color="#E9ECEF"/><stop offset=".42" stop-color="#FFFFFF"/><stop offset=".62" stop-color="#B9BEC4"/><stop offset="1" stop-color="#7E848B"/></linearGradient>
+                <linearGradient id="juice" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBDCD7"/><stop offset=".75" stop-color="#F8CFC8"/><stop offset="1" stop-color="#F6BFA0"/></linearGradient></defs>
+            <g class="pspray"><rect x="47" y="34" width="26" height="12" rx="2" fill="url(#chrome2)" stroke="#3A2626" stroke-width="1.6"/><g class="pact"><rect x="51" y="22" width="18" height="13" rx="2" fill="url(#chrome2)" stroke="#3A2626" stroke-width="1.6"/><circle cx="55" cy="28" r="1.4" fill="#4A4F55"/></g></g>
+            <rect x="10" y="44" width="100" height="112" rx="9" fill="#FBF3F2" stroke="#3A2626" stroke-width="2.4"/>
+            <rect x="16" y="50" width="88" height="100" rx="5" fill="url(#juice)"/>
+            <path d="M16 56 h88" stroke="#fff" stroke-width="1.4" opacity=".6"/><path d="M14 52 v96 M106 52 v96" stroke="#fff" stroke-width="2" opacity=".75"/>
+            <rect x="30" y="66" width="60" height="72" fill="#F5B9B1" stroke="#CDD1D6" stroke-width="2.6"/><rect x="33" y="69" width="54" height="66" fill="none" stroke="#fff" stroke-width=".5" opacity=".6"/>
+            <g text-anchor="middle" fill="#2E2426"><text x="62" y="80" font-family="Bodoni Moda, Georgia, serif" font-size="6.4">amazing</text><text x="60" y="94" font-family="Bodoni Moda, Georgia, serif" font-weight="700" font-size="17">grace</text><text x="64" y="102" font-family="Bodoni Moda, Georgia, serif" font-style="italic" font-size="6.6">ballet rose</text>
+                <text x="60" y="111" font-family="Georgia, serif" font-size="3.6"><tspan font-weight="700">philosophy:</tspan> grace lets you move</text><text x="60" y="115.5" font-family="Georgia, serif" font-size="3.6">to your own rhythm.</text>
+                <text x="60" y="124" font-family="Georgia, serif" font-weight="700" font-size="4.4">eau de parfum</text><text x="60" y="132.5" font-family="Georgia, serif" font-size="6.4">philosophy</text></g>
+            <g class="pcap"><rect x="41" y="2" width="38" height="44" rx="3" fill="url(#chrome2)" stroke="#3A2626" stroke-width="2"/><path d="M50 6 v36" stroke="#fff" stroke-width="3" opacity=".9"/><path d="M71 6 v36" stroke="#6E747B" stroke-width="1.5" opacity=".6"/><ellipse cx="60" cy="3.5" rx="18" ry="1.6" fill="#F4F6F8" opacity=".7"/></g></svg>`,
         open: 'perfume'
     },
     {
@@ -358,11 +359,20 @@ window.ITEMS = [
                 <text x="55" y="106" font-size="8.5" font-style="italic">United States</text>
                 <text x="55" y="117" font-size="8.5" font-style="italic">of America</text>
             </g>
-            <g fill="none" stroke="#D9B45A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="55" cy="44" r="6"/>
-                <path d="M55 52 v32 M47 58 h16 v14 q-8 8 -16 0z"/>
-                <path d="M47 60 C38 56 32 50 28 58 C34 60 38 64 46 66 M63 60 C72 56 78 50 82 58 C76 60 72 64 64 66"/>
-                <path d="M36 82 q-6 -4 -8 -10 M74 82 q6 -4 8 -10"/>
+            <g fill="#D9B45A">
+                <circle cx="55" cy="38" r="7.5" fill="none" stroke="#D9B45A" stroke-width=".9"/>
+                <g>${[[55,33],[51,36],[59,36],[55,38],[52,41],[58,41],[49,39],[61,39],[55,42]].map(([x, y]) => `<path d="M${x} ${y - 1.4} l.45 1 1 .1 -.75 .7 .25 1 -.95 -.55 -.95 .55 .25 -1 -.75 -.7 1 -.1z"/>`).join('')}</g>
+                <path d="M50 56 C44 52 36 44 29 36 C27 42 28 47 31 51 C28 51 26 53 25 56 C29 56 31 58 32 60 C30 61 29 63 29 66 C35 64 42 62 49 61Z"/>
+                <path d="M60 56 C66 52 74 44 81 36 C83 42 82 47 79 51 C82 51 84 53 85 56 C81 56 79 58 78 60 C80 61 81 63 81 66 C75 64 68 62 61 61Z"/>
+                <path d="M31 43 l8 7 M29 50 l11 5 M29 58 l13 1 M79 43 l-8 7 M81 50 l-11 5 M81 58 l-13 1" stroke="#1E2A4A" stroke-width=".7" fill="none"/>
+                <path d="M52 47 c0 -3 2 -5 4 -5 c2 0 3 2 3 4 l-1 3 h-6z"/><path d="M52 46 l-3.5 1.2 3.3 1.2z"/><circle cx="54.6" cy="45" r=".55" fill="#1E2A4A"/>
+                <path d="M38 50 q8 -4 17 0 q9 4 17 0" fill="none" stroke="#D9B45A" stroke-width="1.6"/>
+                <path d="M47.5 55 h15 v12 q0 7 -7.5 11 q-7.5 -4 -7.5 -11z"/>
+                <path d="M47.5 59 h15" stroke="#1E2A4A" stroke-width=".8"/><path d="M50 60 v12 M52.5 60 v14 M55 60 v15.5 M57.5 60 v14 M60 60 v12" stroke="#1E2A4A" stroke-width=".7"/>
+                <path d="M51 77 l4 9 4 -9z"/>
+                <path d="M47 73 C42 76 38 79 33 84" fill="none" stroke="#D9B45A" stroke-width="1.1"/>
+                <g>${[[44,75,-30],[41,77.5,-30],[38,80,-30],[35.5,82.5,-30],[43,78,60],[40,80.5,60],[37,83,60]].map(([x, y, r]) => `<ellipse cx="${x}" cy="${y}" rx="2" ry=".9" transform="rotate(${r} ${x} ${y})"/>`).join('')}</g>
+                <path d="M63 73 L77 84 M64 75 L76 87 M62 76 L73 88" stroke="#D9B45A" stroke-width="1" fill="none"/><path d="M77 84 l-2.6 -.4 1 -1.8z M76 87 l-2.6 -.2 .9 -2z M73 88 l-2.4 0 .6 -2.1z"/>
             </g>
             <rect x="47" y="128" width="16" height="9" rx="1.5" fill="none" stroke="#D9B45A" stroke-width="1.4"/><path d="M50 132.5 h10 M55 128 v9" stroke="#D9B45A" stroke-width="1"/>
         </svg>`,

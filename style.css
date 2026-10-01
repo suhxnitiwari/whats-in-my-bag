@@ -1284,3 +1284,14 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .cp-in { transform: rotateX(180deg); background: #141011; padding: 10px; }
 .cp-in span { display: block; width: 100%; height: 100%; border-radius: 18%; background: linear-gradient(135deg, #F4F6F8 0%, #C9CED4 45%, #EEF1F4 60%, #B9BFC6 100%); }
 .cp-hint { position: absolute; top: -206px; left: 50%; transform: translateX(-50%); white-space: nowrap; color: var(--plum); font-size: 1.05rem; margin: 0; opacity: .8; }
+
+/* perfume: the chrome cap comes off, then the nozzle sprays */
+.pf-bottle { width: 190px; margin: 50px auto 6px; }
+.pf-bottle .pcap { transition: transform .6s cubic-bezier(.3,1.3,.5,1); transform-box: view-box; }
+.pf-bottle.capoff .pcap { transform: translate(78px, 40px) rotate(18deg); }
+.pf-hint { text-align: center; color: var(--plum); margin: 0; font-size: 1.1rem; }
+.notes3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.notes3 div { border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; background: #FCE8E5; }
+.notes3 b { display: block; font: 600 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--plum); }
+.notes3 span { font-size: .85rem; }
+@media (max-width: 760px) { .notes3 { grid-template-columns: 1fr; } }
