@@ -1463,3 +1463,5 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .cp-glass.mag img { transform: scale(1.9); transform-origin: 50% 35%; }
 .cp-shine { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.6), rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25)); }
 .cp-tag { position: absolute; right: 16px; bottom: 14px; font: 600 .7rem var(--mono); color: #fff; background: rgba(0,0,0,.45); padding: 1px 6px; border-radius: 999px; }
+
+.sg-big { width: min(420px, 90%); margin: 6px auto 12px; }

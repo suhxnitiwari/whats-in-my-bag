@@ -728,7 +728,8 @@ const VIEWS = {
 
     sunglasses: () => `
         <h2>How I <em>see</em> things</h2>
-        <p class="note">black and gold, gray gradient lenses. put them on.</p>
+        <p class="note">chanel square sunglasses. black and beige, brown gradient lenses, gold CC on the arms. put them on.</p>
+        <div class="sg-big">${ITEMS.find(i => i.id === 'sunglasses').art}</div>
         <p>Everything I look at, I look at the same way: why would someone choose this? That’s the lens behind my psychology classes, my MIS projects and every marketing deck I’ve made.</p>
         <div class="row"><button class="btn solid" type="button" id="shades">${document.body.classList.contains('shades') ? 'Take them off' : 'Put them on'}</button></div>
         <p class="shades-note" id="shades-note">${document.body.classList.contains('shades') ? 'ooh, very mysterious.' : ''}</p>`,
