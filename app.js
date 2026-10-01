@@ -774,7 +774,6 @@ const VIEWS = {
                 ['Saturday in Austin', 'saturday'],
                 ['RideFlow', 'https://suhanitiwari.com/home/work#mp-rideflow'],
                 ['Owala Marathon', 'owala'],
-                ['Starbucks App', 'starbucks'],
                 ['FuelFlow', 'fuelflow'],
                 ['Girls Can Be Engineers', 'book'],
                 ['Acacia Advisors', 'acacia'],
@@ -853,7 +852,6 @@ const VIEWS = {
             <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="bpages">${[
                 ['owala', 'Owala Marathon Series', 'Brand strategy', 'assets/img/owala.jpg'],
-                ['starbucks', 'Starbucks app strategy', 'Product strategy', 'assets/img/starbucks.jpg'],
                 ['fuelflow', 'FuelFlow', 'Service concept', 'assets/img/fuelflow.jpg'],
                 ['acacia', 'Acacia Advisors', 'Go-to-market', '']
             ].map(([k, n, t, img], i) => `<button type="button" class="bpage" data-case="${k}" style="--i:${i}">

@@ -292,15 +292,15 @@ window.ITEMS = [
     },
     {
         id: 'cap', name: 'my pink ny cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
-        art: `<svg viewBox="0 0 180 128"><defs><linearGradient id="capg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F7D3D4"/><stop offset=".6" stop-color="#F2C2C4"/><stop offset="1" stop-color="#E9AFB2"/></linearGradient></defs>
-            <path d="M42 80 C34 42 64 14 104 15 C142 16 168 40 167 76 C150 71 122 67 94 67 C72 67 54 72 42 80Z" fill="url(#capg)" ${S}/>
-            <path d="M104 16 C98 34 94 50 93 67 M104 16 C126 26 140 46 146 70 M104 16 C80 22 60 38 50 62" fill="none" stroke="#DFA2A6" stroke-width="1.8"/>
-            <circle cx="104" cy="16" r="4" fill="#F2C2C4" stroke="#3A2626" stroke-width="2"/><circle cx="74" cy="34" r="1.4" fill="#C98E92"/><circle cx="128" cy="30" r="1.4" fill="#C98E92"/>
-            <g transform="translate(76 56) rotate(-6)" font-family="Bodoni Moda, Georgia, serif" font-weight="700" font-style="italic" font-size="34"><g fill="#D99A9F" transform="translate(1.2 1.6)"><text x="0" y="0">N</text><text x="15" y="5">Y</text></g><g fill="#FFF8EE" stroke="#CDB39E" stroke-width=".9"><text x="0" y="0">N</text><text x="15" y="5">Y</text></g></g>
-            <text x="156" y="66" font-family="Instrument Sans" font-weight="700" font-size="7" fill="#FBF3EA" transform="rotate(-8 156 66)">47</text>
-            <path d="M42 80 C62 70 112 66 152 75 C146 96 112 112 74 115 C46 117 22 112 12 106 C18 96 30 86 42 80Z" fill="#F4C9CB" ${S}/>
-            <path d="M24 102 C44 92 96 82 142 80 M30 107 C52 97 100 88 138 86 M36 111 C58 102 102 94 132 92" fill="none" stroke="#E2A9AD" stroke-width="1.1" stroke-dasharray="3 2.5"/>
-            <path d="M56 26 q20 -12 46 -10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".45"/></svg>`,
+        art: `<svg viewBox="0 0 200 150"><defs><linearGradient id="capg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F6CDD0"/><stop offset=".65" stop-color="#F1BFC3"/><stop offset="1" stop-color="#E7AEB3"/></linearGradient></defs>
+            <path d="M36 104 C26 56 62 16 112 16 C160 16 192 52 188 102 C160 94 120 92 84 94 C66 95 50 99 36 104Z" fill="url(#capg2)" ${S}/>
+            <path d="M112 17 C104 40 100 68 100 93 M112 17 C138 30 156 58 162 96 M112 17 C82 26 58 52 50 98" fill="none" stroke="#DFA1A6" stroke-width="1.6"/>
+            <circle cx="112" cy="16" r="4.6" fill="#F1BFC3" stroke="#3A2626" stroke-width="2"/><circle cx="76" cy="44" r="1.5" fill="#C98E92"/><circle cx="148" cy="40" r="1.5" fill="#C98E92"/>
+            <g font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" fill="#FBF4EA" stroke="#E2CDB8" stroke-width=".8"><text x="82" y="76" transform="rotate(-4 100 64)">N</text><text x="101" y="82" transform="rotate(-4 100 64)">Y</text></g>
+            <text x="172" y="88" font-family="Instrument Sans" font-weight="700" font-size="8" fill="#FBF4EA" transform="rotate(-10 172 88)">47</text>
+            <path d="M36 104 C66 94 130 92 188 102 C182 118 152 128 112 134 C72 140 30 142 10 132 C14 120 24 110 36 104Z" fill="#F4C7CA" ${S}/>
+            <path d="M28 124 C70 116 130 108 176 106 M38 130 C80 122 132 114 170 112" fill="none" stroke="#E0A8AD" stroke-width="1.3" stroke-dasharray="4 3"/>
+            <path d="M58 30 q24 -12 52 -12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'cap'
     },
     {
@@ -441,7 +441,7 @@ window.STICKERS = [
 <g fill="#33627E"><path d="M-20 -18 l1.5 3.5 3.5 1.5 -3.5 1.5 -1.5 3.5 -1.5 -3.5 -3.5 -1.5 3.5 -1.5z"/><path d="M30 -24 l1 2.5 2.5 1 -2.5 1 -1 2.5 -1 -2.5 -2.5 -1 2.5 -1z"/></g>
 <path d="M26 -32 c-3 -4 -8 -1 -5 3 c-4 1 -3 6 1 5 c1 4 6 2 4 -2" fill="#5B8FB0"/><rect x="-36" y="20" width="3" height="9" fill="#9C2B2B"/><rect x="-6" y="34" width="9" height="5" fill="#F2D24B" transform="rotate(-12 -6 34)"/>
 <path d="M14 26 l2 -5 2 5 M24 6 h6 M-22 36 q4 -3 8 0" fill="none" stroke="#2A2222" stroke-width=".8"/>` },
-    { id: 'cupcake', label: 'the Mozart’s cupcake → Starbucks app', x: 194, y: 171, r: 32, go: 'starbucks',
+    { id: 'cupcake', label: 'the Mozart’s cupcake → Saturday in Austin', x: 194, y: 171, r: 32, go: 'saturday',
       svg: `<g fill="#FFFFFF" stroke="#FFFFFF" stroke-width="9" stroke-linejoin="round"><path d="M-32 -2 C-38 -22 -14 -34 4 -30 L8 -50 L15 -48 L13 -30 C30 -28 40 -14 36 2 L32 34 C30 44 22 48 14 48 L-20 48 C-28 48 -34 44 -34 36 Z"/></g><g fill="none" stroke="#C9CDD2" stroke-width="10.4" stroke-linejoin="round" opacity=".35"><path d="M-32 -2 C-38 -22 -14 -34 4 -30 L8 -50 L15 -48 L13 -30 C30 -28 40 -14 36 2 L32 34 C30 44 22 48 14 48 L-20 48 C-28 48 -34 44 -34 36 Z"/></g><g fill="#FFFFFF" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"><path d="M-32 -2 C-38 -22 -14 -34 4 -30 L8 -50 L15 -48 L13 -30 C30 -28 40 -14 36 2 L32 34 C30 44 22 48 14 48 L-20 48 C-28 48 -34 44 -34 36 Z"/></g><path d="M-32 -2 C-38 -22 -14 -34 4 -30 L8 -50 L15 -48 L13 -30 C30 -28 40 -14 36 2 L32 34 C30 44 22 48 14 48 L-20 48 C-28 48 -34 44 -34 36 Z" fill="#EFA3BA"/>
 <path d="M-30 2 H32 L26 30 H-24Z" fill="#B2A4DA"/><path d="M-24 3 L-19.7 29" stroke="#C9BFEA" stroke-width="1"/><path d="M-18 3 L-14.8 29" stroke="#C9BFEA" stroke-width="1"/><path d="M-12 3 L-9.8 29" stroke="#C9BFEA" stroke-width="1"/><path d="M-6 3 L-4.9 29" stroke="#C9BFEA" stroke-width="1"/><path d="M0 3 L0.0 29" stroke="#C9BFEA" stroke-width="1"/><path d="M6 3 L4.9 29" stroke="#C9BFEA" stroke-width="1"/><path d="M12 3 L9.8 29" stroke="#C9BFEA" stroke-width="1"/><path d="M18 3 L14.8 29" stroke="#C9BFEA" stroke-width="1"/><path d="M24 3 L19.7 29" stroke="#C9BFEA" stroke-width="1"/>
 <path d="M-33 4 C-38 -8 -26 -18 -16 -16 C-14 -27 6 -30 12 -21 C26 -23 36 -12 32 4 C10 8 -12 8 -33 4Z" fill="#FBF3E2"/><path d="M-20 -6 q14 -10 30 -4 M-26 0 q22 -8 46 -2" fill="none" stroke="#EADFCB" stroke-width="1.4"/>
@@ -573,7 +573,6 @@ window.PROJECTS = [
     { name: 'Listening History', tag: 'Live · data', c: '#F4A7B9', img: 'assets/img/listening.jpg', href: 'https://listening-history.onrender.com/' },
     { name: 'Saturday in Austin', tag: 'Live · Python', c: '#CDE6D0', img: 'assets/img/saturday.jpg', href: 'https://suhxnitiwari.github.io/saturday-in-austin/' },
     { name: 'Owala Marathon Series', tag: 'Brand strategy', c: '#F8E7A9', img: 'assets/img/owala.jpg', href: 'https://suhanitiwari.com/home/study#marketing' },
-    { name: 'Starbucks app', tag: 'Product strategy', c: '#D9C8F0', img: 'assets/img/starbucks.jpg', href: 'https://suhanitiwari.com/home/study#marketing' },
     { name: 'Girls Can Be Engineers, Too!', tag: '#1 New Release', c: '#F2C6C8', img: 'assets/img/book.jpg', href: 'https://suhanitiwari.com/home/beyondtheclassroom' }
 ];
 
