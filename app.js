@@ -5,6 +5,7 @@ const $ = s => document.querySelector(s);
 const stage = $('#stage'), bagBtn = $('#bag'), bagArt = $('#bag-art'), list = $('#items');
 const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-label');
 const phone = () => matchMedia('(max-width: 760px)').matches;
+const moved = {};   // things you've dragged somewhere else on the table
 
 /* ---------- the bag, with my caramel frappuccino charm clipped on (Sitara lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
@@ -264,7 +265,35 @@ function relayout() {
         const li = document.getElementById('item-' + b.it.id); if (!li) continue;
         li.style.setProperty('--l', `${b.cx * CM}%`);
         li.style.setProperty('--t', `${b.cy / H * 100}%`);
+        if (moved[b.it.id]) { li.style.setProperty('--l', moved[b.it.id][0] + '%'); li.style.setProperty('--t', moved[b.it.id][1] + '%'); }
     }
+}
+
+// rearrange the table however you like: drag anything that's out; a tap still picks it up
+{
+    let d = null, skip = false, zTop = 40;
+    list.addEventListener('pointerdown', e => {
+        const li = e.target.closest('.item.out'); if (!li || phone() || e.button) return;
+        d = { li, x: e.clientX, y: e.clientY, on: false, id: li.id.slice(5) };
+    });
+    addEventListener('pointermove', e => {
+        if (!d) return;
+        const dx = e.clientX - d.x, dy = e.clientY - d.y;
+        if (!d.on && Math.hypot(dx, dy) < 7) return;
+        if (!d.on) { d.on = true; d.li.classList.add('dragging'); d.li.style.zIndex = ++zTop; }
+        d.li.style.translate = `${dx}px ${dy}px`;
+    });
+    addEventListener('pointerup', () => {
+        if (!d) return;
+        const { li, on, id } = d; d = null;
+        if (!on) return;
+        const r = stage.getBoundingClientRect(), [tx, ty] = (li.style.translate || '0px 0px').split(' ').map(parseFloat);
+        const l = parseFloat(li.style.getPropertyValue('--l')) + tx / r.width * 100, t = parseFloat(li.style.getPropertyValue('--t')) + (ty || 0) / r.height * 100;
+        li.style.translate = ''; li.classList.remove('dragging');
+        li.style.setProperty('--l', l + '%'); li.style.setProperty('--t', t + '%');
+        moved[id] = [l, t]; skip = true;
+    });
+    list.addEventListener('click', e => { if (skip) { skip = false; e.stopPropagation(); e.preventDefault(); } }, true);
 }
 
 let busy = Promise.resolve();
@@ -2057,6 +2086,13 @@ const AFTER = {
         $('#mpull').onclick = () => { if (mskip) { mskip = false; return; } toggle(); };
         let mdrag = null, mskip = false;
         const mp = $('#mpull'); mp.style.touchAction = 'none';
+        const gap = bag.querySelector('.mgap'), mks = [...bag.querySelectorAll('.mk')];
+        // while you drag, the zipper opens exactly as far as you've pulled, and each thing pops up once its spot is unzipped
+        const scrub = f => {
+            if (gap) { gap.style.transition = 'none'; gap.style.strokeDashoffset = 244 * (1 - f); }
+            const byX = [...mks].sort((a, b) => (parseFloat(getComputedStyle(a).getPropertyValue('--x')) || 0) - (parseFloat(getComputedStyle(b).getPropertyValue('--x')) || 0));
+            byX.forEach((m, k) => m.classList.toggle('peek', f > (k + .5) / byX.length));
+        };
         mp.addEventListener('pointerdown', e => { mdrag = { x: e.clientX, moved: false, f: bag.classList.contains('open') ? 1 : 0 }; try { mp.setPointerCapture(e.pointerId); } catch {} });
         mp.addEventListener('pointermove', e => {
             if (!mdrag) return;
@@ -2064,12 +2100,14 @@ const AFTER = {
             const f = Math.max(0, Math.min(1, (e.clientX - r.left - r.width * .06) / (r.width * .84)));
             if (Math.abs(e.clientX - mdrag.x) > 6) mdrag.moved = true;
             if (!mdrag.moved) return;
-            mdrag.f = f; mp.style.transition = 'none'; mp.style.left = `calc(6% + ${f} * (84% - 22px))`;
+            if (!bag.classList.contains('scrub')) { bag.classList.add('scrub'); bag.classList.remove('open'); }
+            mdrag.f = f; mp.style.transition = 'none'; mp.style.left = `calc(6% + ${f} * (84% - 22px))`; scrub(f);
         });
         mp.addEventListener('pointerup', () => {
             if (!mdrag) return;
             const d = mdrag; mdrag = null; if (!d.moved) return;
             mskip = true; mp.style.transition = ''; mp.style.left = '';
+            bag.classList.remove('scrub'); mks.forEach(m => m.classList.remove('peek')); if (gap) { gap.style.transition = ''; gap.style.strokeDashoffset = ''; }
             if ((d.f > .5) !== bag.classList.contains('open')) toggle();
         });
         bag.querySelector('.mbag-front svg').onclick = () => { if (!bag.classList.contains('open')) toggle(); };

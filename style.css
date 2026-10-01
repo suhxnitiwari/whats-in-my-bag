@@ -2027,3 +2027,13 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .lip-stick.held { position: absolute; transition: transform .2s; transform: rotate(-38deg); cursor: grabbing; z-index: 30; }
 .lipwrap { position: relative; }
 .lipface { cursor: default; }
+
+/* dragging things around the table */
+.item.out { touch-action: none; }
+.item.dragging { transition: none !important; cursor: grabbing; filter: drop-shadow(0 16px 18px rgba(59,21,36,.28)); }
+.item.dragging button { pointer-events: none; }
+
+/* makeup pouch: zip it as slowly as you like */
+.mbag.scrub .mk.peek { transform: none; opacity: 1; transition-delay: 0s !important; }
+.mbag.scrub .mk { transition-delay: 0s !important; }
+.mbag.scrub .mk.peek { opacity: 1 !important; transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(var(--rise, 0px)) !important; transition: transform .45s var(--ease), opacity .2s !important; }
