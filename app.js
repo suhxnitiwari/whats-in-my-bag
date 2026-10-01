@@ -577,7 +577,7 @@ const VIEWS = {
     cap: () => `
         <h2>My <em>cap</em></h2>
         <p class="note">a cap is a must.</p>
-        <p>Pink, with the cream NY. Goes with everything. Bad hair day, sunny day, running-late day.</p>
+        <p>Brown, with the NY stitched tone on tone. Goes with everything, especially the Chanel sunglasses. Bad hair day, sunny day, running-late day.</p>
         <div class="row"><button class="btn solid" type="button" id="cap-on">Put it on</button></div>`,
     romcom: () => `
         <h2><em>You Deserve Each Other</em></h2>

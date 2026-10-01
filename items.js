@@ -291,16 +291,16 @@ window.ITEMS = [
         open: 'haircomb'
     },
     {
-        id: 'cap', name: 'my pink ny cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
-        art: `<svg viewBox="0 0 200 150"><defs><linearGradient id="capg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F6CDD0"/><stop offset=".65" stop-color="#F1BFC3"/><stop offset="1" stop-color="#E7AEB3"/></linearGradient></defs>
+        id: 'cap', name: 'my brown ny cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
+        art: `<svg viewBox="0 0 200 150"><defs><linearGradient id="capg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7A5A49"/><stop offset=".65" stop-color="#6E4F3F"/><stop offset="1" stop-color="#5F4334"/></linearGradient></defs>
             <path d="M36 104 C26 56 62 16 112 16 C160 16 192 52 188 102 C160 94 120 92 84 94 C66 95 50 99 36 104Z" fill="url(#capg2)" ${S}/>
-            <path d="M112 17 C104 40 100 68 100 93 M112 17 C138 30 156 58 162 96 M112 17 C82 26 58 52 50 98" fill="none" stroke="#DFA1A6" stroke-width="1.6"/>
-            <circle cx="112" cy="16" r="4.6" fill="#F1BFC3" stroke="#3A2626" stroke-width="2"/><circle cx="76" cy="44" r="1.5" fill="#C98E92"/><circle cx="148" cy="40" r="1.5" fill="#C98E92"/>
-            <g font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" fill="#FBF4EA" stroke="#E2CDB8" stroke-width=".8"><text x="82" y="76" transform="rotate(-4 100 64)">N</text><text x="101" y="82" transform="rotate(-4 100 64)">Y</text></g>
-            <text x="172" y="88" font-family="Instrument Sans" font-weight="700" font-size="8" fill="#FBF4EA" transform="rotate(-10 172 88)">47</text>
-            <path d="M36 104 C66 94 130 92 188 102 C182 118 152 128 112 134 C72 140 30 142 10 132 C14 120 24 110 36 104Z" fill="#F4C7CA" ${S}/>
-            <path d="M28 124 C70 116 130 108 176 106 M38 130 C80 122 132 114 170 112" fill="none" stroke="#E0A8AD" stroke-width="1.3" stroke-dasharray="4 3"/>
-            <path d="M58 30 q24 -12 52 -12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg>`,
+            <path d="M112 17 C104 40 100 68 100 93 M112 17 C138 30 156 58 162 96 M112 17 C82 26 58 52 50 98" fill="none" stroke="#5A3E30" stroke-width="1.6"/>
+            <circle cx="112" cy="16" r="4.6" fill="#6E4F3F" stroke="#3A2626" stroke-width="2"/><circle cx="76" cy="44" r="1.5" fill="#4A3226"/><circle cx="148" cy="40" r="1.5" fill="#4A3226"/>
+            <g font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" fill="#6E4F3F" stroke="#3E2A20" stroke-width="1.6"><text x="82" y="76" transform="rotate(-4 100 64)">N</text><text x="101" y="82" transform="rotate(-4 100 64)">Y</text></g>
+            <text x="172" y="88" font-family="Instrument Sans" font-weight="700" font-size="8" fill="#4A3226" transform="rotate(-10 172 88)">47</text>
+            <path d="M36 104 C66 94 130 92 188 102 C182 118 152 128 112 134 C72 140 30 142 10 132 C14 120 24 110 36 104Z" fill="#6A4C3C" ${S}/>
+            <path d="M28 124 C70 116 130 108 176 106 M38 130 C80 122 132 114 170 112" fill="none" stroke="#59402F" stroke-width="1.3" stroke-dasharray="4 3"/>
+            <path d="M58 30 q24 -12 52 -12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".18"/></svg>`,
         open: 'cap'
     },
     {
