@@ -183,6 +183,7 @@ window.JEWELS = {
         ${ELISA('#0F5A5C', '<path d="M-18 -11 L-4 0 L-18 11 M18 -11 L4 0 L18 11 M-4 0 H4" stroke="#3FA3A0" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-10 -8 l8 6" stroke="#9FE0D8" stroke-width="1.6" opacity=".7"/>')}</svg>`
 };
 
+const ITEMS_HP_ART = () => window.ITEMS.find(i => i.id === 'headphones').art;
 window.ITEMS = [
     {
         id: 'headphones', name: 'my airpods max', zip: 'devices', l: 67.7, t: 8.2, w: 16.0, r: -8,
@@ -199,6 +200,15 @@ window.ITEMS = [
         open: () => `
             <h2>What I’m <em>listening</em> to</h2>
             <p class="note">four years of my spotify, turned into a database i can ask anything</p>
+            <div class="study-wrap">
+                <div class="study" id="study">
+                    <img src="assets/img/me-study.jpg" alt="Me studying in a booth, writing in my notebook between two laptops">
+                    <img class="study-on" src="assets/img/me-study-headphones.jpg" alt="" aria-hidden="true">
+                    <span class="study-hint hand" id="study-hint">drop them on me ↓</span>
+                </div>
+                <button type="button" class="study-hp" id="study-hp" aria-label="Put my headphones on me">${ITEMS_HP_ART()}</button>
+            </div>
+            <p class="hand study-say" id="study-say">i’m studying. drag my headphones onto me.</p>
             <div class="eq" aria-hidden="true">${'<i></i>'.repeat(18)}</div>
             <div class="stats"><div><b>182K</b><span>plays cleaned</span></div><div><b>21</b><span>days in a row on one song</span></div><div><b>7</b><span>SQL views</span></div></div>
             <div class="shot"><img src="assets/img/listening.jpg" alt="Listening History, the app"></div>

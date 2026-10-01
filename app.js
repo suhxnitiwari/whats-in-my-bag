@@ -589,7 +589,7 @@ function pickUp(it) {
     sheetBody.innerHTML = typeof it.open === 'function' ? it.open() : (VIEWS[it.open] || (() => ''))();
     if (!sheet.open) sheet.showModal();
     sheet.scrollTop = 0;
-    (AFTER[it.open] || (() => {}))();
+    (AFTER[typeof it.open === 'function' ? it.id : it.open] || (() => {}))();
 }
 sheet.addEventListener('click', e => {
     if (e.target === sheet || e.target.closest('[data-close]')) sheet.close();
@@ -1747,7 +1747,7 @@ const VIEWS = {
         <p class="note">the hand sanitizer that lives in my caramel frappuccino charm. go ahead, squirt some.</p>
         <div class="sani" id="sani">
             <button type="button" class="sani-charm" id="sani-charm" aria-label="Squeeze the hand sanitizer">${BAG.charm}</button>
-            <svg class="sani-hand" viewBox="0 0 200 210" aria-hidden="true"><g id="sani-palm"><rect x="-11" y="-36" width="22" height="52" rx="11" transform="translate(56 132) rotate(-46)"/><rect x="56" y="40" width="22" height="80" rx="11"/><rect x="80" y="26" width="22" height="94" rx="11"/><rect x="104" y="34" width="21" height="86" rx="10.5"/><rect x="127" y="56" width="19" height="70" rx="9.5"/><path d="M54 98 H146 V150 C146 176 128 192 100 192 C72 192 54 176 54 150 Z"/><rect x="70" y="170" width="60" height="50"/></g><use href="#sani-palm" fill="#E9B998" stroke="#3A2626" stroke-width="6" stroke-linejoin="round"/><use href="#sani-palm" fill="#E9B998"/><path d="M66 126 C86 134 116 132 138 116" fill="none" stroke="#CF9877" stroke-width="2.5" stroke-linecap="round"/><path d="M64 146 C80 152 96 162 108 180" fill="none" stroke="#CF9877" stroke-width="2.5" stroke-linecap="round"/><ellipse id="sani-pool" cx="100" cy="146" rx="0" ry="0" fill="#EAF6FF" stroke="#B9D6EC" stroke-width="1.5" opacity=".9"/><ellipse id="sani-shine" cx="93" cy="142" rx="0" ry="0" fill="#fff"/></svg>
+            <svg class="sani-hand" viewBox="0 0 300 170" aria-hidden="true"><defs><linearGradient id="sani-skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8D3BC"/><stop offset=".6" stop-color="#EDB496"/><stop offset="1" stop-color="#E2A083"/></linearGradient><radialGradient id="sani-cup" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FBE3D4"/><stop offset="1" stop-color="#FBE3D4" stop-opacity="0"/></radialGradient></defs><path d="M0 120 C30 104 60 92 90 84 C100 80 110 76 122 76 C140 76 156 80 170 82 C182 80 192 74 200 70 C206 67 212 70 208 76 C200 86 186 92 176 96 C196 92 220 82 244 72 C250 69 256 70 254 76 C240 90 220 102 200 110 C224 104 248 94 266 88 C272 86 276 90 271 95 C254 108 232 118 206 122 C228 120 248 114 262 110 C268 109 270 114 265 117 C248 126 228 132 204 134 C220 134 236 132 246 131 C251 131 251 136 247 138 C232 144 212 146 194 146 C170 150 146 150 128 146 C110 142 98 140 86 142 C60 148 30 160 10 170 L0 170 Z" fill="url(#sani-skin)" stroke="#D39A80" stroke-width="1.4" stroke-linejoin="round"/><ellipse cx="156" cy="104" rx="44" ry="15" fill="url(#sani-cup)"/><path d="M200 110 C190 113 182 114 174 113 M206 122 C196 124 186 124 178 122 M204 134 C194 136 184 136 176 134 M176 96 C168 100 160 101 150 100" fill="none" stroke="#D39A80" stroke-width="1.2" stroke-linecap="round" opacity=".8"/><g fill="#F7C6CB" stroke="#E3A3AA" stroke-width=".8"><ellipse cx="249" cy="73.5" rx="4.6" ry="2.6" transform="rotate(-28 249 73.5)"/><ellipse cx="268" cy="90.5" rx="4.4" ry="2.5" transform="rotate(-22 268 90.5)"/><ellipse cx="264" cy="112.5" rx="4" ry="2.4" transform="rotate(-16 264 112.5)"/><ellipse cx="246" cy="134" rx="3.4" ry="2.2" transform="rotate(-10 246 134)"/><ellipse cx="205" cy="71.5" rx="3.4" ry="2.2" transform="rotate(-34 205 71.5)"/></g><ellipse id="sani-pool" cx="156" cy="104" rx="0" ry="0" fill="#EAF6FF" stroke="#B9D6EC" stroke-width="1.5" opacity=".9"/><ellipse id="sani-shine" cx="150" cy="101" rx="0" ry="0" fill="#fff"/></svg>
         </div>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="sani-go">Squirt some</button><button class="btn" type="button" id="sani-rub" hidden>Rub it in</button></div>`
 };
@@ -1879,6 +1879,40 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    headphones: () => {
+        // drag my headphones onto me while i study; tap me to take them back off
+        const study = $('#study'), hp = $('#study-hp'), say = $('#study-say');
+        const on = () => {
+            study.classList.add('on'); hp.style.visibility = 'hidden';
+            say.textContent = 'noise cancelling: on. do not disturb 🎧';
+            const r = study.getBoundingClientRect(); fairyDust(r.left + r.width * .62, r.top + r.height * .25);
+            toast('locked in. tap me to take them off.');
+        };
+        const off = () => { if (!study.classList.contains('on')) return; study.classList.remove('on'); hp.style.visibility = ''; say.textContent = 'headphones off. what did i miss?'; };
+        study.onclick = off;
+        let g = null, sx = 0, sy = 0, skip = false;
+        const over = e => { const r = study.getBoundingClientRect(); return e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom; };
+        hp.addEventListener('pointerdown', e => { e.preventDefault(); sx = e.clientX; sy = e.clientY; g = 'armed'; try { hp.setPointerCapture(e.pointerId); } catch {} });
+        hp.addEventListener('pointermove', e => {
+            if (!g) return;
+            if (g === 'armed') {
+                if (Math.hypot(e.clientX - sx, e.clientY - sy) < 6) return;
+                g = document.createElement('div'); g.className = 'sk-ghost'; g.style.width = '110px'; g.innerHTML = hp.innerHTML; sheet.appendChild(g); hp.classList.add('held');
+            }
+            g.style.left = e.clientX + 'px'; g.style.top = e.clientY + 'px';
+            study.classList.toggle('target', over(e));
+        });
+        const up = e => {
+            if (!g) return;
+            const was = g; g = null; study.classList.remove('target'); hp.classList.remove('held');
+            if (was === 'armed') return;
+            was.remove(); skip = true;
+            if (over(e)) on(); else say.textContent = 'on my head, please. not the table.';
+        };
+        hp.addEventListener('pointerup', up); hp.addEventListener('pointercancel', up);
+        // a plain tap (or the keyboard) works too
+        hp.addEventListener('click', () => { if (skip) { skip = false; return; } on(); });
+    },
     jewelry: () => {
         const jw = $('#jw'), say = $('#jw-say');
         jw.addEventListener('click', e => {
@@ -2981,7 +3015,7 @@ const AFTER = {
             const c = charm.getBoundingClientRect(), h = hand.getBoundingClientRect(), b = sani.getBoundingClientRect();
             const drop = document.createElement('span'); drop.className = 'sani-drop';
             drop.style.left = (c.left + c.width * .49 - b.left) + 'px'; drop.style.top = (c.top + c.height * .93 - b.top) + 'px';
-            drop.style.setProperty('--fall', (h.top + h.height * .69 - (c.top + c.height * .93)) + 'px');
+            drop.style.setProperty('--fall', (h.top + h.height * .61 - (c.top + c.height * .93)) + 'px');
             sani.appendChild(drop);
             setTimeout(() => {
                 drop.remove(); globs++;
