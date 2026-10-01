@@ -428,6 +428,11 @@ window.ITEMS = [
         open: 'cards'
     },
     {
+        id: 'backup-lip', name: 'my backup lipstick', zip: 'shades', l: 0, t: 0, w: 2.6, r: 18,
+        get art() { return window.ITEMS.find(i => i.id === 'lipstick').art; },
+        open: 'backuplip'
+    },
+    {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'

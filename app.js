@@ -536,6 +536,7 @@ const COMBOS = [
     [['ticket', 'keys'], 'a speeding ticket and the car keys. we don’t talk about it.'],
     [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
     [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
+    [['backup-lip', 'makeup-pouch'], 'a lipstick in the makeup pouch AND a backup in the grab-it pocket. priorities.'],
     [['bear', 'cards'], 'T.D. and a stack of her little sister’s cards. okay, now you know her soft spot.'],
     [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
@@ -569,6 +570,12 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    backuplip: () => `
+        <h2>the <em>backup</em> lipstick</h2>
+        <div class="big-obj" style="max-width:120px">${ITEMS.find(i => i.id === 'lipstick').art}</div>
+        <p class="note" style="text-align:center">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
+        <div class="swatch" id="bl-swatch"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="bl-swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#8E2A24" stroke-width="16" stroke-linecap="round" style="stroke-dasharray:260; stroke-dashoffset:260"/></svg></div>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="bl-go">Swipe it on</button></div>`,
     cards: () => `
         <h2><em>amaira’s</em> cards</h2>
         <p class="note">my little sister makes me cards. i keep them. all of them. they live in my backpack.</p>
@@ -1221,6 +1228,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    backuplip: () => { $('#bl-go').onclick = () => { const sw = $('#bl-swatch'); sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on'); $('#bl-swipe').style.animation = 'none'; void sw.offsetWidth; $('#bl-swipe').style.animation = 'swipe-on .9s cubic-bezier(.3,.7,.3,1) .15s forwards'; toast('ahh. lips: saved.'); }; },
     todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [['Happy Bithday Didi!','#F6C6D3','a birthday card. spelling: hers. didi means big sister.'],['I love you! you\'re the sweetest sister ever! I\'ll miss you!','#FFFDF8','she wrote “i’ll miss you.” enough said.'],['Two Starbucks Girls','#FBF6EA','us. at starbucks. she drew the cups very accurately.'],['Two Little Girls Walking on the Street','#EAF4EC','a house, two girls, a walk. peak art.'],['Merry Christmas and Happy New Year!','#FCE8E5','a christmas card with a gingerbread friend.'],['Girl boss','#EEF0FB','she thinks i run the world. i\'m not correcting her.']];
