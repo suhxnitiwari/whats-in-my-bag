@@ -140,7 +140,7 @@ window.ITEMS = [
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my keys', zip: 'shades', l: 91, t: 10, w: 13, r: 4,
+        id: 'keys', name: 'my keys', zip: 'shades', l: 92, t: 10, w: 6.5, r: 4,
         get art() { return window.KEYRING(false); },
         open: 'keys'
     },
@@ -201,17 +201,48 @@ window.ITEMS = [
         open: 'notebooks'
     },
     {
+        id: 'romcom', name: 'my rom-com (unread)', zip: 'main', l: 24, t: 67, w: 9, r: -7,
+        art: `<svg viewBox="0 0 110 160"><path d="M60 0 v22 l6 -5 6 5 V0" fill="#C9475F" stroke="#3A2626" stroke-width="2"/>
+            <rect x="6" y="6" width="98" height="148" rx="4" fill="#F8C9D4" ${S}/><rect x="6" y="6" width="12" height="148" rx="3" fill="#EFB0C0" stroke="#3A2626" stroke-width="2"/>
+            <circle cx="62" cy="64" r="26" fill="#FFE7A8"/><path d="M62 84 c-22 -14 -26 -30 -14 -36 c7 -3 12 1 14 6 c2 -5 7 -9 14 -6 c12 6 8 22 -14 36z" fill="#E4577A" stroke="#3A2626" stroke-width="2.5"/>
+            <path d="M32 112 q14 -8 30 0 t30 0" fill="none" stroke="#3A2626" stroke-width="3" stroke-linecap="round"/><path d="M40 126 h44" stroke="#3A2626" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+            <path d="M24 16 q20 -4 34 2" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/></svg>`,
+        open: 'romcom'
+    },
+    {
+        id: 'scrunchies', name: 'my silk scrunchies', zip: 'main', l: 10, t: 34, w: 11, r: 0,
+        art: `<svg viewBox="0 0 130 80">
+            <g><circle cx="42" cy="44" r="26" fill="none" stroke="#3A2626" stroke-width="20"/><circle cx="42" cy="44" r="26" fill="none" stroke="#F2B8C6" stroke-width="15"/><circle cx="42" cy="44" r="26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 9" opacity=".7"/><path d="M26 28 q8 -6 16 -4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/></g>
+            <g><circle cx="88" cy="38" r="26" fill="none" stroke="#3A2626" stroke-width="20"/><circle cx="88" cy="38" r="26" fill="none" stroke="#F1DEC2" stroke-width="15"/><circle cx="88" cy="38" r="26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 9" opacity=".75"/><path d="M72 22 q8 -6 16 -4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g></svg>`,
+        open: 'hairpony'
+    },
+    {
+        id: 'clip', name: 'my wooden claw clip', zip: 'main', l: 23, t: 35, w: 7, r: 16,
+        art: `<svg viewBox="0 0 90 80"><path d="M10 40 C10 14 80 14 80 40 L72 44 C70 26 20 26 18 44Z" fill="#B57B4B" ${S}/>
+            <path d="M18 44 l4 26 M30 40 l2 30 M45 38 v32 M60 40 l-2 30 M72 44 l-4 26" stroke="#B57B4B" stroke-width="8" stroke-linecap="round"/><path d="M18 44 l4 26 M30 40 l2 30 M45 38 v32 M60 40 l-2 30 M72 44 l-4 26" stroke="#3A2626" stroke-width="1.5" stroke-linecap="round" opacity=".55"/>
+            <path d="M22 30 q22 -10 46 0" stroke="#8A5530" stroke-width="1.6" fill="none"/><path d="M28 24 q16 -6 34 0" stroke="#D6A372" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="38" y="36" width="14" height="7" rx="3" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/></svg>`,
+        open: 'hairclaw'
+    },
+    {
+        id: 'comb', name: 'my wide-tooth comb', zip: 'main', l: 91, t: 67, w: 12, r: -14,
+        art: `<svg viewBox="0 0 170 64"><path d="M8 12 h154 a6 6 0 0 1 0 12 H8 a6 6 0 0 1 0 -12z" fill="#C48A57" ${S}/>
+            <g stroke="#C48A57" stroke-width="8" stroke-linecap="round">${[22,40,58,76,94,112,130,148].map(x => `<path d="M${x} 24 v32"/>`).join('')}</g>
+            <g stroke="#3A2626" stroke-width="1.4" opacity=".5">${[22,40,58,76,94,112,130,148].map(x => `<path d="M${x-4} 26 v28 M${x+4} 26 v28"/>`).join('')}</g>
+            <path d="M16 16 q50 -3 90 1" stroke="#E2B386" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+        open: 'haircomb'
+    },
+    {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 10, t: 86, w: 17, r: -5,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'
     },
     {
         id: 'ipad', name: 'my ipad', zip: 'devices', l: 41, t: 12, w: 19, r: 4,
-        art: `<svg viewBox="0 0 220 160"><rect x="4" y="4" width="212" height="152" rx="16" fill="#2A2629" ${S}/><rect x="14" y="14" width="192" height="132" rx="8" fill="#F7E9EC"/><rect x="58" y="46" width="40" height="40" rx="10" fill="#E60023" ${S} stroke-width="2"/><path d="M78 56 c-10 0 -13 8 -11 13 c1 3 3 3 3 1 c-1 -4 1 -9 8 -9 c6 0 8 4 7 8 c-1 5 -4 7 -6 6 c-2 0 -2 -2 -1 -4 l1 -5 m0 0 l-4 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><rect x="122" y="46" width="40" height="40" rx="10" fill="#1B1B1F" ${S} stroke-width="2"/><path d="M132 78 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="133" cy="78" r="3" fill="#B9A3E8"/><text x="78" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Pinterest</text><text x="142" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Procreate</text></svg>`,
+        art: `<svg viewBox="0 0 220 176"><g transform="translate(0 16)"><rect x="4" y="4" width="212" height="152" rx="16" fill="#2A2629" ${S}/><rect x="14" y="14" width="192" height="132" rx="8" fill="#F7E9EC"/><rect x="58" y="46" width="40" height="40" rx="10" fill="#E60023" ${S} stroke-width="2"/><path d="M78 56 c-10 0 -13 8 -11 13 c1 3 3 3 3 1 c-1 -4 1 -9 8 -9 c6 0 8 4 7 8 c-1 5 -4 7 -6 6 c-2 0 -2 -2 -1 -4 l1 -5 m0 0 l-4 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><rect x="122" y="46" width="40" height="40" rx="10" fill="#1B1B1F" ${S} stroke-width="2"/><path d="M132 78 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="133" cy="78" r="3" fill="#B9A3E8"/><text x="78" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Pinterest</text><text x="142" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Procreate</text></g><g data-part="pencil" class="kpart pencil-on" transform="translate(0 7)"><path d="M44 3 H192 a5 6 0 0 1 0 12 H44 L28 10 a2 2 0 0 1 0 -2 Z" fill="#F7F7F5" stroke="#3A2626" stroke-width="2"/><path d="M50 6 H184" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M50 13 H188" stroke="#D9D9D6" stroke-width="1.5" stroke-linecap="round"/></g></svg>`,
         open: 'ipad'
     },
     {
-        id: 'pencil', name: 'my apple pencil pro', zip: 'devices', l: 41, t: 25, w: 15.5, r: -2,
+        id: 'pencil', name: 'my apple pencil pro', zip: 'attached', l: 41, t: 25, w: 15.5, r: -2,
         art: `<svg viewBox="0 0 330 26"><path d="M14 13 L2 13" stroke="#3A2626" stroke-width="2"/><path d="M30 4 H318 a7 9 0 0 1 0 18 H30 L6 15 a2 2 0 0 1 0 -4 Z" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M40 8 H300" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M40 18 H312" stroke="#D9D9D6" stroke-width="2" stroke-linecap="round"/><text x="250" y="16" font-family="Instrument Sans" font-size="7" fill="#9A9A96">Pencil Pro</text></svg>`,
         open: 'pencil'
     },
@@ -293,30 +324,25 @@ window.EC = (bands, big) => `<svg viewBox="0 0 170 220" aria-hidden="true">
 </svg>`;
 
 
-/* my keys: BMW fob + apartment fob on one ring, with my सुहानी keychain. Each piece is its own tap. */
-window.BMW_FOB = `<svg viewBox="36 18 196 92"><path d="M44 52 L78 22 H210 L228 42 V82 L212 106 H62 L40 84Z" fill="#141416" ${S}/>
-            <clipPath id="fobclip"><path d="M44 52 L78 22 H210 L228 42 V82 L212 106 H62 L40 84Z"/></clipPath>
-            <g clip-path="url(#fobclip)"><path d="M46 96 L84 28 H226" fill="none" stroke="#2A5BD7" stroke-width="7"/><path d="M52 100 L90 34 H226" fill="none" stroke="#8CC4F0" stroke-width="5" transform="translate(-8 -14)"/></g>
-            <path d="M92 40 C120 34 170 32 206 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".12"/>
-            <circle cx="168" cy="56" r="16" fill="#1F2933" stroke="#D8DCE1" stroke-width="4"/><circle cx="168" cy="56" r="9" fill="#2B3A47"/>
-            <path d="M118 52 h10 v8 h-10z M120 52 v-3 a3 3 0 0 1 6 0 v3" fill="none" stroke="#C9D3DD" stroke-width="1.6"/>
-            <g fill="#26272B" ${S} stroke-width="1.5"><rect x="92" y="84" width="34" height="16" rx="3"/><rect x="130" y="84" width="34" height="16" rx="3"/><rect x="168" y="84" width="34" height="16" rx="3"/></g>
-            <path d="M101 92 h4 l5 -4 v8 l-5 -4 M113 89 q3 3 0 6" fill="none" stroke="#8CC4F0" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M136 96 h22 l-3 -5 h-6 l-3 -3 h-6 z" fill="none" stroke="#C9D3DD" stroke-width="1.4" stroke-linejoin="round"/>
-            <path d="M180 90 h10 v7 h-10z M182 90 v-3 a3 3 0 0 1 6 0" fill="none" stroke="#C9D3DD" stroke-width="1.5"/>
+/* my keys: BMW fob + apartment fob, close together on one ring. Each one is its own tap. */
+window.BMW_FOB = `<svg viewBox="0 0 80 210"><path d="M30 128 h20 v52 l-4 4 4 5 -4 4 4 5 -6 8 h-8 l-6 -8 z" fill="#D8DBDF" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 134 v64" stroke="#fff" stroke-width="2" opacity=".7"/>
+            <rect x="6" y="4" width="68" height="132" rx="20" fill="#141416" ${S}/>
+            <path d="M8 40 h64" stroke="#2A5BD7" stroke-width="4"/><path d="M8 46 h64" stroke="#8CC4F0" stroke-width="2.5"/>
+            <path d="M18 14 q6 -6 16 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".15"/>
+            <g fill="#26272B" stroke="#3A2626" stroke-width="1.5"><rect x="18" y="56" width="44" height="18" rx="5"/><rect x="18" y="78" width="44" height="18" rx="5"/><rect x="18" y="100" width="44" height="14" rx="5"/></g>
+            <path d="M35 61 h8 v8 h-8z M37 61 v-3 a2 2 0 0 1 4 0 v3" fill="none" stroke="#C9D3DD" stroke-width="1.5"/>
+            <path d="M35 83 h8 v8 h-8z M37 83 v-3 a2 2 0 0 1 4 0" fill="none" stroke="#8CC4F0" stroke-width="1.5"/>
+            <path d="M31 110 h18 l-3 -4 h-5 l-2 -2 h-5 z" fill="none" stroke="#C9D3DD" stroke-width="1.3" stroke-linejoin="round"/>
+            <circle cx="40" cy="124" r="6" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/><circle cx="38" cy="122" r="1.8" fill="#fff"/>
+            <rect x="34" y="-4" width="12" height="12" rx="3" fill="#141416" ${S} stroke-width="2"/>
         </svg>`;
 window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M24 4 C40 4 46 24 44 44 C42 66 6 66 4 44 C2 24 8 4 24 4Z" fill="#2B2C30" stroke="#3A2626" stroke-width="2.5"/><rect x="16" y="10" width="16" height="7" rx="3.5" fill="#FAF1EF" stroke="#3A2626" stroke-width="1.5"/><path d="M14 24 q6 -5 14 -4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".18"/></svg>`;
-window.KEYRING = big => `<svg viewBox="0 0 300 200" class="keyring${big ? ' big' : ''}">
-    <circle cx="150" cy="34" r="22" fill="none" stroke="#B9BCC2" stroke-width="7"/><circle cx="150" cy="34" r="22" fill="none" stroke="#3A2626" stroke-width="1.5"/>
-    <g data-part="tag" class="kpart"><path d="M150 56 v10" stroke="#D9A441" stroke-width="3"/>
-        <rect x="112" y="64" width="76" height="40" rx="20" fill="#F4A7B9" stroke="#3A2626" stroke-width="2.5"/>
-        <circle cx="124" cy="84" r="3" fill="#FFFBF8" stroke="#3A2626" stroke-width="1.2"/>
-        <text x="156" y="91" text-anchor="middle" font-family="Kalam, 'Kohinoor Devanagari', sans-serif" font-weight="700" font-size="19" fill="#3A2626">सुहानी</text>
-        <path d="M176 70 l3 5 5 1 -4 3 1 5 -5 -3 -5 3 1 -5 -4 -3 5 -1z" fill="#FFFBF8" stroke="#3A2626" stroke-width="1"/></g>
-    <g data-part="apartment" class="kpart"><path d="M134 52 L92 92" stroke="#B9BCC2" stroke-width="3"/>
-        <g transform="translate(62 88) rotate(18 24 33)">${window.APT_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="48" height="66" viewBox="0 0 48 66">')}</g></g>
-    <g data-part="bmw" class="kpart"><path d="M166 52 L196 100" stroke="#B9BCC2" stroke-width="3"/>
-        <g transform="translate(176 96) rotate(-12 60 28)">${window.BMW_FOB.replace('<svg viewBox="36 18 196 92">', '<svg width="120" height="56" viewBox="36 18 196 92">')}</g></g>
+window.KEYRING = big => `<svg viewBox="0 0 130 252" class="keyring${big ? ' big' : ''}">
+    <circle cx="66" cy="26" r="20" fill="none" stroke="#B9BCC2" stroke-width="6"/><circle cx="66" cy="26" r="20" fill="none" stroke="#3A2626" stroke-width="1.5"/>
+    <g data-part="apartment" class="kpart"><circle cx="50" cy="52" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="50" cy="52" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
+        <g transform="translate(22 58) rotate(6 24 33)">${window.APT_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="50" height="69" viewBox="0 0 48 66">')}</g></g>
+    <g data-part="bmw" class="kpart"><circle cx="78" cy="50" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="78" cy="50" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
+        <g transform="translate(52 58)">${window.BMW_FOB.replace('<svg viewBox="0 0 80 210">', '<svg width="68" height="179" viewBox="0 -6 80 216" overflow="visible">')}</g></g>
 </svg>`;
 
 /* my wallet: student ID, driver license, and my cards. Cards pop out like file folders. */

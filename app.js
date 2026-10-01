@@ -42,7 +42,7 @@ const doodles = [
 $('.doodles').innerHTML = doodles.map(([d, l, t, w]) => `<svg viewBox="0 0 40 40" style="left:${l}%; top:${t}%; width:${w}px">${d}</svg>`).join('');
 
 /* ---------- everything in the bag ---------- */
-list.innerHTML = ITEMS.filter(it => it.zip !== 'side').map(it => `
+list.innerHTML = ITEMS.filter(it => it.zip !== 'side' && it.zip !== 'attached').map(it => `
     <li class="item" id="item-${it.id}" style="--l:${it.l}%; --t:${it.t}%; --w:${it.w}%; --r:${it.r}deg">
         <button type="button" data-item="${it.id}" aria-label="${it.name}" tabindex="-1">
             <span class="art">${it.art}</span><span class="tag">${it.name}</span>
@@ -103,7 +103,26 @@ bottle.setAttribute('tabindex', '0');
 bottle.setAttribute('aria-label', 'My pink Stanley, in the backpack’s water bottle pocket');
 bottle.innerHTML = ITEMS.find(i => i.id === 'stanley').art + '<span class="holder" aria-hidden="true"></span>';
 bagBtn.appendChild(bottle);
-const openBottle = e => { e.stopPropagation(); e.preventDefault(); pickUp(ITEMS.find(i => i.id === 'stanley')); };
+// wrap the cap so it can open
+const capRect = bottle.querySelector('svg rect[x="21"][y="6"]');
+if (capRect) { const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', 'lid'); capRect.replaceWith(g); g.appendChild(capRect); }
+let sips = 0;
+const openBottle = e => {
+    e.stopPropagation(); e.preventDefault();
+    const out = bottle.classList.contains('out');
+    if (!out) { bottle.classList.add('out'); bottle.setAttribute('aria-label', 'My pink Stanley, out of the pocket. Tap the lid to open it, the bottle for my water tracker, the pocket to put it back'); return; }
+    if (e.target.closest && e.target.closest('.lid')) {
+        const lid = bottle.querySelector('.lid');
+        if (bottle.classList.contains('lid-open')) {
+            bottle.classList.remove('lid-open'); lid.classList.add('closing');
+            setTimeout(() => lid.classList.remove('closing'), 650);
+            toast('lid’s back on. no spills ♡');
+        } else { lid.classList.remove('closing'); bottle.classList.add('lid-open'); sips++; toast(sips === 1 ? 'sip ♡ (one more than usual)' : `sip #${sips}. who even am i`); }
+        return;
+    }
+    if (e.target.closest && e.target.closest('.holder')) { bottle.classList.remove('out', 'lid-open'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
+    pickUp(ITEMS.find(i => i.id === 'stanley'));
+};
 bottle.addEventListener('click', openBottle);
 bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openBottle(e); });
 
@@ -166,12 +185,51 @@ $('#repack').addEventListener('click', () => {
 list.addEventListener('click', e => {
     const part = e.target.closest('[data-part]');
     if (part) {
-        if (part.dataset.part === 'tag') return toast('सुहानी: that’s Suhani, in Hindi ♡');
+        if (part.dataset.part === 'pencil') return pickUp(ITEMS.find(i => i.id === 'pencil'));
         return pickUp(part.dataset.part === 'bmw' ? ITEMS.find(i => i.id === 'keys') : { id: 'apartment', name: 'my apartment fob', open: 'apartment' });
     }
     const b = e.target.closest('[data-item]');
     if (b) pickUp(ITEMS.find(i => i.id === b.dataset.item));
 });
+
+
+/* my hair things: two silk scrunchies, a wooden claw clip, a wide-tooth comb. Try each one on. */
+function hairView(state) {
+    return `
+        <h2>My <em>hair</em> stuff</h2>
+        <p class="note">two silk scrunchies, a wooden claw clip, a wide-tooth comb. dark, long, and always done.</p>
+        <div class="hair-stage"><svg viewBox="0 0 200 300" class="hairdo" id="hairdo" data-state="${state}" style="--scr:#F2B8C6">
+            <path d="M10 300 C12 236 56 212 100 212 C144 212 188 236 190 300Z" fill="#F4D3DA" stroke="#3A2626" stroke-width="3"/>
+            <rect x="82" y="112" width="36" height="110" rx="14" fill="#C68E6A" stroke="#3A2626" stroke-width="2.5"/>
+            <g class="h-down"><path d="M52 82 C50 26 150 26 148 82 C150 150 160 210 156 268 Q100 290 44 268 C40 210 50 150 52 82Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/>
+                <path d="M78 60 C70 140 72 210 70 262 M100 50 C98 140 100 220 100 276 M122 60 C130 140 128 210 130 262" fill="none" stroke="#4A3430" stroke-width="2"/></g>
+            <g class="h-up"><path d="M52 86 C50 26 150 26 148 86 C140 116 60 116 52 86Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/>
+                <path d="M70 50 C84 70 92 88 100 100 M130 50 C116 70 108 88 100 100 M100 34 V100" fill="none" stroke="#4A3430" stroke-width="2"/></g>
+            <g class="h-pony"><path d="M92 100 C80 150 84 210 100 262 C116 210 120 150 108 100Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/><path d="M100 110 C96 160 98 210 100 250" stroke="#4A3430" stroke-width="2" fill="none"/>
+                <ellipse cx="100" cy="100" rx="20" ry="12" fill="var(--scr)" stroke="#3A2626" stroke-width="3"/><path d="M84 100 q4 -6 8 0 t8 0 t8 0 t8 0" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/></g>
+            <g class="h-claw"><path d="M100 98 C70 92 66 62 92 56 C120 50 132 78 112 92 C104 98 100 98 100 98Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/><path d="M84 48 q-8 -14 4 -22 M110 46 q8 -14 -2 -24" fill="none" stroke="#2A1C1A" stroke-width="7" stroke-linecap="round"/>
+                <g transform="translate(58 46) scale(.95)">${ITEMS.find(i => i.id === 'clip').art.replace('<svg viewBox="0 0 90 80">', '<svg width="90" height="80" viewBox="0 0 90 80">')}</g></g>
+            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 170 64">', '<svg x="18" y="0" width="164" height="62" viewBox="0 0 170 64">')}</g></g>
+            <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M30 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M168 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
+        </svg></div>
+        <div class="row hair-btns">
+            <button class="btn" type="button" data-hair="pony" data-scr="#F2B8C6">Pink scrunchie</button>
+            <button class="btn" type="button" data-hair="pony" data-scr="#F1DEC2">Champagne scrunchie</button>
+            <button class="btn" type="button" data-hair="claw">Claw clip</button>
+            <button class="btn" type="button" data-hair="comb">Comb it out</button>
+        </div>`;
+}
+function hairAfter(state) {
+    const svg = $('#hairdo'), lines = { pony: 'ponytail. silk, so no creases ♡', claw: 'claw clip. effortless (it took four tries).', comb: 'wide-tooth comb. no knots, no breakage.' };
+    const set = (st, scr) => {
+        if (scr) svg.style.setProperty('--scr', scr);
+        svg.dataset.state = '';
+        requestAnimationFrame(() => { svg.dataset.state = st; });
+        sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === st && (!scr || b.dataset.scr === scr)));
+    };
+    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair, b.dataset.scr); toast(lines[b.dataset.hair]); });
+    set(state, state === 'pony' ? '#F2B8C6' : null);
+}
 
 /* ---------- picking something up ---------- */
 function pickUp(it) {
@@ -187,6 +245,16 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    romcom: () => `
+        <h2>My <em>rom-com</em></h2>
+        <p class="note">a paperback. it’s been in my backpack for three weeks. i keep saying i’ll read it.</p>
+        <div class="rc-wrap"><div class="rc" id="rc"><div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
+        <p class="rc-stats mono">days in my backpack: <b id="rc-days">21</b> · pages read: <b>0</b></p>
+        <div class="row"><button class="btn solid" type="button" id="rc-read">Read it</button></div>`,
+    hairpony: () => hairView('pony'),
+    hairclaw: () => hairView('claw'),
+    haircomb: () => hairView('comb'),
+
     bag: () => `
         <h2>My <em>backpack</em></h2>
         <p class="note">it goes everywhere with me. class, work, coffee, back to class.</p>
@@ -639,6 +707,18 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    romcom: () => {
+        let days = 21;
+        $('#rc-read').onclick = () => {
+            const rc = $('#rc'); if (rc.classList.contains('open')) return;
+            rc.classList.add('open'); $('#rc-read').disabled = true;
+            setTimeout(() => { rc.classList.remove('open'); $('#rc-read').disabled = false; $('#rc-days').textContent = ++days; toast(days === 22 ? 'tomorrow. definitely tomorrow ♡' : 'okay… tomorrow. for real this time.'); }, reduce ? 300 : 1800);
+        };
+    },
+    hairpony: () => hairAfter('pony'),
+    hairclaw: () => hairAfter('claw'),
+    haircomb: () => hairAfter('comb'),
+
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
     phone: () => {
         const d = new Date();
@@ -847,7 +927,7 @@ const AFTER = {
             }
             zipping = false;
         };
-        // tap a card: that card slides straight up out of its slot and rises above the wallet. Tap again to tuck it back.
+        // tap a card: it slides straight up out of its slot, like pulling it out with a thumb. Tap again to tuck it back.
         const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {
             const was = card.classList.contains('picked');
@@ -857,11 +937,8 @@ const AFTER = {
             vw.classList.add('has-pick');
             card.classList.add('picked');
             card.closest('.vslot').style.zIndex = 30;
-            requestAnimationFrame(() => {
-                const cr = card.getBoundingClientRect(), wr = vw.getBoundingClientRect();
-                const lift = cr.bottom - wr.top + 14;   // clear the top of the wallet
-                card.style.transform = `translateY(calc(-36% - ${lift}px)) scale(1.55)`;
-            });
+            // same orientation, same size: it just slides straight up, still tucked into its slot at the bottom
+            card.style.transform = 'translateY(-88%)';
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });

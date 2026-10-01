@@ -16,13 +16,15 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Phone (iPhone 18 Pro Max, pink case) | Photos, Instagram, LinkedIn, Spotify, YouTube, Netflix, Prime, Google Calendar and Duolingo |
 | Sunglasses | How I see things (and they tint the whole page) |
-| Car keys | The truth about my driving |
+| Car keys + apartment fob | The truth about my driving, and the way home |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
 | iPad | Pinterest (my board), Procreate (my art), and a folder of things I built |
-| Apple Pencil Pro | A blank canvas: draw anything |
+| Apple Pencil Pro (clipped to the iPad) | A blank canvas: draw anything |
 | MacBook Pro 14" (silver) | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
-| Pink Stanley | A water tracker, because I don't drink enough water |
+| Pink Stanley | Slides out of the side pocket, the lid twists off; a water tracker, because I don't drink enough water |
+| Paperback rom-com | Three weeks in my backpack, still on chapter one |
+| Two silk scrunchies, a wooden claw clip, a wide-tooth comb | Try each one on |
 | Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
