@@ -484,7 +484,7 @@ const COMBOS = [
     [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
     [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
-    [['passport', 'boarding'], 'passport and a boarding pass to “???”. she’s always halfway somewhere.'],
+    [['passport', 'wallet'], 'passport and a boarding pass to “???” tucked inside. she’s always halfway somewhere.'],
     [['romcom', 'journal'], 'one book she’s not reading, one journal she always writes in.'],
     [['keys', 'stanley'], 'car keys and a full stanley. she is not coming back for hours.']
 ];
@@ -1022,7 +1022,7 @@ const VIEWS = {
         const visa = (num, scene, inner) => `<div class="pb-page visa scene-${scene}"><span class="pb-visas">Visas</span>${inner}<span class="pb-num">${num}</span></div>`;
         // each leaf is a sheet of paper: a front (right-hand page) and a back (left-hand page once it's turned)
         const leaves = [
-            [`<div class="pb-page pb-cover">${ITEMS.find(i => i.id === 'passport').art}</div>`,
+            [`<div class="pb-page pb-cover">${ITEMS.find(i => i.id === 'passport').cover}</div>`,
              `<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-sign-l"><span class="pp-guil"></span><span class="pp-endorse">Endorsements</span><span class="pp-ghost"><img src="assets/img/me.jpg" alt=""></span><span class="pp-sig">Suhani Tiwari</span><span class="pp-sigline">SIGNATURE OF BEARER</span></div></div></div>`],
             [`<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-data"><span class="pp-guil"></span>
                 <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
@@ -1043,6 +1043,7 @@ const VIEWS = {
         <div class="pb-wrap"><div class="pb" id="pb" data-at="0" style="--n:${leaves.length}">${leaves.map(([f, bk], i) => `
             <div class="pb-leaf" style="--i:${i}" data-leaf="${i}"><div class="pb-face pb-front">${f}</div><div class="pb-face pb-backface">${bk}</div></div>`).join('')}
         </div></div>
+        <div class="pb-boarding"><div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div><p class="hand" style="text-align:center; color:var(--plum); margin:0">tucked inside: a boarding pass to “???”. wherever’s next.</p></div>
         <div class="row pb-ctrl"><button class="btn" type="button" id="pb-prev" aria-label="Previous page">‹ back</button><span class="hand" id="pb-where">tap the cover</span><button class="btn solid" type="button" id="pb-next" aria-label="Next page">open ›</button></div>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`;
     },

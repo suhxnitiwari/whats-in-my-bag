@@ -337,7 +337,7 @@ window.ITEMS = [
         open: 'padfolio'
     },
     {
-        id: 'boarding', name: 'my boarding pass', zip: 'front', l: 50.8, t: 28.7, w: 18.8, r: 4,
+        id: 'boarding', name: 'my boarding pass', zip: 'attached', l: 50.8, t: 28.7, w: 18.8, r: 4,
         art: `<svg viewBox="0 0 200 80"><path d="M6 4 H194 V30 a6 6 0 0 0 0 12 V76 H6 V42 a6 6 0 0 0 0 -12Z" fill="#FFFDF8" ${S} stroke-width="2.5"/>
             <rect x="6" y="4" width="188" height="16" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/><text x="14" y="15.5" font-family="Instrument Sans" font-weight="600" font-size="8" fill="#3A2626" letter-spacing="1.5">BOARDING PASS</text>
             <path d="M146 20 V76" stroke="#3A2626" stroke-width="1.5" stroke-dasharray="3 3"/>
@@ -431,7 +431,7 @@ window.ITEMS = [
         open: 'cards'
     },
     {
-        id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'shades', l: 0, t: 0, w: 2.6, r: 18,
+        id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'shades', l: 0, t: 0, w: 3.9, r: 18,
         art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
         open: 'backuplip'
     },
@@ -464,8 +464,8 @@ window.ITEMS = [
         open: 'phone'
     },
     {
-        id: 'passport', name: 'my passport', zip: 'devices', l: 91.2, t: 36.2, w: 9.3, r: 7,
-        art: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
+        id: 'passport', name: 'my passport (and a boarding pass)', zip: 'devices', l: 91.2, t: 36.2, w: 12.4, r: 7,
+        cover: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
             <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
                 <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>
                 <text x="55" y="106" font-size="8.5" font-style="italic">United States</text>
@@ -488,6 +488,11 @@ window.ITEMS = [
             </g>
             <rect x="47" y="128" width="16" height="9" rx="1.5" fill="none" stroke="#D9B45A" stroke-width="1.4"/><path d="M50 132.5 h10 M55 128 v9" stroke="#D9B45A" stroke-width="1"/>
         </svg>`,
+        get art() {
+            const bp = window.ITEMS.find(x => x.id === 'boarding').art.replace('<svg viewBox="0 0 200 80">', '<svg x="0" y="0" width="150" height="60" viewBox="0 0 200 80">');
+            const pp = this.cover.replace('<svg viewBox="0 0 110 150">', '<svg x="0" y="0" width="110" height="150" viewBox="0 0 110 150">');
+            return `<svg viewBox="0 0 150 196"><g transform="translate(108 6) rotate(76)">${bp}</g><g transform="translate(8 42) rotate(-4 55 75)">${pp}</g></svg>`;
+        },
         open: 'passport'
     },
     {
