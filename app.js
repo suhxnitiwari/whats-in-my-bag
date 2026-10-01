@@ -898,8 +898,8 @@ const SKIN_INFO = {
 };
 // what each one does when it lands on me
 const SKIN_FX = {
-    dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'skin activator serum on. hydrated, plump, glowing.'], goldpump: ['glow2', 'suprême c on. vitamin c. brighter, more even.'],
-    lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
+    dropper: [null, 'eye activator on. a drop under each eye, patted in.'], pinkpump: [null, 'skin activator serum on. patted in.'], goldpump: [null, 'suprême c on. vitamin c, patted in.'],
+    lamer: [null, 'la mer under both eyes, with the little spoon. as it should be.'], sisley: [null, 'sisley on. night cream, all over.'],
     lash: ['lashes', 'grandelash on. lashes, but more.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy.']
 };
@@ -944,10 +944,6 @@ const VIEWS = {
                 <linearGradient id="lidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6957F"/><stop offset="1" stop-color="#D2A390"/></linearGradient>
                 <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D873"/><stop offset=".45" stop-color="#D8A82A"/><stop offset=".7" stop-color="#F3D06A"/><stop offset="1" stop-color="#C9961E"/></linearGradient>
             </defs>
-                <g class="fx" data-fx="eyeserum" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="298" cy="352" rx="38" ry="15" fill="#FFF0EC" opacity=".5"/><ellipse cx="434" cy="350" rx="44" ry="15" fill="#FFF0EC" opacity=".5"/><ellipse cx="292" cy="348" rx="12" ry="5" fill="#fff" opacity=".7"/><ellipse cx="428" cy="346" rx="13" ry="5" fill="#fff" opacity=".7"/></g>
-                <g class="fx" data-fx="glow" filter="url(#fx-blur)" style="mix-blend-mode:soft-light"><ellipse cx="375" cy="390" rx="140" ry="190" fill="#FFE2C8" opacity=".55"/></g>
-                <g class="fx" data-fx="glow2" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="375" cy="390" rx="130" ry="180" fill="#FFE9D6" opacity=".2"/></g>
-                <g class="fx" data-fx="bright" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="300" cy="350" rx="40" ry="16" fill="#FFE8DA" opacity=".55"/><ellipse cx="435" cy="348" rx="46" ry="16" fill="#FFE8DA" opacity=".55"/></g>
                 <g class="fx" data-fx="lashes"><image href="assets/img/me-lash-l.png" x="248" y="278" width="100" height="70"/><image href="assets/img/me-lash-r.png" x="372" y="272" width="120" height="76"/></g>
                 <g class="fx" data-fx="lips"><image href="assets/img/me-lips-laneige.png" x="296" y="436" width="128" height="92"/></g>
                                 <g class="fx" data-fx="patches" transform="translate(0 10)">
@@ -956,6 +952,7 @@ const VIEWS = {
                     <path d="M492 330 q8 6 6 18 M418 384 q14 4 26 2 M282 350 q2 14 10 22" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>
             </svg>
             <span class="face-hint hand" id="face-hint">drop products here ↓</span>
+            <button type="button" class="lm-spoon" id="lm-spoon" hidden aria-label="La Mer's little applicator: drag it under my eyes"><svg viewBox="0 0 20 96" aria-hidden="true"><defs><linearGradient id="lmsp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4C40"/><stop offset=".4" stop-color="#E9D5CA"/><stop offset="1" stop-color="#3A231C"/></linearGradient></defs><path d="M10 18 L10 92" stroke="#3A2626" stroke-width="6" stroke-linecap="round"/><path d="M10 18 L10 92" stroke="#5E7E2C" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="10" cy="10" rx="7" ry="9" fill="url(#lmsp)" stroke="#3A2626" stroke-width="1.6"/></svg></button>
         </div>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
@@ -1740,16 +1737,55 @@ const AFTER = {
         const apply = k => {
             const [fx, line] = SKIN_FX[k];
             if (k === 'patches' && applied.has('patches')) {
-                applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); clearTimeout(face.zzz); face.classList.remove('asleep', 'patched');
+                applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); clearTimeout(face.zzz); clearTimeout(face.wake); face.classList.remove('asleep', 'patched');
                 return toast('patches off. i’m up. glowing.');
             }
             applied.add(k);
-            const g = face.querySelector(`[data-fx="${fx}"]`); if (g) g.classList.add('on'); else face.classList.add(fx);
-            if (k === 'patches') { face.classList.add('patched'); clearTimeout(face.zzz); face.zzz = setTimeout(() => { if (applied.has('patches')) { face.classList.add('asleep'); toast('and… i’m out. sleepy. bye bye 💤'); } }, reduce ? 0 : 1800); }
+            // only laneige (lips), grandelash (lashes) and the patches change how i look. everything else just sinks in
+            if (fx) face.querySelector(`[data-fx="${fx}"]`).classList.add('on');
+            else { const r = face.getBoundingClientRect(); fairyDust(r.left + r.width * .42, r.top + r.height * .52); }
+            if (k === 'patches') { face.classList.add('patched'); clearTimeout(face.zzz); face.zzz = setTimeout(() => { if (applied.has('patches')) { face.classList.add('asleep'); toast('and… i’m out. sleepy. bye bye 💤'); } }, reduce ? 0 : 1800); clearTimeout(face.wake); face.wake = setTimeout(() => { if (applied.has('patches')) pg.dispatchEvent(new Event('click')); }, 9000); }
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
             const N = Object.keys(SKIN_FX).length; $('#face-hint').textContent = applied.size >= N ? 'fully skincared ♡' : `${applied.size} of ${N} on`;
             toast(line + (k === 'patches' ? '' : ''));
         };
+        // la mer goes on with its little spoon, under my eyes only
+        const spoon = $('#lm-spoon'), touched = new Set();
+        const UNDER = [[300, 352, 46, 24, 'l'], [436, 350, 50, 24, 'r']];
+        let honeyAt = 0;
+        const spoonTime = b => {
+            b.classList.add('use');
+            spoon.hidden = false;
+            toast('use the little spoon. smooth it under my eyes only ↓');
+            $('#face-hint').textContent = 'pick up the spoon ↘';
+        };
+        const zone = (cx, cy) => {
+            const r = face.getBoundingClientRect(); if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
+            const x = (cx - r.left) / r.width * 900, y = (cy - r.top) / r.height * 719;
+            const u = UNDER.find(([ux, uy, rx, ry]) => ((x - ux) / rx) ** 2 + ((y - uy) / ry) ** 2 <= 1);
+            if (u) return u[4];
+            return (x > 230 && x < 540 && y > 170 && y < 600) ? 'face' : 'off';
+        };
+        let sp = null;
+        spoon.addEventListener('pointerdown', e => {
+            e.preventDefault(); try { spoon.setPointerCapture(e.pointerId); } catch {}
+            sp = document.createElement('div'); sp.className = 'sk-ghost lm-ghost'; sp.innerHTML = spoon.innerHTML; sheet.appendChild(sp);
+            spoon.classList.add('held'); sp.style.left = e.clientX + 'px'; sp.style.top = e.clientY + 'px';
+        });
+        spoon.addEventListener('pointermove', e => {
+            if (!sp) return;
+            sp.style.left = e.clientX + 'px'; sp.style.top = e.clientY + 'px';
+            const z = zone(e.clientX, e.clientY);
+            if (z === 'l' || z === 'r') {
+                if (!touched.has(z)) { touched.add(z); fairyDust(e.clientX, e.clientY); toast(touched.size < 2 ? 'mmm. now the other eye.' : 'both eyes. perfect ♡'); }
+            } else if (z === 'face' && Date.now() - honeyAt > 2500) { honeyAt = Date.now(); toast('honey, we don’t waste expensive products here. under the eyes only.'); }
+        });
+        const spoonUp = () => {
+            if (!sp) return; sp.remove(); sp = null; spoon.classList.remove('held');
+            if (touched.size === 2 && !applied.has('lamer')) { apply('lamer'); spoon.hidden = true; }
+            else if (touched.size === 1) $('#face-hint').textContent = 'one eye done. the other one ↘';
+        };
+        spoon.addEventListener('pointerup', spoonUp); spoon.addEventListener('pointercancel', spoonUp);
         // tap the patches on my face to peel them off; my eyes open again
         const pg = face.querySelector('[data-fx="patches"]');
         pg.addEventListener('click', () => {
@@ -1782,13 +1818,14 @@ const AFTER = {
                 if (!d.ghost) return;
                 d.ghost.remove(); b.dataset.skip = '1';
                 const r = face.getBoundingClientRect();
-                if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) apply(b.dataset.sk);
+                if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) { if (b.dataset.sk === 'lamer') spoonTime(b); else apply(b.dataset.sk); }
             };
             b.addEventListener('pointerup', end); b.addEventListener('pointercancel', end);
         });
         sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => b.onclick = () => {
             if (b.dataset.skip) { delete b.dataset.skip; return; }
-            apply(b.dataset.sk);
+            if (b.dataset.sk === 'lamer') { if (!applied.has('lamer')) return spoonTime(b); }
+            else apply(b.dataset.sk);
             const k = b.dataset.sk, used = b.classList.toggle('use');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const lbl = $('#swatch-label'), sw = $('#swatch');
