@@ -18,7 +18,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
-| Laptop | My real sticker layout; every sticker opens a project |
+| Laptop | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Cable knit sweater | Because I get cold easily |

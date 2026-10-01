@@ -410,3 +410,15 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pad textarea::placeholder { color: rgba(58,38,38,.35); }
 /* visible to screen readers only */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* the laptop, open: my pink desktop with blue folders */
+.desktop { border: 3px solid var(--ink); border-radius: 14px; overflow: hidden; background: #F0D5CF; padding-bottom: 18px; }
+.menubar { display: flex; justify-content: space-between; padding: 6px 14px; background: rgba(255,255,255,.55); backdrop-filter: blur(6px); text-transform: none; font-size: .72rem; color: var(--ink); }
+.menubar span:first-child::before { content: "●  File  Edit  View"; letter-spacing: .04em; }
+.dfolders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 10px; padding: 26px 18px 6px; }
+.dfolder { display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: 0; padding: 6px; border-radius: 10px; cursor: pointer; }
+.dfolder svg { width: 84px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.12)); transition: transform .2s; }
+.dfolder span { font-family: -apple-system, system-ui, sans-serif; font-weight: 600; font-size: .82rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.45); text-align: center; line-height: 1.2; }
+.dfolder:hover, .dfolder:focus-visible { background: rgba(255,255,255,.25); outline: none; }
+.dfolder:hover svg { transform: translateY(-3px); }
+@media (max-width: 760px) { .dfolders { grid-template-columns: repeat(2, 1fr); } }

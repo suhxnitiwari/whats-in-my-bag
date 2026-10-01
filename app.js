@@ -292,14 +292,28 @@ const VIEWS = {
 
     laptop: () => `
         <h2>My <em>laptop</em></h2>
-        <p class="note">the stickers are load-bearing. tap one.</p>
-        <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>
-        <p class="mono" style="color:var(--plum); margin:22px 0 10px">Or open a folder</p>
-        <div class="folders">${PROJECTS.map(p => `
-            <a class="folder" href="${p.href}" target="_blank" rel="noopener" style="--c:${p.c}">
-                <span class="f"><img src="${p.img}" alt=""></span>
-                <b>${p.name}</b><small>${p.tag}</small>
-            </a>`).join('')}</div>`,
+        <p class="note" id="lap-note">the stickers are load-bearing. tap one, or open it up.</p>
+        <div class="lap-closed" id="lap-closed">
+            <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>
+            <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="lap-open">Open the laptop</button></div>
+        </div>
+        <div class="desktop" id="desktop" hidden>
+            <div class="menubar mono"><span></span><span id="lap-clock"></span></div>
+            <div class="dfolders">${[
+                ['Listening History', 'https://listening-history.onrender.com/'],
+                ['Saturday in Austin', 'saturday'],
+                ['RideFlow', 'https://suhanitiwari.com/home/work#mp-rideflow'],
+                ['Owala Marathon', 'owala'],
+                ['Starbucks App', 'starbucks'],
+                ['FuelFlow', 'fuelflow'],
+                ['Girls Can Be Engineers', 'book'],
+                ['Acacia Advisors', 'acacia'],
+                ['suhanitiwari.com', 'https://suhanitiwari.com']
+            ].map(([n, go]) => `<button type="button" class="dfolder" data-go="${go}">
+                <svg viewBox="0 0 100 78" aria-hidden="true"><path d="M4 12 a6 6 0 0 1 6 -6 h26 l8 8 h46 a6 6 0 0 1 6 6 v4 H4z" fill="#4E9BE0"/><rect x="4" y="18" width="92" height="56" rx="7" fill="#7EC4F5"/><rect x="4" y="18" width="92" height="56" rx="7" fill="none" stroke="#5FA9E6" stroke-width="1.2"/><path d="M8 66 h84 M8 69 h84" stroke="#6BB4EC" stroke-width="1"/></svg>
+                <span>${n}</span></button>`).join('')}</div>
+            <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close">Close the laptop</button></div>
+        </div>`,
 
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:220px; height:220px; margin:0 auto 14px; perspective:700px">
@@ -606,6 +620,18 @@ const AFTER = {
     },
 
     laptop: () => {
+        const showDesk = on => {
+            $('#lap-closed').hidden = on; $('#desktop').hidden = !on;
+            $('#lap-note').textContent = on ? 'my desktop. every folder is a project.' : 'the stickers are load-bearing. tap one, or open it up.';
+            if (on) $('#lap-clock').textContent = new Date().toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+        };
+        $('#lap-open').onclick = () => showDesk(true);
+        $('#lap-close').onclick = () => showDesk(false);
+        sheetBody.querySelectorAll('.dfolder').forEach(f => f.onclick = () => {
+            const go = f.dataset.go;
+            if (go.startsWith('http')) window.open(go, '_blank', 'noopener');
+            else pickUp({ id: go, name: 'from my laptop', open: go });
+        });
         const label = $('#stk-label');
         sheetBody.querySelectorAll('.stk').forEach(g => {
             const k = STICKERS.find(x => x.id === g.dataset.sticker);
