@@ -218,7 +218,7 @@ window.ITEMS = [
         open: 'sweater'
     },
     {
-        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 29.1, t: 86.8, w: 24.3, r: -6,
+        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 31.0, t: 86.8, w: 31.9, r: -6,
         get art() {
             const nb1 = window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']]);
             const nb2 = window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']]);
@@ -324,7 +324,7 @@ window.ITEMS = [
         open: 'perfume'
     },
     {
-        id: 'binder', name: 'my pink binder', zip: 'main', l: 14.5, t: 83.4, w: 29.1, r: -6,
+        id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'
     },
