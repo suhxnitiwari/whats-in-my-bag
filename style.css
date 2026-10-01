@@ -613,3 +613,12 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .swatches button.on { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
 .procreate-pad { background: #fff; }
 .procreate-pad canvas { height: 280px; }
+
+.mk.brushes svg { height: 165px; }
+
+.mbag-inside { gap: 10px; left: -40px; right: -40px; }
+
+.mk svg { height: 116px; }
+.mk.brushes svg { height: 140px; }
+.mbag-inside { gap: 8px; left: -60px; right: -60px; }
+.mk span { font-size: 1rem; }

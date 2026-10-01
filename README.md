@@ -8,7 +8,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 |---|---|
 | AirPods Max (Starlight) | My listening data: four years of Spotify in a SQL warehouse |
 | Sketchbook | A flip-through of my digital art |
-| Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Lancôme Lash Idôle and my Morphe brushes pop out |
+| Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Hourglass Vanish concealer, Charlotte Tilbury Beautiful Skin foundation (6N), Lancôme Lash Idôle and my Morphe Along for the Glide brushes pop out |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
 | Wallet | Pops open to my cards: UT Austin student ID, a (joke) Texas driver license, Bank of America credit (grey) and debit (red), Delta Gold, Amex Blue Cash Everyday. No numbers, ever. |
 | Mildliner pouch | The full 25-pack: every color is a class I took at UT Austin, highlighted when you pick it |
