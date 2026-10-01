@@ -364,9 +364,49 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .stamp.real text.small.yr { font-size: 10px; letter-spacing: 3px; font-weight: 500; }
 
 /* the mascara wand pulls out of the tube */
-.mascara-big { width: 120px; margin: 0 auto 4px; }
-.mascara-big .wand { transition: transform .9s var(--ease); transform-box: fill-box; transform-origin: 50% 100%; }
-.mascara-big.out .wand { transform: translate(-46px, -30px) rotate(-28deg); }
+.mascara-big { width: 140px; margin: -20px auto 0; }
+/* the wand twists (a quick spin, drawn as a squeeze) while it pulls straight up, clears the tube, then sets down beside it */
+.mascara-big .wand { transform-box: fill-box; transform-origin: 50% 50%; }
+.mascara-big.out .wand { animation: wandOut 2.4s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes wandOut {
+    0%   { transform: translate(0, 0) scaleX(1); }
+    7%   { transform: translate(0, -6px) scaleX(.12); }
+    14%  { transform: translate(0, -14px) scaleX(1); }
+    21%  { transform: translate(0, -22px) scaleX(.12); }
+    28%  { transform: translate(0, -30px) scaleX(1); }
+    55%  { transform: translate(0, -150px) scaleX(1); }
+    72%  { transform: translate(-64px, -150px); }
+    92%  { transform: translate(-64px, 10px); }
+    96%  { transform: translate(-64px, 2px); }
+    100% { transform: translate(-64px, 6px); }
+}
+@media (prefers-reduced-motion: reduce) { .mascara-big.out .wand { animation: none; transform: translate(-64px, 6px); } }
 .mascara-big .tube { transform: translate(18px, 0); }
 /* thin things (mascara, lipstick) get a wider invisible tap area */
 .item button::before { content: ""; position: absolute; inset: -6px -14px; }
+
+/* the phone: pink case, a home screen with three apps */
+.phone-big { width: 230px; margin: 0 auto; padding: 12px; border-radius: 40px; background: #F2C6C8; border: 3px solid var(--ink); }
+.phone-big .screen { position: relative; height: 420px; border-radius: 30px; border: 2px solid var(--ink); overflow: hidden; background: linear-gradient(160deg, #F7E9EC, #E9DDF3); padding: 14px; }
+.phone-big .clock { text-align: center; margin: 4px 0 26px; font-size: 1.6rem; letter-spacing: .02em; text-transform: none; color: var(--ink); }
+.home { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 8px; }
+.papp { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; padding: 0; cursor: pointer; font-size: .7rem; text-decoration: none; color: var(--ink); }
+.papp .ic { width: 52px; height: 52px; border-radius: 14px; border: 2px solid var(--ink); display: grid; place-items: center; transition: transform .2s; }
+.papp:hover .ic { transform: translateY(-3px); }
+.papp .ic svg { width: 78%; }
+.ic-photos { background: #fff; }
+.ic-ig { background: linear-gradient(45deg, #F7B23B, #E84393 55%, #8E44AD); }
+.ic-li { background: #2E6FB7; }
+.app-view { position: absolute; inset: 0; background: #fff; padding: 12px; overflow: auto; }
+.app-view .back { background: none; border: 0; padding: 0; cursor: pointer; color: #2E6FB7; text-transform: none; font-size: .8rem; }
+.app-view .apptitle { margin: 8px 0 10px; font-size: .9rem; text-transform: none; color: var(--ink); }
+.app-view .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.app-view .grid img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+.ig-todo { margin-top: 30px; text-align: center; }
+
+/* the notepad under my Paper Mate pouch: pick a pen, write anything */
+.pad { margin: 6px auto 0; max-width: 520px; border: 2px solid var(--ink); border-radius: 6px; background: #FFFDF9 repeating-linear-gradient(transparent 0 33px, rgba(46,134,222,.18) 33px 34px); box-shadow: 4px 4px 0 var(--ink); }
+.pad textarea { display: block; width: 100%; min-height: 136px; padding: 4px 16px; border: 0; background: transparent; resize: vertical; font-family: var(--hand); font-size: 1.7rem; line-height: 34px; color: #E63F7A; caret-color: #E63F7A; outline: none; }
+.pad textarea::placeholder { color: rgba(58,38,38,.35); }
+/* visible to screen readers only */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

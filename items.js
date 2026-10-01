@@ -248,7 +248,7 @@ window.PENS = [
     { name: 'Canva', c: '#C7E3A1', note: 'Posters, decks and social graphics.' }
 ];
 
-/* my Paper Mate pouch: the InkJoy Gel 30-pack, 0.7mm. Just pens. */
+/* my Paper Mate pouch: 20 InkJoy Gel pens, 0.7mm. Pick one and write anything. */
 window.GELPENS = [
     { name: 'Berry', c: '#E63F7A' },
     { name: 'Violet', c: '#7B4FD1' },
@@ -269,17 +269,7 @@ window.GELPENS = [
     { name: 'Royal', c: '#3867D6' },
     { name: 'Lime', c: '#20BF6B' },
     { name: 'Tangerine', c: '#FA8231' },
-    { name: 'Rose', c: '#C2185B' },
-    { name: 'Grape', c: '#5F27CD' },
-    { name: 'Cerulean', c: '#2D98DA' },
-    { name: 'Aqua', c: '#0FB9B1' },
-    { name: 'Red', c: '#EB3B5A' },
-    { name: 'Lavender', c: '#A55EEA' },
-    { name: 'Cornflower', c: '#4B7BEC' },
-    { name: 'Spring', c: '#26DE81' },
-    { name: 'Apricot', c: '#FD9644' },
-    { name: 'Cherry', c: '#D63031' },
-    { name: 'Navy', c: '#341F97' }
+    { name: 'Rose', c: '#C2185B' }
 ];
 
 /* my laptop: projects as file folders */

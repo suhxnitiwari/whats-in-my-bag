@@ -211,7 +211,7 @@ const VIEWS = {
 
     mascara: () => `
         <div class="mascara-big" id="masc">
-            <svg viewBox="0 0 200 260" aria-label="Lancôme Lash Idôle mascara, wand out">
+            <svg viewBox="0 -160 200 420" aria-label="Lancôme Lash Idôle mascara, wand out">
                 <g class="wand">
                     <rect x="84" y="6" width="32" height="104" rx="5" fill="#E8C3B4" stroke="#3A2626" stroke-width="3"/>
                     <rect x="90" y="14" width="20" height="88" rx="3" fill="#1E1414"/>
@@ -259,7 +259,7 @@ const VIEWS = {
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel, the 30-pack. pick a color.',
+        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color, then write anything.',
         list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
@@ -425,9 +425,18 @@ const VIEWS = {
 
     phone: () => `
         <h2>My <em>phone</em></h2>
-        <p class="note">lives in the sunglasses pocket. here’s an app i redesigned for it.</p>
-        <div class="shot" style="background:var(--mint); padding:20px"><img src="assets/img/starbucks.jpg" alt="My Starbucks app prototype" style="max-width:380px; margin:0 auto; border-radius:14px"></div>
-        <p><b>The Starbucks app, reimagined:</b> “set the vibe” AI recommendations, with a roadmap ranked by RICE scoring.</p>`,
+        <p class="note">lives in the sunglasses pocket, in its pink case</p>
+        <div class="phone-big">
+            <div class="screen" id="screen">
+                <p class="clock mono" id="clock"></p>
+                <div class="home" id="home">
+                    <button type="button" class="papp" data-app="photos"><span class="ic ic-photos"><svg viewBox="0 0 40 40">${[0, 45, 90, 135, 180, 225, 270, 315].map((r, i) => `<ellipse cx="20" cy="11" rx="5" ry="9" fill="${['#F7D54A', '#F29B6B', '#E84393', '#B9A3E8', '#2E86DE', '#18A39A', '#27AE60', '#C7E3A1'][i]}" opacity=".85" transform="rotate(${r} 20 20)"/>`).join('')}</svg></span>Photos</button>
+                    <button type="button" class="papp" data-app="instagram"><span class="ic ic-ig"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="5.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="26.5" cy="13.5" r="1.6" fill="#fff"/></svg></span>Instagram</button>
+                    <a class="papp" href="https://www.linkedin.com/in/suhxnitiwari/" target="_blank" rel="noopener"><span class="ic ic-li"><svg viewBox="0 0 40 40"><rect x="10" y="15" width="20" height="14" rx="2" fill="none" stroke="#fff" stroke-width="3"/><path d="M16 15 v-3 h8 v3" fill="none" stroke="#fff" stroke-width="3"/></svg></span>LinkedIn</a>
+                </div>
+                <div class="app-view" id="app-view" hidden></div>
+            </div>
+        </div>`,
 
     passport: () => `
         <h2>My <em>passport</em></h2>
@@ -471,6 +480,7 @@ function penView({ title, note, list, front, pen, pick }) {
             <div class="pouch-front">${front}</div>
         </div>
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
+        ${list === GELPENS ? `<div class="pad"><label class="sr" for="pad-text">Write something</label><textarea id="pad-text" maxlength="200" placeholder="write anything…"></textarea></div>` : ''}
         ${list === GELPENS ? `<div class="in-pencil"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
             <div><p class="mono" style="margin:0 0 4px; color:var(--plum)">Plus my BIC Xtra-Smooth mechanical pencils</p>
             <p style="margin:0">For anything still in draft. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>` : ''}`;
@@ -494,6 +504,23 @@ function cardHTML(c, i) {
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
+    phone: () => {
+        const d = new Date();
+        $('#clock').textContent = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        const view = $('#app-view'), home = $('#home');
+        const back = '<button type="button" class="back mono" id="back">‹ home</button>';
+        sheetBody.querySelectorAll('[data-app]').forEach(b => b.onclick = () => {
+            if (b.dataset.app === 'photos') {
+                view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
+                    ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+            } else {
+                view.innerHTML = back + '<p class="mono apptitle">Instagram</p><p class="ig-todo"><span class="todo">what’s your @?</span></p>';
+            }
+            home.hidden = true; view.hidden = false;
+            $('#back').onclick = () => { view.hidden = true; home.hidden = false; };
+        });
+    },
+
     mascara: () => {
         setTimeout(() => $('#masc') && $('#masc').classList.add('out'), reduce ? 0 : 350);
         $('#see-makeup').onclick = () => pickUp({ id: 'makeup', name: 'my makeup pouch', open: 'makeup' });
@@ -632,7 +659,9 @@ function pensAfter(list) {
         // highlighters tell you which tool they are; gel pens just write in their color
         note.innerHTML = p.note
             ? `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`
-            : `<span style="color:${p.c}; font-size:1.9rem">hi, i’m suhani ♡</span> <span class="mono" style="color:var(--muted)">${p.name}</span>`;
+            : `writing in <span style="color:${p.c}; font-size:1.7rem">${p.name.toLowerCase()}</span>`;
+        const pad = $('#pad-text');
+        if (pad && !p.note) { pad.style.color = p.c; pad.style.caretColor = p.c; pad.focus(); }
     };
 }
 

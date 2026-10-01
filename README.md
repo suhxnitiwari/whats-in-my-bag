@@ -12,8 +12,9 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
 | Wallet | Pops open to my cards: my UT Austin student ID, Oracle, Acacia Advisors, Outlier, Girls Who Code |
 | Mildliner pouch | The full 25-pack: one highlighter for every tool on my résumé |
-| Paper Mate pouch | InkJoy Gel 30-pack (tap one, it writes in that color), plus my BIC mechanical pencils |
+| Paper Mate pouch | 20 InkJoy Gel pens: pick one and write anything on the notepad, plus my BIC mechanical pencils |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
+| Phone | A home screen with Photos, Instagram and LinkedIn |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
