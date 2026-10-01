@@ -668,6 +668,7 @@ window.PROJECTS = [
 
 /* my sketchbook */
 window.ART = [
+    ['Eye Study', 'Graphite on paper. One of my older drawings, and still one of my favorites.', 'eye-study'],
     ['Softly, I Belong', 'She blossoms as she holds the flower: embracing cultural identity empowers children.', 'embracing-cultural-identity'],
     ['Between Two Worlds', 'The Indian and American flags in a child’s hands.', 'navigating-indian-american-identity'],
     ['In Full Bloom', 'Both flags’ colors in one vase. Identity can blossom.', 'coexistence-of-both-my-worlds'],
