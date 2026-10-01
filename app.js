@@ -453,7 +453,7 @@ const VIEWS = {
         </div>`,
 
     passport: () => `
-        <h2>My <em>passport</em></h2>
+        <h2>My <em>passport</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">United States of America</span></h2>
         <p class="note">six countries so far. the domestic trips live in my itineraries.</p>
         <div class="stamps">${[
             ['Thailand', '2010', '#C2185B', 'circle', '<path d="M0 -14 L-10 8 h20 Z M-4 -4 h8 M-6 2 h12" fill="none"/><path d="M0 -20 v6"/>'],

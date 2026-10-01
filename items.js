@@ -178,7 +178,20 @@ window.ITEMS = [
     },
     {
         id: 'passport', name: 'my passport', zip: 'front', l: 91, t: 53, w: 7, r: 10,
-        art: `<svg viewBox="0 0 110 150"><rect x="6" y="6" width="98" height="138" rx="8" fill="#22325A" ${S}/><circle cx="55" cy="62" r="18" fill="none" stroke="#D9B45A" stroke-width="2.5"/><path d="M42 62 h26 M55 49 v26" stroke="#D9B45A" stroke-width="2"/><text x="55" y="30" text-anchor="middle" font-family="Bodoni Moda" font-size="11" letter-spacing="2" fill="#D9B45A">PASSPORT</text><rect x="38" y="104" width="34" height="14" rx="2" fill="none" stroke="#D9B45A" stroke-width="2"/><rect x="70" y="2" width="16" height="30" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
+        art: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
+            <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
+                <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>
+                <text x="55" y="106" font-size="8.5" font-style="italic">United States</text>
+                <text x="55" y="117" font-size="8.5" font-style="italic">of America</text>
+            </g>
+            <g fill="none" stroke="#D9B45A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="55" cy="44" r="6"/>
+                <path d="M55 52 v32 M47 58 h16 v14 q-8 8 -16 0z"/>
+                <path d="M47 60 C38 56 32 50 28 58 C34 60 38 64 46 66 M63 60 C72 56 78 50 82 58 C76 60 72 64 64 66"/>
+                <path d="M36 82 q-6 -4 -8 -10 M74 82 q6 -4 8 -10"/>
+            </g>
+            <rect x="47" y="128" width="16" height="9" rx="1.5" fill="none" stroke="#D9B45A" stroke-width="1.4"/><path d="M50 132.5 h10 M55 128 v9" stroke="#D9B45A" stroke-width="1"/>
+        </svg>`,
         open: 'passport'
     },
     {
