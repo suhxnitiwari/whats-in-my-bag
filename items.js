@@ -253,17 +253,14 @@ window.EC = (bands, big) => `<svg viewBox="0 0 170 220" aria-hidden="true">
     ${Array.from({ length: 13 }, (_, i) => `<ellipse cx="12" cy="${16 + i * 15.5}" rx="7" ry="3.2" fill="none" stroke="#9EA3AA" stroke-width="2.5"/>`).join('')}
 </svg>`;
 
-/* my wallet: cards pop out like file folders. The first one is my student ID. */
+/* my wallet: student ID, driver license, and my cards. Cards pop out like file folders. */
 window.CARDS = [
     { kind: 'id', title: 'UT Austin student ID', big: 'Suhani Tiwari', sub: 'Management Information Systems + Psychology', metric: 'McCombs School of Business · Class of 2027 · 3.5 GPA', body: 'BBA in MIS and a BA in Psychology, with minors in Marketing and Educational Psychology. Two McCombs scholarships this year.' },
     { kind: 'dl', title: 'Driver license', big: 'Suhani Tiwari', metric: 'Class: C (for cute) · Restrictions: curbs · Endorsements: none, yet', body: 'Weight: don’t ask. Address: wouldn’t you wanna knowwww. DOB: a lady never tells. Driving skill: see my car keys.' },
-    { kind: 'bofa', title: 'Bank of America card', big: 'Recent transactions', metric: 'Westman Atelier · Lancôme · Staples · Target · Bath & Body Works', body: 'Glögg (obviously). Lash Idôle. A 25-pack of Mildliners. InkJoy gel pens. One more Cozy Vanilla Almond PocketBac. Everything in this bag, basically.' },
+    { kind: 'bofa', title: 'Bank of America credit card', big: 'Recent transactions', metric: 'Westman Atelier · Lancôme · Staples · Target · Bath & Body Works', body: 'Glögg (obviously). Lash Idôle. A 25-pack of Mildliners. InkJoy gel pens. One more Cozy Vanilla Almond PocketBac. Everything in this bag, basically.' },
+    { kind: 'bofadebit', title: 'Bank of America debit card', big: 'Balance', metric: 'Balance: none of your business', body: 'The red one. For when the credit cards need a break.' },
     { kind: 'amexgold', title: 'Amex Delta SkyMiles Gold', big: 'Where the miles went', metric: 'Thailand + Malaysia 2010 · Switzerland, France, Italy 2016 · Mexico 2020', body: 'The stamps are in my passport.', go: 'passport' },
-    { kind: 'amexblue', title: 'American Express (blue)', big: 'The everyday card', metric: 'Coffee runs · Target trips · gas for the car the curb keeps attacking', body: 'Not pictured: the receipts.' },
-    { color: '#C74634', text: '#fff', title: 'Oracle', big: 'ERP Consultant Intern', tag: 'MEMBER SINCE 2026', metric: '$20M–$200M companies · 12-week Enterprise Sales Development program', body: 'Prospected enterprises, led discovery calls, and matched what they actually needed to Oracle NetSuite.' },
-    { color: '#E8D5B0', text: INK, title: 'Acacia Advisors', big: '+20% traffic', tag: 'MEMBER SINCE 2025', metric: '+20% website traffic · +27% LinkedIn visits · $1M Azure AI go-to-market', body: 'Rewrote the messaging for their AI and cloud services, and built the go-to-market for a manufacturing AI product.' },
-    { color: '#2B2B33', text: '#F2C6C8', title: 'Outlier', big: '1,000+ AI answers', tag: 'MEMBER SINCE 2024', metric: '1,000+ responses graded · Tier 3 → Tier 1 in four months', body: 'Graded AI answers for accuracy, safety and reasoning, and ranked outputs to train frontier models.' },
-    { color: '#F4A7B9', text: INK, title: 'Girls Who Code', big: '240+ girls', tag: 'FOUNDER 2022', metric: '2 chapters · 16-week sessions · 10 coding projects', body: 'Started chapters at two middle schools and wrote the curriculum myself. 100% of mentees who tested passed AP CS.' }
+    { kind: 'amexblue', title: 'Amex Blue Cash Everyday', big: 'The everyday card', metric: 'Coffee runs · Target trips · gas for the car the curb keeps attacking', body: 'Not pictured: the receipts.' }
 ];
 
 /* my pencil pouch: every pen is a tool I actually use */

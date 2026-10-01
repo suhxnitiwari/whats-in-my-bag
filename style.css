@@ -476,3 +476,46 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .ut-photo { grid-row: 1; grid-column: 2; background: #5AA7E8; border-radius: 2px; overflow: hidden; aspect-ratio: .8; align-self: start; }
 .ut-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
 .ut-bars { grid-column: 1 / -1; height: 16%; min-height: 12px; background: repeating-linear-gradient(90deg, #222 0 2px, transparent 2px 4px, #222 4px 5px, transparent 5px 8px, #222 8px 11px, transparent 11px 12px); opacity: .85; }
+
+/* Instagram on my phone: hi from hani, sized to fit the screen */
+.ig { font-family: -apple-system, system-ui, sans-serif; color: #111; }
+.ig-handle { margin: 6px 0 10px; font-weight: 700; font-size: .9rem; }
+.ig-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ig-top img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; padding: 2px; background: linear-gradient(45deg, #F7B23B, #E84393, #8E44AD); }
+.ig-name { font-weight: 600; font-size: .82rem; }
+.ig-btn { display: block; text-align: center; padding: 6px; border-radius: 8px; background: #EFEFEF; color: #111; font-size: .75rem; font-weight: 600; text-decoration: none; margin-bottom: 10px; }
+.ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.ig-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.app-view { box-sizing: border-box; }
+.app-view img { max-width: 100%; }
+
+/* LinkedIn on my phone: a profile preview */
+.li { font-family: -apple-system, system-ui, sans-serif; color: #111; position: relative; margin: 8px -12px 0; }
+.li-banner { height: 70px; background: linear-gradient(120deg, #F2C6C8, #D9C8F0 60%, #BFD7F0); }
+.li-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; margin: -36px 0 0 14px; display: block; }
+.li-name { margin: 6px 14px 0; font-weight: 700; font-size: .95rem; }
+.li-head { margin: 2px 14px 0; font-size: .72rem; line-height: 1.35; color: #333; }
+.li-loc { margin: 4px 14px 0; font-size: .66rem; color: #777; }
+.li-url { margin: 2px 14px 0; font-size: .66rem; color: #0A66C2; }
+.li-btn { display: block; margin: 12px 14px 0; padding: 7px; border-radius: 999px; background: #0A66C2; color: #fff; text-align: center; font-size: .78rem; font-weight: 600; text-decoration: none; }
+
+/* more apps: Spotify, YouTube, Netflix, Prime */
+.ic-sp { background: #191414; } .ic-yt { background: #E62117; } .ic-nf { background: #111; } .ic-pv { background: #0F171E; }
+.sp { font-family: -apple-system, system-ui, sans-serif; background: linear-gradient(#1F3F2B, #121212 60%); color: #fff; margin: 8px -12px -12px; padding: 14px; min-height: 360px; }
+.sp-h { margin: 0 0 12px; font-weight: 800; font-size: 1rem; }
+.sp-card { background: rgba(255,255,255,.08); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+.sp-card b { display: block; font-size: 1.3rem; color: #1ED760; }
+.sp-card span { font-size: .7rem; color: #CFCFCF; }
+.sp-btn { display: block; margin-top: 8px; padding: 8px; border-radius: 999px; background: #1ED760; color: #111; text-align: center; font-size: .75rem; font-weight: 700; text-decoration: none; }
+.sp-btn.ghost { background: transparent; color: #fff; border: 1px solid #727272; }
+.stream { font-family: -apple-system, system-ui, sans-serif; margin: 8px -12px -12px; padding: 14px 12px; min-height: 360px; color: #fff; }
+.stream.nf { background: #141414; } .stream.pv { background: #0F171E; }
+.stream-h { margin: 0 0 10px; font-weight: 700; font-size: .85rem; }
+.posters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.posters img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; }
+
+.card.bofadebit { background: linear-gradient(115deg, #B3192E 0%, #DC3545 45%, #A3122A 100%); color: #fff; }
+.card.bofadebit .bofa-bank, .card.bofadebit .foot, .card.bofadebit .visa, .card.bofadebit .visa b { color: #fff; }
+/* headings on the dark phone apps stay readable */
+.sheet-body .sp-h, .sheet-body .stream-h { color: #fff; }
+.sheet-body .sp-card span { color: #CFCFCF; }

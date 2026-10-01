@@ -446,7 +446,11 @@ const VIEWS = {
                 <div class="home" id="home">
                     <button type="button" class="papp" data-app="photos"><span class="ic ic-photos"><svg viewBox="0 0 40 40">${[0, 45, 90, 135, 180, 225, 270, 315].map((r, i) => `<ellipse cx="20" cy="11" rx="5" ry="9" fill="${['#F7D54A', '#F29B6B', '#E84393', '#B9A3E8', '#2E86DE', '#18A39A', '#27AE60', '#C7E3A1'][i]}" opacity=".85" transform="rotate(${r} 20 20)"/>`).join('')}</svg></span>Photos</button>
                     <button type="button" class="papp" data-app="instagram"><span class="ic ic-ig"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="5.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="26.5" cy="13.5" r="1.6" fill="#fff"/></svg></span>Instagram</button>
-                    <a class="papp" href="https://www.linkedin.com/in/suhxnitiwari/" target="_blank" rel="noopener"><span class="ic ic-li"><svg viewBox="0 0 40 40"><rect x="10" y="15" width="20" height="14" rx="2" fill="none" stroke="#fff" stroke-width="3"/><path d="M16 15 v-3 h8 v3" fill="none" stroke="#fff" stroke-width="3"/></svg></span>LinkedIn</a>
+                    <button type="button" class="papp" data-app="linkedin"><span class="ic ic-li"><svg viewBox="0 0 40 40"><rect x="10" y="15" width="20" height="14" rx="2" fill="none" stroke="#fff" stroke-width="3"/><path d="M16 15 v-3 h8 v3" fill="none" stroke="#fff" stroke-width="3"/></svg></span>LinkedIn</button>
+                    <button type="button" class="papp" data-app="spotify"><span class="ic ic-sp"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="#111"/><path d="M13 16 q8 -3 15 1 M14 21 q6 -2 12 1 M15 25.5 q5 -1.5 9 .5" fill="none" stroke="#1ED760" stroke-width="2.4" stroke-linecap="round"/></svg></span>Spotify</button>
+                    <button type="button" class="papp" data-app="youtube"><span class="ic ic-yt"><svg viewBox="0 0 40 40"><rect x="8" y="12" width="24" height="16" rx="5" fill="#fff"/><path d="M18 16 v8 l7 -4z" fill="#E62117"/></svg></span>YouTube</button>
+                    <button type="button" class="papp" data-app="netflix"><span class="ic ic-nf"><svg viewBox="0 0 40 40"><path d="M14 9 v22 M14 9 l12 22 M26 9 v22" fill="none" stroke="#E50914" stroke-width="4" stroke-linejoin="round"/></svg></span>Netflix</button>
+                    <button type="button" class="papp" data-app="prime"><span class="ic ic-pv"><svg viewBox="0 0 40 40"><text x="20" y="20" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="9" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#1FA8E0" stroke-width="2" stroke-linecap="round"/></svg></span>Prime</button>
                 </div>
                 <div class="app-view" id="app-view" hidden></div>
             </div>
@@ -501,6 +505,12 @@ function penView({ title, note, list, front, pen, pick }) {
 }
 
 function cardHTML(c, i) {
+    if (c.kind === 'bofadebit') return `
+        <button class="card bofadebit" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
+            <span class="bofa-top"><span class="chip"></span><svg class="tap" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="bofa-bank">BANK OF AMERICA</span>
+            <span class="foot"><span>SUHANI TIWARI</span><span class="visa"><b>VISA</b> Debit</span></span>
+        </button>`;
     if (c.kind === 'amexgold') return `
         <button class="card amexgold" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
             <svg class="facet" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 60 L62 4 L100 30 Z" fill="#fff" opacity=".22"/><path d="M62 4 L100 30 L70 26 Z" fill="#fff" opacity=".35"/><path d="M30 60 L70 26 L100 30 Z" fill="#8A6A2A" opacity=".18"/></svg>
@@ -566,8 +576,44 @@ const AFTER = {
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
                     ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+            } else if (b.dataset.app === 'spotify') {
+                view.innerHTML = back + `
+                    <div class="sp">
+                        <p class="sp-h">Wrapped could never</p>
+                        <div class="sp-card"><b>182K</b><span>plays since 2022, cleaned into a SQL warehouse</span></div>
+                        <div class="sp-card"><b>21 days</b><span>in a row on one song (SQL found it)</span></div>
+                        <a class="sp-btn" href="https://listening-history.onrender.com/" target="_blank" rel="noopener">Open Listening History</a>
+                        <a class="sp-btn ghost" href="https://suhanitiwari.com/home/favorites#listen" target="_blank" rel="noopener">My music universe</a>
+                    </div>`;
+            } else if (b.dataset.app === 'netflix' || b.dataset.app === 'prime') {
+                const nf = b.dataset.app === 'netflix';
+                const list = nf ? ['bridgerton', 'ginny-and-georgia', 'mismatched', 'masaba-masaba', 'gilmore-girls'] : ['call-me-bae', 'mind-the-malhotras', 'off-campus'];
+                view.innerHTML = back + `
+                    <div class="stream ${nf ? 'nf' : 'pv'}">
+                        <p class="stream-h">${nf ? 'Continue watching for Suhani' : 'Keep watching'}</p>
+                        <div class="posters">${list.map(f => `<img src="assets/posters/${f}.jpg" alt="${f.replace(/-/g, ' ')}">`).join('')}</div>
+                    </div>`;
+            } else if (b.dataset.app === 'youtube') {
+                view.innerHTML = back + '<p class="mono apptitle">YouTube</p><p class="ig-todo"><span class="todo">what do you watch here?</span></p>';
+            } else if (b.dataset.app === 'linkedin') {
+                view.innerHTML = back + `
+                    <div class="li">
+                        <div class="li-banner"></div>
+                        <img class="li-photo" src="assets/img/me.jpg" alt="">
+                        <p class="li-name">Suhani Tiwari</p>
+                        <p class="li-head">MIS + Psychology @ UT Austin McCombs · Prev. Oracle, Acacia Advisors, Outlier</p>
+                        <p class="li-loc">Austin, Texas</p>
+                        <p class="li-url">linkedin.com/in/suhxnitiwari</p>
+                        <a class="li-btn" href="https://www.linkedin.com/in/suhxnitiwari/" target="_blank" rel="noopener">View on LinkedIn</a>
+                    </div>`;
             } else {
-                view.innerHTML = back + '<p class="mono apptitle">Instagram</p><p class="ig-todo"><span class="todo">what’s your @?</span></p>';
+                view.innerHTML = back + `
+                    <div class="ig">
+                        <p class="ig-handle">hifromhani</p>
+                        <div class="ig-top"><img src="assets/img/me.jpg" alt=""><span class="ig-name">hi from hani</span></div>
+                        <a class="ig-btn" href="https://www.instagram.com/hifromhani/" target="_blank" rel="noopener">Open in Instagram</a>
+                        <div class="ig-grid">${['cafe', 'chicago', 'book', 'nyc', 'gwc', 'me'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
+                    </div>`;
             }
             home.hidden = true; view.hidden = false;
             $('#back').onclick = () => { view.hidden = true; home.hidden = false; };
