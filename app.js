@@ -893,12 +893,14 @@ const SKIN_INFO = {
     patches: ['under-eye gel patches', 'under my eyes. cool, squishy, instant “i slept” energy.', 'eye patches'],
     lamer: ['La Mer The Eye Concentrate', 'lid off, a tap with the little wand.', 'la mer'],
     sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley'],
+    lash: ['Grande Cosmetics GrandeLASH-MD Lash Enhancing Serum', 'one swipe along my lash line.', 'grandelash'],
     laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige']
 };
 // what each one does when it lands on me
 const SKIN_FX = {
     dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'skin activator serum on. hydrated, plump, glowing.'], goldpump: ['glow2', 'suprême c on. vitamin c. brighter, more even.'],
     lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
+    lash: ['lashes', 'grandelash on. lashes, but more.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy.']
 };
 const VIEWS = {
@@ -946,6 +948,7 @@ const VIEWS = {
                 <g class="fx" data-fx="glow" filter="url(#fx-blur)" style="mix-blend-mode:soft-light"><ellipse cx="375" cy="390" rx="140" ry="190" fill="#FFE2C8" opacity=".55"/></g>
                 <g class="fx" data-fx="glow2" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="375" cy="390" rx="130" ry="180" fill="#FFE9D6" opacity=".2"/></g>
                 <g class="fx" data-fx="bright" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="300" cy="350" rx="40" ry="16" fill="#FFE8DA" opacity=".55"/><ellipse cx="435" cy="348" rx="46" ry="16" fill="#FFE8DA" opacity=".55"/></g>
+                <g class="fx" data-fx="lashes"><image href="assets/img/me-lash-l.png" x="248" y="278" width="100" height="70"/><image href="assets/img/me-lash-r.png" x="372" y="272" width="120" height="76"/></g>
                 <g class="fx" data-fx="lips"><image href="assets/img/me-lips-laneige.png" x="296" y="436" width="128" height="92"/></g>
                                 <g class="fx" data-fx="patches" transform="translate(0 10)">
                     <path d="M272 340 C290 336 310 336 324 338 C326 360 318 380 298 381 C282 382 272 366 272 340Z" fill="#FFE4DE" fill-opacity=".38" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
@@ -956,7 +959,7 @@ const VIEWS = {
         </div>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['patches', 120, -126, -36, 0, -34], ['pinkpump', 190, -84, -24, 70, -6], ['dropper', 172, -42, -12, 140, 0], ['goldpump', 190, 0, 0, 210, 0], ['laneige', 64, 42, 12, 280, -40], ['lamer', 84, 90, 24, 350, -40], ['sisley', 86, 140, 34, 420, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['patches', 120, -147, -35, 0, -34], ['pinkpump', 190, -105, -25, 60, -6], ['dropper', 172, -63, -15, 120, 0], ['lash', 176, -21, -5, 180, 0], ['goldpump', 190, 21, 5, 240, 0], ['laneige', 64, 63, 15, 300, -40], ['lamer', 84, 108, 25, 360, -40], ['sisley', 86, 155, 35, 420, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -1045,7 +1048,14 @@ const VIEWS = {
     pads: () => `
         <h2><em>pads</em></h2>
         <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
-        <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>`,
+        <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>
+        <div class="pad-note">
+            <p>hey girl ♡</p>
+            <p>if you’re on your period right now, take one. take two. i hope you’re taking care of yourself: drink some water, eat something warm, rest if you can, and be a little extra nice to you today.</p>
+            <p>you deserve to feel better. i hope you do ♡</p>
+            <p class="pad-sig">— suhani</p>
+        </div>
+        <p class="pad-more">i care about this so much i built an app for it: <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener">Cadence ↗</a>, a free, private period app for your first one and every one after.</p>`,
 
     brushes: () => `
         <h2>My <em>Morphe</em> brushes</h2>
@@ -1737,7 +1747,7 @@ const AFTER = {
             const g = face.querySelector(`[data-fx="${fx}"]`); if (g) g.classList.add('on'); else face.classList.add(fx);
             if (k === 'patches') { face.classList.add('patched'); clearTimeout(face.zzz); face.zzz = setTimeout(() => { if (applied.has('patches')) { face.classList.add('asleep'); toast('and… i’m out. sleepy. bye bye 💤'); } }, reduce ? 0 : 1800); }
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
-            $('#face-hint').textContent = applied.size >= 7 ? 'fully skincared ♡' : `${applied.size} of 7 on`;
+            const N = Object.keys(SKIN_FX).length; $('#face-hint').textContent = applied.size >= N ? 'fully skincared ♡' : `${applied.size} of ${N} on`;
             toast(line + (k === 'patches' ? '' : ''));
         };
         // tap the patches on my face to peel them off; my eyes open again
