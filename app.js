@@ -960,6 +960,8 @@ const DIGI_CARDS = {
 const ROMCOMS = [["the-hating-game","The Hating Game","Sally Thorne","Lucy and Joshua are executive assistants who share an office and can’t stand each other. Then they both go for the same promotion, and the games get complicated."],["the-unhoneymooners","The Unhoneymooners","Christina Lauren","Everyone at her twin sister’s wedding gets food poisoning except Olive and the groom’s grumpy brother Ethan. So they take the free Maui honeymoon, pretending to be newlyweds."],["people-we-meet-on-vacation","People We Meet on Vacation","Emily Henry","Best friends Poppy and Alex took a trip together every summer, until two years ago. Poppy talks him into one more vacation to fix whatever broke."],["you-deserve-each-other","You Deserve Each Other","Sarah Hogle","Naomi and Nicholas are engaged and secretly miserable. Neither wants to be the one to call it off, so each tries to make the other quit first."],["the-spanish-love-deception","The Spanish Love Deception","Elena Armas","Catalina needs a date to her sister’s wedding in Spain, and the only volunteer is Aaron, the coworker she can’t stand."],["by-a-thread","By a Thread","Lucy Score","Ally needs a steady paycheck. Dominic is the moody heir of a fashion empire. Working together at Label magazine is chaos from day one."],["the-devil-you-know","The Devil You Know","Elizabeth O’Roark","A slow burn with the one man she’s been warned about, who turns out to be exactly who she needed."],["the-ex-talk","The Ex Talk","Rachel Lynn Solomon","Public radio producer Shay and her rival Dominic get pushed to cohost a show about relationships as exes. They’ve never actually dated."],["funny-story","Funny Story","Emily Henry","Daphne’s fiancé leaves her for his best friend, so she moves in with Miles, the best friend’s ex. Then they start pretending to date."],["the-american-roommate-experiment","The American Roommate Experiment","Elena Armas","Rosie’s ceiling caves in, and she ends up sharing her apartment with Lucas, her best friend’s cousin, who’s in New York for a few weeks."],["the-worst-best-man","The Worst Best Man","Mia Sosa","Wedding planner Carolina was left at the altar. Years later she has to work with Max, the best man who talked his brother out of marrying her."],["the-love-hypothesis","The Love Hypothesis","Ali Hazelwood","To prove she’s moved on, PhD student Olive kisses the first man she sees: young, intimidating professor Adam Carlsen."]];
 // onward opens onto the rest of my business shelf
 const BIZBOOKS = [["onward", "Onward", "Howard Schultz"], ["the-design-of-everyday-things", "The Design of Everyday Things", "Don Norman"], ["inspired", "Inspired", "Marty Cagan"], ["creative-confidence", "Creative Confidence", "Tom Kelley & David Kelley"], ["the-innovators-dilemma", "The Innovator’s Dilemma", "Clayton Christensen"], ["competing-against-luck", "Competing Against Luck", "Clayton Christensen"], ["shoe-dog", "Shoe Dog", "Phil Knight"], ["creativity-inc", "Creativity, Inc.", "Ed Catmull"], ["alchemy", "Alchemy", "Rory Sutherland"], ["the-choice-factory", "The Choice Factory", "Richard Shotton"], ["decoded", "Decoded", "Phil Barden"], ["influence", "Influence", "Robert Cialdini"]];
+// procreate on my ipad: my ap portfolio and my published book, as stacks
+const AP_ART = [["Image 1", "Sketch: traditionalism versus modernism. Thought of essential questions, sketched the woman, decided on the color scheme."], ["Image 2", "Background pattern mirrored on the salwar kameez illustrates how culture is an inherent part of us."], ["Image 3", "Sketch: embracing cultural identity. Essential questions, sketch, colorblocked the rose, decided on the color scheme."], ["Image 4", "Airbrushing two contrasting colors to show how different ideas blend to create an integrated sense of self."], ["Image 5", "Sketch: decided on her pose, sketched my piece, decided the background and the pattern on the blouse."], ["Image 6", "Bold paint strokes in the background to showcase cultural identity."], ["Image 7", "Symmetrical mandala design in the background, continued color blocking on skin."], ["Image 8", "Sketch: used a tripod to take a picture holding scissors and cutting my hair, to show support for Mahsa Amini."], ["Image 9", "Continued use of red to show what a powerful force culture plays in our identity."], ["Image 10", "Navigating Indian-American identity: continued to creatively showcase my Indian-American heritage."], ["Image 11", "Colorblocked skin and bow, added shadows on the cube to give it form, drew two faces of the cube."], ["Image 12", "Embracing Indian heritage: designed a pattern and repeated it on the sleeve and dupatta, drew the jewelry."], ["Image 13", "Repeated the pattern on the sleeve and dupatta to show how ingrained culture is in our identities."], ["Image 14", "Sketch: coexistence of both my worlds. Sketched the flowers, especially the two roses, facing opposite directions."], ["Image 15", "Vibrant flag colors on a bold background capture the essence of Indian-American cultural identity."]];
 const VIEWS = {
     onward: () => `
         <h2><em>Onward</em></h2>
@@ -2410,14 +2412,36 @@ const AFTER = {
                 const pins = ['art/embracing-cultural-identity', 'img/cake-solar-system', 'img/cafe', 'art/braid', 'posters/gossip-girl', 'img/nyc', 'img/cupcakes', 'art/coexistence-of-both-my-worlds', 'img/chicago', 'art/packing-home', 'img/cake-lego', 'art/vanity'];
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
             } else if (k === 'procreate') {
-                view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="canvases">${ART.map(([t, , f], i) => `<button type="button" class="canvas" data-page="${i}"><img src="assets/art/${f}.jpg" alt=""><span>${t}</span></button>`).join('')}</div>`;
-                view.classList.add('procreate');
+                const STACKS = [
+                    { name: 'Paintings', items: ART.map(([t, d, f]) => [`assets/art/${f}.jpg`, t, d]) },
+                    { name: 'AP 2-D Art & Design', sub: 'my AP portfolio. sustained investigation: growing up between two worlds.', items: AP_ART.map(([t, d], n) => [`assets/ap/ap-${String(n + 1).padStart(2, '0')}.jpg`, t, d]) },
+                    { name: 'Girls Can Be Engineers, Too!', sub: 'i wrote it, illustrated it and published it. every page.', link: 'https://a.co/d/9PAHLVL', items: Array.from({ length: 32 }, (_, n) => [`assets/book/pg-${String(n + 1).padStart(2, '0')}.jpg`, `page ${n + 1}`, '']) }
+                ];
+                const gallery = () => {
+                    view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="stacks">${STACKS.map((st, n) => `<button type="button" class="stack" data-stack="${n}"><span class="stack-pile">${st.items.slice(0, 3).map(([src]) => `<img src="${src}" alt="">`).join('')}</span><b>${st.name}</b><small>${st.items.length} ${n === 2 ? 'pages' : 'artworks'}</small></button>`).join('')}</div>`;
+                    view.querySelectorAll('[data-stack]').forEach(x => x.onclick = () => openStack(+x.dataset.stack));
+                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
+                };
+                const openStack = n => {
+                    const st = STACKS[n];
+                    view.innerHTML = `<button type="button" class="back mono" id="ip-back">‹ Gallery</button><p class="ip-title dark">${st.name}</p>${st.sub ? `<p class="stack-sub">${st.sub}${st.link ? ` <a href="${st.link}" target="_blank" rel="noopener">see it on amazon ↗</a>` : ''}</p>` : ''}<div class="canvases">${st.items.map(([src, t], j) => `<button type="button" class="canvas" data-c="${j}"><img src="${src}" alt="" loading="lazy"><span>${t}</span></button>`).join('')}</div>`;
+                    view.scrollTop = 0;
+                    $('#ip-back').onclick = gallery;
+                    view.querySelectorAll('[data-c]').forEach(c => c.onclick = () => openCanvas(n, +c.dataset.c));
+                };
+                const openCanvas = (n, j) => {
+                    const st = STACKS[n], [src, t, d] = st.items[j];
+                    view.innerHTML = `<button type="button" class="back mono" id="ip-back">‹ ${st.name}</button><div class="pc-full"><img src="${src}" alt="${t}"><div class="pc-nav"><button type="button" data-d="-1" aria-label="Previous">‹</button><span><b>${t}</b>${d ? `<small>${d}</small>` : ''}</span><button type="button" data-d="1" aria-label="Next">›</button></div></div>`;
+                    $('#ip-back').onclick = () => openStack(n);
+                    view.querySelectorAll('[data-d]').forEach(x => x.onclick = () => openCanvas(n, (j + +x.dataset.d + st.items.length) % st.items.length));
+                };
+                gallery(); view.classList.add('procreate'); home.hidden = true; view.hidden = false; addQ(view, k);
+                return;
             }
             if (k !== 'procreate') view.classList.remove('procreate');
             addQ(view, k);
             home.hidden = true; view.hidden = false;
             $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
-            view.querySelectorAll('.canvas').forEach(c => c.onclick = () => pickUp(ITEMS.find(i => i.id === 'sketchbook')));
         });
     },
     pencil: () => {

@@ -2195,3 +2195,18 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .bz-book.out { transform: translateY(-14px) scale(1.18) rotate(-3deg); z-index: 2; }
 .bz-say { text-align: center; color: var(--plum); font-size: 1.35rem; min-height: 1.5em; }
 @media (max-width: 760px) { .bz-shelf { grid-template-columns: repeat(4, 1fr); background: none; } }
+
+/* procreate: stacks, like the real gallery */
+.stacks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 14px; padding: 6px 2px; }
+.stack { display: grid; gap: 4px; justify-items: start; padding: 0; border: 0; background: none; color: #EDEDED; cursor: pointer; text-align: left; }
+.stack-pile { position: relative; width: 100%; aspect-ratio: 4 / 3; }
+.stack-pile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,.5); }
+.stack-pile img:nth-child(1) { transform: rotate(-5deg) scale(.92); } .stack-pile img:nth-child(2) { transform: rotate(4deg) scale(.95); }
+.stack:hover .stack-pile img:nth-child(1) { transform: rotate(-8deg) scale(.92) translateX(-6px); }
+.stack b { font-size: .72rem; } .stack small { font-size: .6rem; color: #9A9AA0; }
+.stack-sub { margin: -4px 0 10px; font-size: .68rem; color: #B9B9C0; } .stack-sub a { color: #8FB8F0; }
+.pc-full img { display: block; max-width: 100%; max-height: 300px; margin: 0 auto; border-radius: 4px; }
+.pc-nav { display: grid; grid-template-columns: 30px 1fr 30px; gap: 8px; align-items: center; margin-top: 8px; color: #EDEDED; }
+.pc-nav button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #555; background: #2A2A30; color: #fff; cursor: pointer; }
+.pc-nav b { display: block; font-size: .75rem; } .pc-nav small { display: block; font-size: .62rem; color: #B9B9C0; line-height: 1.35; margin-top: 2px; }
+@media (max-width: 760px) { .stacks { grid-template-columns: repeat(2, 1fr); } }
