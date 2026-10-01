@@ -927,7 +927,19 @@ const VIEWS = {
         <p class="note" id="cr-note" style="text-align:center">crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.</p>`,
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
-        <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
+        <button type="button" class="tk" id="tk" aria-label="My speeding ticket: tap to flip it over">
+            <span class="tk-f">${ITEMS.find(i => i.id === 'ticket').art}</span>
+            <span class="tk-b"><svg viewBox="0 0 220 150" aria-hidden="true"><rect x="4" y="4" width="212" height="142" rx="3" fill="#F7F3EA" stroke="#3A2626" stroke-width="3"/><path d="M14 22 h192" stroke="#C9C1B2" stroke-width="1.2"/>
+                <text x="16" y="18" font-family="Instrument Sans" font-weight="700" font-size="9" letter-spacing="1.4" fill="#2C4E95">PAYMENT</text>
+                <text x="16" y="44" font-family="Instrument Sans" font-size="8" fill="#3A2626">FINE + COURT COSTS</text>
+                <text x="204" y="44" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#3A2626">$350.00</text>
+                <path d="M16 54 h188" stroke="#C9C1B2" stroke-width="1" stroke-dasharray="3 3"/>
+                <text x="16" y="72" font-family="Instrument Sans" font-weight="700" font-size="11" fill="#3A2626">TOTAL DUE</text>
+                <text x="204" y="74" text-anchor="end" font-family="Bodoni Moda" font-weight="600" font-size="22" fill="#3A2626">$350</text>
+                <g transform="translate(110 112) rotate(-10)"><rect x="-48" y="-18" width="96" height="36" rx="5" fill="none" stroke="#C0272D" stroke-width="3.5"/><text x="0" y="9" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="24" letter-spacing="3" fill="#C0272D" opacity=".9">PAID</text></g>
+                <text x="16" y="140" font-family="Caveat" font-size="12" fill="#8E2A24">ouch.</text></svg></span>
+        </button>
+        <p class="hand tk-say" id="tk-say">tap it to flip it over</p>
         <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>`,
     giftcards: () => `
         <h2>some <em>gift cards</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(store credit, technically)</span></h2>
@@ -2361,6 +2373,10 @@ const AFTER = {
         };
     },
 
+    ticket: () => {
+        const tk = $('#tk');
+        tk.onclick = () => { const f = tk.classList.toggle('flip'); $('#tk-say').textContent = f ? '$350. three hundred and fifty dollars. for going “a little too excited.”' : 'tap it to flip it over'; if (f) toast('$350. i could’ve bought a lot of lipstick.'); };
+    },
     giftcards: () => {
         const flipped = new Set();
         sheetBody.querySelectorAll('.gc').forEach(c => c.onclick = e => {
