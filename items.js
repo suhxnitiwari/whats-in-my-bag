@@ -57,8 +57,19 @@ window.BAG = {
 
 window.ITEMS = [
     {
-        id: 'headphones', name: 'my headphones', zip: 'devices', l: 52, t: 12, w: 14, r: -8,
-        art: `<svg viewBox="0 0 220 190"><path d="M36 128 C20 30 200 30 184 128" fill="none" ${S} stroke-width="16"/><path d="M36 128 C20 30 200 30 184 128" fill="none" stroke="#F2C6C8" stroke-width="7" stroke-linecap="round"/><rect x="12" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="158" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="22" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><rect x="168" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><path d="M104 24 q10 -14 20 0" fill="none" ${S} stroke-width="2"/><circle cx="92" cy="10" r="4" fill="${INK}"/><path d="M96 10 V-6" ${S} stroke-width="2"/></svg>`,
+        id: 'headphones', name: 'my airpods max', zip: 'devices', l: 53, t: 13, w: 16, r: -6,
+        art: `<svg viewBox="0 0 220 200"><defs>
+            <pattern id="mesh" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#EFE6D6"/><circle cx="2.5" cy="2.5" r=".9" fill="#DDD0B8"/></pattern>
+            <linearGradient id="cup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3EADB"/><stop offset=".55" stop-color="#E2D4BC"/><stop offset="1" stop-color="#CDBB9E"/></linearGradient></defs>
+            <path d="M34 110 C34 20 186 20 186 110" fill="none" stroke="#C9CDD3" stroke-width="5" stroke-linecap="round"/>
+            <path d="M34 110 C34 20 186 20 186 110" fill="none" stroke="#3A2626" stroke-width="1.4"/>
+            <path d="M46 92 C52 40 168 40 174 92" fill="none" stroke="#3A2626" stroke-width="19" stroke-linecap="round"/>
+            <path d="M46 92 C52 40 168 40 174 92" fill="none" stroke="url(#mesh)" stroke-width="15" stroke-linecap="round"/>
+            <rect x="29" y="104" width="10" height="20" rx="2" fill="#D9DCE0" stroke="#3A2626" stroke-width="1.5"/>
+            <rect x="181" y="104" width="10" height="20" rx="2" fill="#D9DCE0" stroke="#3A2626" stroke-width="1.5"/>
+            <g transform="rotate(10 36 158)"><rect x="8" y="120" width="56" height="76" rx="22" fill="url(#cup)" ${S}/><rect x="14" y="126" width="44" height="64" rx="17" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/></g>
+            <g transform="rotate(-10 184 158)"><rect x="156" y="120" width="56" height="76" rx="22" fill="url(#cup)" ${S}/><rect x="162" y="126" width="44" height="64" rx="17" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/><circle cx="200" cy="128" r="3" fill="#C9CDD3" stroke="#3A2626" stroke-width="1"/></g>
+        </svg>`,
         open: () => `
             <h2>What I’m <em>listening</em> to</h2>
             <p class="note">four years of my spotify, turned into a database i can ask anything</p>
@@ -180,6 +191,11 @@ window.ITEMS = [
         open: 'ipad'
     },
     {
+        id: 'pencil', name: 'my apple pencil pro', zip: 'devices', l: 30, t: 23, w: 15.5, r: -3,
+        art: `<svg viewBox="0 0 330 26"><path d="M14 13 L2 13" stroke="#3A2626" stroke-width="2"/><path d="M30 4 H318 a7 9 0 0 1 0 18 H30 L6 15 a2 2 0 0 1 0 -4 Z" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M40 8 H300" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M40 18 H312" stroke="#D9D9D6" stroke-width="2" stroke-linecap="round"/><text x="250" y="16" font-family="Instrument Sans" font-size="7" fill="#9A9A96">Pencil Pro</text></svg>`,
+        open: 'pencil'
+    },
+    {
         id: 'phone', name: 'my phone', zip: 'shades', l: 82, t: 24, w: 6, r: -8,
         art: `<svg viewBox="0 0 90 180"><rect x="4" y="4" width="82" height="172" rx="16" fill="#F2C6C8" ${S}/><rect x="20" y="16" width="26" height="26" rx="8" fill="#E9A9B6" ${S} stroke-width="2"/><circle cx="33" cy="29" r="7" fill="#3A2626"/><circle cx="56" cy="22" r="3" fill="#3A2626"/><path d="M30 120 C10 104 12 86 24 86 C30 86 32 92 32 95 C32 92 34 86 40 86 C52 86 54 104 30 120Z" fill="#FFFBF8" ${S} stroke-width="2"/><text x="45" y="150" text-anchor="middle" font-family="Caveat" font-size="16" fill="${INK}">s.t.</text></svg>`,
         open: 'phone'
@@ -203,7 +219,7 @@ window.ITEMS = [
         open: 'passport'
     },
     {
-        id: 'laptop', name: 'my laptop', zip: 'devices', l: 10, t: 19, w: 18, r: -6,
+        id: 'laptop', name: 'my macbook pro', zip: 'devices', l: 10, t: 19, w: 18, r: -6,
         get art() { return window.LID(false); },
         open: 'laptop'
     }
@@ -229,9 +245,9 @@ window.STICKERS = [
 ];
 
 window.LID = (big) => `<svg viewBox="0 0 210 300" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
-    <rect x="3" y="3" width="204" height="294" rx="14" fill="#CDD0D5" ${S}/>
+    <rect x="3" y="3" width="204" height="294" rx="14" fill="#2C2D31" ${S}/>
     <rect x="3" y="3" width="204" height="294" rx="14" fill="url(#brushed)" opacity=".5"/>
-    <defs><linearGradient id="brushed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#9DA2A9" stop-opacity=".35"/></linearGradient></defs>
+    <defs><linearGradient id="brushed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs>
     ${window.STICKERS.map(k => big
         ? `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}" transform="translate(${k.x} ${k.y})"><g class="stk-in">${k.svg}</g></g>`
         : `<g transform="translate(${k.x} ${k.y})">${k.svg}</g>`).join('')}

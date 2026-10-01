@@ -606,3 +606,10 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pin-head b { display: block; font-size: .9rem; color: #111; }
 .pin-head small { font-size: .7rem; color: #767676; }
 .pin-btn { margin-left: auto; padding: 7px 12px; border-radius: 999px; background: #E60023; color: #fff; font-size: .72rem; font-weight: 700; text-decoration: none; }
+
+/* Apple Pencil: a blank Procreate-style canvas with swatches */
+.swatches { display: flex; gap: 8px; justify-content: center; margin: 4px 0 12px; }
+.swatches button { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ink); cursor: pointer; }
+.swatches button.on { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
+.procreate-pad { background: #fff; }
+.procreate-pad canvas { height: 280px; }

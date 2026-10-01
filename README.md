@@ -6,7 +6,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 
 | In my bag | What it opens |
 |---|---|
-| Headphones | My listening data: four years of Spotify in a SQL warehouse |
+| AirPods Max (Starlight) | My listening data: four years of Spotify in a SQL warehouse |
 | Sketchbook | A flip-through of my digital art |
 | Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Lancôme Lash Idôle and my Morphe brushes pop out |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
@@ -19,7 +19,8 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Car keys | The truth about my driving |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
 | iPad | Pinterest (my board), Procreate (my art), and a folder of things I built |
-| Laptop | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
+| Apple Pencil Pro | A blank canvas: draw anything |
+| MacBook Pro 14" (space black) | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Ralph Lauren cable knit sweater | Because I get cold easily |

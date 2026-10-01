@@ -268,6 +268,12 @@ const VIEWS = {
         <p>Address: wouldn’t you wanna knowwww.</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="beep">Tap it on the reader</button></div>`,
 
+    pencil: () => `
+        <h2>My <em>Apple Pencil</em> Pro</h2>
+        <p class="note">it lives on my ipad. go ahead, draw something.</p>
+        <div class="swatches" id="swatches">${['#1B1B1F', '#E63F7A', '#7B4FD1', '#1F6FD1', '#18A39A', '#F0592B', '#F7D54A'].map((c, i) => `<button type="button" style="background:${c}" data-ink="${c}" aria-label="Color ${c}"${i === 0 ? ' class="on"' : ''}></button>`).join('')}</div>
+        <div class="pad procreate-pad"><canvas id="pad-canvas" aria-label="Canvas: draw with my Apple Pencil"></canvas><span class="pad-hint" id="pad-hint">draw anything…</span><button type="button" class="pad-clear mono" id="pad-clear">clear</button></div>`,
+
     sketchbook: () => `
         <div class="spread" id="spread">
             <div class="l"><img id="art-img" src="" alt=""></div>
@@ -327,7 +333,7 @@ const VIEWS = {
         </ul></div>`,
 
     laptop: () => `
-        <h2>My <em>laptop</em></h2>
+        <h2>My <em>MacBook Pro</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">14-inch, space black</span></h2>
         <p class="note" id="lap-note">the stickers are load-bearing. tap one, or open it up.</p>
         <div class="lap-closed" id="lap-closed">
             <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>
@@ -714,6 +720,15 @@ const AFTER = {
             $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
             view.querySelectorAll('.canvas').forEach(c => c.onclick = () => pickUp(ITEMS.find(i => i.id === 'sketchbook')));
         });
+    },
+    pencil: () => {
+        ink = '#1B1B1F';
+        setupPad();
+        $('#swatches').onclick = e => {
+            const b = e.target.closest('[data-ink]'); if (!b) return;
+            ink = b.dataset.ink;
+            $('#swatches').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        };
     },
     apartment: () => { $('#beep').onclick = () => toast('beep. door’s open. welcome home ♡'); },
     mascara: () => {
