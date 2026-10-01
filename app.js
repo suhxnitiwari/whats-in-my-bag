@@ -392,90 +392,6 @@ const GIFTCARDS = [
     { id: 'sephora', name: 'Sephora', front: '<span class="gc-stripes"></span><span class="gc-word">SEPHORA</span>', why: 'the box sat by my door for 31 days.', bal: 'a mystery, honestly', last: '1969' }
 ];
 
-/* my hair things: two silk scrunchies and a wide-tooth comb. A little hair salon: pick a style, pick a scrunchie, comb it out. */
-const SCRUNCHIES = { pink: ['#F4A7B9', '#D9788F', 'pink silk'], brown: ['#8A5A3E', '#5E3A26', 'brown silk'] };
-const HAIR_STYLES = { down: 'Down', pony: 'Ponytail', braid: 'Braid', half: 'Half up, half down' };
-const HAIR_LINES = { down: 'down and wavy. main character hours.', pony: 'high pony. running late energy.', braid: 'braided and tied off ♡', half: 'half up, half down. effortless (it took 20 minutes).' };
-// a scrunchie: a puffy ring of silk gathered around a point
-const scrunchie = (x, y, r = 10) => `<g class="scr" transform="translate(${x} ${y})">${Array.from({ length: 9 }, (_, k) => {
-    const a = k / 9 * Math.PI * 2; return `<circle cx="${(Math.cos(a) * r).toFixed(1)}" cy="${(Math.sin(a) * r * .62).toFixed(1)}" r="${(r * .62).toFixed(1)}"/>`;
-}).join('')}<path d="M${-r * .9} 0 q${r * .9} ${r * .5} ${r * 1.8} 0" fill="none" stroke="var(--scr-d)" stroke-width="1.2" opacity=".6"/></g>`;
-// a few lighter strands so the hair reads as hair
-const strands = (list) => list.map(d => `<path d="${d}" fill="none" stroke="#6B4A3A" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>`).join('');
-// sleek hair on the head, every strand pulled toward one point
-const sleek = (gx, gy) => `<ellipse cx="150" cy="128" rx="64" ry="74" fill="#3A2620"/>` + strands([
-    `M100 92 Q125 ${gy - 10} ${gx} ${gy}`, `M120 66 Q140 ${gy - 20} ${gx} ${gy}`, `M180 66 Q160 ${gy - 20} ${gx} ${gy}`, `M200 92 Q175 ${gy - 10} ${gx} ${gy}`,
-    `M92 140 Q120 ${gy + 4} ${gx} ${gy}`, `M208 140 Q180 ${gy + 4} ${gx} ${gy}`, `M150 58 Q150 ${gy - 30} ${gx} ${gy}`]);
-const curtain = top => `<path d="M88 ${top} C78 200 66 262 76 338 C96 356 110 340 122 352 C136 362 150 346 164 354 C180 362 196 342 210 352 C226 350 230 336 224 338 C234 262 222 200 212 ${top} Z" fill="#3A2620"/>` +
-    strands(['M100 150 C92 210 92 270 98 336', 'M124 160 C118 220 122 280 120 344', 'M150 160 C146 230 152 290 150 348', 'M176 160 C182 220 178 280 180 346', 'M200 150 C208 210 208 270 204 338']);
-function hairSVG() {
-    const braid = Array.from({ length: 8 }, (_, k) => {
-        const y = 204 + k * 15, s = k % 2 ? 1 : -1;
-        return `<g transform="rotate(${s * 28} ${150 + s * 5} ${y})"><ellipse class="bl" style="--k:${k}" cx="${150 + s * 5}" cy="${y}" rx="15" ry="10" fill="#3A2620" stroke="#24150F" stroke-width="1.5"/></g>`;
-    }).join('');
-    return `<svg class="salon-svg" viewBox="0 0 300 380" role="img" aria-label="The back of my head">
-        <path d="M30 380 C34 300 86 262 126 252 L174 252 C214 262 266 300 270 380Z" fill="#E6B593"/>
-        <rect x="128" y="176" width="44" height="84" rx="16" fill="#D9A47F"/>
-        <path d="M70 380 C72 330 92 306 112 300 L188 300 C208 306 228 330 230 380Z" fill="#F2A6B8"/>
-        <path d="M112 302 L118 254 M188 302 L182 254" stroke="#F2A6B8" stroke-width="7" stroke-linecap="round"/>
-        <g class="hs" data-s="down">${curtain(110)}<ellipse cx="150" cy="128" rx="64" ry="74" fill="#3A2620"/>${strands(['M150 58 C130 90 120 120 112 160', 'M150 58 C170 90 180 120 188 160', 'M150 58 C150 100 150 130 150 170'])}</g>
-        <g class="hs" data-s="half">${curtain(140)}${sleek(150, 104)}<path d="M142 108 C130 140 138 176 146 214 Q152 222 158 212 C166 176 172 140 158 108Z" fill="#3A2620" stroke="#24150F" stroke-width="1"/>${strands(['M150 112 C146 150 150 180 152 210'])}${scrunchie(150, 104)}</g>
-        <g class="hs" data-s="pony">${sleek(150, 92)}<path d="M140 96 C112 150 126 230 136 300 C142 318 160 318 164 300 C176 230 190 150 160 96Z" fill="#3A2620" stroke="#24150F" stroke-width="1"/>${strands(['M148 100 C136 170 142 240 146 304', 'M154 100 C162 170 160 240 156 306'])}${scrunchie(150, 92)}</g>
-        <g class="hs" data-s="braid">${sleek(150, 192)}${braid}<path class="bl" style="--k:8" d="M144 322 C140 338 146 352 150 358 C154 352 160 338 156 322Z" fill="#3A2620"/>${scrunchie(150, 324, 8)}</g>
-    </svg>`;
-}
-function hairView(state) {
-    const scr = state === 'brown' ? 'brown' : 'pink';
-    const st = state === 'braid' ? 'braid' : state === 'comb' ? 'down' : 'pony';
-    return `
-        <h2>My <em>hair</em> salon</h2>
-        <p class="note">two silk scrunchies and a wide-tooth comb. pick a style, pick a scrunchie, then comb it out.</p>
-        <p class="hair-hint hand" id="hair-hint"></p>
-        <div class="salon" id="hairpic" data-style="${st}" style="--scr:${SCRUNCHIES[scr][0]}; --scr-d:${SCRUNCHIES[scr][1]}" data-scr="${scr}">
-            ${hairSVG()}
-            <div class="hp-comb" id="hp-comb" aria-hidden="true">${ITEMS.find(i => i.id === 'comb').art}</div>
-            <span class="hp-shine" aria-hidden="true"></span>
-        </div>
-        <div class="salon-ctrl">
-            <p class="mono">style</p>
-            <div class="row hair-btns">${Object.entries(HAIR_STYLES).map(([k, t]) => `<button class="btn" type="button" data-hair="${k}">${t}</button>`).join('')}</div>
-            <p class="mono">scrunchie</p>
-            <div class="row hair-btns">${Object.entries(SCRUNCHIES).map(([k, [c, , t]]) => `<button class="scr-pick" type="button" data-scr="${k}" aria-label="${t} scrunchie" style="--c:${c}"><span></span>${t}</button>`).join('')}</div>
-        </div>`;
-}
-function hairAfter() {
-    const pic = $('#hairpic'), hint = $('#hair-hint'), comb = $('#hp-comb');
-    const sync = () => {
-        sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === pic.dataset.style));
-        sheetBody.querySelectorAll('.scr-pick').forEach(b => b.setAttribute('aria-pressed', b.dataset.scr === pic.dataset.scr));
-        hint.textContent = pic.dataset.style === 'down' ? 'drag the comb down through it ↓' : `${HAIR_STYLES[pic.dataset.style].toLowerCase()} with the ${SCRUNCHIES[pic.dataset.scr][2]} one. drag the comb to smooth it ↓`;
-    };
-    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => {
-        pic.dataset.style = b.dataset.hair;
-        // restart the braid weave so it braids itself down from the nape every time
-        if (b.dataset.hair === 'braid') { pic.classList.remove('weave'); void pic.offsetWidth; pic.classList.add('weave'); }
-        sync(); toast(HAIR_LINES[b.dataset.hair]);
-    });
-    sheetBody.querySelectorAll('.scr-pick').forEach(b => b.onclick = () => {
-        const [c, d, t] = SCRUNCHIES[b.dataset.scr];
-        pic.dataset.scr = b.dataset.scr; pic.style.setProperty('--scr', c); pic.style.setProperty('--scr-d', d);
-        if (pic.dataset.style === 'down') { pic.dataset.style = 'pony'; }
-        sync(); toast(b.dataset.scr === 'pink' ? 'pink silk scrunchie. no creases ♡' : 'the brown one. goes with everything.');
-    });
-    // comb it: drag the wide-tooth comb down the hair; a few passes and it shines
-    let d = null, passes = 0; pic.style.touchAction = 'none';
-    pic.addEventListener('pointerdown', e => { const r = pic.getBoundingClientRect(); d = { y0: e.clientY, r }; try { pic.setPointerCapture(e.pointerId); } catch {} });
-    pic.addEventListener('pointermove', e => {
-        if (!d) return; const y = Math.max(0, Math.min(d.r.height - 40, e.clientY - d.r.top - 30));
-        comb.style.transform = `translateY(${y}px) rotate(-45deg)`; comb.style.transition = 'none';
-        if (e.clientY - d.y0 > d.r.height * .55) { d.y0 = 1e9; passes++; pic.classList.remove('shiny'); void pic.offsetWidth; pic.classList.add('shiny');
-            hint.textContent = passes < 3 ? `${3 - passes} more…` : 'silky. no knots ♡'; if (passes === 3) toast('wide teeth, no breakage. we love to see it'); }
-    });
-    const up = () => { if (!d) return; d = null; comb.style.transition = ''; comb.style.transform = ''; };
-    pic.addEventListener('pointerup', up); pic.addEventListener('pointercancel', up);
-    if (pic.dataset.style === 'braid') pic.classList.add('weave');
-    sync();
-}
 
 
 /* my Medici regulars card lives in the wallet's zip pocket: a vanilla latte a day, buy 10 & get 1 free */
@@ -1116,8 +1032,14 @@ const VIEWS = {
         <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
         <p class="rc-stats mono">days in my backpack: <b id="rc-days">21</b> · pages read: <b>0</b></p>
         <div class="row"><button class="btn solid" type="button" id="rc-read">Read it</button></div>`,
-    hairpony: () => hairView('pony'),
-    haircomb: () => hairView('comb'),
+    hairpony: () => `
+        <h2>My silk <em>scrunchies</em></h2>
+        <p class="note">two of them, pink and brown.</p>
+        <div class="solo">${ITEMS.find(i => i.id === 'scrunchies').art}</div>`,
+    haircomb: () => `
+        <h2>My <em>wide-tooth</em> comb</h2>
+        <p class="note">wide teeth, for long hair.</p>
+        <div class="solo">${ITEMS.find(i => i.id === 'comb').art}</div>`,
 
     bag: () => `
         <h2>My <em>backpack</em></h2>
@@ -1934,8 +1856,6 @@ const AFTER = {
         };
         btn.onclick = toggle; rc.onclick = toggle; rc.style.cursor = 'pointer';
     },
-    hairpony: () => hairAfter('pony'),
-    haircomb: () => hairAfter('comb'),
 
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
     phone: () => {

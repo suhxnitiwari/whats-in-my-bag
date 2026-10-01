@@ -2070,3 +2070,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .stan-big.lid-open .lid { animation: unscrew-off .9s cubic-bezier(.45,.05,.4,1) forwards; }
 .stan-big .lid.closing { animation: rescrew-on .8s cubic-bezier(.45,.05,.4,1) forwards; }
 .stan-say { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 6px 0 10px; }
+
+/* comb and scrunchies: just the thing itself */
+.solo { width: min(300px, 70%); margin: 10px auto 18px; }
+.solo svg { display: block; width: 100%; height: auto; }
