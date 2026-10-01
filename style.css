@@ -1320,3 +1320,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 /* wallet: tap the bottom-left of the open wallet to fold it closed */
 .vw.open .p1 { cursor: pointer; }
 .vw.open .p1 .vslot .card { cursor: pointer; }
+/* a picked card comes most of the way out of its slot */
+.vslot .card.picked { transform: translateY(-88%); }
+.vw.has-pick { margin-top: clamp(90px, 14vw, 130px); }

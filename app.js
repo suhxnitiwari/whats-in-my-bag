@@ -1435,7 +1435,7 @@ const AFTER = {
             vw.classList.add('has-pick');
             card.classList.add('picked');
             // same orientation, same size: it just slides straight up, still tucked into its slot at the bottom
-            card.style.transform = 'translateY(-52%)';
+            card.style.transform = 'translateY(-88%)';
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });
