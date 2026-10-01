@@ -1487,3 +1487,8 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .ending { text-align: center; padding: 24px 16px 10px; }
 .end-big { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 4px; }
 .end-line { font-size: 1.35rem; color: var(--plum); margin: 0 0 14px; }
+
+.big-obj { width: min(300px, 80%); margin: 6px auto 10px; }
+.big-obj svg { width: 100%; height: auto; display: block; }
+.big-obj.hugged { animation: hug .6s cubic-bezier(.3,1.6,.5,1); }
+@keyframes hug { 40% { transform: scale(.88, 1.06); } 70% { transform: scale(1.04, .97); } }

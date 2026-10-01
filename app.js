@@ -539,7 +539,10 @@ const dumping = () => bagBtn.classList.contains('tip');
 const SNOOPABLE = ITEMS.filter(i => i.zip !== 'makeup' && i.zip !== 'attached').map(i => i.id);
 const snooped = new Set();
 const COMBOS = [
-    [['laptop', 'headphones'], 'laptop + airpods max: do not disturb.'],
+    [['laptop', 'headphones'], 'laptop + headphones: do not disturb.'],
+    [['ticket', 'keys'], 'a speeding ticket and the car keys. we don’t talk about it.'],
+    [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
+    [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
     [['laptop', 'padfolio', 'notebooks'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
     [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
@@ -572,6 +575,28 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    bear: () => `
+        <h2>yes, there’s a <em>teddy bear</em> in my backpack.</h2>
+        <div class="big-obj">${ITEMS.find(i => i.id === 'bear').art}</div>
+        <p class="note">he goes everywhere. he’s seen things. he has not judged once.</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>`,
+    todo: () => `
+        <h2>an <em>overdue</em> to-do list</h2>
+        <div class="big-obj">${ITEMS.find(i => i.id === 'todo').art}</div>
+        <p class="note">tucked away so it can’t make eye contact with me.</p>`,
+    ticket: () => `
+        <h2>a <em>speeding ticket</em></h2>
+        <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
+        <p class="note">see also: my car keys. and the curb. the curb knows what it did.</p>`,
+    giftcards: () => `
+        <h2>some <em>gift cards</em></h2>
+        <div class="big-obj">${ITEMS.find(i => i.id === 'giftcards').art}</div>
+        <p class="note">balances: a mystery. saving them for a special occasion that never comes.</p>`,
+    pads: () => `
+        <h2><em>pads</em></h2>
+        <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
+        <p class="note">obviously. and yes, you can have one.</p>`,
+
     brushes: () => `
         <h2>My <em>Morphe</em> brushes</h2>
         <p class="note">m241 angled bronzer, m242 cream bronzer, m132 angled concealer, and the eye want it all 7-piece set.</p>
@@ -1190,6 +1215,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    bear: () => { const b = sheetBody.querySelector('.big-obj'); $('#hug').onclick = () => { b.classList.remove('hugged'); void b.offsetWidth; b.classList.add('hugged'); toast('he says thank you ♡'); }; },
     brushes: () => {
         const D = [['M241','Angled Powder Bronzer','bronzer, swept on the cheekbones'],['M242','Slanted Cream & Liquid Bronzer','cream bronzer, buffed in'],['M132','Angled Concealer','concealer, under the eyes'],['Eye','Tapered Blender','blending the crease'],['Eye','Pointed Crease','cutting the crease'],['Eye','Dome Shader','packing on shadow'],['Eye','Pencil','smudging along the lash line'],['Eye','Flat Shader','lid color'],['Eye','Small Detail','inner corners'],['Eye','Angled Liner + Spoolie','brows and liner']], note = $('#mbr-note');
         sheetBody.querySelectorAll('.mbr').forEach(b => b.onclick = () => {
