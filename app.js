@@ -965,37 +965,46 @@ const BIZBOOKS = [["onward", "Onward", "Howard Schultz", "How Howard Schultz cam
 const AP_ART = [["Image 1", "Sketch: traditionalism versus modernism. Thought of essential questions, sketched the woman, decided on the color scheme."], ["Image 2", "Background pattern mirrored on the salwar kameez illustrates how culture is an inherent part of us."], ["Image 3", "Sketch: embracing cultural identity. Essential questions, sketch, colorblocked the rose, decided on the color scheme."], ["Image 4", "Airbrushing two contrasting colors to show how different ideas blend to create an integrated sense of self."], ["Image 5", "Sketch: decided on her pose, sketched my piece, decided the background and the pattern on the blouse."], ["Image 6", "Bold paint strokes in the background to showcase cultural identity."], ["Image 7", "Symmetrical mandala design in the background, continued color blocking on skin."], ["Image 8", "Sketch: used a tripod to take a picture holding scissors and cutting my hair, to show support for Mahsa Amini."], ["Image 9", "Continued use of red to show what a powerful force culture plays in our identity."], ["Image 10", "Navigating Indian-American identity: continued to creatively showcase my Indian-American heritage."], ["Image 11", "Colorblocked skin and bow, added shadows on the cube to give it form, drew two faces of the cube."], ["Image 12", "Embracing Indian heritage: designed a pattern and repeated it on the sleeve and dupatta, drew the jewelry."], ["Image 13", "Repeated the pattern on the sleeve and dupatta to show how ingrained culture is in our identities."], ["Image 14", "Sketch: coexistence of both my worlds. Sketched the flowers, especially the two roses, facing opposite directions."], ["Image 15", "Vibrant flag colors on a bold background capture the essence of Indian-American cultural identity."]];
 // my mailbox, flooded with cards from amaira
 const MAIL_CARDS = [["assets/mail/amaira-9970.jpg", "“Two Starbucks Girls.” us, at starbucks. obviously."], ["assets/mail/amaira-9971.jpg", "“Two Littl Grils Walking on the Street.” spelling: hers."], ["assets/mail/amaira-9972.jpg", "“I’ll love you! I love you! your the sweets sister ever! I’ll miss you!”"], ["assets/mail/amaira-9973.jpg", "a hot cocoa with an S on it. for me."], ["assets/mail/amaira-9974.jpg", "the two of us, hugging. “this love is just…” she ran out of room."], ["assets/mail/amaira-9975.jpg", "“Happy Valentine’s Day.”"], ["assets/mail/amaira-9976.jpg", "“Girl boss. To: the best sister ever, Didi. From: Amaira. xoxo, Amaripop. I am lucky to have you.”"], ["assets/mail/amaira-9978.jpg", "“Thinking a latte about you.”"], ["assets/mail/amaira-9979.jpg", "a sparkly latte cup, tucked inside a card."], ["assets/mail/amaira-9980.jpg", "“Dear didi, I hope you have a nice time in college. your the sweetest sister ever! I’ll love you forever.”"], ["assets/mail/amaira-9981.jpg", "“Happy Bithday Didi!” with a heart that says suhani & amaira."], ["assets/mail/amaira-9982.jpg", "“Merry Christmas and Happy New Year!! To: Didi From: Amaira.”"], ["assets/mail/amaira-9983.jpg", "“I Love You.”"]];
+// an open book: left page is the cover, drawn; right page is the chapter and its synopsis
+const bookHTML = (cover, say) => `
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="drawn" x="0" y="0" width="100%" height="100%"><feColorMatrix type="saturate" values=".9"/><feComponentTransfer><feFuncR type="discrete" tableValues="0 .2 .4 .6 .8 1"/><feFuncG type="discrete" tableValues="0 .2 .4 .6 .8 1"/><feFuncB type="discrete" tableValues="0 .2 .4 .6 .8 1"/></feComponentTransfer><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></svg>
+        <div class="bk" id="bk">
+            <button type="button" class="bk-closed" id="bk-closed" aria-label="Open the book">${cover}</button>
+            <div class="bk-open" aria-live="polite">
+                <div class="bk-page bk-l"><div class="bk-art"><img id="bk-img" alt=""></div></div>
+                <div class="bk-page bk-r"><p class="bk-ch" id="bk-ch"></p><h3 id="bk-t"></h3><p class="bk-a" id="bk-a"></p><p class="bk-s" id="bk-s"></p><span class="bk-num mono" id="bk-num"></span></div>
+                <div class="bk-leaf" id="bk-leaf"></div>
+            </div>
+        </div>
+        <p class="hand rcx-say">${say}</p>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`;
+const WORDS = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
 // a book you open, where every chapter is another book: [cover file, title, author, synopsis]
 function chapterBook(list, bye) {
-    const rc = $('#rc'), btn = $('#rc-read'), box = $('#rcx');
+    const bk = $('#bk'), btn = $('#rc-read'), leaf = $('#bk-leaf');
     let ch = -1;
-    const show = () => {
+    const fill = () => {
         const [f, t, au, syn] = list[ch];
-        $('#rcx-cover').src = `assets/covers/${f}.jpg`; $('#rcx-cover').alt = `${t} by ${au}`;
-        $('#rcx-ch').textContent = `chapter ${ch + 1} of ${list.length}`; $('#rcx-t').textContent = t; $('#rcx-a').textContent = au; $('#rcx-s').textContent = syn;
-        box.classList.remove('turn'); void box.offsetWidth; box.classList.add('turn');
+        $('#bk-img').src = `assets/covers/${f}.jpg`; $('#bk-img').alt = `${t}, drawn`;
+        $('#bk-ch').textContent = `Chapter ${WORDS[ch] || ch + 1}`; $('#bk-t').textContent = t; $('#bk-a').textContent = au; $('#bk-s').textContent = syn;
+        $('#bk-num').textContent = `${ch + 1} / ${list.length}`;
         $('#rcx-prev').hidden = ch === 0;
         btn.textContent = ch === list.length - 1 ? 'Close it' : 'next chapter ›';
     };
+    const turn = dir => { leaf.className = 'bk-leaf ' + (dir > 0 ? 'fwd' : 'back'); void leaf.offsetWidth; leaf.classList.add('go'); setTimeout(fill, reduce ? 0 : 280); };
     const next = () => {
-        if (!rc.classList.contains('open')) { rc.classList.add('open'); ch = 0; box.hidden = false; return setTimeout(show, reduce ? 0 : 450); }
-        if (ch === list.length - 1) { rc.classList.remove('open'); box.hidden = true; ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast(bye); }
-        ch++; show();
+        if (!bk.classList.contains('open')) { bk.classList.add('open'); ch = 0; return fill(); }
+        if (ch === list.length - 1) { bk.classList.remove('open'); ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast(bye); }
+        ch++; turn(1);
     };
-    btn.onclick = next; rc.onclick = next; rc.style.cursor = 'pointer';
-    $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; show(); } };
+    btn.onclick = next; $('#bk-closed').onclick = next;
+    $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; turn(-1); } };
 }
 const VIEWS = {
     onward: () => `
         <h2><em>Onward</em></h2>
         <p class="note">howard schultz. how starbucks fought for its life without losing its soul. open it: every chapter is another book behind the business.</p>
-        <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'onward').art}</div></div></div>
-        <div class="rcx" id="rcx" hidden>
-            <img id="rcx-cover" alt="">
-            <div><p class="rcx-ch mono" id="rcx-ch"></p><h3 id="rcx-t"></h3><p class="rcx-a" id="rcx-a"></p><p class="rcx-s" id="rcx-s"></p></div>
-        </div>
-        <p class="hand rcx-say">how things work: the books behind how i think about products, brands and people.</p>
-        <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`,
+        ${bookHTML(ITEMS.find(i => i.id === 'onward').art, 'how things work: the books behind how i think about products, brands and people.')}`,
     mailbox: () => `
         <h2>My <em>mailbox</em></h2>
         <p class="note">one gold key. it’s mostly packages i definitely needed. but every time i open it, it’s flooded with cards from my little sister.</p>
@@ -1235,13 +1244,7 @@ const VIEWS = {
     romcom: () => `
         <h2><em>You Deserve Each Other</em></h2>
         <p class="note">sarah hogle. one of the rom-coms i’ll never shut up about. open it: every chapter is another one.</p>
-        <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
-        <div class="rcx" id="rcx" hidden>
-            <img id="rcx-cover" alt="">
-            <div><p class="rcx-ch mono" id="rcx-ch"></p><h3 id="rcx-t"></h3><p class="rcx-a" id="rcx-a"></p><p class="rcx-s" id="rcx-s"></p></div>
-        </div>
-        <p class="hand rcx-say">enemies to lovers, fake dating, happy endings: i know how every one ends and still can’t put them down.</p>
-        <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`,
+        ${bookHTML(ITEMS.find(i => i.id === 'romcom').art, 'enemies to lovers, fake dating, happy endings: i know how every one ends and still can’t put them down.')}`,
     hairpony: () => `
         <h2>My silk <em>scrunchies</em></h2>
         <p class="note">two of them, pink and brown.</p>

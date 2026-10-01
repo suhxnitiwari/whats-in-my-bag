@@ -2262,3 +2262,29 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 
 /* a hidden button stays hidden (button styles were overriding the hidden attribute) */
 .btn[hidden], button[hidden] { display: none !important; }
+
+/* a real open book: cover (drawn) on the left, chapter + synopsis on the right */
+.bk { position: relative; width: min(660px, 100%); margin: 14px auto 6px; perspective: 1600px; }
+.bk-closed { display: block; width: 200px; margin: 0 auto; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .3s; filter: drop-shadow(0 12px 16px rgba(40,20,20,.3)); }
+.bk-closed svg { display: block; width: 100%; height: auto; }
+.bk-closed:hover { transform: rotate(-2deg) translateY(-4px); }
+.bk-open { display: none; position: relative; grid-template-columns: 1fr 1fr; aspect-ratio: 1.45; background: #EFE6D6; border: 2px solid var(--ink); border-radius: 6px; box-shadow: 0 18px 30px -16px rgba(40,20,20,.5); padding: 6px; }
+.bk.open .bk-closed { display: none; }
+.bk.open .bk-open { display: grid; animation: bk-in .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes bk-in { from { opacity: 0; transform: rotateY(-25deg) scale(.9); } }
+.bk-page { position: relative; background: #FFFCF4; padding: 18px 20px; overflow: hidden; }
+.bk-l { border-radius: 4px 0 0 4px; box-shadow: inset -14px 0 18px -14px rgba(0,0,0,.35); display: grid; place-items: center; }
+.bk-r { border-radius: 0 4px 4px 0; box-shadow: inset 14px 0 18px -14px rgba(0,0,0,.35); }
+.bk-art { width: 72%; padding: 8px; background: #fff; border: 1.5px solid #3A2626; border-radius: 2px; transform: rotate(-2deg); box-shadow: 3px 3px 0 rgba(58,38,38,.15); }
+.bk-art img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; filter: url(#drawn) saturate(1.1); }
+.bk-ch { margin: 0; font: 600 1.35rem var(--hand); color: var(--plum); }
+.bk-r h3 { margin: 2px 0 0; font: 400 clamp(1.05rem, 2.2vw, 1.4rem)/1.15 var(--serif); }
+.bk-a { margin: 2px 0 10px; font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.bk-s { margin: 0; font: 400 clamp(.82rem, 1.6vw, .95rem)/1.55 var(--serif); color: #3A2E2A; }
+.bk-num { position: absolute; right: 16px; bottom: 10px; font-size: .62rem; color: var(--muted); text-transform: none; }
+.bk-leaf { position: absolute; top: 6px; bottom: 6px; left: 50%; right: 6px; background: #FFFCF4; border-radius: 0 4px 4px 0; transform-origin: 0 50%; opacity: 0; pointer-events: none; box-shadow: inset 10px 0 14px -10px rgba(0,0,0,.3); }
+.bk-leaf.go.fwd { animation: bk-turn .55s ease-in-out; }
+.bk-leaf.go.back { animation: bk-turn-back .55s ease-in-out; }
+@keyframes bk-turn { 0% { opacity: 1; transform: rotateY(0); } 100% { opacity: 1; transform: rotateY(-180deg); } }
+@keyframes bk-turn-back { 0% { opacity: 1; transform: rotateY(-180deg); } 100% { opacity: 1; transform: rotateY(0); } }
+@media (max-width: 760px) { .bk-open { aspect-ratio: auto; grid-template-columns: 1fr; } .bk-l { min-height: 220px; } }
