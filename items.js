@@ -216,8 +216,16 @@ window.ITEMS = [
         open: 'pencil'
     },
     {
-        id: 'phone', name: 'my phone', zip: 'shades', l: 82, t: 24, w: 6, r: -8,
-        art: `<svg viewBox="0 0 90 180"><rect x="4" y="4" width="82" height="172" rx="16" fill="#F2C6C8" ${S}/><rect x="20" y="16" width="26" height="26" rx="8" fill="#E9A9B6" ${S} stroke-width="2"/><circle cx="33" cy="29" r="7" fill="#3A2626"/><circle cx="56" cy="22" r="3" fill="#3A2626"/><path d="M30 120 C10 104 12 86 24 86 C30 86 32 92 32 95 C32 92 34 86 40 86 C52 86 54 104 30 120Z" fill="#FFFBF8" ${S} stroke-width="2"/><text x="45" y="150" text-anchor="middle" font-family="Caveat" font-size="16" fill="${INK}">s.t.</text></svg>`,
+        id: 'phone', name: 'my iphone', zip: 'shades', l: 82, t: 25, w: 7.3, r: -8,
+        art: `<svg viewBox="0 0 94 190"><defs><linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F5F6"/><stop offset=".55" stop-color="#E2E4E7"/><stop offset="1" stop-color="#CED1D5"/></linearGradient></defs>
+            <rect x="3" y="3" width="88" height="184" rx="16" fill="url(#silver)" ${S}/>
+            <rect x="6" y="8" width="82" height="48" rx="11" fill="#EEF0F2" stroke="#3A2626" stroke-width="1.6"/>
+            <g stroke="#3A2626" stroke-width="1.6"><circle cx="22" cy="22" r="9" fill="#2A2C31"/><circle cx="22" cy="44" r="9" fill="#2A2C31"/><circle cx="40" cy="33" r="9" fill="#2A2C31"/></g>
+            <g fill="#4B5263"><circle cx="22" cy="22" r="4"/><circle cx="22" cy="44" r="4"/><circle cx="40" cy="33" r="4"/></g>
+            <circle cx="74" cy="20" r="4.5" fill="#F7F7F4" stroke="#3A2626" stroke-width="1.2"/><circle cx="74" cy="42" r="3.5" fill="#2A2C31"/><circle cx="62" cy="33" r="1.4" fill="#2A2C31"/>
+            <path d="M47 112 c-6 0 -10 5 -9 11 c1 7 5 12 9 12 c4 0 8 -5 9 -12 c1 -6 -3 -11 -9 -11z" fill="#D7DADE"/><path d="M48 107 c1 -3 4 -4 5 -4" stroke="#D7DADE" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M12 64 v108" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+        </svg>`,
         open: 'phone'
     },
     {

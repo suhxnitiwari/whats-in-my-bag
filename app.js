@@ -502,7 +502,7 @@ const VIEWS = {
 
     phone: () => `
         <h2>My <em>phone</em></h2>
-        <p class="note">lives in the sunglasses pocket, in its pink case</p>
+        <p class="note">iphone 18 pro max, silver. lives in the sunglasses pocket.</p>
         <div class="phone-big">
             <div class="screen" id="screen">
                 <p class="clock mono" id="clock"></p>

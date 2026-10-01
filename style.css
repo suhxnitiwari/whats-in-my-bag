@@ -725,3 +725,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .mbag .mk { transform: translateX(calc(-50% + var(--x, 0px))) rotate(calc(var(--a) * .2)) translateY(70%); }
 .mbag.open .mk { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(0); }
 .mbag.open .mk:hover { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(-14px); }
+
+/* my phone is silver */
+.phone-big { background: linear-gradient(135deg, #F4F5F6, #CED1D5); }
