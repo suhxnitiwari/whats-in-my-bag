@@ -24,9 +24,10 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Erin Condren notebooks | My classes |
 | Pink Stanley | Slides out of the side pocket, the lid twists off; a water tracker, because I don't drink enough water |
 | Medici regulars card (in the wallet's zip pocket) | A vanilla latte a day: stamp it, buy 10 & get 1 free |
-| Paperback rom-com | Three weeks in my backpack, still on chapter one |
+| You Deserve Each Other, Sarah Hogle (paperback rom-com) | Three weeks in my backpack, still on chapter one |
+| Brown cap | A cap is a must |
 | Two silk scrunchies, a wooden claw clip, a wide-tooth comb | Try each one on |
-| Ralph Lauren cable knit sweater | Because I get cold easily |
+| Pink Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
 

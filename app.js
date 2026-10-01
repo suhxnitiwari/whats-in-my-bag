@@ -256,10 +256,15 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    cap: () => `
+        <h2>My <em>cap</em></h2>
+        <p class="note">a cap is a must.</p>
+        <p>Brown, tone on tone, goes with everything. Bad hair day, sunny day, running-late day.</p>
+        <div class="row"><button class="btn solid" type="button" id="cap-on">Put it on</button></div>`,
     romcom: () => `
-        <h2>My <em>rom-com</em></h2>
-        <p class="note">a paperback. it’s been in my backpack for three weeks. i keep saying i’ll read it.</p>
-        <div class="rc-wrap"><div class="rc" id="rc"><div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
+        <h2><em>You Deserve Each Other</em></h2>
+        <p class="note">sarah hogle. a paperback rom-com. it’s been in my backpack for three weeks. i keep saying i’ll read it.</p>
+        <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
         <p class="rc-stats mono">days in my backpack: <b id="rc-days">21</b> · pages read: <b>0</b></p>
         <div class="row"><button class="btn solid" type="button" id="rc-read">Read it</button></div>`,
     hairpony: () => hairView('pony'),
@@ -488,7 +493,7 @@ const VIEWS = {
 
     sweater: () => `
         <h2>My Ralph Lauren <em>cable knit</em></h2>
-        <p class="note">camel, cozy, always in my bag. i get cold easily.</p>
+        <p class="note">pink, cable knit, always in my bag. i get cold easily.</p>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
         <div class="row"><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
@@ -772,6 +777,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
         const pp = $('#pp'), b = $('#pp-flip');
         b.onclick = () => {

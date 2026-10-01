@@ -190,19 +190,19 @@ window.ITEMS = [
         open: 'stanley'
     },
     {
-        id: 'sweater', name: 'my ralph lauren cable knit', zip: 'main', l: 13, t: 50, w: 23, r: -4,
+        id: 'sweater', name: 'my pink ralph lauren cable knit', zip: 'main', l: 13, t: 50, w: 23, r: -4,
         art: `<svg viewBox="0 0 240 170"><defs>
-            <pattern id="rib" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#A9744C"/><path d="M3 0 v10" stroke="#8C5D3A" stroke-width="2"/></pattern>
-            <pattern id="cable" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#B98258"/>
-                <path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#8E5E3A" stroke-width="2.6"/>
-                <path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#9A6842" stroke-width="2.2"/>
-                <path d="M19 0 v28" stroke="#A5704A" stroke-width="1.6" stroke-dasharray="2 2"/>
+            <pattern id="rib" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern>
+            <pattern id="cable" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/>
+                <path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#D9849C" stroke-width="2.6"/>
+                <path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#DE8CA2" stroke-width="2.2"/>
+                <path d="M19 0 v28" stroke="#E395A9" stroke-width="1.6" stroke-dasharray="2 2"/>
             </pattern></defs>
             <path d="M8 60 C4 90 6 130 14 150 L36 150 L40 64Z" fill="url(#cable)" ${S} stroke-width="2.5"/>
             <rect x="26" y="34" width="200" height="124" rx="16" fill="url(#cable)" ${S}/>
             <rect x="26" y="138" width="200" height="20" rx="8" fill="url(#rib)" ${S} stroke-width="2.5"/>
-            <path d="M92 34 C96 58 156 58 160 34" fill="url(#rib)" ${S} stroke-width="2.5"/>
-            <path d="M100 34 C104 50 148 50 152 34" fill="#7A4E30" ${S} stroke-width="2"/>
+            <path d="M90 34 L126 84 L162 34Z" fill="url(#rib)" ${S} stroke-width="2.5"/>
+            <path d="M102 34 L126 68 L150 34Z" fill="#C56C86" ${S} stroke-width="2"/>
             <rect x="118" y="36" width="16" height="6" rx="1.5" fill="#F4EFE6" stroke="#3A2626" stroke-width="1"/>
             <path d="M40 46 q40 -8 80 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".14"/>
         </svg>`,
@@ -214,12 +214,19 @@ window.ITEMS = [
         open: 'notebooks'
     },
     {
-        id: 'romcom', name: 'my rom-com (unread)', zip: 'main', l: 24, t: 67, w: 9, r: -7,
-        art: `<svg viewBox="0 0 110 160"><path d="M60 0 v22 l6 -5 6 5 V0" fill="#C9475F" stroke="#3A2626" stroke-width="2"/>
-            <rect x="6" y="6" width="98" height="148" rx="4" fill="#F8C9D4" ${S}/><rect x="6" y="6" width="12" height="148" rx="3" fill="#EFB0C0" stroke="#3A2626" stroke-width="2"/>
-            <circle cx="62" cy="64" r="26" fill="#FFE7A8"/><path d="M62 84 c-22 -14 -26 -30 -14 -36 c7 -3 12 1 14 6 c2 -5 7 -9 14 -6 c12 6 8 22 -14 36z" fill="#E4577A" stroke="#3A2626" stroke-width="2.5"/>
-            <path d="M32 112 q14 -8 30 0 t30 0" fill="none" stroke="#3A2626" stroke-width="3" stroke-linecap="round"/><path d="M40 126 h44" stroke="#3A2626" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-            <path d="M24 16 q20 -4 34 2" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/></svg>`,
+        id: 'romcom', name: 'you deserve each other (unread)', zip: 'main', l: 24, t: 67, w: 9, r: -7,
+        art: `<svg viewBox="0 0 110 160"><rect x="4" y="4" width="102" height="152" rx="3" fill="#A51F52" ${S}/>
+            <rect x="64" y="10" width="34" height="26" fill="#F7E4DC" stroke="#3A2626" stroke-width="1.5"/><rect x="58" y="10" width="7" height="26" fill="#FBF4EE" stroke="#3A2626" stroke-width="1.2"/><rect x="97" y="10" width="7" height="26" fill="#FBF4EE" stroke="#3A2626" stroke-width="1.2"/>
+            <circle cx="80" cy="20" r="5" fill="#E9B79C"/><path d="M75 19 q5 -9 10 0 v6 h-10z" fill="#7A3B1E"/><path d="M73 36 q7 -8 14 0" fill="#3C3F8F"/><path d="M58 37 h46" stroke="#3A2626" stroke-width="2"/>
+            <path d="M44 46 l4 -4 4 3 3 -4 3 5" fill="none" stroke="#F4F0E8" stroke-width="2.4" stroke-linecap="round"/><circle cx="48" cy="44" r="2" fill="#7BB98C"/><circle cx="55" cy="42" r="2" fill="#7BB98C"/>
+            <g font-family="Kalam, Caveat, cursive" font-weight="700" text-anchor="middle">
+                <text x="18" y="56" font-size="5" fill="#F4F0E8" text-anchor="start" font-family="Instrument Sans" font-weight="400">a novel</text>
+                <text x="56" y="70" font-size="17" fill="#F4F0E8">YOU</text>
+                <text x="58" y="88" font-size="16" fill="#F4F0E8">DESERVE</text>
+                <text x="64" y="106" font-size="17" fill="#BFE6D6">EACH</text>
+                <text x="64" y="124" font-size="17" fill="#F4F0E8">OTHER</text>
+                <text x="68" y="143" font-size="11" fill="#BFE6D6" font-family="Instrument Sans" font-weight="600">Sarah Hogle</text></g>
+            <circle cx="18" cy="104" r="5" fill="#E9B79C"/><path d="M13 103 q5 -7 10 0" fill="#3A2A20"/><path d="M10 112 h16 l1 22 h-18z" fill="#2E3466"/><path d="M12 116 h12" stroke="#F4F0E8" stroke-width="3"/><path d="M12 134 h6 v14 h-6z M19 134 h6 v14 h-6z" fill="#5A3A26"/></svg>`,
         open: 'romcom'
     },
     {
@@ -243,6 +250,17 @@ window.ITEMS = [
             <g stroke="#3A2626" stroke-width="1.4" opacity=".5">${[22,40,58,76,94,112,130,148].map(x => `<path d="M${x-4} 26 v28 M${x+4} 26 v28"/>`).join('')}</g>
             <path d="M16 16 q50 -3 90 1" stroke="#E2B386" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
         open: 'haircomb'
+    },
+    {
+        id: 'cap', name: 'my brown cap', zip: 'main', l: 70, t: 35, w: 10, r: -6,
+        art: `<svg viewBox="0 0 160 110"><path d="M28 72 C26 26 70 8 104 18 C128 26 140 46 138 70Z" fill="#5C4535" ${S}/>
+            <path d="M82 13 C84 34 84 54 82 72 M58 18 C52 36 50 54 52 72 M112 22 C120 38 124 54 124 70" fill="none" stroke="#4A3628" stroke-width="2"/>
+            <circle cx="84" cy="13" r="4" fill="#5C4535" stroke="#3A2626" stroke-width="2"/><circle cx="66" cy="34" r="1.8" fill="#3A2A20"/><circle cx="104" cy="34" r="1.8" fill="#3A2A20"/>
+            <path d="M70 40 l6 14 4 -12 4 12 6 -14" fill="none" stroke="#3E2D21" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>
+            <path d="M18 72 Q80 86 146 70 Q150 92 96 100 Q38 102 18 72Z" fill="#4E3A2C" ${S}/>
+            <path d="M30 78 Q80 90 136 76 M38 84 Q82 95 128 82" fill="none" stroke="#6B5444" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <path d="M40 30 q16 -14 36 -16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".12"/></svg>`,
+        open: 'cap'
     },
     {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 10, t: 86, w: 17, r: -5,
@@ -338,28 +356,27 @@ window.EC = (bands, big) => `<svg viewBox="0 0 170 220" aria-hidden="true">
 
 
 /* my keys: BMW fob + apartment fob, close together on one ring. Each one is its own tap. */
-window.BMW_FOB = `<svg viewBox="0 0 80 210"><path d="M30 128 h20 v52 l-4 4 4 5 -4 4 4 5 -6 8 h-8 l-6 -8 z" fill="#D8DBDF" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 134 v64" stroke="#fff" stroke-width="2" opacity=".7"/>
-            <rect x="6" y="4" width="68" height="132" rx="20" fill="#141416" ${S}/>
-            <path d="M8 40 h64" stroke="#2A5BD7" stroke-width="4"/><path d="M8 46 h64" stroke="#8CC4F0" stroke-width="2.5"/>
-            <path d="M18 14 q6 -6 16 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".15"/>
-            <g fill="#26272B" stroke="#3A2626" stroke-width="1.5"><rect x="18" y="56" width="44" height="18" rx="5"/><rect x="18" y="78" width="44" height="18" rx="5"/><rect x="18" y="100" width="44" height="14" rx="5"/></g>
-            <path d="M35 61 h8 v8 h-8z M37 61 v-3 a2 2 0 0 1 4 0 v3" fill="none" stroke="#C9D3DD" stroke-width="1.5"/>
-            <path d="M35 83 h8 v8 h-8z M37 83 v-3 a2 2 0 0 1 4 0" fill="none" stroke="#8CC4F0" stroke-width="1.5"/>
-            <path d="M31 110 h18 l-3 -4 h-5 l-2 -2 h-5 z" fill="none" stroke="#C9D3DD" stroke-width="1.3" stroke-linejoin="round"/>
-            <circle cx="40" cy="124" r="6" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/><circle cx="38" cy="122" r="1.8" fill="#fff"/>
-            <rect x="34" y="-4" width="12" height="12" rx="3" fill="#141416" ${S} stroke-width="2"/>
+window.BMW_FOB = `<svg viewBox="0 -8 80 158"><rect x="33" y="-6" width="14" height="10" rx="3" fill="#1A1A1C" stroke="#3A2626" stroke-width="2"/>
+            <path d="M22 3 H58 L72 22 L74 118 L60 146 H20 L6 118 L8 22Z" fill="#0F0F11" ${S}/>
+            <path d="M42 4 C34 50 30 100 28 145" fill="none" stroke="#2A2A2E" stroke-width="1.6"/>
+            <path d="M18 12 q8 -6 20 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".22"/>
+            <path d="M8 25 L30 47" stroke="#D8432F" stroke-width="4.5"/><path d="M30 47 L63 82 Q70 90 70 102 V140" fill="none" stroke="#2F6BD8" stroke-width="4.5"/>
+            <circle cx="40" cy="108" r="9.5" fill="#CDD1D6" stroke="#3A2626" stroke-width="1.5"/><circle cx="40" cy="108" r="6.5" fill="#1C1C20"/><circle cx="38" cy="106" r="1.6" fill="#fff" opacity=".6"/>
+            <path d="M54 88 h7 v6 h-7z M55.5 88 v-2.5 a2 2 0 0 1 4 0" fill="none" stroke="#C9D3DD" stroke-width="1.3"/>
+            <circle cx="58" cy="126" r="5.5" fill="none" stroke="#C9D3DD" stroke-width="1.2"/><text x="58" y="128.3" text-anchor="middle" font-family="Instrument Sans" font-size="5.5" fill="#C9D3DD">3x</text>
         </svg>`;
-window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M15 3 h18 a7 7 0 0 1 7 7 v5 C45 19 46.5 26 46 34 a22 22 0 1 1 -44 0 C1.5 26 3 19 8 15 v-5 a7 7 0 0 1 7 -7Z" fill="#1F3A93" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>
+window.SALTO_FOB = `<svg viewBox="0 0 48 66"><path d="M15 3 h18 a7 7 0 0 1 7 7 v5 C45 19 46.5 26 46 34 a22 22 0 1 1 -44 0 C1.5 26 3 19 8 15 v-5 a7 7 0 0 1 7 -7Z" fill="#1F3A93" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>
     <rect x="15" y="8" width="18" height="7.5" rx="3.75" fill="#FAF1EF" stroke="#16296B" stroke-width="1.5"/>
     <circle cx="24" cy="40" r="17" fill="#F7F5F0" stroke="#16296B" stroke-width="1.2"/>
     <path d="M12 37 h24" stroke="#2B2B2E" stroke-width="3.2" stroke-linecap="round"/><path d="M13 43.5 h22" stroke="#7A7A7E" stroke-width="2" stroke-linecap="round"/><path d="M19 50 h10" stroke="#B3B3B8" stroke-width="1.4" stroke-linecap="round"/>
     <path d="M34 28 q4 4 3 12" fill="none" stroke="#E9E2D6" stroke-width="1.5" stroke-linecap="round"/><path d="M8 24 q3 -6 9 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".25"/></svg>`;
+window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M24 3 C34 3 46 22 45 42 C44 64 4 64 3 42 C2 22 14 3 24 3Z" fill="#9EA49F" stroke="#3A2626" stroke-width="2.5"/><circle cx="24" cy="12" r="4.5" fill="#FAF1EF" stroke="#6F746F" stroke-width="1.5"/><rect x="11" y="30" width="26" height="9" rx="2" fill="none" stroke="#7D837E" stroke-width="1.4" transform="rotate(-8 24 34)"/><path d="M14 22 q4 -8 10 -10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".3"/></svg>`;
 window.KEYRING = big => `<svg viewBox="0 0 130 252" class="keyring${big ? ' big' : ''}">
     <circle cx="66" cy="26" r="20" fill="none" stroke="#B9BCC2" stroke-width="6"/><circle cx="66" cy="26" r="20" fill="none" stroke="#3A2626" stroke-width="1.5"/>
     <g data-part="apartment" class="kpart"><circle cx="50" cy="52" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="50" cy="52" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
         <g transform="translate(25 47) rotate(6 24 33)">${window.APT_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="50" height="69" viewBox="0 0 48 66">')}</g></g>
     <g data-part="bmw" class="kpart"><circle cx="78" cy="50" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="78" cy="50" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
-        <g transform="translate(52 58)">${window.BMW_FOB.replace('<svg viewBox="0 0 80 210">', '<svg width="68" height="179" viewBox="0 -6 80 216" overflow="visible">')}</g></g>
+        <g transform="translate(52 58)">${window.BMW_FOB.replace('<svg viewBox="0 -8 80 158">', '<svg width="70" height="138" viewBox="0 -8 80 158" overflow="visible">')}</g></g>
 </svg>`;
 
 /* my wallet: student ID, driver license, and my cards. Cards pop out like file folders. */
