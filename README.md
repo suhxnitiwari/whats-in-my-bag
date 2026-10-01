@@ -14,7 +14,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Mildliner pouch | The full 25-pack: every color is a class I took at UT Austin, highlighted when you pick it |
 | Paper Mate pouch | 20 InkJoy Gel pens: pick one and write by hand on the notepad, plus my BIC mechanical pencils |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
-| Phone | A home screen with Photos, Instagram and LinkedIn |
+| Phone (iPhone 18 Pro Max, pink case) | Photos, Instagram, LinkedIn, Spotify, YouTube, Netflix, Prime, Google Calendar and Duolingo |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |

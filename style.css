@@ -740,3 +740,52 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .holder::after { content: ""; position: absolute; left: -2%; right: -6%; top: 46%; height: 11%; background: #1A181C; border-top: 1.5px solid #3A2626; border-bottom: 1.5px solid #3A2626;
     box-shadow: inset -26px 0 0 -8px #4A474F; }
 .holder { left: -26%; }
+
+/* only the drawn shapes are tappable, so neighbors in the fan don't steal each other's taps */
+.mbag .mk { pointer-events: none; }
+.mbag.open .mk svg { pointer-events: none; }
+.mbag.open .mk svg * { pointer-events: visiblePainted; cursor: pointer; }
+.mbag.open .mk span { pointer-events: auto; cursor: pointer; }
+.mbag.open .mk { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(var(--rise, 0px)); }
+.mbag.open .mk:hover { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(calc(var(--rise, 0px) - 14px)); }
+/* foundation: the tube squeezes and my shade swipes out */
+.mbag .mk.squeeze svg { animation: squeeze .5s ease; transform-origin: 50% 100%; }
+@keyframes squeeze { 40% { transform: scaleX(.82) scaleY(1.03); } }
+.swatch { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 0; height: 0; overflow: hidden; transition: height .3s; }
+.swatch.on { height: 64px; }
+.swatch svg { width: 200px; }
+.swatch #swipe { stroke-dasharray: 260; stroke-dashoffset: 260; }
+.swatch.on #swipe { animation: swipe-on .9s cubic-bezier(.3,.7,.3,1) .15s forwards; }
+@keyframes swipe-on { to { stroke-dashoffset: 0; } }
+.swatch span { font-size: 1.35rem; color: var(--plum); opacity: 0; transition: opacity .4s .6s; }
+.swatch.on span { opacity: 1; }
+/* items in the fan keep their real width (the global max-width was squeezing the brushes) */
+.mbag .mk { width: max-content; }
+.mbag .mk svg { max-width: none; }
+
+/* Google Calendar on my phone */
+.ic-cal { background: #fff; }
+.gcal { font-family: -apple-system, system-ui, sans-serif; color: #202124; }
+.gcal-h { margin: 6px 0 0; display: flex; align-items: baseline; gap: 6px; }
+.gcal-h b { font-size: 1rem; } .gcal-h span { font-size: .75rem; color: #5F6368; }
+.gcal-sub { margin: 2px 0 10px; font-family: var(--hand); font-size: 1.05rem; color: var(--plum); }
+.gcal-ev { display: grid; grid-template-columns: 34px 1fr; gap: 6px; align-items: center; margin-bottom: 7px; }
+.gcal-ev .t { font-size: .6rem; color: #5F6368; text-align: right; }
+.gcal-ev .e { padding: 7px 8px; border-radius: 6px; color: #fff; font-size: .7rem; font-weight: 600; }
+
+/* Duolingo on my phone */
+.ic-duo { background: #58CC02; }
+.duo { font-family: -apple-system, system-ui, sans-serif; color: #3C3C3C; text-align: center; }
+.duo-streak { margin: 6px 0 2px; font-weight: 800; color: #FF9600; }
+.duo-h { margin: 0 0 14px; font-size: .78rem; font-weight: 700; }
+.duo-path { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding-left: 50px; }
+.duo-node { width: 46px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #E5E5E5; color: #AFAFAF; font-size: .9rem; box-shadow: 0 5px 0 #CECECE; }
+.duo-node.done { background: #FFC800; color: #fff; box-shadow: 0 5px 0 #E5A800; }
+.duo-node.now { background: #58CC02; color: #fff; box-shadow: 0 5px 0 #46A302; }
+/* the card you pick is big and readable */
+.vread .card.big { width: min(500px, 96%); }
+.vread.show { min-height: 330px; }
+.vread .card.big .dl-fields { font-size: 2.9cqw; line-height: 1.22; }
+.vread .card.big .dl-fine { font-size: 3.2cqw; }
+.vread .card.big .dl-state { font-size: 5cqw; }
+.vread .card.big .t { font-size: 3cqw; }
