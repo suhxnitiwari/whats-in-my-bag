@@ -945,7 +945,7 @@ const SKIN_INFO = {
     sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley'],
     lash: ['Grande Cosmetics GrandeLASH-MD Lash Enhancing Serum', 'one swipe along my lash line.', 'grandelash'],
     laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige'],
-    mask: ['Olivia von Halle Audrey Aspen Eye Mask, ivory cashmere', 'ivory cashmere. lights out.', 'eye mask']
+    mask: ['Olivia von Halle Audrey Aspen Eye Mask', 'lights out.', 'eye mask']
 };
 // my night routine, in order. patches go on clean, dry skin first and come off before the rest
 const ROUTINE = ['patches', 'pinkpump', 'dropper', 'lash', 'goldpump', 'laneige', 'lamer', 'sisley', 'mask'];
@@ -955,7 +955,7 @@ const SKIN_FX = {
     lamer: [null, 'la mer under both eyes, with the little spoon. as it should be.'], sisley: [null, 'sisley on. night cream, all over.'],
     lash: ['lashes', 'grandelash on. lashes, but more.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'under-eye patches on. cool and squishy. tap them on my face to peel them off.'],
-    mask: [null, 'eye mask on. ivory cashmere. goodnight ✨']
+    mask: [null, 'eye mask on. goodnight ✨']
 };
 // amaira's cards, redrawn: her words, her spelling, her colors
 const KM = 'font-family="Kalam, Caveat, cursive"';
@@ -1110,9 +1110,11 @@ const VIEWS = {
     skinbag: () => `
         <h2>My <em>skincare</em> pouch</h2>
         <p class="note">another victoria’s secret pouch, just for skincare. here’s everything in it ↓</p>
+        <div class="skin-layout">
+        <div class="skin-left">
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['patches', 120, -168, -36, 0, -34], ['pinkpump', 190, -126, -27, 0, -6], ['dropper', 172, -84, -18, 0, 0], ['lash', 176, -42, -9, 0, 0], ['goldpump', 190, 0, 0, 0, 0], ['laneige', 64, 42, 9, 0, -40], ['lamer', 84, 84, 18, 0, -40], ['sisley', 86, 126, 27, 0, -40], ['mask', 64, 170, 36, 0, -30]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['patches', 112, -182, -38, 0, -34], ['pinkpump', 160, -128, -27, 0, -6], ['dropper', 126, -88, -18, 0, 0], ['lash', 132, -48, -9, 0, 0], ['goldpump', 160, -6, 0, 0, 0], ['laneige', 58, 38, 9, 0, -40], ['lamer', 62, 76, 18, 0, -40], ['sisley', 82, 116, 27, 0, -40], ['mask', 196, 184, 26, 0, -30]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -1128,9 +1130,10 @@ const VIEWS = {
         <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden></button></p>
         <p class="pen-note" id="mk-note">pull the zipper</p>
         <h3 class="routine-h">my night routine</h3>
-        <p class="routine-sub hand" id="routine-next">step 1: ${SKIN_INFO[ROUTINE[0]][2]}. tap them in the pouch ↑</p>
-        <div class="routine-wrap">
+        <p class="routine-sub hand" id="routine-next">step 1: ${SKIN_INFO[ROUTINE[0]][2]}. tap them in the pouch</p>
             <ol class="routine" id="routine">${ROUTINE.map(k => `<li data-step="${k}">${SKIN_INFO[k][0]}</li>`).join('')}</ol>
+        </div>
+        <div class="skin-right">
             <div class="face" id="face">
                 <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-patched" src="assets/img/me-skin-patches.jpg" alt="" aria-hidden="true"><img class="face-lamer" src="assets/img/me-skin-lamer.jpg" alt="" aria-hidden="true"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true"><img class="face-mask" src="assets/img/me-skin-mask.jpg" alt="" aria-hidden="true">
                 <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
@@ -1150,6 +1153,7 @@ const VIEWS = {
                 <span class="face-hint hand" id="face-hint">drop products here ↓</span>
                 <button type="button" class="lm-spoon" id="lm-spoon" hidden aria-label="La Mer's little applicator: drag it under my eyes"><svg viewBox="0 0 20 96" aria-hidden="true"><defs><linearGradient id="lmsp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4C40"/><stop offset=".4" stop-color="#E9D5CA"/><stop offset="1" stop-color="#3A231C"/></linearGradient></defs><path d="M10 18 L10 92" stroke="#3A2626" stroke-width="6" stroke-linecap="round"/><path d="M10 18 L10 92" stroke="#5E7E2C" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="10" cy="10" rx="7" ry="9" fill="url(#lmsp)" stroke="#3A2626" stroke-width="1.6"/></svg></button>
             </div>
+        </div>
         </div>`,
     chargers: () => `
         <h2>My <em>chargers</em></h2>
@@ -1324,8 +1328,14 @@ const VIEWS = {
         <div class="solo">${ITEMS.find(i => i.id === 'scrunchies').art}</div>`,
     haircomb: () => `
         <h2>My <em>wide-tooth</em> comb</h2>
-        <p class="note">wide teeth, for long hair.</p>
-        <div class="solo">${ITEMS.find(i => i.id === 'comb').art}</div>`,
+        <p class="note">wide teeth, for long hair. drag it down through my hair.</p>
+        <div class="hair" id="hair">
+            <img src="assets/img/me-hair-before.jpg" alt="My hair before combing: frizzy">
+            <img class="hair-after" id="hair-after" src="assets/img/me-hair-after.jpg" alt="My hair after combing: smooth waves">
+            <button type="button" class="hair-comb" id="hair-comb" aria-label="Comb my hair: drag down, or press to comb it all the way">${ITEMS.find(i => i.id === 'comb').art}</button>
+            <span class="hair-tag mono" id="hair-tag">before</span>
+        </div>
+        <p class="pen-note" id="hair-note">before → after, one comb.</p>`,
 
     bag: () => `
         <h2>My <em>backpack</em></h2>
@@ -1396,14 +1406,15 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-147px; --a:-36deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
-                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-21px; --a:-5deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
-                <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:21px; --a:5deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
-                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:63px; --a:15deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
-                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:147px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
-                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-105px; --a:-26deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
-                <button type="button" class="mk" data-mk="contour" style="--h:172px; --rise:-34px; --x:-63px; --a:-15deg; --d:135ms" aria-label="Westman Atelier Face Trace Cream Contour Stick, Biscuit">${ITEMS.find(i => i.id === 'contour').art}<span>contour</span></button>
-                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:105px; --a:26deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
+                <button type="button" class="mk" data-mk="lipliner" style="--h:250px; --rise:-34px; --x:-152px; --a:-36deg; --d:0ms" aria-label="Make Up For Ever Artist Color Pencil lip liner, 600 Anywhere Caffeine">${ITEMS.find(i => i.id === 'lipliner').art}<span>lip liner</span></button>
+                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-114px; --a:-27deg; --d:45ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
+                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:0px; --a:0deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
+                <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:38px; --a:9deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
+                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:76px; --a:18deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
+                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:152px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
+                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-76px; --a:-18deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
+                <button type="button" class="mk" data-mk="contour" style="--h:172px; --rise:-34px; --x:-38px; --a:-9deg; --d:135ms" aria-label="Westman Atelier Face Trace Cream Contour Stick, Biscuit">${ITEMS.find(i => i.id === 'contour').art}<span>contour</span></button>
+                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:114px; --a:27deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vs2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#F7C9D6"/><rect width="11" height="22" fill="#F29BB6"/></pattern></defs>
@@ -1418,6 +1429,17 @@ const VIEWS = {
         <div class="swatch" id="swatch" aria-live="polite"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#D2A27E" stroke-width="16" stroke-linecap="round"/></svg><span class="hand" id="swatch-label"></span></div>
         <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden>take a closer look ↗</button></p>
         <p class="pen-note" id="mk-note">pull the zipper</p>
+        <h3 class="routine-h">bibbidi bobbidi boo</h3>
+        <div class="bbb" id="bbb">
+            <div class="bbb-photo">
+                <img src="assets/img/me-makeup-before.jpg" alt="Me before makeup">
+                <img class="bbb-after" src="assets/img/me-makeup-after.jpg" alt="Me after makeup: Westman blush, MAC Espresso Yourself, Lash Idôle" aria-hidden="true">
+                <span class="bbb-tag mono" id="bbb-tag">before</span>
+                <div class="bbb-dust" id="bbb-dust" aria-hidden="true"></div>
+            </div>
+            <button type="button" class="btn solid bbb-wand" id="bbb-wand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 L14 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M17 3 l1.1 2.9 2.9 1.1 -2.9 1.1 -1.1 2.9 -1.1 -2.9 -2.9 -1.1 2.9 -1.1Z" fill="currentColor"/></svg><span id="bbb-word">bibbidi bobbidi boo</span></button>
+            <p class="bbb-cap hand" aria-live="polite">pretty both ways, right?</p>
+        </div>
 `,
 
     apartment: () => `
@@ -1895,6 +1917,26 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    haircomb: () => {
+        // drag the comb down: everything above it is combed, everything below is still frizz
+        const hair = $('#hair'), comb = $('#hair-comb');
+        let done = false, drag = false;
+        const set = f => {
+            f = Math.max(0, Math.min(1, f));
+            hair.style.setProperty('--comb', f);
+            $('#hair-tag').textContent = f > .97 ? 'after' : f < .03 ? 'before' : 'combing…';
+            if (f > .97 && !done) { done = true; $('#hair-note').textContent = 'see? smooth. the comb stays in the bag.'; }
+        };
+        const at = e => { const r = hair.getBoundingClientRect(); return (e.clientY - r.top) / r.height; };
+        hair.style.touchAction = 'none';
+        hair.addEventListener('pointerdown', e => { drag = true; hair.classList.add('dragging'); try { hair.setPointerCapture(e.pointerId); } catch {} set(at(e)); });
+        hair.addEventListener('pointermove', e => { if (drag) set(at(e)); });
+        const end = () => { drag = false; hair.classList.remove('dragging'); };
+        hair.addEventListener('pointerup', end); hair.addEventListener('pointercancel', end);
+        comb.onkeydown = e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); set((+hair.style.getPropertyValue('--comb') || 0) + (e.key === 'ArrowDown' ? .1 : -.1)); } };
+        comb.onclick = e => { if (e.detail) return; set((+hair.style.getPropertyValue('--comb') || 0) > .5 ? 0 : 1); };
+        set(0);
+    },
     headphones: () => {
         // drag my headphones onto me while i study; tap me to take them back off
         const study = $('#study'), hp = $('#study-hp'), say = $('#study-say');
@@ -1966,6 +2008,8 @@ const AFTER = {
     },
     skinbag: () => {
         AFTER.makeupbag();
+        // my face sticks just under the sheet's title bar (which wraps to two lines on a phone)
+        sheetBody.style.setProperty('--bar-h', document.querySelector('.sheet-bar').offsetHeight + 'px');
         setTimeout(() => { const bag = $('#mbag'); if (bag && !bag.classList.contains('open')) $('#mpull').click(); }, reduce ? 0 : 350);
         setTimeout(() => sheetBody.querySelector('#routine li') && sheetBody.querySelector('#routine li').classList.add('now'), 0);
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
@@ -1983,8 +2027,8 @@ const AFTER = {
             const N = ROUTINE.length, nx = ROUTINE.find(r => !applied.has(r));
             $('#face-hint').textContent = patchesOn ? 'tap the patches to peel them off ↑' : applied.size >= N ? 'routine done ♡' : `${applied.size} of ${N} done`;
             sheetBody.querySelectorAll('#routine li').forEach(li => { li.classList.toggle('done', applied.has(li.dataset.step) && !(li.dataset.step === 'patches' && patchesOn)); li.classList.toggle('now', patchesOn ? li.dataset.step === 'patches' : li.dataset.step === nx); });
-            $('#routine-next').textContent = patchesOn ? 'patches off before the rest. tap them on my face ↓'
-                : nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch ↑` : 'night routine done. goodnight ♡';
+            $('#routine-next').textContent = patchesOn ? 'patches off before the rest. tap them on my face'
+                : nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch` : 'night routine done. goodnight ♡';
             stage();
         };
         stage();
@@ -2560,6 +2604,7 @@ const AFTER = {
         bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
             // tap one: it swipes on in its real shade, and its name gets written underneath in that shade
             const SH = {
+                lipliner: ['#A3655B', 'Make Up For Ever Artist Color Pencil · 600 Anywhere Caffeine', null],
                 lipstick: ['#6E3A2E', 'MAC Sleek Satin · Espresso Yourself', 'lipstick'],
                 blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
                 contour: ['#9A7462', 'Westman Atelier · Face Trace, Biscuit', null],
@@ -2578,6 +2623,20 @@ const AFTER = {
             const more = $('#swatch-more');
             if (SH[2] && ITEMS.find(i => i.id === SH[2]).open !== 'makeup') { more.hidden = false; more.onclick = () => { pickUp(ITEMS.find(i => i.id === SH[2])); backToPouch(); }; } else more.hidden = true;
         });
+        // bibbidi bobbidi boo: a wave of the wand, a burst of sparkles, and everything in the pouch is on. wave again to take it off.
+        const bbb = $('#bbb'), dust = $('#bbb-dust');
+        if (bbb) $('#bbb-wand').onclick = () => {
+            const on = bbb.classList.toggle('after');
+            $('#bbb-tag').textContent = on ? 'after' : 'before';
+            $('#bbb-word').textContent = on ? 'and back again' : 'bibbidi bobbidi boo';
+            bbb.querySelector('.bbb-after').setAttribute('aria-hidden', !on);
+            bbb.querySelector('.bbb-photo img').setAttribute('aria-hidden', on);
+            dust.innerHTML = Array.from({ length: 26 }, () => {
+                const a = Math.random() * Math.PI * 2, r = 30 + Math.random() * 45;
+                return `<i style="--x:${Math.cos(a) * r}%; --y:${Math.sin(a) * r}%; --s:${.5 + Math.random()}; --d:${Math.random() * 250}ms"></i>`;
+            }).join('');
+            bbb.classList.remove('poof'); void bbb.offsetWidth; bbb.classList.add('poof');
+        };
     },
     ipad: () => {
         const view = $('#ipad-view'), home = $('#ipad-home');

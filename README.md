@@ -8,7 +8,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 |---|---|
 | AirPods Max (Starlight) | My listening data: four years of Spotify in a SQL warehouse |
 | Strathmore Mixed Media sketchbook (11×14, pink) | A flip-through of my digital art |
-| Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Hourglass Vanish concealer, Charlotte Tilbury Beautiful Skin foundation (6N), Lancôme Lash Idôle and my Morphe brushes (M241, M242, M132, Eye Want It All set) pop out |
+| Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Hourglass Vanish concealer, Charlotte Tilbury Beautiful Skin foundation (6N), Lancôme Lash Idôle, Make Up For Ever Artist Color Pencil lip liner (600 Anywhere Caffeine) and my Morphe brushes (M241, M242, M132, Eye Want It All set) pop out. Then wave the wand: bibbidi bobbidi boo, before and after |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
 | Wallet (LV Victorine) | Opens into the raspberry trifold: cards tucked in the slots (UT ID, a joke Texas license, BofA credit and debit, Delta Gold, Amex Blue Cash Everyday; no numbers, ever), and rupees + dollars in the zip pocket |
 | Mildliner pouch | The full 25-pack: every color is a class I took at UT Austin, highlighted when you pick it |
@@ -33,7 +33,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Amaira’s cards | The cards my little sister makes me; I keep all of them |
 | Backup lipstick (sunglasses pocket) | Dry lips, always. Lipstick is my favorite makeup product |
 | McCombs padfolio | Résumés in the pocket (links to my résumé), a pen, a legal pad you can write on |
-| Two silk scrunchies and a wide-tooth comb | Try each one on |
+| Two silk scrunchies and a wide-tooth comb | Try each one on; drag the comb down through my hair, frizz to smooth |
 | Pink Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |

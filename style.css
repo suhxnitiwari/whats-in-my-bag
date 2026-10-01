@@ -2231,14 +2231,25 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .mbag.skin { padding-top: 240px; margin-top: -10px; }
 .routine-h { margin: 22px 0 0; font: 400 1.6rem var(--serif); text-align: center; }
 .routine-sub { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 2px 0 10px; }
-.routine-wrap { display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; }
-.routine-wrap .face { margin: 0; width: 100%; }
+/* the pouch and my face side by side, so i can do my skincare without scrolling back and forth */
+dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
+/* overflow-x: hidden would turn the body into its own scroller and break the sticky face; clip doesn't */
+#sheet-body:has(.skin-layout) { overflow-x: clip; }
+.skin-layout { display: grid; grid-template-columns: minmax(520px, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.skin-layout .routine { margin-top: 6px; }
+.skin-right { position: sticky; top: 72px; }
+.skin-right .face { margin: 0; width: 100%; }
 .routine { margin: 0; padding-left: 22px; font-size: .82rem; line-height: 1.35; color: var(--muted); }
 .routine li { padding: 5px 4px; border-radius: 6px; }
 .routine li.now { color: var(--ink); font-weight: 600; background: #FBE3EB; }
 .routine li.done { color: var(--plum); text-decoration: line-through; text-decoration-color: rgba(118,52,78,.5); }
 .routine li.done::after { content: " ✓"; text-decoration: none; }
-@media (max-width: 760px) { .routine-wrap { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) {
+    .skin-layout { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+    /* phones: my face rides along at the top while you scroll through the pouch */
+    .skin-right { order: -1; top: var(--bar-h, 58px); z-index: 2; padding: 6px 0 10px; background: var(--paper); }
+    .skin-right .face { width: min(100%, calc(34svh * 900 / 719)); margin: 0 auto; }
+}
 
 /* the cash: rupees, and five $100s with the blue security ribbon */
 .bill { transform: translateY(calc(var(--k) * 3.4%)); }
@@ -2377,3 +2388,36 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .face .face-lamer, .face .face-mask { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .9s ease; }
 .face.lamer .face-lamer, .face.masked .face-mask { opacity: 1; }
 .face.masked [data-fx="lashes"] { opacity: 0 !important; }
+
+/* makeup pouch: bibbidi bobbidi boo, before and after */
+.bbb { display: flex; flex-direction: column; align-items: center; gap: 14px; margin: 4px auto 8px; }
+.bbb-photo { position: relative; width: min(300px, 82%); aspect-ratio: 720 / 861; border-radius: 18px; overflow: hidden; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--rose); background: var(--plum-deep); }
+.bbb-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .5s .25s, filter .5s .25s; }
+.bbb-after { opacity: 0; }
+.bbb.after .bbb-after { opacity: 1; }
+.bbb.poof .bbb-photo img { animation: bbb-flash .8s ease; }
+@keyframes bbb-flash { 35% { filter: brightness(1.7) saturate(.6) blur(2px); } }
+.bbb-tag { position: absolute; left: 10px; top: 10px; padding: 3px 9px; border-radius: 99px; background: rgba(255, 251, 248, .88); color: var(--plum); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
+.bbb-dust { position: absolute; inset: 0; pointer-events: none; }
+.bbb-dust i { position: absolute; left: 50%; top: 40%; width: 14px; height: 14px; margin: -7px; opacity: 0; background: radial-gradient(circle, #fff 0 20%, var(--butter) 35%, transparent 70%); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+.bbb.poof .bbb-dust i { animation: bbb-spark 1.1s var(--ease) var(--d) both; }
+@keyframes bbb-spark {
+    0% { opacity: 0; transform: translate(0, 0) scale(.2) rotate(0); }
+    25% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(var(--x) * 3), calc(var(--y) * 3)) scale(var(--s)) rotate(180deg); }
+}
+.bbb-wand { display: inline-flex; align-items: center; gap: 8px; }
+.bbb-wand svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
+.bbb-wand:hover svg, .bbb.poof .bbb-wand svg { transform: rotate(-24deg); }
+.bbb-cap { margin: 0; font-size: 1.6rem; color: var(--plum); text-align: center; }
+@media (prefers-reduced-motion: reduce) { .bbb.poof .bbb-dust i, .bbb.poof .bbb-photo img { animation: none; } }
+
+/* the comb: drag it down through my hair, frizz above turns to smooth waves */
+.hair { --comb: 0; position: relative; width: min(340px, 86%); aspect-ratio: 730 / 1040; margin: 6px auto 8px; border: 3px solid var(--ink); border-radius: 18px; overflow: hidden; box-shadow: 6px 6px 0 var(--rose); cursor: grab; user-select: none; }
+.hair.dragging { cursor: grabbing; }
+.hair img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+.hair-after { clip-path: inset(0 0 calc((1 - var(--comb)) * 100%) 0); transition: clip-path .5s var(--ease); }
+.hair.dragging .hair-after, .hair.dragging .hair-comb { transition: none; }
+.hair-comb { position: absolute; left: 50%; top: calc(7% + var(--comb) * 88%); width: 46%; padding: 0; border: 0; background: none; cursor: inherit; transform: translate(-50%, -50%) rotate(-45deg); transition: top .5s var(--ease); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+.hair-comb svg { display: block; width: 100%; height: auto; }
+.hair-tag { position: absolute; left: 10px; top: 10px; padding: 3px 9px; border-radius: 99px; background: rgba(255, 251, 248, .88); color: var(--plum); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
