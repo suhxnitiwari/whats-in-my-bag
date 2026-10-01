@@ -633,3 +633,12 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 .dl-fields { line-height: 1.18; }
 .card.dl { padding-top: 4%; padding-bottom: 3.5%; }
+
+/* license photo + signature, and ten one-line fields */
+.dl-body { align-items: flex-start; gap: 5%; }
+.dl-photo { width: 24%; flex: none; display: flex; flex-direction: column; align-items: center; }
+.dl-photo img, .dl-body .dl-photo img { width: 100%; }
+.dl-sig { margin-top: 2cqw; font-family: var(--hand); font-size: 4.4cqw; line-height: 1; color: #1F2D5A; white-space: nowrap; border-bottom: 1px solid rgba(31,45,90,.35); padding: 0 1cqw .4cqw; transform: rotate(-3deg); }
+.dl-fields { font-size: 2.45cqw; line-height: 1.14; }
+.card.dl { gap: 1%; padding-top: 3.5%; padding-bottom: 3%; }
+.dl-fine { font-size: 3cqw; }

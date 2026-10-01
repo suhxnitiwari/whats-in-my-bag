@@ -582,13 +582,15 @@ function cardHTML(c, i) {
         <button class="card dl" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
             <span class="dl-head"><span class="dl-state">Texas<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 l4.6 10.4 11.2 1 -8.5 7.4 2.6 11 -9.9 -5.9 -9.9 5.9 2.6 -11 -8.5 -7.4 11.2 -1z" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/></svg></span><span class="t">Driver license</span></span>
             <span class="dl-body">
-                <img src="assets/img/me.jpg" alt="">
+                <span class="dl-photo"><img src="assets/img/me.jpg" alt=""><span class="dl-sig">Suhani Tiwari</span></span>
                 <span class="dl-fields">
                     <span><i>name</i> Suhani Tiwari</span>
                     <span><i>dob</i> a lady never tells</span>
                     <span><i>hgt</i> 5′6″</span>
                     <span><i>weight</i> don’t ask</span>
+                    <span><i>sex</i> F</span>
                     <span><i>eyes</i> dreamy</span>
+                    <span><i>hair</i> dark, long, and always done</span>
                     <span><i>address</i> wouldn’t you wanna knowwww</span>
                     <span><i>class</i> C (for cute)</span>
                     <span><i>restr</i> curbs</span>
