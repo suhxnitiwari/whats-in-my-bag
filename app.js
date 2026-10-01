@@ -6,16 +6,16 @@ const stage = $('#stage'), bagBtn = $('#bag'), bagArt = $('#bag-art'), list = $(
 const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-label');
 const phone = () => matchMedia('(max-width: 760px)').matches;
 
-/* ---------- the bag, with my hot cocoa charm clipped on (Sitara lives in it) ---------- */
+/* ---------- the bag, with my caramel frappuccino charm clipped on (Sitara lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
 const charm = document.createElement('span');
 charm.className = 'charm';
 charm.setAttribute('role', 'button');
 charm.setAttribute('tabindex', '0');
-charm.setAttribute('aria-label', 'My hot cocoa bag charm: Sitara lives in it. Ask her anything');
+charm.setAttribute('aria-label', 'My Bath & Body Works caramel frappuccino charm: Sitara lives in it. Ask her anything');
 charm.innerHTML = BAG.charm;
 bagBtn.appendChild(charm);
-const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sitara', name: 'my hot cocoa charm', open: 'sitara' }); };
+const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sitara', name: 'my caramel frappuccino charm', open: 'sitara' }); };
 charm.addEventListener('click', openCharm);
 charm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCharm(e); });
 
@@ -459,7 +459,7 @@ const AFTER = {
             if (me || reduce) { b.textContent = text; return Promise.resolve(); }
             return type(b, text);
         };
-        say('Hi! I’m Sitara ✦ I live in Suhani’s hot cocoa charm. Ask me anything about her.');
+        say('Hi! I’m Sitara ✦ I live in Suhani’s caramel frappuccino charm (whipped cream included). Ask me anything about her.');
         $('#chips').onclick = async e => {
             const b = e.target.closest('[data-q]'); if (!b) return;
             await say(b.textContent, true);

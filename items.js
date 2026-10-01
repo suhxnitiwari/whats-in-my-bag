@@ -33,12 +33,12 @@ window.BAG = {
         <rect x="140" y="170" width="20" height="132" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
         <path d="M140 208 h20 M140 284 h20" stroke="#D23B3B" stroke-width="4"/>
     </svg>`,
-    /* my bag charm: a little hot cocoa mug that smiles back */
+    /* my bag charm: a Bath & Body Works caramel frappuccino with whipped cream, and it smiles back */
     charm: `<svg viewBox="0 0 90 120" aria-hidden="true">
         <circle cx="45" cy="8" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
         <path d="M45 15 v10" stroke="#B9BCC2" stroke-width="4"/>
         <path d="M18 44 C14 26 32 20 40 26 C46 16 64 18 66 30 C78 30 80 44 70 48 Z" fill="#FFF8EE" ${S} stroke-width="2.5"/>
-        <path d="M22 40 q6 8 12 0 q6 8 12 0 q6 8 12 0 q6 8 10 0" fill="none" stroke="#7A4A2C" stroke-width="3" stroke-linecap="round"/>
+        <path d="M22 40 q6 8 12 0 q6 8 12 0 q6 8 12 0 q6 8 10 0" fill="none" stroke="#C98A3E" stroke-width="3.4" stroke-linecap="round"/>
         <rect x="52" y="22" width="14" height="12" rx="2" fill="#F2C572" ${S} stroke-width="2" transform="rotate(12 59 28)"/>
         <rect x="18" y="46" width="52" height="50" rx="10" fill="#F4F2F0" ${S} stroke-width="2.5"/>
         <path d="M70 56 q16 0 16 14 q0 14 -16 14" fill="none" ${S} stroke-width="5"/>
