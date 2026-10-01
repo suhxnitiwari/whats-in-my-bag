@@ -1821,6 +1821,8 @@ const AFTER = {
         const capOff = () => { bottle.classList.add('capoff'); btn.textContent = 'Spritz'; hint.textContent = 'now press the nozzle. each spritz is a layer of me ✨'; };
         const spritz = () => {
             if (!bottle.classList.contains('capoff')) return capOff();
+            // five sprays, max. then she cuts you off
+            if (n >= 5) { bottle.classList.remove('nope'); void bottle.offsetWidth; bottle.classList.add('nope'); hint.textContent = 'cut off. five is the limit ♡'; return toast('girl, i know this perfume is amazing, but don’t let people smell you from a mile away.'); }
             act.style.transition = 'transform .12s'; act.style.transform = 'translateY(3px)';
             setTimeout(() => { act.style.transform = ''; }, 170);
             const r = bottle.getBoundingClientRect();
@@ -1829,7 +1831,7 @@ const AFTER = {
             // each spritz goes one layer deeper: first impression, then who i am, then what stays
             const layers = sheetBody.querySelectorAll('.pf-me [data-layer]'), L = layers[Math.min(n, 3) - 1];
             if (n <= 3) { L.classList.add('on'); hint.textContent = n < 3 ? 'spritz again, go a little deeper ✨' : 'that’s me. all of it ♡'; }
-            toast(n === 1 ? 'first impression: sweet ✨' : n === 2 ? 'the heart of it ♡' : n === 3 ? 'and this part lingers' : 'okay that’s enough, it’s a small elevator');
+            toast(n === 1 ? 'first impression: sweet ✨' : n === 2 ? 'the heart of it ♡' : n === 3 ? 'and this part lingers' : n === 4 ? 'okay that’s enough, it’s a small elevator' : 'that’s five. last one. i mean it.');
         };
         btn.onclick = spritz;
         bottle.onclick = e => { if (e.target.closest('.pcap') && bottle.classList.contains('capoff')) { bottle.classList.remove('capoff'); btn.textContent = 'Take the cap off'; hint.textContent = 'cap’s back on ♡'; return; } spritz(); };

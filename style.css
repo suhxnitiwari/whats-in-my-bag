@@ -2047,3 +2047,5 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 /* the license's age band, like the real one */
 .tx-kind { letter-spacing: .06em; }
 .vpanel.p2 .vstamp { z-index: 8; pointer-events: none; }
+/* perfume: past five sprays the nozzle won't budge */
+#pf-bottle.nope { animation: chg-nope .35s; }
