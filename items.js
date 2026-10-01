@@ -13,7 +13,7 @@ window.BAG = {
         { id: 'devices', label: 'devices', d: 'M52 104 C52 40 248 40 248 104' },
         { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
         { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'wallet, passport, makeup & hair', d: 'M220 196 C216 176 84 176 80 196' }
+        { id: 'front', label: 'wallet, passport, makeup & hair', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>

@@ -49,7 +49,7 @@ list.innerHTML = ITEMS.filter(it => it.zip !== 'side' && it.zip !== 'attached').
         </button>
     </li>`).join('');
 
-/* the frappuccino PocketBac and the McCombs strap are clipped to the third zipper's pull, and ride along with it */
+/* the frappuccino PocketBac and the McCombs strap are clipped to the front (fourth) zipper's pull, and ride along with it */
 function hangCharms(pt) {
     const vb = bagArt.querySelector('svg').viewBox.baseVal;
     const x = (pt.x - vb.x) / vb.width * 100, y = (pt.y + 17 - vb.y) / vb.height * 100;
@@ -116,7 +116,7 @@ function place(pk, t) {
     const { path, pull, len } = pk.el;
     const pt = path.getPointAtLength(len * t);
     pull.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
-    if (pk.id === 'shades') hangCharms(pt);
+    if (pk.id === 'front') hangCharms(pt);
     path.style.strokeDashoffset = len * (1 - t);
 }
 function slide(pk, from, to) {
