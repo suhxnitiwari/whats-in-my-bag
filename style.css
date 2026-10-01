@@ -1387,22 +1387,23 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .lid-big .stk .stk-in { transition: fill-opacity .2s, stroke-opacity .2s; stroke: var(--plum); stroke-width: 2; stroke-opacity: 0; stroke-dasharray: 4 3; }
 .lid-big .stk:hover .stk-in, .lid-big .stk:focus-visible .stk-in { fill-opacity: .12; stroke-opacity: .9; transform: none; filter: none; }
 
-/* the journal: tap the bottom-right corner, the cover swings open, both pages show */
-.jb { position: relative; width: 200px; aspect-ratio: 125 / 176; margin: 12px auto 0; perspective: 1500px; transition: transform .8s cubic-bezier(.45,.05,.25,1); }
-.jb.open { transform: translateX(50%); }
-.jb::after { content: ""; position: absolute; left: -4px; top: 2%; bottom: 2%; width: 8px; border-radius: 4px; background: linear-gradient(90deg, rgba(0,0,0,.18), rgba(0,0,0,0)); opacity: 0; transition: opacity .4s .5s; pointer-events: none; }
-.jb.open::after { opacity: 1; }
-.jb-page { position: absolute; inset: 0; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 2px 8px 8px 2px; overflow: hidden; }
-.jb-lines { position: absolute; inset: 0; padding: 24px 12px 10px 14px; outline: none; overflow: hidden; overflow-wrap: anywhere; font: 600 1.05rem/22px var(--hand); color: #1F2D5A;
-    background-image: repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.35) 21px 22px); background-position: 0 2px; }
-.jb-lines:empty::before { content: "an idea…"; color: #B9B2C6; }
-.jb-cover { position: absolute; inset: 0; transform-origin: 0 50%; transform-style: preserve-3d; transition: transform 1s cubic-bezier(.45,.05,.25,1); z-index: 2; }
-.jb.open .jb-cover { transform: rotateY(-180deg); }
-.jb-front, .jb-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.jb-front { cursor: pointer; }
+/* the journal: spiral on top, the cover flips up and over the rings; the page has a date box, checkboxes and lines */
+.jb { position: relative; width: 200px; aspect-ratio: 125 / 176; margin: 14px auto 0; perspective: 1400px; transition: margin-top .9s cubic-bezier(.45,.05,.25,1); }
+.jb.open { margin-top: calc(200px * 176 / 125 + 26px); }
+.jb-spiral { position: absolute; left: 12%; right: 12%; top: -10px; height: 20px; display: flex; justify-content: space-between; z-index: 5; pointer-events: none; }
+.jb-spiral i { width: 9px; height: 20px; box-sizing: border-box; border: 2.2px solid #77736F; border-radius: 5px; background: linear-gradient(90deg, #E2DFDB, #A29E9A); }
+.jb-page { position: absolute; inset: 0; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 3px 3px 8px 8px; overflow: hidden; }
+.jb-page::before { content: ""; position: absolute; left: 10px; top: 34px; bottom: 8px; width: 12px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='22'%3E%3Crect x='1.5' y='6.5' width='9' height='9' fill='none' stroke='%23AEB9CF'/%3E%3C/svg%3E") repeat-y; pointer-events: none; }
+.jb-date { position: absolute; left: 30px; top: 13px; padding: 1px 6px; border: 1px solid #C3CCDD; border-radius: 2px; font: 600 .58rem/1.3 "JetBrains Mono", monospace; letter-spacing: 1px; color: #8A93A8; pointer-events: none; }
+.jb-lines { position: absolute; inset: 0; padding: 34px 10px 8px 28px; outline: none; overflow: hidden; overflow-wrap: anywhere; font: 600 1.05rem/22px var(--hand); color: #1F2D5A;
+    background-image: repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.35) 21px 22px); background-position: 0 12px; }
+.jb-lines:empty::before { content: "a to-do, an idea…"; color: #B9B2C6; }
+.jb-cover { position: absolute; inset: 0; transform-origin: 50% 0; transform-style: preserve-3d; transition: transform 1s cubic-bezier(.45,.05,.25,1); z-index: 3; }
+.jb.open .jb-cover { transform: rotateX(-180deg); }
+.jb-front, .jb-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer; }
 .jb-front svg { width: 100%; height: 100%; display: block; }
-.jb-back { transform: rotateY(180deg); border-radius: 8px 2px 2px 8px; }
-.jb-corner { position: absolute; right: 6px; bottom: 6px; font: 600 .8rem var(--hand); color: #FFF6F2; background: rgba(0,0,0,.15); padding: 1px 6px; border-radius: 999px; animation: nudge 1.6s ease-in-out infinite; }
+.jb-back { transform: rotateX(180deg); box-sizing: border-box; border: 2px solid var(--ink); border-radius: 3px 3px 8px 8px; background: repeating-linear-gradient(125deg, #F3D3DD 0 14px, #F8E3EA 14px 22px); }
+.jb-corner { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font: 600 .8rem var(--hand); color: #FFF6F2; background: rgba(0,0,0,.15); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
 @keyframes nudge { 50% { transform: translate(2px, 2px); } }
 
 /* sweater v2: one connected garment; fold = sleeves cross over the chest, then the bottom folds up */

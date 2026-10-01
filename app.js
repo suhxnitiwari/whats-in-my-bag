@@ -1231,13 +1231,14 @@ const VIEWS = {
         <h2><em>her greatest power is believing in herself</em></h2>
         <p class="note">my pink journal. small, always on me, for the ideas that show up at the worst times.</p>
         <div class="jb" id="jb">
-            <div class="jb-page jb-right"><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Right page: leave an idea"></div></div>
+            <div class="jb-spiral" aria-hidden="true">${'<i></i>'.repeat(7)}</div>
+            <div class="jb-page"><span class="jb-date" aria-hidden="true">DATE&nbsp;&nbsp;/&nbsp;&nbsp;/</span><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Write a to-do or an idea"></div></div>
             <div class="jb-cover" id="jb-cover">
-                <div class="jb-front">${ITEMS.find(i => i.id === 'journal').art}<span class="jb-corner" aria-hidden="true">open ↘</span></div>
-                <div class="jb-back jb-page"><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Left page: leave an idea"></div></div>
+                <div class="jb-front" role="button" tabindex="0" aria-label="Flip the cover up">${ITEMS.find(i => i.id === 'journal').art}<span class="jb-corner" aria-hidden="true">flip it up ↑</span></div>
+                <div class="jb-back" aria-label="Flip the cover back down"></div>
             </div>
         </div>
-        <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the bottom-right corner to open it</p>`,
+        <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the cover to flip it up</p>`,
     perfume: () => `
         <h2>My <em>personality</em>, in a bottle</h2>
         <p class="note">philosophy amazing grace ballet rose. it says “grace lets you move to your own rhythm” right on the label. that’s just me.</p>
@@ -2217,13 +2218,13 @@ const AFTER = {
     nb1: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     nb2: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     journal: () => {
-        const jb = $('#jb'), cover = $('#jb-cover'), hint = $('#jb-hint');
-        cover.querySelector('.jb-front').onclick = e => {
-            const r = cover.getBoundingClientRect();
-            if (e.clientX < r.left + r.width * .45 || e.clientY < r.top + r.height * .5) { hint.textContent = 'grab the bottom-right corner ↘'; return; }
-            jb.classList.add('open'); hint.textContent = 'write on either page. tap the spine to close it (nothing is saved).';
-        };
-        jb.addEventListener('click', e => { if (jb.classList.contains('open') && e.target === jb) { jb.classList.remove('open'); hint.textContent = 'tap the bottom-right corner to open it'; } });
+        // top spiral: the cover flips up and over the rings, like the real one
+        const jb = $('#jb'), front = jb.querySelector('.jb-front'), hint = $('#jb-hint');
+        const open = () => { jb.classList.add('open'); hint.textContent = 'write anything. tap the cover to flip it back down (nothing is saved).'; };
+        const close = () => { jb.classList.remove('open'); hint.textContent = 'tap the cover to flip it up'; };
+        front.onclick = open;
+        front.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+        jb.querySelector('.jb-back').onclick = close;
     },
     perfume: () => {
         let n = 0;
