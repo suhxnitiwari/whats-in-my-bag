@@ -815,3 +815,11 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vw.no-anim .vw-open > *, .vw.no-anim .vw-closed { transition: none !important; }
 .vw.snapped .vw-closed { animation: snapshut .45s cubic-bezier(.3,1.6,.5,1); }
 @keyframes snapshut { 0% { transform: translate(-50%, -50%) scale(.88); } 100% { transform: translate(-50%, -50%) scale(1); } }
+
+/* the picked card slides straight up out of its slot and rises above the wallet (no copies) */
+.vpanel { overflow: visible; }
+.vw { transition: margin-top .55s cubic-bezier(.2,.8,.2,1); }
+.vw.has-pick { margin-top: clamp(190px, 30vw, 250px); }
+.vslot .card { transform-origin: 50% 100%; transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
+.vslot .card.picked { box-shadow: 0 0 0 3px var(--gold), 0 18px 30px -12px rgba(0,0,0,.35); }
+.vread { display: none; }

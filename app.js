@@ -814,8 +814,8 @@ const AFTER = {
             if (closing || !vw.classList.contains('open')) return;
             closing = true;
             vw.classList.remove('cash-out');
-            vw.querySelectorAll('.vslot .card').forEach(x => x.classList.remove('picked'));
-            read.innerHTML = ''; read.classList.remove('show');
+            vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
+            vw.classList.remove('has-pick');
             vw.classList.add('fold-left'); await wait(650);
             vw.classList.add('fold-right'); await wait(650);
             vw.classList.add('no-anim');
@@ -831,12 +831,21 @@ const AFTER = {
         vw.querySelector('.vsnap').onclick = close;
         $('#snap').onclick = open;
         $('#vzip').onclick = () => { const on = vw.classList.toggle('cash-out'); if (on) toast('rupees for home, dollars for here ♡'); };
+        // tap a card: that card slides straight up out of its slot and rises above the wallet. Tap again to tuck it back.
+        const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {
+            const was = card.classList.contains('picked');
+            tuck();
+            if (was) { vw.classList.remove('has-pick'); return; }
             const c = CARDS[+card.dataset.card];
-            vw.querySelectorAll('.vslot .card').forEach(x => x.classList.toggle('picked', x === card));
-            // the card slides up out of its slot, and a big copy shows above so you can read it
-            read.innerHTML = cardHTML(c, 0).replace('class="card', 'class="card big');
-            read.classList.remove('show'); void read.offsetWidth; read.classList.add('show');
+            vw.classList.add('has-pick');
+            card.classList.add('picked');
+            card.closest('.vslot').style.zIndex = 30;
+            requestAnimationFrame(() => {
+                const cr = card.getBoundingClientRect(), wr = vw.getBoundingClientRect();
+                const lift = cr.bottom - wr.top + 14;   // clear the top of the wallet
+                card.style.transform = `translateY(calc(-36% - ${lift}px)) scale(1.55)`;
+            });
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });
