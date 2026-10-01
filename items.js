@@ -196,7 +196,7 @@ window.ITEMS = [
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my keys', zip: 'shades', l: 93.0, t: 14.4, w: 10.3, r: 4,
+        id: 'keys', name: 'my keys', zip: 'shades', l: 93.0, t: 14.4, w: 11.7, r: 4,
         get art() { return window.KEYRING(false); },
         open: 'keys'
     },
@@ -513,14 +513,18 @@ window.SALTO_FOB = `<svg viewBox="0 0 48 66"><path d="M15 3 h18 a7 7 0 0 1 7 7 v
     <path d="M12 37 h24" stroke="#2B2B2E" stroke-width="3.2" stroke-linecap="round"/><path d="M13 43.5 h22" stroke="#7A7A7E" stroke-width="2" stroke-linecap="round"/><path d="M19 50 h10" stroke="#B3B3B8" stroke-width="1.4" stroke-linecap="round"/>
     <path d="M34 28 q4 4 3 12" fill="none" stroke="#E9E2D6" stroke-width="1.5" stroke-linecap="round"/><path d="M8 24 q3 -6 9 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".25"/></svg>`;
 window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M24 3 C34 3 46 22 45 42 C44 64 4 64 3 42 C2 22 14 3 24 3Z" fill="#9EA49F" stroke="#3A2626" stroke-width="2.5"/><circle cx="24" cy="12" r="4.5" fill="#FAF1EF" stroke="#6F746F" stroke-width="1.5"/><rect x="11" y="30" width="26" height="9" rx="2" fill="none" stroke="#7D837E" stroke-width="1.4" transform="rotate(-8 24 34)"/><path d="M14 22 q4 -8 10 -10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".3"/></svg>`;
-window.KEYRING = big => `<svg viewBox="0 0 176 252" class="keyring${big ? ' big' : ''}">
+window.KEYRING = big => `<svg viewBox="0 0 200 252" class="keyring${big ? ' big' : ''}">
     <circle cx="86" cy="26" r="20" fill="none" stroke="#B9BCC2" stroke-width="6"/><circle cx="86" cy="26" r="20" fill="none" stroke="#3A2626" stroke-width="1.5"/>
     <g data-part="apartment" class="kpart"><circle cx="66" cy="50" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="66" cy="50" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
         <g transform="translate(38 50) rotate(6 24 33)">${window.SALTO_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="52" height="72" viewBox="0 0 48 66">')}</g></g>
     <g data-part="bmw" class="kpart"><circle cx="96" cy="50" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="96" cy="50" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
         <g transform="translate(66 58)">${window.BMW_FOB.replace('<svg viewBox="0 -8 80 158">', '<svg width="70" height="138" viewBox="0 -8 80 158" overflow="visible">')}</g></g>
-    <g data-part="mailbox" class="kpart"><circle cx="118" cy="44" r="7" fill="none" stroke="#B9BCC2" stroke-width="3.5"/><circle cx="118" cy="44" r="7" fill="none" stroke="#3A2626" stroke-width="1"/>
-        <g transform="translate(118 48) rotate(-14)"><svg width="20" height="52" viewBox="0 0 20 52"><path d="M3 3 h14 a2 2 0 0 1 2 2 v13 a8 8 0 0 1 -18 0 v-13 a2 2 0 0 1 2 -2z" fill="#D6D9DE" stroke="#3A2626" stroke-width="1.8"/><circle cx="10" cy="8" r="2.6" fill="#FAF1EF" stroke="#7C8189" stroke-width="1"/><path d="M7 24 h6 v22 l-3 4 -3 -4z" fill="#C9CDD3" stroke="#3A2626" stroke-width="1.6"/><path d="M13 30 h-3 M13 35 h-2 M13 40 h-3" stroke="#3A2626" stroke-width="1.4"/></svg></g><g transform="translate(130 44) rotate(12)" display="none"><svg width="20" height="52" viewBox="0 0 20 52"><path d="M3 3 h14 a2 2 0 0 1 2 2 v13 a8 8 0 0 1 -18 0 v-13 a2 2 0 0 1 2 -2z" fill="#D6D9DE" stroke="#3A2626" stroke-width="1.8"/><circle cx="10" cy="8" r="2.6" fill="#FAF1EF" stroke="#7C8189" stroke-width="1"/><path d="M7 24 h6 v22 l-3 4 -3 -4z" fill="#C9CDD3" stroke="#3A2626" stroke-width="1.6"/><path d="M13 30 h-3 M13 35 h-2 M13 40 h-3" stroke="#3A2626" stroke-width="1.4"/></svg></g></g>
+    <g data-part="mailbox" class="kpart"><circle cx="128" cy="46" r="8" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="128" cy="46" r="8" fill="none" stroke="#3A2626" stroke-width="1.2"/>
+        <g transform="translate(140 50) rotate(10)"><svg width="44" height="110" viewBox="0 0 40 100" overflow="visible">
+            <path d="M6 2 h28 a5 5 0 0 1 5 5 v26 a14 14 0 0 1 -14 14 h-10 a14 14 0 0 1 -14 -14 v-26 a5 5 0 0 1 5 -5z" fill="#E3B754" stroke="#3A2626" stroke-width="2.2"/>
+            <circle cx="20" cy="12" r="4.6" fill="#FAF1EF" stroke="#8A6A2A" stroke-width="1.4"/><path d="M8 20 q12 -4 24 0" fill="none" stroke="#F6DB94" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 46 h14 v4 h-3 v42 l-4 7 -4 -7 v-4 h-4 v-6 h4 v-5 h-5 v-6 h5 v-6 h-4 v-6 h4 v-8 h-3z" fill="#E3B754" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M22 52 v38" stroke="#B8862F" stroke-width="1.6"/><path d="M15 52 v20" stroke="#F6DB94" stroke-width="1.4"/></svg></g></g>
 </svg>`;
 
 /* my wallet: student ID, driver license, and my cards. Cards pop out like file folders. */
