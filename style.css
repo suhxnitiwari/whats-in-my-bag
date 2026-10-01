@@ -998,3 +998,34 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
     background-image: repeating-linear-gradient(transparent 0 9px, rgba(60,50,40,.12) 9px 10px); background-size: 80% 100%; background-position: 50% 30%; background-repeat: no-repeat; }
 .rc-cover { z-index: 3; }
 .rc.open .rc-leaf { transform: rotateY(-160deg); transition-delay: calc(.35s + var(--k) * 110ms); }
+
+/* one real-world scale for everything (0.94% of the table width per cm; the 32 cm backpack is 30%).
+   To scale, a binder or padfolio is almost as wide as the backpack, so the table is taller once it's open. */
+.stage { aspect-ratio: 16 / 22; transition: aspect-ratio .6s var(--ease); }
+.stage.idle { aspect-ratio: 16 / 13.5; }
+.stage:not(.idle) .bag { top: 50%; }
+.bottle { width: 22%; }
+
+/* the padfolio, open: black leatherette, résumé stack in the left pocket, pen loop, legal pad */
+.pf { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #1D1D21; border: 3px solid var(--ink); border-radius: 14px; padding: 14px; aspect-ratio: 1.55; max-width: 640px; margin: 10px auto; box-shadow: 0 18px 30px -18px rgba(0,0,0,.6); }
+.pf-left { position: relative; border-right: 2px solid #0E0E11; padding: 14px 18px 0 10px; overflow: hidden; }
+.pf-stack span { position: absolute; left: 6%; right: 16%; top: 10px; bottom: 30%; background: #F7F6F2; border: 1px solid #CFCAC0; transform: rotate(-4deg); }
+.pf-stack span + span { transform: rotate(-1.5deg); top: 14px; }
+.pf-resume { position: absolute; left: 7%; right: 15%; top: 18px; bottom: 30%; background: #FFFFFF; border: 1px solid #CFCAC0; padding: 10px 10px; display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: #1D1D21; transform: rotate(1deg); transition: transform .3s var(--ease); }
+.pf-resume:hover, .pf-resume:focus-visible { transform: translateY(-10px) rotate(-1deg); }
+.pf-resume b { font: 600 .7rem/1 var(--serif); letter-spacing: .12em; text-align: center; margin-bottom: 4px; }
+.pf-resume i { height: 3px; background: #D9D6CF; border-radius: 2px; } .pf-resume i.s { width: 40%; background: #8B8880; }
+.pf-take { margin-top: auto; align-self: center; font: 500 .9rem var(--hand); color: var(--plum); }
+.pf-left::after { content: ""; position: absolute; left: 0; right: 10%; bottom: 0; height: 34%; background: #232328; border-top: 2px solid #0E0E11; border-radius: 0 0 0 8px; }
+.pf-pen { position: absolute; right: 3%; top: 16%; width: 8px; height: 58%; background: linear-gradient(90deg, #111 0 40%, #333 60%, #111); border-radius: 4px; z-index: 2; box-shadow: 0 0 0 4px #121215; }
+.pf-right { padding: 12px 14px 12px 18px; }
+.pf-legal { height: 100%; background: #FFFFFF; border: 1px solid #D8D8D8; border-top: 22px solid #FFFFFF; outline: none; overflow: auto; padding: 0 10px 0 34px; font: 400 1.05rem/22px var(--hand); color: #24304F;
+    background-image: linear-gradient(90deg, transparent 26px, rgba(220,80,90,.55) 26px 27.5px, transparent 27.5px), repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.45) 21px 22px); }
+.pf-legal:empty::before { content: "take a note…"; color: #A9B2C6; }
+@media (max-width: 760px) { .pf { aspect-ratio: auto; grid-template-columns: 1fr; } .pf-left { min-height: 220px; border-right: 0; border-bottom: 2px solid #0E0E11; } .pf-right { min-height: 200px; } }
+
+/* each makeup swatch is written in its own shade */
+.swatch { flex-direction: column; gap: 0; }
+.swatch.on { height: 104px; }
+.swatch span { font-size: 1.6rem; font-weight: 700; line-height: 1.1; text-align: center; }
+.swatch-more { text-align: center; margin: 0 0 4px; min-height: 1.4em; }

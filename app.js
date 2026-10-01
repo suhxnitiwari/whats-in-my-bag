@@ -256,6 +256,20 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    padfolio: () => `
+        <h2>My <em>McCombs</em> padfolio</h2>
+        <p class="note">résumés on the left, a legal pad on the right, a pen in the middle. ready for anything.</p>
+        <div class="pf">
+            <div class="pf-left">
+                <div class="pf-stack" aria-hidden="true"><span></span><span></span></div>
+                <a class="pf-resume" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener" aria-label="My résumé (opens in a new tab)">
+                    <b>SUHANI TIWARI</b><i></i><i></i><i class="s"></i><i></i><i></i><i class="s"></i><i></i><i></i><i></i><i class="s"></i><i></i>
+                    <span class="pf-take">take one ↗</span>
+                </a>
+                <span class="pf-pen" aria-hidden="true"></span>
+            </div>
+            <div class="pf-right"><div class="pf-legal" id="pf-legal" contenteditable="true" spellcheck="false" aria-label="Legal pad: write a note"></div></div>
+        </div>`,
     cap: () => `
         <h2>My <em>cap</em></h2>
         <p class="note">a cap is a must.</p>
@@ -357,6 +371,7 @@ const VIEWS = {
             </div>
         </div>
         <div class="swatch" id="swatch" aria-live="polite"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#D2A27E" stroke-width="16" stroke-linecap="round"/></svg><span class="hand" id="swatch-label"></span></div>
+        <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden>take a closer look ↗</button></p>
         <p class="pen-note" id="mk-note">pull the zipper</p>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="see-makeup2">My makeup loves &amp; skips</button></div>`,
 
@@ -777,6 +792,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    padfolio: () => { const pad = $('#pf-legal'); pad.addEventListener('focus', () => { if (!pad.dataset.used) { pad.dataset.used = 1; toast('taking notes like it’s a coffee chat ☕'); } }); },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
         const pp = $('#pp'), b = $('#pp-flip');
@@ -896,14 +912,23 @@ const AFTER = {
         $('#mpull').onclick = toggle;
         bag.querySelector('.mbag-front svg').onclick = () => { if (!bag.classList.contains('open')) toggle(); };
         bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
-            if (b.dataset.mk === 'foundation') {
-                b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
-                const sw = $('#swatch'); sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on');
-                $('#swatch-label').textContent = '6 Neutral. my shade ♡';
-                return;
-            }
-            if (b.dataset.mk === 'brushes' || b.dataset.mk === 'concealer' || b.dataset.mk === 'foundation') return pickUp({ id: 'makeup', name: { brushes: 'morphe brushes', concealer: 'hourglass vanish concealer', foundation: 'charlotte tilbury beautiful skin, 6n' }[b.dataset.mk], open: 'makeup' });
-            pickUp(ITEMS.find(i => i.id === b.dataset.mk));
+            // tap one: it swipes on in its real shade, and its name gets written underneath in that shade
+            const SH = {
+                lipstick: ['#8E2A24', 'Westman Atelier · Glögg', 'lipstick'],
+                blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
+                mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
+                concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
+                foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null]
+            }[b.dataset.mk];
+            if (!SH) return pickUp({ id: 'makeup', name: 'morphe brushes', open: 'makeup' });
+            b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
+            const sw = $('#swatch'), lbl = $('#swatch-label');
+            $('#swipe').setAttribute('stroke', SH[0]);
+            $('#swipe').setAttribute('stroke-width', b.dataset.mk === 'mascara' ? 6 : 16);
+            lbl.textContent = SH[1]; lbl.style.color = SH[0];
+            sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on');
+            const more = $('#swatch-more');
+            if (SH[2]) { more.hidden = false; more.onclick = () => pickUp(ITEMS.find(i => i.id === SH[2])); } else more.hidden = true;
         });
         $('#see-makeup2').onclick = () => pickUp({ id: 'makeup', name: 'my makeup', open: 'makeup' });
     },
