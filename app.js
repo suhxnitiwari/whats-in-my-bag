@@ -726,6 +726,7 @@ const VIEWS = {
                     <button type="button" class="papp" data-app="prime"><span class="ic ic-pv"><svg viewBox="0 0 40 40"><text x="20" y="20" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="9" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#1FA8E0" stroke-width="2" stroke-linecap="round"/></svg></span>Prime</button>
                     <button type="button" class="papp" data-app="calendar"><span class="ic ic-cal"><svg viewBox="0 0 40 40"><rect x="7" y="8" width="26" height="25" rx="3" fill="#fff"/><path d="M7 14 h26" stroke="#1A73E8" stroke-width="4"/><text x="20" y="29" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="11" fill="#1A73E8">${new Date().getDate()}</text></svg></span>Calendar</button>
                     <button type="button" class="papp" data-app="duolingo"><span class="ic ic-duo"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="12" ry="11" fill="#fff"/><circle cx="15.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="24.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="16" cy="21.5" r="2" fill="#3C3C3C"/><circle cx="24" cy="21.5" r="2" fill="#3C3C3C"/><path d="M18 26 l2 2.5 2 -2.5z" fill="#FFC800"/></svg></span>Duolingo</button>
+                    <button type="button" class="papp" data-app="contacts"><span class="ic ic-ct"><svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="6" fill="#fff"/><path d="M9 31 c1 -7 6 -10 11 -10 s10 3 11 10z" fill="#fff"/></svg></span>Contacts</button>
                 </div>
                 <div class="app-view" id="app-view" hidden></div>
             </div>
@@ -981,6 +982,33 @@ const AFTER = {
                     <div class="yt-feed"></div></div>`;
                 view.querySelectorAll('.yt-chips button').forEach(c => c.onclick = () => render(c.dataset.f));
                 render('all');
+            } else if (b.dataset.app === 'contacts') {
+                view.innerHTML = back + `
+                    <div class="ct">
+                        <div class="ct-me"><img src="assets/img/me.jpg" alt=""><b>Suhani Tiwari</b><span>MIS + Psychology · UT Austin</span></div>
+                        <p class="ct-ask">do you wanna connect with me? ♡<br><small>go ahead, add your name and number.</small></p>
+                        <form class="ct-form" id="ct-form">
+                            <label>Name<input name="name" required autocomplete="name" placeholder="first and last"></label>
+                            <label>Phone<input name="phone" type="tel" required autocomplete="tel" placeholder="(512) 555-0123"></label>
+                            <label>How we met <span>(optional)</span><input name="met" placeholder="coffee chat? class? career fair?"></label>
+                            <button class="ct-add" type="submit">Add + send to Suhani</button>
+                        </form>
+                        <p class="ct-fine">this opens your email so it comes straight to me. nothing’s saved on this site.</p>
+                        <button type="button" class="ct-save" id="ct-save">or save me to your contacts ↓</button>
+                    </div>`;
+                $('#ct-form').onsubmit = ev => {
+                    ev.preventDefault();
+                    const f = new FormData(ev.target), name = (f.get('name') || '').trim(), phone = (f.get('phone') || '').trim(), met = (f.get('met') || '').trim();
+                    const body = `Hi Suhani! Let's connect.\n\nName: ${name}\nPhone: ${phone}${met ? `\nHow we met: ${met}` : ''}\n\n(sent from your bag ♡)`;
+                    location.href = `mailto:suhanitiwari@utexas.edu?subject=${encodeURIComponent(`let's connect ♡ ${name}`)}&body=${encodeURIComponent(body)}`;
+                    toast('yay! your email app should pop up ♡');
+                };
+                $('#ct-save').onclick = () => {
+                    const vcf = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Tiwari;Suhani;;;', 'FN:Suhani Tiwari', 'ORG:The University of Texas at Austin', 'TITLE:MIS + Psychology', 'EMAIL;TYPE=INTERNET:suhanitiwari@utexas.edu', 'URL:https://suhanitiwari.com', 'URL:https://www.linkedin.com/in/suhxnitiwari', 'END:VCARD'].join('\r\n');
+                    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([vcf], { type: 'text/vcard' })); a.download = 'Suhani-Tiwari.vcf'; a.click();
+                    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+                    toast('saved. now you have no excuse ♡');
+                };
             } else if (b.dataset.app === 'duolingo') {
                 view.innerHTML = back + `
                     <div class="duo">

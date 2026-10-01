@@ -26,6 +26,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Medici regulars card (in the wallet's zip pocket) | A vanilla latte a day: stamp it, buy 10 & get 1 free |
 | You Deserve Each Other, Sarah Hogle (paperback rom-com) | Three weeks in my backpack, still on chapter one |
 | Brown cap | A cap is a must |
+| iPhone: Contacts app | "do you wanna connect with me?" — add your name + number (sends to me by email), or save my contact card |
 | Boarding pass (front pocket) | Destination: wherever's next |
 | McCombs padfolio | Résumés in the pocket (links to my résumé), a pen, a legal pad you can write on |
 | Two silk scrunchies and a wide-tooth comb | Try each one on |

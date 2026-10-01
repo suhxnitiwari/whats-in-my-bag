@@ -1223,3 +1223,18 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .bottle.free .holder { z-index: -1; }
 .bottle.dragging svg { transition: none; cursor: grabbing; filter: drop-shadow(0 14px 14px rgba(59,21,36,.25)); }
 .bottle.free:not(.dragging) svg { transition: transform .4s cubic-bezier(.2,.9,.25,1.1); }
+
+/* phone: Contacts */
+.ic-ct { background: linear-gradient(180deg, #B9BEC6, #8D939C); }
+.ct { padding: 4px 2px 10px; text-align: center; font-family: var(--sans); }
+.ct-me { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ct-me img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.ct-me b { font-size: 1rem; margin-top: 4px; } .ct-me span { font-size: .68rem; color: #8A8A8E; }
+.ct-ask { font: 600 1.15rem/1.15 var(--hand); color: var(--plum); margin: 10px 0 8px; } .ct-ask small { font-size: .9rem; color: #8A6A74; }
+.ct-form { display: flex; flex-direction: column; gap: 6px; text-align: left; background: #fff; border-radius: 12px; padding: 8px 10px; }
+.ct-form label { display: flex; flex-direction: column; font-size: .62rem; color: #8A8A8E; letter-spacing: .02em; border-bottom: 1px solid #ECECEF; padding-bottom: 4px; }
+.ct-form label span { font-size: .58rem; }
+.ct-form input { border: 0; outline: none; font: 500 .85rem var(--sans); color: #1C1C1E; padding: 2px 0; background: none; min-width: 0; }
+.ct-add { margin-top: 4px; border: 0; border-radius: 10px; background: #E0568F; color: #fff; font: 600 .82rem var(--sans); padding: 8px; cursor: pointer; }
+.ct-fine { font-size: .6rem; color: #8A8A8E; margin: 6px 0 2px; }
+.ct-save { border: 0; background: none; color: #2E6FD8; font: 500 .75rem var(--sans); cursor: pointer; }
