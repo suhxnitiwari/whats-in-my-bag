@@ -2259,3 +2259,6 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .mf-view .hand { color: var(--plum); font-size: 1.3rem; margin: 10px 0 6px; }
 .mf-x { position: absolute; right: 8px; top: 6px; border: 0; background: none; font-size: 1.4rem; cursor: pointer; }
 @media (max-width: 760px) { .mf-card { width: 86px; } .mf-card img { height: 64px; } .mf.out { height: 220px; } }
+
+/* a hidden button stays hidden (button styles were overriding the hidden attribute) */
+.btn[hidden], button[hidden] { display: none !important; }
