@@ -911,7 +911,8 @@ const VIEWS = {
                 <rect x="30" y="30" width="160" height="120" rx="3" fill="#2E2A2C" stroke="#3A2626" stroke-width="2"/>
                 <g class="mbx-env"><rect x="55" y="70" width="110" height="64" rx="3" fill="#FFFDF7" stroke="#3A2626" stroke-width="2"/><path d="M55 72 L110 108 L165 72" fill="none" stroke="#3A2626" stroke-width="2"/><text x="110" y="128" text-anchor="middle" font-family="Kalam" font-size="10" fill="#76344E">to didi ♡</text></g>
                 <g class="mbx-door"><rect x="30" y="30" width="160" height="120" rx="3" fill="#B9BCC2" stroke="#3A2626" stroke-width="2.4"/><rect x="40" y="40" width="140" height="18" rx="2" fill="#A7AAB1"/><text x="110" y="53" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5E6168" letter-spacing="2">MAIL</text>
-                    <g class="mbx-lock"><circle cx="164" cy="96" r="10" fill="#E2C47A" stroke="#3A2626" stroke-width="2"/><rect x="162.5" y="89" width="3" height="11" rx="1.2" fill="#3A2626"/></g></g>
+                    <g class="mbx-lock"><circle cx="164" cy="96" r="10" fill="#E2C47A" stroke="#3A2626" stroke-width="2"/><rect x="162.5" y="89" width="3" height="11" rx="1.2" fill="#3A2626"/></g>
+                    <g class="mbx-key"><g class="mbx-key-turn"><path d="M164 93.5 h26 v-3 h5 v3 h4 v5 h-35z" fill="#E7C24E" stroke="#3A2626" stroke-width="1.6" stroke-linejoin="round"/><path d="M170 98.5 v4 h3 v-3 h3 v4 h3 v-5" fill="#E7C24E" stroke="#3A2626" stroke-width="1.4" stroke-linejoin="round"/><rect x="198" y="84" width="22" height="24" rx="6" fill="#E7C24E" stroke="#3A2626" stroke-width="2"/><circle cx="209" cy="96" r="4" fill="#B9BCC2" stroke="#3A2626" stroke-width="1.4"/></g></g></g>
             </svg>
         </div>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="mbx-key">Turn the key</button></div>
@@ -1710,13 +1711,15 @@ const AFTER = {
         const mbx = $('#mbx'), btn = $('#mbx-key');
         btn.onclick = () => {
             if (!mbx.classList.contains('open')) {
-                mbx.classList.add('turn');
-                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('no packages. just a letter ♡'); }, reduce ? 0 : 550);
+                // the gold key slides into the lock, turns, then the door swings open
+                mbx.classList.add('insert');
+                setTimeout(() => mbx.classList.add('turn'), reduce ? 0 : 650);
+                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('click. no packages. just a letter ♡'); }, reduce ? 0 : 1250);
             } else if ($('#lc').hidden) {
                 $('#lc').hidden = false; mbx.classList.add('taken'); btn.textContent = 'Put it back';
                 $('#lc').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
             } else {
-                $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn'); btn.textContent = 'Turn the key';
+                $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn', 'insert'); btn.textContent = 'Turn the key';
             }
         };
         mbx.onclick = () => btn.click();
@@ -1738,6 +1741,13 @@ const AFTER = {
             $('#face-hint').textContent = applied.size >= 7 ? 'fully skincared ♡' : `${applied.size} of 7 on`;
             toast(line + (k === 'patches' ? '' : ''));
         };
+        // tap the patches on my face to peel them off; my eyes open again
+        const pg = face.querySelector('[data-fx="patches"]');
+        pg.addEventListener('click', () => {
+            if (!applied.has('patches') || pg.classList.contains('peel')) return;
+            pg.classList.add('peel');
+            setTimeout(() => { pg.classList.remove('peel'); apply('patches'); }, reduce ? 0 : 450);
+        });
         // pick a product up out of the pouch and drop it on my face
         let drag = null;
         sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => {
