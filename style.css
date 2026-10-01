@@ -1467,3 +1467,4 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .sg-big { width: min(420px, 90%); margin: 6px auto 12px; }
 
 #item-notebooks { z-index: 4; }
+#after { display: none !important; }
