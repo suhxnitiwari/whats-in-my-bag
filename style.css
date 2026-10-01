@@ -1238,3 +1238,41 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .ct-add { margin-top: 4px; border: 0; border-radius: 10px; background: #E0568F; color: #fff; font: 600 .82rem var(--sans); padding: 8px; cursor: pointer; }
 .ct-fine { font-size: .6rem; color: #8A8A8E; margin: 6px 0 2px; }
 .ct-save { border: 0; background: none; color: #2E6FD8; font: 500 .75rem var(--sans); cursor: pointer; }
+
+/* phone home: live clock, date and Austin weather up top; apps fit on one screen */
+.phone-big .clock { margin: 2px 0 0; font-size: 1.7rem; }
+.pdate { text-align: center; margin: 0 0 8px; font: 500 .72rem var(--sans); color: #6B5A62; }
+.wx { display: flex; align-items: center; gap: 8px; margin: 0 2px 12px; padding: 7px 10px; border-radius: 14px; background: rgba(255,255,255,.65); border: 1.5px solid rgba(58,38,38,.15); font-family: var(--sans); }
+.wx-ic { font-size: 1.3rem; line-height: 1; } .wx-t { font-weight: 600; font-size: 1.05rem; } .wx-d { font-size: .62rem; color: #6B5A62; line-height: 1.2; }
+.phone-big .home { gap: 10px 6px; }
+.phone-big .papp .ic { width: 46px; height: 46px; border-radius: 12px; }
+.papp { font-size: .64rem; min-width: 0; }
+.plabel { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ic-gcal { background: #fff; }
+.phone-big .screen { height: 468px; }
+/* Stanley All Day Slim (~7 cm wide, ~26 cm tall) next to the backpack */
+.bottle { width: 16%; right: -7%; }
+/* the pen, real size against the page (~14.5 cm, about half the page) */
+.pf-pen { width: 46px; height: auto; top: 12%; right: -10px; z-index: 4; filter: drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+.pf-pen svg { width: 100%; height: auto; }
+
+/* perfume: spritz sends a little mist out of the nozzle */
+.pf-bottle { position: relative; width: 170px; margin: 30px auto 10px; }
+.mist { position: absolute; left: 28%; top: 4%; width: 0; height: 0; pointer-events: none; }
+.mist i { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle, rgba(242,166,142,.55), rgba(242,166,142,0) 70%); opacity: 0; }
+.mist.go i { animation: mist 1.1s ease-out forwards; animation-delay: calc(var(--k) * 25ms); }
+@keyframes mist { 0% { opacity: .9; transform: translate(0, 0) scale(.4); } 100% { opacity: 0; transform: translate(calc(-40px - var(--k) * 5px), calc((var(--k) - 7) * 5px - 10px)) scale(calc(2 + var(--k) * .25)); } }
+
+/* hair: comb out the tangles yourself; braid it twist by twist */
+.hairdo[data-state="braid"] .h-up, .hairdo[data-state="braid"] .h-braid { opacity: 1; }
+.hairdo[data-state="comb"] .h-tangle { opacity: 1; }
+.hairdo .h-tangle { transition: opacity .4s; }
+.hairdo .h-spark { opacity: 0 !important; transition: opacity .4s; }
+.hairdo.smooth[data-state="comb"] .h-spark { opacity: 1 !important; }
+.hairdo .combmove { transform: none; opacity: 1; animation: none !important; }
+.hairdo[data-state="comb"] { cursor: grab; } .hairdo[data-state="braid"] { cursor: pointer; }
+#braid .seg { opacity: 0; transition: opacity .25s, transform .25s; }
+#braid .seg.on { opacity: 1; }
+#braid .braid-tie, #braid .braid-end { opacity: 0; transition: opacity .3s; }
+.hairdo.braided #braid .braid-tie, .hairdo.braided #braid .braid-end { opacity: 1; }
+.hair-hint { min-height: 1.4em; margin: 0; text-align: center; color: var(--plum); font-size: 1.15rem; }

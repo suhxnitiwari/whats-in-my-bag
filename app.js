@@ -272,6 +272,7 @@ function hairView(state) {
     return `
         <h2>My <em>hair</em> stuff</h2>
         <p class="note">two silk scrunchies and a wide-tooth comb. dark, long, and always done.</p>
+        <p class="hair-hint hand" id="hair-hint"></p>
         <div class="hair-stage"><svg viewBox="0 0 220 300" class="hairdo" id="hairdo" data-state="${state}">
             <path d="M8 300 C10 246 48 222 110 222 C172 222 210 246 212 300Z" fill="#F3A9BB" stroke="#3A2626" stroke-width="3"/>
             <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
@@ -288,24 +289,61 @@ function hairView(state) {
                 <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
                 <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
 
-            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 222 96">', '<svg x="40" y="0" width="150" height="65" viewBox="0 0 222 96">')}</g></g>
+            <g class="h-tangle" id="tangle" fill="none" stroke="#4A3127" stroke-width="2.2" stroke-linecap="round">
+                <path d="M60 120 c10 -8 18 8 8 12 c-10 4 -14 -10 -4 -14 c12 -4 16 12 6 16"/><path d="M150 140 c-10 -8 -20 6 -10 12 c10 6 16 -8 6 -12 c-12 -4 -18 12 -6 16"/>
+                <path d="M96 190 c8 -10 22 -2 14 8 c-8 10 -20 0 -12 -8 c8 -8 22 2 14 10"/><path d="M70 230 c10 -6 18 6 8 10 c-10 4 -12 -8 -2 -10"/><path d="M146 220 c-8 -8 -18 4 -8 10 c10 6 14 -8 4 -10"/>
+                <path d="M48 160 l-10 -6 M44 190 l-12 2 M170 170 l12 -4 M176 200 l10 6 M58 250 l-10 8 M164 250 l10 8" stroke="#2A1C17"/></g>
+            <g class="h-braid" id="braid">${Array.from({ length: 9 }, (_, k) => `<g class="seg" data-k="${k}" transform="translate(${110 + (k % 2 ? 7 : -7)} ${118 + k * 16}) rotate(${k % 2 ? -32 : 32})"><ellipse rx="13" ry="9.5" fill="#2A1C17" stroke="#3A2626" stroke-width="2"/><path d="M-7 -2 q7 -6 14 0" fill="none" stroke="#5A3C30" stroke-width="2"/></g>`).join('')}
+                <g class="braid-tie">${window.SCRUNCHIE(110, 262, 11, ...window.SCR_PINK)}</g><path class="braid-end" d="M104 272 q6 14 2 22 M110 272 q2 14 6 20 M116 272 q4 10 0 20" fill="none" stroke="#2A1C17" stroke-width="5" stroke-linecap="round"/></g>
+            <g class="h-comb"><g id="combdrag" transform="translate(0 40)">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 240 100">', '<svg x="38" y="0" width="144" height="60" viewBox="0 0 240 100">')}</g></g>
             <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
         <div class="row hair-btns">
             <button class="btn" type="button" data-hair="pony" data-scr="pink">Pink scrunchie</button>
             <button class="btn" type="button" data-hair="pony" data-scr="brown">Brown scrunchie</button>
             <button class="btn" type="button" data-hair="comb">Comb it out</button>
+            <button class="btn" type="button" data-hair="braid">Braid it</button>
         </div>`;
 }
 function hairAfter(state) {
-    const svg = $('#hairdo'), lines = { pony: 'ponytail. silk, so no creases ♡', comb: 'wide-tooth comb. no knots, no breakage.' };
+    const svg = $('#hairdo'), hint = $('#hair-hint');
+    const lines = { pony: 'ponytail. silk, so no creases ♡' };
+    let passes = 0, twists = 0;
+    const tangle = $('#tangle'), comb = $('#combdrag'), segs = [...svg.querySelectorAll('#braid .seg')];
     const set = (st, scr) => {
         if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 102, 13, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
-        svg.dataset.state = '';
-        requestAnimationFrame(() => { svg.dataset.state = st; });
+        svg.dataset.state = st;
         sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === st && (!scr || b.dataset.scr === scr)));
+        if (st === 'comb') { passes = 0; tangle.style.opacity = 1; svg.classList.remove('smooth'); comb.setAttribute('transform', 'translate(0 40)'); hint.textContent = 'it’s tangled. drag the comb down through it ↓'; }
+        else if (st === 'braid') { twists = 0; segs.forEach(g => g.classList.remove('on')); svg.classList.remove('braided'); hint.textContent = 'tap the hair to cross one strand over. keep going ↓'; }
+        else hint.textContent = '';
     };
-    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair, b.dataset.scr); toast(lines[b.dataset.hair]); });
+    // combing: drag the comb down through the hair; three good passes and the tangles are gone
+    let drag = null;
+    svg.style.touchAction = 'none';
+    const yAt = e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()).y; };
+    svg.addEventListener('pointerdown', e => {
+        if (svg.dataset.state === 'braid') {
+            if (twists >= segs.length) return;
+            segs[twists++].classList.add('on');
+            if (twists === segs.length) { svg.classList.add('braided'); hint.textContent = 'braided ♡ tied off with the pink scrunchie'; toast('look at that braid ♡'); }
+            else hint.textContent = `${twists} of ${segs.length}. ${twists % 2 ? 'right over the middle' : 'left over the middle'}…`;
+            return;
+        }
+        if (svg.dataset.state !== 'comb') return;
+        drag = { y0: yAt(e), last: yAt(e) }; try { svg.setPointerCapture(e.pointerId); } catch {}
+    });
+    svg.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const y = Math.max(20, Math.min(250, yAt(e) - 20));
+        comb.setAttribute('transform', `translate(0 ${y})`);
+        if (y - drag.y0 > 140) { drag.y0 = 9999; passes++; tangle.style.opacity = Math.max(0, 1 - passes / 3);
+            if (passes >= 3) { svg.classList.add('smooth'); hint.textContent = 'tangle-free ♡ wide teeth, no breakage'; toast('silky. no knots. we love to see it'); }
+            else hint.textContent = `${3 - passes} more…`; }
+    });
+    const up = () => { if (!drag) return; drag = null; comb.setAttribute('transform', 'translate(0 40)'); };
+    svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
+    sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair, b.dataset.scr); if (lines[b.dataset.hair]) toast(lines[b.dataset.hair]); });
     set(state, state === 'pony' ? 'pink' : null);
 }
 
@@ -318,6 +356,23 @@ function mediciHTML(n) {
     return `<span class="medici-card"><span class="m-top"><span>REGULARS CARD</span><b>MEDICI</b><span>HAVE ONE ON US</span></span>
         <span class="m-grid">${Array.from({ length: 10 }, (_, k) => arch(k)).join('')}</span>
         <span class="m-band">BUY 10 DRINKS &amp; GET 1 FREE</span></span>`;
+}
+
+
+/* live weather (Open-Meteo: free, no API key, CORS-friendly). Austin, TX. */
+let clockTimer = null, wxCache = null;
+const WX = c => c === 0 ? ['☀️', 'clear'] : c <= 2 ? ['🌤️', 'mostly sunny'] : c === 3 ? ['☁️', 'cloudy'] : c <= 48 ? ['🌫️', 'foggy'] : c <= 57 ? ['🌦️', 'drizzle'] : c <= 67 ? ['🌧️', 'rain'] : c <= 77 ? ['❄️', 'snow'] : c <= 82 ? ['🌦️', 'showers'] : ['⛈️', 'storms'];
+async function loadWeather() {
+    if (wxCache && Date.now() - wxCache.at < 600000) return wxCache;
+    try {
+        const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=30.2672&longitude=-97.7431&current=temperature_2m,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America%2FChicago&forecast_days=1');
+        if (!r.ok) throw 0;
+        const j = await r.json();
+        let [icon, label] = WX(j.current.weather_code);
+        if (!j.current.is_day && j.current.weather_code <= 1) icon = '🌙';
+        wxCache = { at: Date.now(), icon, label, temp: Math.round(j.current.temperature_2m), hi: Math.round(j.daily.temperature_2m_max[0]), lo: Math.round(j.daily.temperature_2m_min[0]) };
+        return wxCache;
+    } catch { return null; }
 }
 
 /* ---------- picking something up ---------- */
@@ -334,6 +389,11 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    perfume: () => `
+        <h2>My <em>perfume</em></h2>
+        <p class="note">philosophy amazing grace, ballet rose. front pocket, always.</p>
+        <div class="pf-bottle" id="pf-bottle">${ITEMS.find(i => i.id === 'perfume').art}<span class="mist" id="mist" aria-hidden="true">${Array.from({ length: 14 }, (_, k) => `<i style="--k:${k}"></i>`).join('')}</span></div>
+        <div class="row"><button class="btn solid" type="button" id="spritz">Spritz</button></div>`,
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
         <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
@@ -716,6 +776,8 @@ const VIEWS = {
         <div class="phone-big">
             <div class="screen" id="screen">
                 <p class="clock mono" id="clock"></p>
+                <p class="pdate" id="pdate"></p>
+                <div class="wx" id="wx" aria-live="polite"><span class="wx-ic">⛅</span><span class="wx-t">--°</span><span class="wx-d">Austin · checking the sky…</span></div>
                 <div class="home" id="home">
                     <button type="button" class="papp" data-app="photos"><span class="ic ic-photos"><svg viewBox="0 0 40 40">${[0, 45, 90, 135, 180, 225, 270, 315].map((r, i) => `<ellipse cx="20" cy="11" rx="5" ry="9" fill="${['#F7D54A', '#F29B6B', '#E84393', '#B9A3E8', '#2E86DE', '#18A39A', '#27AE60', '#C7E3A1'][i]}" opacity=".85" transform="rotate(${r} 20 20)"/>`).join('')}</svg></span>Photos</button>
                     <button type="button" class="papp" data-app="instagram"><span class="ic ic-ig"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="5.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="26.5" cy="13.5" r="1.6" fill="#fff"/></svg></span>Instagram</button>
@@ -724,7 +786,7 @@ const VIEWS = {
                     <button type="button" class="papp" data-app="youtube"><span class="ic ic-yt"><svg viewBox="0 0 40 40"><rect x="8" y="12" width="24" height="16" rx="5" fill="#fff"/><path d="M18 16 v8 l7 -4z" fill="#E62117"/></svg></span>YouTube</button>
                     <button type="button" class="papp" data-app="netflix"><span class="ic ic-nf"><svg viewBox="0 0 40 40"><path d="M14 9 v22 M14 9 l12 22 M26 9 v22" fill="none" stroke="#E50914" stroke-width="4" stroke-linejoin="round"/></svg></span>Netflix</button>
                     <button type="button" class="papp" data-app="prime"><span class="ic ic-pv"><svg viewBox="0 0 40 40"><text x="20" y="20" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="9" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#1FA8E0" stroke-width="2" stroke-linecap="round"/></svg></span>Prime</button>
-                    <button type="button" class="papp" data-app="calendar"><span class="ic ic-cal"><svg viewBox="0 0 40 40"><rect x="7" y="8" width="26" height="25" rx="3" fill="#fff"/><path d="M7 14 h26" stroke="#1A73E8" stroke-width="4"/><text x="20" y="29" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="11" fill="#1A73E8">${new Date().getDate()}</text></svg></span>Calendar</button>
+                    <button type="button" class="papp" data-app="calendar"><span class="ic ic-gcal"><svg viewBox="0 0 40 40"><rect x="5" y="5" width="30" height="30" rx="4" fill="#fff"/><path d="M8 8 h24 v20" fill="none" stroke="#4285F4" stroke-width="4"/><path d="M32 28 l-6 6 h-18" fill="none" stroke="#34A853" stroke-width="4"/><path d="M8 34 v-26" fill="none" stroke="#FBBC04" stroke-width="4"/><path d="M26 34 l6 -6 h-6z" fill="#EA4335"/><text x="20" y="25.5" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="11" fill="#4285F4" id="gcal-day">${new Date().toLocaleDateString('en-US', { day: 'numeric', timeZone: 'America/Chicago' })}</text></svg></span><span class="plabel">Google Calendar</span></button>
                     <button type="button" class="papp" data-app="duolingo"><span class="ic ic-duo"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="12" ry="11" fill="#fff"/><circle cx="15.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="24.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="16" cy="21.5" r="2" fill="#3C3C3C"/><circle cx="24" cy="21.5" r="2" fill="#3C3C3C"/><path d="M18 26 l2 2.5 2 -2.5z" fill="#FFC800"/></svg></span>Duolingo</button>
                     <button type="button" class="papp" data-app="contacts"><span class="ic ic-ct"><svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="6" fill="#fff"/><path d="M9 31 c1 -7 6 -10 11 -10 s10 3 11 10z" fill="#fff"/></svg></span>Contacts</button>
                 </div>
@@ -901,6 +963,7 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    perfume: () => { let n = 0; $('#spritz').onclick = () => { const m = $('#mist'); m.classList.remove('go'); void m.offsetWidth; m.classList.add('go'); n++; toast(n === 1 ? 'ballet rose ♡ you smell that?' : n < 4 ? 'one more. for good luck.' : 'okay that’s enough, it’s a small elevator'); }; },
     boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
     padfolio: () => { $('#bc').onclick = () => { const f = $('#bc').classList.toggle('flip'); if (f) toast('take one. seriously ♡'); }; },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
@@ -939,7 +1002,22 @@ const AFTER = {
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
     phone: () => {
         const d = new Date();
-        $('#clock').textContent = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        // live: Austin time and date (it's my phone), ticking while the phone is open
+        const tick = () => {
+            const c = $('#clock'); if (!c) return clearInterval(clockTimer);
+            const now = new Date();
+            c.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' });
+            $('#pdate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Chicago' });
+        };
+        clearInterval(clockTimer); tick(); clockTimer = setInterval(tick, 1000);
+        // live weather for Austin from Open-Meteo (free, no key), refreshed at most every 10 minutes
+        loadWeather().then(w => {
+            const el = $('#wx'); if (!el) return;
+            if (!w) { el.querySelector('.wx-d').textContent = 'Austin · weather’s shy right now'; return; }
+            el.querySelector('.wx-ic').textContent = w.icon;
+            el.querySelector('.wx-t').textContent = `${w.temp}°`;
+            el.querySelector('.wx-d').textContent = `Austin · ${w.label} · H ${w.hi}° L ${w.lo}°`;
+        });
         const view = $('#app-view'), home = $('#home');
         const back = '<button type="button" class="back mono" id="back">‹ home</button>';
         sheetBody.querySelectorAll('[data-app]').forEach(b => b.onclick = () => {

@@ -27,6 +27,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | You Deserve Each Other, Sarah Hogle (paperback rom-com) | Three weeks in my backpack, still on chapter one |
 | Pink NY cap | A cap is a must |
 | iPhone: Contacts app | "do you wanna connect with me?" — add your name + number (sends to me by email), or save my contact card |
+| philosophy amazing grace ballet rose (front pocket) | Spritz it |
 | Boarding pass (front pocket) | Destination: wherever's next |
 | McCombs padfolio | Résumés in the pocket (links to my résumé), a pen, a legal pad you can write on |
 | Two silk scrunchies and a wide-tooth comb | Try each one on |
