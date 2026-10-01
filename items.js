@@ -255,14 +255,14 @@ window.ITEMS = [
         open: 'sweater'
     },
     {
-        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 31.0, t: 86.8, w: 31.9, r: -6,
-        get art() {
-            const nb1 = window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']]);
-            const nb2 = window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']]);
-            const nest = (svg, x, y) => svg.replace('<svg viewBox="0 0 170 220" aria-hidden="true">', `<svg x="${x}" y="${y}" width="170" height="220" viewBox="0 0 170 220">`);
-            return `<svg viewBox="0 0 262 262" aria-hidden="true"><g transform="rotate(-3 85 110)">${nest(nb1, 0, 6)}</g><g transform="rotate(4 170 150)">${nest(nb2, 84, 36)}</g></svg>`;
-        },
-        open: 'notebooks'
+        id: 'nb1', name: 'my erin condren notebook (blue)', zip: 'main', l: 0, t: 0, w: 20.7, r: -4,
+        get art() { return window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']]); },
+        open: 'nb1'
+    },
+    {
+        id: 'nb2', name: 'my erin condren notebook (pink)', zip: 'main', l: 0, t: 0, w: 20.7, r: 5,
+        get art() { return window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']]); },
+        open: 'nb2'
     },
     {
         id: 'romcom', name: 'you deserve each other (unread)', zip: 'main', l: 9.4, t: 58.8, w: 11.8, r: -7,

@@ -226,12 +226,6 @@ function shelf(list, x0, x1, y0, gap = 2.2) {
 function relayout() {
     if (phone()) return;
     let items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip)).map(sizeOf);
-    // the binder and the Erin Condrens travel together: the notebooks sit stacked on the binder, like in my bag
-    const bi = items.find(b => b.it.id === 'binder'), nb = items.find(b => b.it.id === 'notebooks');
-    if (bi && nb) {
-        items = items.filter(b => b !== bi && b !== nb);
-        items.push({ it: { id: '__stack' }, w: bi.w * .62 + nb.w, h: Math.max(bi.h, nb.h) + 2, parts: [[bi, bi.w / 2, 0], [nb, bi.w * .62 + nb.w / 2, 2]] });
-    }
     items.sort((a, b) => b.w * b.h - a.w * a.h);
     if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
     const bands = {
@@ -260,7 +254,6 @@ function relayout() {
     const H = Math.max(114, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 105);
     stage.style.aspectRatio = `${TW} / ${H}`;
     bagBtn.style.top = `${BAG_CY / H * 100}%`;
-    for (const b of [...placed]) if (b.parts) for (const [p, dx, dy] of b.parts) placed.push({ ...p, cx: b.cx - b.w / 2 + dx, cy: b.cy + dy / 2 });
     for (const b of placed) {
         const li = document.getElementById('item-' + b.it.id); if (!li) continue;
         li.style.setProperty('--l', `${b.cx * CM}%`);
@@ -544,7 +537,7 @@ const COMBOS = [
     [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
     [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
     [['bear', 'cards'], 'T.D. and a stack of her little sister’s cards. okay, now you know her soft spot.'],
-    [['laptop', 'padfolio', 'notebooks'], 'laptop, padfolio, notebooks. she will work anywhere.'],
+    [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
     [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
     [['passport', 'boarding'], 'passport and a boarding pass to “???”. she’s always halfway somewhere.'],
@@ -913,24 +906,29 @@ const VIEWS = {
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
         <div class="row"><button class="btn" type="button" id="sw-fold">Unfold it</button><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
-    notebooks: () => `
-        <h2>My <em>Erin Condren</em> notebooks</h2>
-        <p class="note">two custom ones. yes, i still take notes by hand.</p>
-        <div class="ecb-row">
-            <div class="ecb" data-ecb>
+    nb1: () => `
+        <h2>My <em>Erin Condren</em> notebook</h2>
+        <p class="note">the blue one. my classes live here. yes, i still take notes by hand.</p>
+        <div class="ecb-row"><div class="ecb" data-ecb>
                 <div class="ecb-page ec-page"><p class="hand ec-h">my classes</p><ul class="hand">
                     <li>Web App Development</li><li>Full-Stack Web App Development</li><li>Database Management</li>
                     <li>Problem Solving &amp; Programming</li><li>Strategic IT Management</li><li>Intro to IT Management</li>
                     <li>Intro to Data Science</li><li>Intro to Decision Science</li><li>Statistics for Business</li>
                 </ul></div>
-                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']])}</div><div class="ecb-back"></div></div>
-            </div>
-            <div class="ecb" data-ecb>
+                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']])}</div><div class="ecb-back"></div></div></div>
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>
+        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
+    nb2: () => `
+        <h2>My <em>Erin Condren</em> notebook</h2>
+        <p class="note">the pink one.</p>
+        <div class="ecb-row"><div class="ecb" data-ecb>
                 <div class="ecb-page ec-page"><p class="hand ec-h">notebook no. 2</p><p><span class="todo">what’s in this one?</span></p></div>
                 <div class="ecb-cover"><div class="ecb-front">${window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']])}</div><div class="ecb-back"></div></div>
             </div>
         </div>
         <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap a notebook to open it. tap again to close.</p>
+        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
 
     binder: () => `
@@ -1244,7 +1242,8 @@ const AFTER = {
             note.innerHTML = b.classList.contains('up') ? `<b>${c === 'Eye' ? 'Eye Want It All' : 'Morphe ' + c}</b> · ${n}<br><small>for ${u}</small>` : 'tap a brush';
         });
     },
-    notebooks: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
+    nb1: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
+    nb2: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     journal: () => {
         const jb = $('#jb'), cover = $('#jb-cover'), hint = $('#jb-hint');
         cover.querySelector('.jb-front').onclick = e => {
