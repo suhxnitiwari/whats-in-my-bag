@@ -400,7 +400,7 @@ window.ITEMS = [
         open: 'todo'
     },
     {
-        id: 'ticket', name: 'a speeding ticket', zip: 'front', l: 0, t: 0, w: 10.3, r: -5,
+        id: 'ticket', name: 'a speeding ticket', zip: 'shades', l: 0, t: 0, w: 10.3, r: -5,
         art: `<svg viewBox="0 0 120 92"><path d="M6 10 L112 4 L116 84 L10 90Z" fill="#FBF8EE" ${S} stroke-width="2"/><path d="M8 46 L114 42" stroke="#D9D2C2" stroke-width="1.4" stroke-dasharray="3 2"/>
     <rect x="12" y="12" width="96" height="12" fill="#3A5A9A" transform="rotate(-3 60 18)"/><text x="60" y="21.5" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="7" fill="#fff" letter-spacing="1.4" transform="rotate(-3 60 18)">CITATION · SPEEDING</text>
     <g font-family="Instrument Sans" font-size="4.6" fill="#3A2626" transform="rotate(-3 60 50)"><text x="14" y="34">NAME: SUHANI TIWARI</text><text x="14" y="40">SPEED: a little too excited</text><text x="14" y="56">OFFICER NOTES: “she was very polite.”</text><text x="14" y="63">STATUS: tucked in the front pocket</text></g>
@@ -408,7 +408,7 @@ window.ITEMS = [
         open: 'ticket'
     },
     {
-        id: 'giftcards', name: 'some gift cards', zip: 'front', l: 0, t: 0, w: 10.3, r: 3,
+        id: 'giftcards', name: 'some gift cards', zip: 'shades', l: 0, t: 0, w: 10.3, r: 3,
         art: `<svg viewBox="0 0 130 100"><g transform="rotate(-10 40 50)"><rect x="6" y="22" width="80" height="50" rx="5" fill="#ECE6DC" ${S} stroke-width="2"/><text x="46" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="2.4" fill="#2A2426">ARITZIA</text></g>
     <g transform="rotate(4 70 50)"><rect x="32" y="18" width="80" height="50" rx="5" fill="#111013" ${S} stroke-width="2"/><text x="72" y="47" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="11" letter-spacing="3.2" fill="#F4F2EE">CHANEL</text></g>
     <g transform="rotate(14 82 64)"><rect x="42" y="38" width="80" height="50" rx="5" fill="#fff" ${S} stroke-width="2"/><g clip-path="none">${[0,1,2,3,4,5,6,7,8,9].map(k => `<rect x="${44 + k * 8}" y="40" width="4" height="12" fill="#111013"/>`).join('')}</g><text x="82" y="72" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="2.4" fill="#111013">SEPHORA</text></g></svg>`,

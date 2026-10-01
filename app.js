@@ -587,7 +587,7 @@ const VIEWS = {
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
-        <p class="note">see also: my car keys. and the curb. the curb knows what it did.</p>`,
+        <p class="note">see also: my car keys, right next to it in the junk pocket. and the curb. the curb knows what it did.</p>`,
     giftcards: () => `
         <h2>some <em>gift cards</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'giftcards').art}</div>
