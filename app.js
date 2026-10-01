@@ -5,6 +5,148 @@ const $ = s => document.querySelector(s);
 const stage = $('#stage'), bagBtn = $('#bag'), bagArt = $('#bag-art'), list = $('#items');
 const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-label');
 const phone = () => matchMedia('(max-width: 760px)').matches;
+/* sounds, all made right here in the browser (no audio files): zipper teeth, things landing on the desk, a little sparkle, a spritz.
+   the button in the corner mutes everything, and it remembers. */
+const SFX = (() => {
+    let ctx = null, on = true, noise = null;
+    try { on = localStorage.getItem('bag-sound') !== 'off'; } catch {}
+    const ac = () => {
+        if (!on) return null;
+        try {
+            if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (ctx.state === 'suspended') ctx.resume();
+        } catch { return null; }
+        if (!noise) { noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+        return ctx;
+    };
+    // a short filtered burst of noise: one zipper tooth, a tap, a spray
+    const burst = (c, at, dur, freq, q, vol) => {
+        const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+        src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
+        g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .002); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
+        src.connect(f).connect(g).connect(c.destination); src.start(at, Math.random() * .9); src.stop(at + dur + .02);
+    };
+    const tone = (c, at, dur, from, to, vol, type = 'sine') => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = type; o.frequency.setValueAtTime(from, at); o.frequency.exponentialRampToValueAtTime(to, at + dur);
+        g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .006); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
+        o.connect(g).connect(c.destination); o.start(at); o.stop(at + dur + .02);
+    };
+    const last = new Map();
+    return {
+        get on() { return on; },
+        set(v) { on = v; try { localStorage.setItem('bag-sound', v ? 'on' : 'off'); } catch {} if (!v && ctx) ctx.suspend(); },
+        // zipper teeth: one click per bit the pull travels, so dragging it slowly clicks slowly. opening sounds a touch brighter than closing.
+        teeth(key, t) {
+            const prev = last.get(key); last.set(key, t);
+            if (prev === undefined) return;
+            const n = Math.min(14, Math.floor(Math.abs(t - prev) / .011));
+            const c = n && ac(); if (!c) return;
+            const up = t > prev, now = c.currentTime;
+            for (let k = 0; k < n; k++) burst(c, now + k * (.045 / n) + Math.random() * .003, .012, (up ? 3400 : 2700) + Math.random() * 900, 3.5, .16);
+        },
+        // a whole zip in one go (for pouches that don't track the pull)
+        zip(open = true, dur = .5) {
+            const c = ac(); if (!c) return;
+            const n = Math.round(dur * 70), now = c.currentTime;
+            for (let k = 0; k < n; k++) burst(c, now + k * dur / n + Math.random() * .004, .012, (open ? 2900 : 2400) + k * (open ? 18 : -10) + Math.random() * 700, 3.5, .14);
+        },
+        // something landing on the desk: a soft thunk, lower for bigger things
+        land(size = 10) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, f = Math.max(70, 230 - size * 4) * (.9 + Math.random() * .2);
+            tone(c, now, .14, f, f * .55, .22); burst(c, now, .05, 900 + Math.random() * 500, 1.2, .1);
+        },
+        sparkle() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            [1318.5, 1568, 1975.5, 2637].forEach((f, k) => { tone(c, now + k * .07, .5, f, f * 1.01, .07, 'triangle'); });
+            for (let k = 0; k < 10; k++) tone(c, now + .1 + Math.random() * .5, .18, 3000 + Math.random() * 2500, 3200 + Math.random() * 2500, .02);
+        },
+        spritz() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            burst(c, now, .3, 6500, .7, .12); burst(c, now + .02, .22, 9000, .9, .06);
+        },
+        // fabric: soft, uneven swishes of filtered noise, like nylon shifting
+        rustle(dur = .6, vol = .09) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, n = Math.max(3, Math.round(dur * 9));
+            for (let k = 0; k < n; k++) {
+                const at = now + k * dur / n + Math.random() * .05, d = .09 + Math.random() * .14;
+                const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+                src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = .8;
+                f.frequency.setValueAtTime(700 + Math.random() * 600, at); f.frequency.linearRampToValueAtTime(1300 + Math.random() * 1200, at + d);
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol * (.5 + Math.random() * .5), at + d * .45); g.gain.exponentialRampToValueAtTime(.0008, at + d);
+                src.connect(f).connect(g).connect(c.destination); src.start(at, Math.random() * .9); src.stop(at + d + .02);
+            }
+        },
+        // the whole bag tipping onto the desk
+        slump() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            tone(c, now, .32, 95, 48, .3); burst(c, now, .18, 420, .9, .12);
+        },
+        // something going back in: a muffled little thud, softer than landing
+        tuck(size = 10) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, f = Math.max(90, 260 - size * 4) * (.9 + Math.random() * .2);
+            tone(c, now, .09, f, f * .7, .1); burst(c, now, .05, 500 + Math.random() * 300, 1, .05);
+        },
+        // closing a view: barely there
+        tap() {
+            const c = ac(); if (!c) return;
+            burst(c, c.currentTime, .008, 3200, 5, .05);
+        },
+        // every thing has its own little sound when you pick it up
+        item(id) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime, r = () => Math.random();
+            // a bright metal ring: a few out-of-tune partials that fade (keys, bottle)
+            const ring = (at, f, vol, dur) => [1, 2.76, 5.4].forEach((m, k) => tone(c, at, dur / (k + 1), f * m, f * m * .998, vol / (k + 1.5)));
+            // a noise sweep (cards sliding, pages turning)
+            const sweep = (at, dur, f0, f1, vol, q = 1.4) => {
+                const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+                src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = q;
+                f.frequency.setValueAtTime(f0, at); f.frequency.exponentialRampToValueAtTime(f1, at + dur);
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + dur * .3); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
+                src.connect(f).connect(g).connect(c.destination); src.start(at, r() * .9); src.stop(at + dur + .02);
+            };
+            const click = (at, f = 4200, vol = .2) => { burst(c, at, .015, f, 6, vol); tone(c, at, .03, 1800, 900, vol * .4, 'square'); };
+            const S = {
+                phone: () => { tone(c, t, .35, 1318.5, 1318.5, .08); tone(c, t + .12, .5, 1760, 1760, .07); },
+                ipad: () => { click(t, 2600, .12); for (let k = 0; k < 6; k++) sweep(t + .08 + k * .06, .05, 2500 + r() * 1500, 3500 + r() * 2000, .05, 4); },
+                pencil: () => { click(t, 2600, .14); click(t + .14, 2800, .1); },
+                keys: () => { for (let k = 0; k < 6; k++) ring(t + k * .05 + r() * .03, 2400 + r() * 1400, .045, .35); },
+                wallet: () => sweep(t, .32, 900, 3600, .12, 1.1),
+                cards: () => sweep(t, .28, 1100, 3800, .1, 1.1),
+                giftcards: () => sweep(t, .28, 1100, 3800, .1, 1.1),
+                lipstick: () => { click(t, 3600, .22); click(t + .09, 5200, .16); },
+                'backup-lip': () => { click(t, 3600, .22); click(t + .09, 5200, .16); },
+                perfume: () => this.spritz(),
+                sanitizer: () => { tone(c, t, .09, 220, 110, .2); burst(c, t + .05, .12, 1400, 2, .12); burst(c, t + .1, .08, 700, 3, .08); },
+                stanley: () => { ring(t, 1180, .12, .9); ring(t + .16, 1560, .06, .6); },
+                penpouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
+                pouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
+                laptop: () => { for (let k = 0; k < 5; k++) click(t + k * .07 + r() * .02, 1900 + r() * 900, .1); },
+                'makeup-pouch': () => this.zip(true, .28),
+                'skin-pouch': () => this.zip(true, .28),
+                sunglasses: () => click(t, 2400, .18),
+                readers: () => click(t, 2400, .18)
+            };
+            // anything with pages flips them
+            ['journal', 'padfolio', 'binder', 'sketchbook', 'romcom', 'onward', 'todo', 'passport'].forEach(k => { S[k] = () => { sweep(t, .22, 600, 2600, .1, .9); sweep(t + .07, .16, 1200, 3200, .05, 1.4); }; });
+            (S[id] || (() => tone(c, t, .1, 520 + r() * 120, 380, .08)))();
+        }
+    };
+})();
+{
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sound-btn mono';
+    const sync = () => { b.textContent = SFX.on ? '♪ sound on' : '♪ sound off'; b.setAttribute('aria-pressed', SFX.on); b.classList.toggle('off', !SFX.on); };
+    b.onclick = () => { SFX.set(!SFX.on); sync(); if (SFX.on) SFX.zip(true, .25); };
+    sync(); document.querySelector('header.top').appendChild(b);
+}
 const moved = {};   // things you've dragged somewhere else on the table
 const stowed = new Set();   // things you've put back in their pocket (the pocket stays open)
 
@@ -134,6 +276,7 @@ BAG.pockets.forEach(pk => {
 });
 function place(pk, t) {
     const { path, pull, len } = pk.el;
+    SFX.teeth(pk.id, t);
     const pt = path.getPointAtLength(len * t);
     pull.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
     if (pk.id === 'front') hangCharms(pt);
@@ -373,6 +516,7 @@ function unzip(pk, from = 0) {
                     { transform: `${base}translate(${dx * .45}px, ${dy * .45 - 60}px) scale(.8) rotate(${-it.r * 2}deg)`, opacity: 1, offset: .55 },
                     { transform: `${base}rotate(${it.r}deg)`, opacity: 1 }
                 ], { duration: 620, easing: 'steps(7, end)' });
+                setTimeout(() => SFX.land(it.w), 560);
                 await new Promise(r => setTimeout(r, 150));
             }
         }
@@ -385,6 +529,8 @@ function unzip(pk, from = 0) {
 function zipUp(pk, from = 1) {
     busy = busy.then(async () => {
         if (!open.has(pk.id)) return;
+        SFX.rustle(.35, .06);
+        ITEMS.filter(i => i.zip === pk.id && !stowed.has(i.id)).forEach((it, k) => setTimeout(() => SFX.tuck(it.w), 60 + k * 70));
         ITEMS.filter(i => i.zip === pk.id).forEach(it => {
             const li = document.getElementById('item-' + it.id);
             li.classList.remove('out'); li.querySelector('button').tabIndex = -1;
@@ -414,6 +560,7 @@ allBtn.addEventListener('click', () => {
     $('#stage').scrollIntoView({ block: 'center', behavior: 'auto' });
     // the whole bag tips over and everything spills out
     bagBtn.classList.remove('tip'); void bagBtn.offsetWidth; bagBtn.classList.add('tip');
+    SFX.rustle(1.1, .11); setTimeout(() => SFX.slump(), reduce ? 0 : 520);
     toast('okay. everything. you asked for this.');
     setTimeout(() => { BAG.pockets.forEach(pk => unzip(pk)); }, reduce ? 0 : 650);
 });
@@ -583,6 +730,7 @@ sheetBody.addEventListener('click', e => {
 sheet.addEventListener('close', () => { navStack.length = 0; curItem = null; });
 
 function pickUp(it) {
+    SFX.item(it.id);
     curItem = it;
     snoop(it.id);
     sheetLabel.textContent = it.name;
@@ -592,7 +740,7 @@ function pickUp(it) {
     (AFTER[typeof it.open === 'function' ? it.id : it.open] || (() => {}))();
 }
 sheet.addEventListener('click', e => {
-    if (e.target === sheet || e.target.closest('[data-close]')) sheet.close();
+    if (e.target === sheet || e.target.closest('[data-close]')) { if (e.target.closest('[data-close]')) SFX.tap(); sheet.close(); }
 });
 
 /* ---------- what each thing shows you ---------- */
@@ -2168,6 +2316,7 @@ const AFTER = {
             if (b.dataset.sk === 'lamer') { if (!applied.has('lamer')) return spoonTime(b); }
             else apply(b.dataset.sk);
             const k = b.dataset.sk, used = b.classList.toggle('use');
+            SFX.item(/pump/.test(k) ? 'sanitizer' : 'skin');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const lbl = $('#swatch-label'), sw = $('#swatch');
             $('#swipe').setAttribute('stroke', { dropper: '#F7D3DD', pinkpump: '#FBEDE6', goldpump: '#E8C9A8', patches: '#E2B23A', lamer: '#F1E9DD', sisley: '#F7E6E2', mask: '#EFE6D2' }[k]);
@@ -2322,6 +2471,7 @@ const AFTER = {
         const capOff = () => { bottle.classList.add('capoff'); btn.textContent = 'Spritz'; hint.textContent = 'now press the nozzle. each spritz is a layer of me ✨'; };
         const spritz = () => {
             if (!bottle.classList.contains('capoff')) return capOff();
+            if (n < 5) SFX.spritz();
             // five sprays, max. then she cuts you off
             if (n >= 5) { bottle.classList.remove('nope'); void bottle.offsetWidth; bottle.classList.add('nope'); hint.textContent = 'cut off. five is the limit ♡'; return toast('girl, i know this perfume is amazing, but don’t let people smell you from a mile away.'); }
             act.style.transition = 'transform .12s'; act.style.transform = 'translateY(3px)';
@@ -2599,6 +2749,7 @@ const AFTER = {
         const bag = $('#mbag'), note = $('#mk-note');
         const toggle = () => {
             const open = bag.classList.toggle('open');
+            SFX.zip(open, .55);
             $('#mpull').setAttribute('aria-label', open ? 'Zip the makeup pouch' : 'Unzip the makeup pouch');
             note.textContent = open ? 'tap anything' : 'pull the zipper';
         };
@@ -2620,7 +2771,7 @@ const AFTER = {
             if (Math.abs(e.clientX - mdrag.x) > 6) mdrag.moved = true;
             if (!mdrag.moved) return;
             if (!bag.classList.contains('scrub')) { bag.classList.add('scrub'); bag.classList.remove('open'); }
-            mdrag.f = f; mp.style.transition = 'none'; mp.style.left = `calc(6% + ${f} * (84% - 22px))`; scrub(f);
+            SFX.teeth('mpouch', f); mdrag.f = f; mp.style.transition = 'none'; mp.style.left = `calc(6% + ${f} * (84% - 22px))`; scrub(f);
         });
         mp.addEventListener('pointerup', () => {
             if (!mdrag) return;
@@ -2643,6 +2794,7 @@ const AFTER = {
                 foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null]
             }[b.dataset.mk];
             if (!SH) { pickUp({ id: 'brushes', name: 'my morphe brushes', open: 'brushes' }); return backToPouch(); }
+            SFX.item(b.dataset.mk === 'lipliner' ? 'pencil' : 'lipstick');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const sw = $('#swatch'), lbl = $('#swatch-label');
             $('#swipe').setAttribute('stroke', SH[0]);
@@ -2662,6 +2814,7 @@ const AFTER = {
         };
         if (bbb) $('#bbb-wand').onclick = () => {
             const on = bbb.classList.toggle('after');
+            SFX.sparkle();
             $('#bbb-tag').textContent = on ? 'after' : 'before';
             $('#bbb-word').textContent = on ? 'and back again' : 'bibbidi bobbidi boo';
             bbb.querySelector('.bbb-after').setAttribute('aria-hidden', !on);
@@ -3195,6 +3348,7 @@ function zipperPouch(pf, pens, btn, note) {
     pens.classList.add('zipdrive');
     const set = v => {
         p = Math.max(0, Math.min(1, v));
+        SFX.teeth(pf, p);
         pull.style.transform = `translateX(${-TRACK * p}px)`;
         pf.classList.toggle('unzipped', p > .02);
         // pens come out one at a time, from the end the zipper opens first
@@ -3362,7 +3516,7 @@ $('#put-back').addEventListener('click', () => { $('#ending').hidden = true; $('
 }
 
 // "pull me" sits next to the first zipper's pull, and actually pulls it
-$('#bag-hint').addEventListener('click', e => { e.stopPropagation(); unzip(BAG.pockets[0]); });
+$('#bag-hint').addEventListener('click', e => { e.stopPropagation(); SFX.rustle(.4, .07); unzip(BAG.pockets[0]); });
 // the makeup list page is gone: anything that pointed at it opens the pouch
 VIEWS.makeup = VIEWS.makeupbag; AFTER.makeup = AFTER.makeupbag;
 })();
