@@ -1348,8 +1348,8 @@ const VIEWS = {
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>LOUIS VUITTON<br>PARIS<br>made in Italy</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
                 <button type="button" class="vbills" id="vbills" aria-label="Bill compartment: take the cash out" aria-pressed="false">${[
-                    ['₹500', '#B9B4A8', '#4E4A40'], ['₹200', '#EBC76A', '#6A4A08'], ['₹100', '#B9A9DC', '#3E2E70'], ['$20', '#B7CFAE', '#24401F'], ['$1', '#CFDCC6', '#33502D']
-                ].map(([d, bg, ink], k) => `<span class="bill" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
+                    ['₹500', '#B9B4A8', '#4E4A40'], ['₹200', '#EBC76A', '#6A4A08'], ['₹100', '#B9A9DC', '#3E2E70'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F']
+                ].map(([d, bg, ink], k) => `<span class="bill${d === '$100' ? ' usd100' : ''}" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
             </div>
             <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
         </div>
@@ -2584,7 +2584,7 @@ const AFTER = {
         $('#vbills').onclick = () => {
             const out = vw.classList.toggle('bills-out');
             $('#vbills').setAttribute('aria-pressed', out); $('#vbills').setAttribute('aria-label', out ? 'Bill compartment: tuck the cash back in' : 'Bill compartment: take the cash out');
-            toast(out ? 'rupees for home, dollars for here ♡' : 'cash tucked away');
+            toast(out ? 'rupees for home, five hundreds for here. don’t get any ideas ♡' : 'cash tucked away');
         };
         // the Medici card comes out with the cash. Tap it for a vanilla latte stamp.
         $('#medici').onclick = () => {

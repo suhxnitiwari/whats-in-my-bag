@@ -2238,3 +2238,11 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .routine li.done { color: var(--plum); text-decoration: line-through; text-decoration-color: rgba(118,52,78,.5); }
 .routine li.done::after { content: " ✓"; text-decoration: none; }
 @media (max-width: 760px) { .routine-wrap { grid-template-columns: 1fr; } }
+
+/* the cash: rupees, and five $100s with the blue security ribbon */
+.bill { transform: translateY(calc(var(--k) * 3.4%)); }
+.vbills:hover .bill { transform: translateY(calc(-4% + var(--k) * 3.4%)); }
+.vw.bills-out .bill, .vw.bills-out .vbills:hover .bill { transform: translateY(calc(-36% + var(--k) * 6%)); }
+.bill.usd100 { background-color: #DCE4D6; background-image: linear-gradient(90deg, transparent 47%, #3B6FD8 47% 50%, transparent 50%), radial-gradient(circle at 74% 46%, rgba(255,255,255,.55) 0 14%, transparent 15%), repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0 1px, transparent 1px 5px); }
+.bill.usd100 b { color: #2C4A2A; } .bill.usd100::after { content: "100"; position: absolute; right: 8px; bottom: 4px; font: 700 1.2rem var(--serif); color: #C7883A; opacity: .85; }
+.vw.bills-out { margin-top: 120px; transition: margin-top .45s ease; }
