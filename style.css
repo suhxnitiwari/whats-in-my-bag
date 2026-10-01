@@ -1468,3 +1468,13 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 #item-notebooks { z-index: 4; }
 #after { display: none !important; }
+
+/* Morphe brushes: white handles, taupe bristles; tap one and it lifts */
+.mbrs { display: flex; justify-content: center; align-items: flex-end; gap: 6px; padding: 30px 6px 6px; flex-wrap: wrap; }
+.mbr { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 54px; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .35s cubic-bezier(.3,1.4,.5,1); }
+.mbr svg { width: 46px; height: auto; max-width: none; }
+.mbr span { font: 500 .58rem/1.15 var(--sans); color: var(--muted); text-align: center; min-height: 2.3em; }
+.mbr:hover, .mbr.up { transform: translateY(-22px) rotate(-4deg); }
+.mbr.up span { color: var(--plum); font-weight: 700; }
+.mbr-note { text-align: center; color: var(--plum); font-size: 1.15rem; min-height: 2.6em; }
+.mbr-note small { font-size: .9rem; color: var(--muted); }
