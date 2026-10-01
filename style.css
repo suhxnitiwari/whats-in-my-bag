@@ -726,3 +726,17 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .mbag.open .mk { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(0); }
 .mbag.open .mk:hover { transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(-14px); }
 
+/* the water bottle sleeve is part of the backpack: same black fabric, attached to its side, bottle sunk deep in it */
+.bottle { right: -1%; bottom: 4%; width: 18%; transform: none; }
+.bottle:hover, .bottle:focus-visible { transform: translateY(-5%); }
+.holder { left: -45%; right: -16%; bottom: -2%; height: 58%; border-radius: 4px 14px 22px 8px;
+    border: 2.5px solid #3A2626; border-left: 0;
+    background-color: #232126;
+    background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1.6px);
+    background-size: 5px 5px; box-shadow: inset 0 4px 0 #34313A, -6px 0 0 #232126; }
+/* elastic edge along the top */
+.holder::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 9%; border-top: none; background: repeating-linear-gradient(90deg, #2E2B33 0 3px, #1C1A1E 3px 5px); border-bottom: 1.5px solid #3A2626; }
+/* compression strap and buckle */
+.holder::after { content: ""; position: absolute; left: -2%; right: -6%; top: 46%; height: 11%; background: #1A181C; border-top: 1.5px solid #3A2626; border-bottom: 1.5px solid #3A2626;
+    box-shadow: inset -26px 0 0 -8px #4A474F; }
+.holder { left: -26%; }
