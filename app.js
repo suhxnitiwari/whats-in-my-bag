@@ -231,6 +231,17 @@ function hairAfter(state) {
     set(state, state === 'pony' ? '#F2B8C6' : null);
 }
 
+
+/* my Medici regulars card lives in the wallet's zip pocket: a vanilla latte a day, buy 10 & get 1 free */
+const mediciStamps = () => { try { const n = parseInt(localStorage.getItem('medici-stamps'), 10); return Number.isFinite(n) ? n : 1; } catch { return 1; } };
+const saveStamps = n => { try { localStorage.setItem('medici-stamps', String(n)); } catch {} };
+function mediciHTML(n) {
+    const arch = k => `<span class="m-slot${k < n ? ' on' : ''}"><svg viewBox="0 0 30 34" aria-hidden="true"><path d="M3 32 V15 a12 12 0 0 1 24 0 V32Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 26 v-9 l5 6 5 -6 v9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${k < n ? '<i>♡</i>' : ''}</span>`;
+    return `<span class="medici-card"><span class="m-top"><span>REGULARS CARD</span><b>MEDICI</b><span>HAVE ONE ON US</span></span>
+        <span class="m-grid">${Array.from({ length: 10 }, (_, k) => arch(k)).join('')}</span>
+        <span class="m-band">BUY 10 DRINKS &amp; GET 1 FREE</span></span>`;
+}
+
 /* ---------- picking something up ---------- */
 function pickUp(it) {
     sheetLabel.textContent = it.name;
@@ -262,17 +273,20 @@ const VIEWS = {
 
     makeup: () => `
         <div class="lipstick-big" id="lip">
-            <svg viewBox="0 0 160 210" aria-label="Westman Atelier HydroBalm lipstick in Glögg, cap off">
+            <svg viewBox="0 0 160 210" aria-label="Westman Atelier lipstick in Glögg">
                 <g class="tube">
-                    <rect x="22" y="96" width="46" height="108" rx="10" fill="#E8EFF6" stroke="#3A2626" stroke-width="3"/>
-                    <rect x="27" y="74" width="36" height="28" rx="4" fill="#DCE6F0" stroke="#3A2626" stroke-width="3"/>
-                    <path d="M31 74 V40 C31 26 59 18 59 32 V74Z" fill="#7A1E2E" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
-                    <path d="M37 44 q6 -9 15 -13" fill="none" stroke="#B4475A" stroke-width="3" stroke-linecap="round"/>
-                    <text x="45" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#9AA8B8" transform="rotate(-90 45 150)" letter-spacing="1.5">WESTMAN ATELIER</text>
+                    <rect x="20" y="108" width="54" height="96" rx="7" fill="#F7F7F5" stroke="#3A2626" stroke-width="3"/>
+                    <path d="M28 116 v80" stroke="#E2E2DF" stroke-width="5" stroke-linecap="round"/>
+                    <rect x="24" y="98" width="46" height="13" rx="4" fill="#EEEEEB" stroke="#3A2626" stroke-width="2.5"/>
+                    <rect x="30" y="74" width="34" height="27" rx="3" fill="#F7F7F5" stroke="#3A2626" stroke-width="2.5"/>
+                    <path d="M33 75 V48 C33 38 43 36 47 41 L61 58 V75Z" fill="#8E2A24" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M37 50 q3 -6 8 -7" fill="none" stroke="#C45A4E" stroke-width="3" stroke-linecap="round"/>
+                    <text x="47" y="168" text-anchor="middle" font-family="Instrument Sans" font-size="7" fill="#A9A9A6" transform="rotate(-90 47 156)" letter-spacing="1.6">WESTMAN ATELIER</text>
                 </g>
                 <g class="cap">
-                    <rect x="20" y="14" width="50" height="100" rx="10" fill="#EEF3F8" stroke="#3A2626" stroke-width="3"/>
-                    <path d="M28 24 v60" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+                    <rect x="20" y="38" width="54" height="64" rx="6" fill="#F7F7F5" stroke="#3A2626" stroke-width="3"/>
+                    <path d="M20 46 q27 -6 54 0" fill="none" stroke="#E2E2DF" stroke-width="2"/>
+                    <path d="M28 52 v40" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
                 </g>
             </svg>
         </div>
@@ -280,7 +294,7 @@ const VIEWS = {
         <p class="note">all of it lives in my victoria’s secret makeup pouch</p>
         <div class="lists">
             <div class="love"><h3>always in my bag</h3><ul>
-                <li><b>Westman Atelier HydroBalm Tinted Lipstick, Glögg.</b> Sheer black cherry. My favorite lipstick, period.</li>
+                <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
                 <li><b>Hourglass Vanish Airbrush Concealer.</b> My favorite concealer. Full coverage, no creasing.</li>
@@ -379,6 +393,7 @@ const VIEWS = {
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>AUSTIN</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
             </div>
+            <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
         </div>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="vclose">Close the wallet</button></div>
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`;
@@ -670,20 +685,38 @@ function cardHTML(c, i) {
             <span class="foot"><span>SUHANI TIWARI</span><span class="visa"><b>VISA</b> Signature</span></span>
         </button>`;
     if (c.kind === 'dl') return `
-        <button class="card dl" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
-            <span class="dl-head"><span class="dl-state">Texas<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 l4.6 10.4 11.2 1 -8.5 7.4 2.6 11 -9.9 -5.9 -9.9 5.9 2.6 -11 -8.5 -7.4 11.2 -1z" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/></svg></span><span class="t">Driver license</span></span>
-            <span class="dl-body">
-                <span class="dl-photo"><img src="assets/img/me.jpg" alt=""><span class="dl-sig">Suhani Tiwari</span></span>
-                <span class="dl-fields">
-                    <span><i>name</i> Suhani Tiwari</span>
-                    <span><i>dob</i> a lady never tells</span>
-                    <span><i>hgt</i> 5′6″</span>
-                    <span><i>weight</i> don’t ask</span>
-                    <span><i>eyes</i> dreamy</span>
-                    <span><i>hair</i> dark, long, and always done</span>
-                    <span><i>address</i> wouldn’t you wanna knowwww</span>
-                    <span><i>class</i> C (for cute)</span>
-                </span>
+        <button class="card dl tx" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
+            <svg class="tx-bg" viewBox="0 0 160 100" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M8 2 h22 v26 l18 6 l14 -4 l10 4 v22 l-4 10 l-10 6 l-12 14 l-6 16 l-10 -2 l-10 -14 l-6 -12 l-8 -6 l-6 6 l-10 -6 l-6 -10 l4 -6 h10 Z" transform="translate(70 18) scale(.95)" fill="#F4B9C3" opacity=".55"/>
+                <path d="M0 70 q40 -10 80 6 t80 -4 V100 H0Z" fill="#C9D3F0" opacity=".45"/>
+                <g fill="none" stroke="#9FB0E0" stroke-width=".35" opacity=".6"><path d="M0 20 q40 10 80 0 t80 0"/><path d="M0 26 q40 10 80 0 t80 0"/><path d="M0 32 q40 10 80 0 t80 0"/></g>
+            </svg>
+            <svg class="tx-seal" viewBox="0 0 90 110" aria-hidden="true"><path d="M8 2 h22 v26 l18 6 l14 -4 l10 4 v22 l-4 10 l-10 6 l-12 14 l-6 16 l-10 -2 l-10 -14 l-6 -12 l-8 -6 l-6 6 l-10 -6 l-6 -10 l4 -6 h10 Z" fill="none" stroke="#D9B45A" stroke-width="2.5"/><circle cx="40" cy="44" r="13" fill="#E6C66E" stroke="#C99A3A" stroke-width="1.5"/><path d="M40 35 l2.6 6 6.4 .5 -4.9 4.2 1.5 6.3 -5.6 -3.4 -5.6 3.4 1.5 -6.3 -4.9 -4.2 6.4 -.5z" fill="#FFF7DF"/></svg>
+            <span class="tx-head">
+                <span class="tx-flag" aria-hidden="true"><b>★</b><i></i><i></i></span>
+                <span class="tx-word">Texas<small>USA</small></span>
+                <span class="tx-kind">LEARNER<br>DRIVER LICENSE</span>
+            </span>
+            <span class="tx-banner">STILL LEARNING ♡</span>
+            <span class="tx-photo"><img src="assets/img/me.jpg" alt=""><span class="tx-sig">Suhani Tiwari</span></span>
+            <span class="tx-fields">
+                <span><i>4d. DL:</i> <b>OOPS-143</b></span>
+                <span><i>9. Class:</i> <b>C</b> (for cute)</span>
+                <span><i>3. DOB:</i> <b>a lady never tells</b></span>
+                <span><i>4b. Exp:</i> <b>my patience, daily</b></span>
+                <span><i>4a. Iss:</i> <b>a very forgiving DMV</b></span>
+                <span><i>9a. End:</i> <b>NONE, YET</b></span>
+            </span>
+            <span class="tx-who">
+                <span><i>1.</i> <b>TIWARI</b></span>
+                <span><i>2.</i> <b>SUHANI M</b></span>
+                <span><i>8.</i> <b>wouldn’t you wanna knowwww</b></span>
+            </span>
+            <span class="tx-foot">
+                <span><i>16. Hgt:</i> <b>5′-06″</b></span>
+                <span><i>18. Eyes:</i> <b>DREAMY</b></span>
+                <span><i>Hair:</i> <b>dark, long, always done</b></span>
+                <span><i>Wgt:</i> <b>don’t ask</b></span>
             </span>
         </button>`;
     if (c.kind === 'id') return `
@@ -691,8 +724,9 @@ function cardHTML(c, i) {
             <span class="ut-left">
                 <span class="ut-word">TEXAS</span>
                 <span class="ut-sub">The University of Texas at Austin</span>
-                <span class="ut-name">SUHANI TIWARI</span>
+                <span class="ut-name">SUHANI M TIWARI</span>
                 <span class="ut-role">STUDENT</span>
+                <span class="ut-num">•••••• ••••••••••</span>
             </span>
             <span class="ut-photo"><img src="assets/img/me.jpg" alt=""></span>
             <span class="ut-bars" aria-hidden="true"></span>
@@ -926,6 +960,23 @@ const AFTER = {
                 vw.classList.remove('zip-open'); z.setAttribute('aria-pressed', 'false'); z.setAttribute('aria-label', 'Zip pocket: unzip for cash');
             }
             zipping = false;
+        };
+        // the Medici card comes out with the cash. Tap it for a vanilla latte stamp.
+        $('#medici').onclick = () => {
+            const draw = () => {
+                const n = mediciStamps();
+                detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">Medici regulars card</p><h3>One vanilla latte, every day</h3>
+                    <div class="medici-big">${mediciHTML(n)}</div>
+                    <p class="m">${n}/10 stamps · ${10 - n} more until a free one</p>
+                    <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="latte">Get my vanilla latte ☕</button></div>`;
+                $('#latte').onclick = () => {
+                    let k = mediciStamps() + 1;
+                    if (k >= 10) { saveStamps(10); draw(); toast('10/10! the next vanilla latte is on medici ♡'); saveStamps(0); setTimeout(() => { draw(); }, 1600); }
+                    else { saveStamps(k); draw(); toast(['stamped ♡', 'same order as yesterday', 'they know my name by now', 'vanilla latte, obviously'][k % 4]); }
+                    $('#medici').innerHTML = mediciHTML(mediciStamps());
+                };
+            };
+            draw(); detail.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
         };
         // tap a card: it slides straight up out of its slot, like pulling it out with a thumb. Tap again to tuck it back.
         const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });

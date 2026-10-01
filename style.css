@@ -161,7 +161,7 @@ dialog.sheet[open] { animation: pop .42s var(--ease); }
 .lipstick-big { width: 120px; margin: 0 auto 8px; }
 .lipstick-big .cap { transition: transform .9s var(--ease); }
 /* the cap lifts straight up, then sets down beside the tube, upright */
-.lipstick-big.off .cap { transform: translate(72px, 90px); }
+.lipstick-big.off .cap { transform: translate(76px, 102px); }
 
 /* ---------- the wallet: flap opens, cards pop out like folders ---------- */
 .wallet-scene { display: grid; place-items: center; padding: clamp(190px, 40vw, 260px) 0 8px; perspective: 900px; }
@@ -330,7 +330,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pencils i::before { content: ""; position: absolute; left: -2px; right: -2px; top: -12px; height: 10px; background: #FFFDF9; border: 2px solid var(--ink); border-radius: 2px; }
 
 /* the McCombs keychain hangs on the right side */
-.charm.mccombs { left: 58%; right: auto; top: 4%; width: 10%; animation-delay: -1.2s; }
+.charm.mccombs { left: 56%; right: auto; top: 2%; width: 10%; animation-delay: -1.2s; }
 
 /* zippers: teeth, the gap that opens behind the pull, and the pull itself */
 .bag { cursor: default; }
@@ -884,3 +884,63 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 @keyframes combdown { 0% { transform: translateY(40px); } 100% { transform: translateY(250px); opacity: 0; } }
 .hairdo .combmove { transform: translateY(250px); opacity: 0; }
 .hair-btns { flex-wrap: wrap; justify-content: center; }
+
+/* student ID, matched to the real card (number and barcode masked on purpose) */
+.ut-photo { background: #ECEBEA; }
+.ut-num { font-family: var(--mono); font-size: clamp(.42rem, 1.2vw, .64rem); letter-spacing: .08em; margin-top: 2px; color: #3A3A3A; }
+.ut-word { font-family: Georgia, "Times New Roman", serif; color: #B5562A; }
+.ut-name, .ut-sub { color: #B5562A; }
+
+/* driver license: same background and layout as my real (learner) Texas license, sassier answers.
+   No real number, birthday, address or barcode, on purpose. */
+.card.dl.tx { display: grid; grid-template-columns: 30% 1fr; grid-template-rows: auto auto 1fr auto auto; column-gap: 4%; row-gap: 1.2cqw; padding: 3.5% 4.5% 3.5%; overflow: hidden; container-type: inline-size;
+    background: linear-gradient(115deg, #DDE4F7 0%, #EEE6F3 40%, #F9D9DF 75%, #F5C4CC 100%); color: #1E1E24; text-align: left; }
+.tx > :not(svg) { position: relative; z-index: 1; }
+.tx-bg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.tx-seal { position: absolute; right: 3%; top: 3%; width: 17%; z-index: 0; opacity: .85; }
+.tx-head { grid-column: 1 / -1; display: flex; align-items: center; gap: 2.4cqw; }
+.tx-flag { position: relative; width: 7cqw; height: 4.6cqw; flex: none; border: .3cqw solid #1E1E24; overflow: hidden; background: #fff; }
+.tx-flag b { position: absolute; left: 0; top: 0; bottom: 0; width: 34%; background: #2B3F8C; color: #fff; font-size: 2.6cqw; display: grid; place-items: center; line-height: 1; font-weight: 400; }
+.tx-flag i:last-child { position: absolute; left: 34%; right: 0; bottom: 0; height: 50%; background: #C8323C; }
+.tx-word { font-family: var(--sans); font-weight: 700; font-size: 7.6cqw; line-height: .9; color: #3B3F8F; letter-spacing: -.01em; display: inline-flex; align-items: flex-start; gap: .6cqw; }
+.tx-word small { font-size: 2.2cqw; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .1em; font-weight: 600; }
+.tx-kind { font-family: var(--sans); font-weight: 600; font-size: 2.9cqw; line-height: 1.1; color: #2E2E36; letter-spacing: .02em; margin-left: auto; margin-right: 18%; text-align: center; }
+.tx-banner { grid-column: 2; justify-self: start; background: #2A2A2E; color: #fff; font: 700 2.8cqw/1 var(--sans); letter-spacing: .06em; padding: 1cqw 2.4cqw; border-radius: .4cqw; }
+.tx-photo { grid-column: 1; grid-row: 2 / 4; display: flex; flex-direction: column; align-items: center; }
+.tx-photo img { width: 100%; aspect-ratio: .82; object-fit: cover; object-position: 50% 25%; border-radius: .6cqw; border: none; filter: none; }
+.tx-sig { margin-top: 1cqw; font-family: var(--hand); font-size: 4.2cqw; line-height: 1; color: #1F1F3A; transform: rotate(-4deg); white-space: nowrap; }
+.tx-fields { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; gap: .3cqw; }
+.tx i { font-style: normal; font-family: var(--sans); font-size: 2.1cqw; color: #3A3A44; }
+.tx b { font-family: var(--sans); font-weight: 700; font-size: 3cqw; color: #1E1E24; letter-spacing: .01em; }
+.tx-fields > span, .tx-who > span, .tx-foot > span { white-space: nowrap; font-size: 2.4cqw; line-height: 1.25; }
+.tx-who { grid-column: 1 / -1; display: flex; gap: 3cqw; flex-wrap: wrap; }
+.tx-foot { grid-column: 1 / -1; display: flex; gap: 2.6cqw; flex-wrap: wrap; }
+.vslot .card.dl.tx { padding: 3.5% 4.5%; }
+.card.dl.tx { grid-template-rows: auto auto auto auto 1fr; row-gap: .8cqw; }
+.tx-photo { grid-row: 2 / 6; }
+.tx-who { grid-column: 2; grid-row: 4; flex-direction: column; gap: 0; }
+.tx-foot { grid-column: 2; grid-row: 5; gap: 0 2cqw; align-self: end; }
+.tx b { font-size: 2.6cqw; }
+.tx-fields > span, .tx-who > span, .tx-foot > span { font-size: 2.2cqw; line-height: 1.2; }
+.tx-sig { font-size: 4.8cqw; margin-top: 1.4cqw; }
+
+/* Medici regulars card: tucked in the zip pocket, slides out with the cash */
+.medici-card { display: grid; grid-template-rows: auto 1fr auto; width: 100%; aspect-ratio: 1.75; background: #F6F0E4; border: 2px solid var(--ink); border-radius: 4px; overflow: hidden; color: #9C3328; container-type: inline-size; text-align: center; }
+.m-top { display: flex; align-items: baseline; justify-content: center; gap: 4cqw; padding: 4cqw 4cqw 1cqw; font: 600 3.6cqw/1 var(--sans); letter-spacing: .14em; }
+.m-top b { font: 800 8cqw/1 var(--sans); letter-spacing: .04em; }
+.m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1cqw 3cqw; padding: 1cqw 8cqw; color: #C9C3B8; align-content: center; }
+.m-slot { position: relative; display: grid; place-items: center; }
+.m-slot svg { width: 9cqw; }
+.m-slot.on { color: #2E2A33; }
+.m-slot.on svg { transform: rotate(-12deg) scale(1.08); }
+.m-slot i { position: absolute; font-style: normal; font-size: 3.6cqw; color: #9C3328; right: 20%; top: -6%; }
+.m-band { background: #9C3328; color: #F6F0E4; font: 600 3.6cqw/1 var(--sans); letter-spacing: .3em; padding: 3cqw 0; }
+.medici-peek { position: absolute; left: 0; bottom: 56%; width: 25%; padding: 0; border: 0; background: none; cursor: pointer; z-index: 5;
+    opacity: 0; pointer-events: none; transform: translate(10%, 60%) rotate(4deg) scale(.6); transform-origin: 0 100%; transition: transform .6s var(--ease), opacity .3s; transition-delay: .25s; }
+.vw.cash-out .medici-peek { opacity: 1; pointer-events: auto; transform: translate(-30%, -40%) rotate(-10deg); }
+.medici-peek:hover { filter: brightness(1.03); }
+.medici-big { width: min(420px, 100%); margin: 10px auto; }
+/* McCombs strap and the frappuccino PocketBac share one carabiner on the side of the bag */
+.charm.mccombs { left: -6%; top: 39%; width: 9%; z-index: 3; animation-delay: -.25s; transform-origin: 50% 4%; }
+.charm:not(.mccombs) { z-index: 5; }
+.m-top span { white-space: nowrap; font-size: 3cqw; }

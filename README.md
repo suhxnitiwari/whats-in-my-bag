@@ -23,6 +23,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | MacBook Pro 14" (silver) | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | Slides out of the side pocket, the lid twists off; a water tracker, because I don't drink enough water |
+| Medici regulars card (in the wallet's zip pocket) | A vanilla latte a day: stamp it, buy 10 & get 1 free |
 | Paperback rom-com | Three weeks in my backpack, still on chapter one |
 | Two silk scrunchies, a wooden claw clip, a wide-tooth comb | Try each one on |
 | Ralph Lauren cable knit sweater | Because I get cold easily |

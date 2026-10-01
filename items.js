@@ -29,14 +29,21 @@ window.BAG = {
         <g class="zips"></g>
     </svg>`,
     /* my McCombs keychain (a stand-in drawing until I swap in a photo of the real one) */
-    mccombs: `<svg viewBox="0 0 80 120" aria-hidden="true">
-        <circle cx="40" cy="9" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
-        <path d="M40 16 v10" stroke="#B9BCC2" stroke-width="4"/>
-        <rect x="8" y="26" width="64" height="88" rx="12" fill="#BF5700" ${S} stroke-width="2.5"/>
-        <rect x="14" y="32" width="52" height="76" rx="8" fill="none" stroke="#F3D3B8" stroke-width="1.5"/>
-        <text x="40" y="66" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="13" fill="#fff" letter-spacing=".5">McCOMBS</text>
-        <text x="40" y="82" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#F3D3B8" letter-spacing="1">UT AUSTIN</text>
-        <path d="M30 92 h20" stroke="#F3D3B8" stroke-width="1.5"/>
+    /* my McCombs keychain: a burnt-orange woven strap (black on the back), on a silver carabiner */
+    mccombs: `<svg viewBox="0 0 50 160" aria-hidden="true">
+        <path d="M18 4 h12 a8 8 0 0 1 8 8 v18 a8 8 0 0 1 -8 8 h-12 a8 8 0 0 1 -8 -8 v-18 a8 8 0 0 1 8 -8z" fill="none" stroke="#B9BCC2" stroke-width="4"/>
+        <path d="M18 4 h12 a8 8 0 0 1 8 8 v18 a8 8 0 0 1 -8 8 h-12 a8 8 0 0 1 -8 -8 v-18 a8 8 0 0 1 8 -8z" fill="none" stroke="#3A2626" stroke-width="1.2"/>
+        <path d="M12 12 l10 14" stroke="#D8DBDF" stroke-width="3" stroke-linecap="round"/>
+        <path d="M17 36 h18 l1 8 H16z" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/>
+        <path d="M13 44 h26 v108 l-3 -2 -3 2 -3 -2 -3 2 -3 -2 -3 2 -3 -2 -2 2z" fill="#1A1718" stroke="#3A2626" stroke-width="2"/>
+        <path d="M17 44 h22 v108 h-22z" fill="#C2661C" stroke="#3A2626" stroke-width="2"/>
+        <path d="M17 44 l3 4 3 -3 3 4 3 -3 3 4 3 -3 4 3" fill="none" stroke="#8E4510" stroke-width="1.2" opacity=".7"/>
+        <g transform="translate(31 56) rotate(90)" fill="#FFF7EE">
+            <text x="0" y="0" font-family="Bodoni Moda, serif" font-size="11" letter-spacing=".3">TEXAS McCombs</text>
+            <text x="2" y="6.5" font-family="Instrument Sans, sans-serif" font-size="3.4" opacity=".9">The University of Texas at Austin</text>
+            <text x="2" y="10.5" font-family="Instrument Sans, sans-serif" font-size="3.4" opacity=".9">McCombs School of Business</text>
+        </g>
+        <path d="M20 50 v96" stroke="#fff" stroke-width="1.4" opacity=".18"/>
     </svg>`,
     /* my bag charm: a Bath & Body Works caramel frappuccino PocketBac holder (whipped cream, smiles back),
        with a White Barn Cozy Vanilla Almond hand sanitizer inside, gold cap poking out the bottom */
@@ -85,7 +92,7 @@ window.ITEMS = [
     },
     {
         id: 'lipstick', name: 'westman atelier, glögg', zip: 'makeup', l: 62.5, t: 86, w: 3.8, r: 16,
-        art: `<svg viewBox="0 0 70 200"><rect x="14" y="80" width="42" height="110" rx="10" fill="#E8EFF6" ${S}/><rect x="18" y="60" width="34" height="26" rx="4" fill="#DCE6F0" ${S}/><path d="M22 60 V24 C22 10 48 4 48 18 V60Z" fill="#7A1E2E" ${S}/><path d="M28 30 q6 -8 14 -12" fill="none" stroke="#B4475A" stroke-width="3" stroke-linecap="round"/><text x="35" y="160" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#9AA8B8" transform="rotate(-90 35 140)" letter-spacing="1.5">WESTMAN ATELIER</text></svg>`,
+        art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
         open: 'makeup'
     },
     {
@@ -336,11 +343,15 @@ window.BMW_FOB = `<svg viewBox="0 0 80 210"><path d="M30 128 h20 v52 l-4 4 4 5 -
             <circle cx="40" cy="124" r="6" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/><circle cx="38" cy="122" r="1.8" fill="#fff"/>
             <rect x="34" y="-4" width="12" height="12" rx="3" fill="#141416" ${S} stroke-width="2"/>
         </svg>`;
-window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M24 4 C40 4 46 24 44 44 C42 66 6 66 4 44 C2 24 8 4 24 4Z" fill="#2B2C30" stroke="#3A2626" stroke-width="2.5"/><rect x="16" y="10" width="16" height="7" rx="3.5" fill="#FAF1EF" stroke="#3A2626" stroke-width="1.5"/><path d="M14 24 q6 -5 14 -4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".18"/></svg>`;
+window.APT_FOB = `<svg viewBox="0 0 48 66"><path d="M15 3 h18 a7 7 0 0 1 7 7 v5 C45 19 46.5 26 46 34 a22 22 0 1 1 -44 0 C1.5 26 3 19 8 15 v-5 a7 7 0 0 1 7 -7Z" fill="#1F3A93" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="15" y="8" width="18" height="7.5" rx="3.75" fill="#FAF1EF" stroke="#16296B" stroke-width="1.5"/>
+    <circle cx="24" cy="40" r="17" fill="#F7F5F0" stroke="#16296B" stroke-width="1.2"/>
+    <path d="M12 37 h24" stroke="#2B2B2E" stroke-width="3.2" stroke-linecap="round"/><path d="M13 43.5 h22" stroke="#7A7A7E" stroke-width="2" stroke-linecap="round"/><path d="M19 50 h10" stroke="#B3B3B8" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M34 28 q4 4 3 12" fill="none" stroke="#E9E2D6" stroke-width="1.5" stroke-linecap="round"/><path d="M8 24 q3 -6 9 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".25"/></svg>`;
 window.KEYRING = big => `<svg viewBox="0 0 130 252" class="keyring${big ? ' big' : ''}">
     <circle cx="66" cy="26" r="20" fill="none" stroke="#B9BCC2" stroke-width="6"/><circle cx="66" cy="26" r="20" fill="none" stroke="#3A2626" stroke-width="1.5"/>
     <g data-part="apartment" class="kpart"><circle cx="50" cy="52" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="50" cy="52" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
-        <g transform="translate(22 58) rotate(6 24 33)">${window.APT_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="50" height="69" viewBox="0 0 48 66">')}</g></g>
+        <g transform="translate(25 47) rotate(6 24 33)">${window.APT_FOB.replace('<svg viewBox="0 0 48 66">', '<svg width="50" height="69" viewBox="0 0 48 66">')}</g></g>
     <g data-part="bmw" class="kpart"><circle cx="78" cy="50" r="9" fill="none" stroke="#B9BCC2" stroke-width="4"/><circle cx="78" cy="50" r="9" fill="none" stroke="#3A2626" stroke-width="1.2"/>
         <g transform="translate(52 58)">${window.BMW_FOB.replace('<svg viewBox="0 0 80 210">', '<svg width="68" height="179" viewBox="0 -6 80 216" overflow="visible">')}</g></g>
 </svg>`;
