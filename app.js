@@ -68,7 +68,38 @@ BAG.pockets.forEach(pk => {
     pk.el = { g, path, pull, len };
     place(pk, 0);
     const toggle = e => { e.stopPropagation(); open.has(pk.id) ? zipUp(pk) : unzip(pk); };
-    pull.addEventListener('click', toggle);
+    // drag the pull yourself: it follows your finger along the zipper; let go past halfway and it finishes
+    const samples = Array.from({ length: 81 }, (_, k) => path.getPointAtLength(len * k / 80));
+    const tAt = e => {
+        const pt = path.ownerSVGElement.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+        const p = pt.matrixTransform(path.getScreenCTM().inverse());
+        let best = 0, bd = Infinity;
+        samples.forEach((q, k) => { const d = (q.x - p.x) ** 2 + (q.y - p.y) ** 2; if (d < bd) { bd = d; best = k; } });
+        return best / 80;
+    };
+    let drag = null;
+    pull.style.touchAction = 'none';
+    pull.addEventListener('pointerdown', e => {
+        e.stopPropagation(); e.preventDefault();
+        drag = { start: open.has(pk.id) ? 1 : 0, t: open.has(pk.id) ? 1 : 0, moved: false };
+        try { pull.setPointerCapture(e.pointerId); } catch {}
+    });
+    pull.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const t = tAt(e);
+        if (Math.abs(t - drag.start) > .04) drag.moved = true;
+        if (drag.moved) { drag.t = t; place(pk, t); }
+    });
+    const release = e => {
+        if (!drag) return;
+        const d = drag; drag = null;
+        if (!d.moved) return toggle(e);
+        if (open.has(pk.id)) d.t < .6 ? zipUp(pk, d.t) : slide(pk, d.t, 1);
+        else d.t > .4 ? unzip(pk, d.t) : slide(pk, d.t, 0);
+    };
+    pull.addEventListener('pointerup', release);
+    pull.addEventListener('pointercancel', () => { if (drag) { const d = drag; drag = null; slide(pk, d.t, d.start); } });
+    pull.addEventListener('click', e => e.stopPropagation());
     pull.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
     // tapping the pocket itself works too, not just the tiny pull
     path.addEventListener('click', toggle);
@@ -81,14 +112,14 @@ function place(pk, t) {
     path.style.strokeDashoffset = len * (1 - t);
 }
 function slide(pk, from, to) {
-    // ten stop-motion steps on a plain timer (frame timers pause in background tabs, which stalled the queue)
+    // stop-motion steps on a plain timer (frame timers pause in background tabs, which stalled the queue)
     return new Promise(res => {
-        if (reduce) { place(pk, to); return res(); }
-        let step = 0;
+        if (reduce || from === to) { place(pk, to); return res(); }
+        let step = 0; const steps = Math.max(2, Math.round(10 * Math.abs(to - from)));
         const timer = setInterval(() => {
             step++;
-            place(pk, from + (to - from) * step / 10);
-            if (step >= 10) { clearInterval(timer); res(); }
+            place(pk, from + (to - from) * step / steps);
+            if (step >= steps) { clearInterval(timer); res(); }
         }, 52);
     });
 }
@@ -128,7 +159,7 @@ bottle.addEventListener('click', openBottle);
 bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openBottle(e); });
 
 let busy = Promise.resolve();
-function unzip(pk) {
+function unzip(pk, from = 0) {
     busy = busy.then(async () => {
         if (open.has(pk.id)) return;
         open.add(pk.id);
@@ -137,7 +168,7 @@ function unzip(pk) {
         pk.el.pull.setAttribute('aria-label', `Zip up: ${pk.label}`);
         pk.el.g.classList.add('open');
         $('#bag-hint').textContent = '';
-        await slide(pk, 0, 1);
+        await slide(pk, from, 1);
         const bagBox = bagBtn.getBoundingClientRect();
         for (const it of ITEMS.filter(i => i.zip === pk.id)) {
             const li = document.getElementById('item-' + it.id);
@@ -160,14 +191,14 @@ function unzip(pk) {
     });
     return busy;
 }
-function zipUp(pk) {
+function zipUp(pk, from = 1) {
     busy = busy.then(async () => {
         if (!open.has(pk.id)) return;
         ITEMS.filter(i => i.zip === pk.id).forEach(it => {
             const li = document.getElementById('item-' + it.id);
             li.classList.remove('out'); li.querySelector('button').tabIndex = -1;
         });
-        await slide(pk, 1, 0);
+        await slide(pk, from, 0);
         open.delete(pk.id);
         pk.el.g.classList.remove('open');
         pk.el.pull.setAttribute('aria-pressed', 'false');
@@ -266,19 +297,28 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    boarding: () => `
+        <h2>My <em>boarding pass</em></h2>
+        <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
+        <div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div>
+        <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button></div>`,
     padfolio: () => `
         <h2>My <em>McCombs</em> padfolio</h2>
-        <p class="note">résumés on the left, a legal pad on the right, a pen in the middle. ready for anything.</p>
+        <p class="note">my résumé on the left, my notes on the right, a black paper mate in the middle. ready for anything.</p>
         <div class="pf">
             <div class="pf-left">
                 <div class="pf-stack" aria-hidden="true"><span></span><span></span></div>
-                <a class="pf-resume" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener" aria-label="My résumé (opens in a new tab)">
-                    <b>SUHANI TIWARI</b><i></i><i></i><i class="s"></i><i></i><i></i><i class="s"></i><i></i><i></i><i></i><i class="s"></i><i></i>
-                    <span class="pf-take">take one ↗</span>
-                </a>
-                <span class="pf-pen" aria-hidden="true"></span>
+                <a class="pf-resume" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener" aria-label="My résumé (opens in a new tab)"><img src="assets/img/resume.png" alt="My résumé"><span class="pf-take">take one ↗</span></a>
+                <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 16 150"><rect x="5" y="0" width="6" height="10" rx="2" fill="#2B2B2E" stroke="#111" stroke-width="1"/><rect x="3" y="9" width="10" height="92" rx="4" fill="#141416" stroke="#000" stroke-width="1"/><path d="M11 12 h3 v46 l-2 3 h-1z" fill="#2E2E33" stroke="#000" stroke-width=".8"/><rect x="3" y="100" width="10" height="30" rx="2" fill="#3A3A40" stroke="#000" stroke-width="1"/><path d="M4 104 h8 M4 109 h8 M4 114 h8 M4 119 h8 M4 124 h8" stroke="#55555C" stroke-width="1.2"/><path d="M3 130 L8 146 L13 130Z" fill="#141416" stroke="#000" stroke-width="1"/><path d="M7.6 146 v4" stroke="#9A9AA0" stroke-width="1"/><path d="M6 20 v70" stroke="#fff" stroke-width="1.2" opacity=".2"/></svg></span>
             </div>
-            <div class="pf-right"><div class="pf-legal" id="pf-legal" contenteditable="true" spellcheck="false" aria-label="Legal pad: write a note"></div></div>
+            <div class="pf-right"><div class="pf-legal" aria-label="My legal pad: the roles I'm going for">
+                <p>roles i’m going for:</p>
+                <p>♡ product marketing manager</p>
+                <p>♡ product manager</p>
+                <p>♡ brand strategist</p>
+                <p>♡ technology consultant</p>
+                <p class="pf-u">→ work where technology meets people</p>
+            </div></div>
         </div>`,
     cap: () => `
         <h2>My <em>cap</em></h2>
@@ -495,7 +535,7 @@ const VIEWS = {
         </div>`,
 
     mirror: () => `
-        <div class="compact" id="compact" style="position:relative; width:220px; height:220px; margin:0 auto 14px; perspective:700px">
+        <div class="compact" id="compact" style="position:relative; width:200px; height:200px; margin:214px auto 14px; perspective:700px">
             <div style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#EDEFF2; overflow:hidden; box-shadow: inset 0 0 0 10px #141011">
                 <img src="assets/img/me.jpg" alt="Me, in the mirror" style="width:100%; height:100%; object-fit:cover; opacity:.92; filter: saturate(.9)">
                 <span style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.55), transparent 45%)"></span>
@@ -520,10 +560,15 @@ const VIEWS = {
         <div class="row"><button class="btn solid" type="button" id="sip">Take a sip for me</button></div>`,
 
     sweater: () => `
-        <h2>My Ralph Lauren <em>cable knit</em></h2>
+        <h2>My pink Ralph Lauren <em>cable knit</em></h2>
         <p class="note">pink, cable knit, always in my bag. i get cold easily.</p>
+        <div class="sw folded" id="sw" role="img" aria-label="My pink cable knit V-neck sweater">
+            <span class="sw-sl l"></span><span class="sw-top"></span><span class="sw-bot"></span><span class="sw-sl r"></span>
+            <svg class="sw-neck" viewBox="0 0 76 78" aria-hidden="true"><path d="M2 2 L38 74 L74 2" fill="none" stroke="#3A2626" stroke-width="3"/><path d="M10 2 L38 60 L66 2" fill="#FBEFF2" stroke="#3A2626" stroke-width="2.5"/><path d="M4 4 L38 70 L72 4" fill="none" stroke="#D27C93" stroke-width="5" stroke-dasharray="1.5 2.5"/></svg>
+            <svg class="sw-pony" viewBox="0 0 18 16" aria-hidden="true"><path d="M2 12 q3 -5 8 -5 l3 -3 2 1 -2 2 q2 2 1 5 M5 12 v3 M12 12 v3 M8 7 l1 -5 M9 2 l3 2" fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
-        <div class="row"><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
+        <div class="row"><button class="btn" type="button" id="sw-fold">Unfold it</button><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
     notebooks: () => `
         <h2>My <em>Erin Condren</em> notebooks</h2>
@@ -808,7 +853,8 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
-    padfolio: () => { const pad = $('#pf-legal'); pad.addEventListener('focus', () => { if (!pad.dataset.used) { pad.dataset.used = 1; toast('taking notes like it’s a coffee chat ☕'); } }); },
+    boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
+    padfolio: () => {},
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
         const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
@@ -830,11 +876,14 @@ const AFTER = {
     },
     romcom: () => {
         let days = 21;
-        $('#rc-read').onclick = () => {
-            const rc = $('#rc'); if (rc.classList.contains('open')) return;
-            rc.classList.add('open'); $('#rc-read').disabled = true;
-            setTimeout(() => { rc.classList.remove('open'); $('#rc-read').disabled = false; $('#rc-days').textContent = ++days; toast(days === 22 ? 'tomorrow. definitely tomorrow ♡' : 'okay… tomorrow. for real this time.'); }, reduce ? 300 : 1800);
+        const rc = $('#rc'), btn = $('#rc-read');
+        const toggle = () => {
+            const open = rc.classList.toggle('open');
+            btn.textContent = open ? 'Close it' : 'Read it';
+            if (!open) { $('#rc-days').textContent = ++days; toast(days === 22 ? 'tomorrow. definitely tomorrow ♡' : 'okay… tomorrow. for real this time.'); }
+            else toast('chapter one. we’ve met before.');
         };
+        btn.onclick = toggle; rc.onclick = toggle; rc.style.cursor = 'pointer';
     },
     hairpony: () => hairAfter('pony'),
     hairclaw: () => hairAfter('claw'),
@@ -934,7 +983,24 @@ const AFTER = {
             $('#mpull').setAttribute('aria-label', open ? 'Zip the makeup pouch' : 'Unzip the makeup pouch');
             note.textContent = open ? 'tap anything' : 'pull the zipper';
         };
-        $('#mpull').onclick = toggle;
+        $('#mpull').onclick = () => { if (mskip) { mskip = false; return; } toggle(); };
+        let mdrag = null, mskip = false;
+        const mp = $('#mpull'); mp.style.touchAction = 'none';
+        mp.addEventListener('pointerdown', e => { mdrag = { x: e.clientX, moved: false, f: bag.classList.contains('open') ? 1 : 0 }; try { mp.setPointerCapture(e.pointerId); } catch {} });
+        mp.addEventListener('pointermove', e => {
+            if (!mdrag) return;
+            const r = bag.querySelector('.mbag-front').getBoundingClientRect();
+            const f = Math.max(0, Math.min(1, (e.clientX - r.left - r.width * .06) / (r.width * .84)));
+            if (Math.abs(e.clientX - mdrag.x) > 6) mdrag.moved = true;
+            if (!mdrag.moved) return;
+            mdrag.f = f; mp.style.transition = 'none'; mp.style.left = `calc(6% + ${f} * (84% - 22px))`;
+        });
+        mp.addEventListener('pointerup', () => {
+            if (!mdrag) return;
+            const d = mdrag; mdrag = null; if (!d.moved) return;
+            mskip = true; mp.style.transition = ''; mp.style.left = '';
+            if ((d.f > .5) !== bag.classList.contains('open')) toggle();
+        });
         bag.querySelector('.mbag-front svg').onclick = () => { if (!bag.classList.contains('open')) toggle(); };
         bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
             // tap one: it swipes on in its real shade, and its name gets written underneath in that shade
@@ -1054,8 +1120,30 @@ const AFTER = {
         vw.querySelector('.vsnap').onclick = close;
         $('#snap').onclick = open;
         // the zipper: the pull slides down, the teeth open, then the cash comes out (and the reverse)
-        let zipping = false;
+        let zipping = false, zdrag = null, zskip = false;
+        const zp = $('#vzip');
+        zp.style.touchAction = 'none';
+        zp.addEventListener('pointerdown', e => { zdrag = { y: e.clientY, moved: false, f: vw.classList.contains('zip-open') ? 1 : 0 }; try { zp.setPointerCapture(e.pointerId); } catch {} });
+        zp.addEventListener('pointermove', e => {
+            if (!zdrag) return;
+            const r = zp.getBoundingClientRect(), f = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+            if (Math.abs(e.clientY - zdrag.y) > 6) zdrag.moved = true;
+            if (!zdrag.moved) return;
+            zdrag.f = f;
+            zp.querySelector('.zgap').style.cssText = `height:${f * 82}%; transition:none`;
+            zp.querySelector('.zpull').style.cssText = `top:${6 + f * 78}%; transition:none`;
+        });
+        zp.addEventListener('pointerup', () => {
+            if (!zdrag) return;
+            const d = zdrag; zdrag = null;
+            if (!d.moved) return;
+            zskip = true;
+            zp.querySelector('.zgap').style.cssText = ''; zp.querySelector('.zpull').style.cssText = '';
+            const want = d.f > .5, is = vw.classList.contains('zip-open');
+            if (want !== is) zp.onclick(); else zskip = false;
+        });
         $('#vzip').onclick = async () => {
+            if (zskip) zskip = false;
             if (zipping) return; zipping = true;
             const z = $('#vzip');
             if (!vw.classList.contains('zip-open')) {
@@ -1155,6 +1243,8 @@ const AFTER = {
     },
 
     sweater: () => {
+        const sw = $('#sw');
+        $('#sw-fold').onclick = () => { const f = sw.classList.toggle('folded'); $('#sw-fold').textContent = f ? 'Unfold it' : 'Fold it'; };
         $('#wear').onclick = () => {
             const on = document.body.classList.toggle('cozy');
             $('#wear').textContent = on ? 'Take it off' : 'Put it on';

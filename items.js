@@ -13,7 +13,7 @@ window.BAG = {
         { id: 'devices', label: 'devices', d: 'M52 104 C52 40 248 40 248 104' },
         { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
         { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'wallet & passport', d: 'M80 196 C84 176 216 176 220 196' }
+        { id: 'front', label: 'wallet, passport, makeup & hair', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
@@ -167,12 +167,12 @@ window.ITEMS = [
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel mirror (the blair waldorf one)', zip: 'main', l: 24.4, t: 55.4, w: 7.0, r: 0,
+        id: 'mirror', name: 'my chanel mirror (the blair waldorf one)', zip: 'front', l: 24.4, t: 55.4, w: 7.0, r: 0,
         art: `<svg viewBox="0 0 120 120"><rect x="8" y="8" width="104" height="104" rx="22" fill="#141011" ${S}/><rect x="16" y="16" width="88" height="88" rx="16" fill="none" stroke="#3A3033" stroke-width="2"/><circle cx="60" cy="60" r="15" fill="none" stroke="#E9E4DF" stroke-width="4"/><circle cx="60" cy="60" r="7" fill="#141011"/><path d="M26 30 q12 -10 30 -8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/></svg>`,
         open: 'mirror'
     },
     {
-        id: 'makeup-pouch', name: 'my victoria’s secret makeup pouch', zip: 'main', l: 86.5, t: 49.9, w: 20.7, r: -4,
+        id: 'makeup-pouch', name: 'my victoria’s secret makeup pouch', zip: 'front', l: 86.5, t: 49.9, w: 20.7, r: -4,
         art: `<svg viewBox="0 0 200 130"><defs><pattern id="vs" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(0)"><rect width="16" height="16" fill="#F7C9D6"/><rect width="8" height="16" fill="#F29BB6"/></pattern></defs><path d="M14 40 C14 22 186 22 186 40 L178 116 C176 124 24 124 22 116Z" fill="url(#vs)" ${S}/><path d="M22 40 H178" ${S} stroke-dasharray="5 5"/><rect x="164" y="30" width="18" height="16" rx="4" fill="#D9A441" ${S} stroke-width="2.5"/><path d="M173 46 v16" ${S} stroke-width="2.5"/><circle cx="173" cy="66" r="5" fill="#fff" ${S} stroke-width="2"/><rect x="40" y="4" width="10" height="42" rx="3" fill="#E8EFF6" ${S} stroke-width="2" transform="rotate(-8 45 25)"/><path d="M68 44 V14 q8 -14 16 0 V44Z" fill="#3A2626" ${S} stroke-width="2"/><circle cx="76" cy="10" r="9" fill="#F2D7C8" ${S} stroke-width="2"/></svg>`,
         open: 'makeupbag'
     },
@@ -224,34 +224,40 @@ window.ITEMS = [
     },
     {
         id: 'romcom', name: 'you deserve each other (unread)', zip: 'main', l: 9.4, t: 58.8, w: 13.6, r: -7,
-        art: `<svg viewBox="0 0 110 160"><rect x="4" y="4" width="102" height="152" rx="3" fill="#A51F52" ${S}/>
-            <rect x="64" y="10" width="34" height="26" fill="#F7E4DC" stroke="#3A2626" stroke-width="1.5"/><rect x="58" y="10" width="7" height="26" fill="#FBF4EE" stroke="#3A2626" stroke-width="1.2"/><rect x="97" y="10" width="7" height="26" fill="#FBF4EE" stroke="#3A2626" stroke-width="1.2"/>
-            <circle cx="80" cy="20" r="5" fill="#E9B79C"/><path d="M75 19 q5 -9 10 0 v6 h-10z" fill="#7A3B1E"/><path d="M73 36 q7 -8 14 0" fill="#3C3F8F"/><path d="M58 37 h46" stroke="#3A2626" stroke-width="2"/>
-            <path d="M44 46 l4 -4 4 3 3 -4 3 5" fill="none" stroke="#F4F0E8" stroke-width="2.4" stroke-linecap="round"/><circle cx="48" cy="44" r="2" fill="#7BB98C"/><circle cx="55" cy="42" r="2" fill="#7BB98C"/>
-            <g font-family="Kalam, Caveat, cursive" font-weight="700" text-anchor="middle">
-                <text x="18" y="56" font-size="5" fill="#F4F0E8" text-anchor="start" font-family="Instrument Sans" font-weight="400">a novel</text>
-                <text x="56" y="70" font-size="17" fill="#F4F0E8">YOU</text>
-                <text x="58" y="88" font-size="16" fill="#F4F0E8">DESERVE</text>
-                <text x="64" y="106" font-size="17" fill="#BFE6D6">EACH</text>
-                <text x="64" y="124" font-size="17" fill="#F4F0E8">OTHER</text>
-                <text x="68" y="143" font-size="11" fill="#BFE6D6" font-family="Instrument Sans" font-weight="600">Sarah Hogle</text></g>
-            <circle cx="18" cy="104" r="5" fill="#E9B79C"/><path d="M13 103 q5 -7 10 0" fill="#3A2A20"/><path d="M10 112 h16 l1 22 h-18z" fill="#2E3466"/><path d="M12 116 h12" stroke="#F4F0E8" stroke-width="3"/><path d="M12 134 h6 v14 h-6z M19 134 h6 v14 h-6z" fill="#5A3A26"/></svg>`,
+        art: `<svg viewBox="0 0 110 160"><rect x="3" y="3" width="104" height="154" rx="3" fill="#A51F52" ${S}/>
+            <g font-family="Instrument Sans" fill="#FBE9EE"><text x="9" y="11" font-size="3.4">“The perfect dose of</text><text x="9" y="15.5" font-size="3.4">sweet, hilarious joy.”</text><text x="13" y="20" font-size="2.6" letter-spacing=".3">—CHRISTINA LAUREN</text></g>
+            <rect x="60" y="5" width="9" height="28" fill="#FBF6F0" stroke="#3A2626" stroke-width="1"/><rect x="95" y="5" width="9" height="28" fill="#FBF6F0" stroke="#3A2626" stroke-width="1"/>
+            <path d="M61 9 h7 M61 13 h7 M61 17 h7 M61 21 h7 M61 25 h7 M61 29 h7 M96 9 h7 M96 13 h7 M96 17 h7 M96 21 h7 M96 25 h7 M96 29 h7" stroke="#D9CFC4" stroke-width=".8"/>
+            <rect x="69" y="5" width="26" height="28" fill="#F3DCCF" stroke="#3A2626" stroke-width="1.2"/>
+            <path d="M75 30 C75 14 89 12 89 26 L89 31 Z" fill="#6B3A1E"/><circle cx="82" cy="17" r="4.2" fill="#EDBFA4"/><path d="M77.6 16 q4.4 -6 8.8 0" fill="#6B3A1E"/>
+            <path d="M75 33 C75 24 89 24 89 33Z" fill="#3D47A0"/><path d="M76 27 C70 30 64 32 58 33" stroke="#3D47A0" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="57.5" cy="33.2" r="1.6" fill="#EDBFA4"/>
+            <rect x="66" y="32" width="32" height="2.6" fill="#FBF6F0" stroke="#3A2626" stroke-width=".8"/>
+            <g transform="translate(50 42) rotate(-20)"><path d="M0 0 l6 -10 M3 0 l7 -8 M-2 -1 l2 -11" stroke="#3E7D4C" stroke-width="1.1"/><circle cx="0" cy="-12" r="2.4" fill="#fff"/><circle cx="6" cy="-11" r="2.6" fill="#fff"/><circle cx="10" cy="-8" r="2.2" fill="#fff"/><circle cx="3" cy="-14" r="2" fill="#F7EDEF"/><path d="M4 -4 q3 -3 6 -1 M-1 -5 q-3 -2 -4 1" fill="#6FAF7C"/><path d="M-1 1 h6 l-1 3 h-4z" fill="#F7EDEF"/></g>
+            <text x="12" y="62" font-family="Instrument Sans" font-size="5" fill="#FBE9EE">a novel</text>
+            <g font-family="Kalam, Caveat, cursive" font-weight="700" text-anchor="middle" stroke="#BFE6D6" stroke-width=".6" paint-order="stroke">
+                <text x="60" y="74" font-size="17" fill="#F7F2EA">YOU</text><text x="62" y="92" font-size="16.5" fill="#F7F2EA">DESERVE</text>
+                <text x="67" y="110" font-size="17" fill="#BFE6D6" stroke="none">EACH</text><text x="67" y="128" font-size="17" fill="#F7F2EA">OTHER</text></g>
+            <g><circle cx="20" cy="100" r="5" fill="#EDBFA4"/><path d="M14.8 99 q5.2 -8 10.4 0 q-2 -3 -5.2 -3 q-3 0 -5.2 3z" fill="#4A2A1A"/><circle cx="18" cy="100.5" r="1.6" fill="none" stroke="#3A2626" stroke-width=".6"/><circle cx="22.4" cy="100.5" r="1.6" fill="none" stroke="#3A2626" stroke-width=".6"/>
+                <path d="M11 109 Q20 104 29 109 L31 132 H9Z" fill="#2E3466"/><path d="M17 107 L20 116 L23 107Z" fill="#F7F2EA"/><rect x="10" y="114" width="20" height="5" rx="2.5" fill="#262B58" stroke="#1C2048" stroke-width=".6"/><circle cx="11" cy="116.5" r="1.4" fill="#EDBFA4"/><circle cx="29" cy="116.5" r="1.4" fill="#EDBFA4"/>
+                <path d="M11 132 h8.5 v18 h-7.5z M20.5 132 h8.5 l-1 18 h-7.5z" fill="#7A4A2E"/><path d="M11 150 h8 v2 h-9z M20.5 150 h8 l.5 2 h-9z" fill="#2A1C17"/></g>
+            <text x="72" y="143" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="11" fill="#BFE6D6">Sarah Hogle</text>
+            <text x="72" y="150" text-anchor="middle" font-family="Instrument Sans" font-size="3" letter-spacing=".4" fill="#FBE9EE">AUTHOR OF TWICE SHY</text></svg>`,
         open: 'romcom'
     },
     {
-        id: 'scrunchies', name: 'my silk scrunchies', zip: 'main', l: 34.3, t: 21.2, w: 16.9, r: 0,
+        id: 'scrunchies', name: 'my silk scrunchies', zip: 'front', l: 34.3, t: 21.2, w: 16.9, r: 0,
         get art() { return `<svg viewBox="0 0 150 90">${window.SCRUNCHIE(48, 46, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(102, 42, 25, ...window.SCR_PINK)}</svg>`; },
         open: 'hairpony'
     },
     {
-        id: 'clip', name: 'my wooden claw clip', zip: 'main', l: 31.0, t: 29.7, w: 8.5, r: 16,
+        id: 'clip', name: 'my wooden claw clip', zip: 'front', l: 31.0, t: 29.7, w: 8.5, r: 16,
         art: `<svg viewBox="0 0 90 80"><path d="M10 40 C10 14 80 14 80 40 L72 44 C70 26 20 26 18 44Z" fill="#B57B4B" ${S}/>
             <path d="M18 44 l4 26 M30 40 l2 30 M45 38 v32 M60 40 l-2 30 M72 44 l-4 26" stroke="#B57B4B" stroke-width="8" stroke-linecap="round"/><path d="M18 44 l4 26 M30 40 l2 30 M45 38 v32 M60 40 l-2 30 M72 44 l-4 26" stroke="#3A2626" stroke-width="1.5" stroke-linecap="round" opacity=".55"/>
             <path d="M22 30 q22 -10 46 0" stroke="#8A5530" stroke-width="1.6" fill="none"/><path d="M28 24 q16 -6 34 0" stroke="#D6A372" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="38" y="36" width="14" height="7" rx="3" fill="#C9CDD2" stroke="#3A2626" stroke-width="1.5"/></svg>`,
         open: 'hairclaw'
     },
     {
-        id: 'comb', name: 'my wide-tooth comb', zip: 'main', l: 54.5, t: 20.5, w: 16.9, r: -10,
+        id: 'comb', name: 'my wide-tooth comb', zip: 'front', l: 54.5, t: 20.5, w: 16.9, r: -10,
         art: `<svg viewBox="0 0 210 80"><defs><linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A7450"/><stop offset=".5" stop-color="#6E5A3A"/><stop offset="1" stop-color="#5A4A30"/></linearGradient></defs>
             <g><path d="M16 28.1 q1 18 -2 29.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M24 28.6 q1 18 -2 29.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M32 29.1 q1 18 -2 29.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M40 29.6 q1 18 -2 28.7" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M48 30.0 q1 18 -2 28.3" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M56 30.5 q1 18 -2 27.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M64 31.0 q1 18 -2 27.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M72 31.5 q1 18 -2 27.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M80 32.0 q1 18 -2 26.7" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M88 32.4 q1 18 -2 26.3" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M96 32.9 q1 18 -2 25.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M104 33.4 q1 18 -2 25.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M112 33.9 q1 18 -2 25.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/></g>
             <path d="M6 30 C4 14 30 8 60 8 C100 8 128 14 150 24 C168 32 176 30 196 26 C206 24 208 38 198 42 C178 48 168 46 150 40 C132 34 120 36 112 40 L112 44 H14 C8 42 6 36 6 30Z" fill="url(#wood)" ${S} stroke-width="2.5"/>
@@ -280,6 +286,18 @@ window.ITEMS = [
                 <text y="-3" font-size="6.4">The University of Texas at Austin</text><text y="7" font-size="8.6">McCombs School of Business</text></g>
             <path d="M14 18 q20 -6 40 -4" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".08"/></svg>`,
         open: 'padfolio'
+    },
+    {
+        id: 'boarding', name: 'my boarding pass', zip: 'front', l: 50.8, t: 28.7, w: 18.8, r: 4,
+        art: `<svg viewBox="0 0 200 80"><path d="M6 4 H194 V30 a6 6 0 0 0 0 12 V76 H6 V42 a6 6 0 0 0 0 -12Z" fill="#FFFDF8" ${S} stroke-width="2.5"/>
+            <rect x="6" y="4" width="188" height="16" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/><text x="14" y="15.5" font-family="Instrument Sans" font-weight="600" font-size="8" fill="#3A2626" letter-spacing="1.5">BOARDING PASS</text>
+            <path d="M146 20 V76" stroke="#3A2626" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <g font-family="Instrument Sans" fill="#3A2626"><text x="14" y="32" font-size="5">PASSENGER</text><text x="14" y="40" font-size="7.5" font-weight="600">SUHANI TIWARI</text>
+                <text x="14" y="58" font-size="16" font-weight="700">AUS</text><text x="62" y="56" font-size="11">✈</text><text x="84" y="58" font-size="16" font-weight="700">???</text>
+                <text x="14" y="70" font-size="5">SEAT window, obviously</text><text x="84" y="70" font-size="5">GATE sprinting</text>
+                <text x="152" y="32" font-size="5">TO</text><text x="152" y="44" font-size="11" font-weight="700">???</text><text x="152" y="56" font-size="5">GROUP whenever</text></g>
+            <g fill="#3A2626">${[0,3,5,9,11,14,18,20,23,27,29,32].map((x, k) => `<rect x="${152 + x}" y="61" width="${k % 3 ? 1.2 : 2.2}" height="10"/>`).join('')}</g></svg>`,
+        open: 'boarding'
     },
     {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 15.0, t: 82.7, w: 29.1, r: -4,

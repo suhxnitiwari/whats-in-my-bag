@@ -1142,3 +1142,53 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pf { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .pf-right, .pf-legal { min-width: 0; }
 .pf-legal { overflow-wrap: anywhere; word-break: break-word; overflow-x: hidden; }
+
+/* padfolio v2: fixed size, real résumé, handwritten notes, black Paper Mate */
+.pf { aspect-ratio: 1.45; width: min(640px, 100%); }
+.pf-left, .pf-right { min-height: 0; overflow: hidden; }
+.pf-resume { padding: 0; overflow: hidden; }
+.pf-resume img { width: 100%; height: auto; display: block; }
+.pf-take { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; background: rgba(255,255,255,.85); padding: 2px 0; }
+.pf-pen { width: 14px; height: 70%; top: 12%; background: none; box-shadow: none; }
+.pf-pen svg { width: 100%; height: 100%; display: block; }
+.pf-legal { height: 100%; max-height: 100%; overflow: hidden; padding: 0 10px 0 36px; font: 600 1.25rem/22px var(--hand); color: #1F2D5A; cursor: default; }
+.pf-legal p { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-legal p:first-child { text-decoration: underline; text-decoration-thickness: 1px; }
+.pf-legal .pf-u { color: #A3204F; margin-top: 22px; white-space: normal; }
+@media (max-width: 760px) { .pf { aspect-ratio: auto; } .pf-left { min-height: 260px; } .pf-right { height: 200px; } }
+
+.bp-big { width: min(560px, 100%); margin: 10px auto; }
+
+.zips .pull { cursor: grab; } .zips .pull:active { cursor: grabbing; }
+.vzip, .mpull { cursor: grab; }
+
+/* the rom-com opens on tap (cover swings, pages fan) and closes on the next tap */
+.rc { width: 200px; }
+.rc-cover { transition: transform .9s cubic-bezier(.45,.05,.25,1); }
+.rc.open .rc-cover { transform: rotateY(-165deg); }
+.rc-leaf { transition: transform .7s cubic-bezier(.45,.05,.25,1); }
+.rc.open .rc-leaf { transform: rotateY(calc(-150deg + var(--k) * 4deg)); transition-delay: calc(.25s + var(--k) * 90ms); }
+.rc-wrap { padding-left: 120px; }
+@media (max-width: 760px) { .rc-wrap { padding-left: 90px; } .rc { width: 150px; } }
+
+/* the sweater, laid flat: sleeves fold in, the bottom folds up; unfold it again */
+.sw { position: relative; width: 340px; max-width: 100%; height: 330px; margin: 14px auto 6px; perspective: 1000px; }
+.sw > * { position: absolute; background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2228%22%20viewBox%3D%220%200%2040%2028%22%3E%3Crect%20width%3D%2240%22%20height%3D%2228%22%20fill%3D%22%23F3A9BB%22/%3E%3Cpath%20d%3D%22M6%200%20C14%207%2014%207%206%2014%20C14%2021%2014%2021%206%2028%20M14%200%20C6%207%206%207%2014%2014%20C6%2021%206%2021%2014%2028%22%20fill%3D%22none%22%20stroke%3D%22%23D9849C%22%20stroke-width%3D%222.6%22/%3E%3Cpath%20d%3D%22M30%200%20L38%2014%20L30%2028%20M30%200%20L22%2014%20L30%2028%22%20fill%3D%22none%22%20stroke%3D%22%23DE8CA2%22%20stroke-width%3D%222.2%22/%3E%3Cpath%20d%3D%22M19%200%20v28%22%20stroke%3D%22%23E395A9%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%222%202%22/%3E%3C/svg%3E"); background-size: 40px 28px; border: 3px solid var(--ink); }
+.sw-top { left: 90px; top: 20px; width: 160px; height: 140px; border-radius: 26px 26px 0 0; border-bottom: 0; z-index: 2; }
+.sw-bot { left: 90px; top: 160px; width: 160px; height: 140px; border-top: 0; transform-origin: 50% 0; transition: transform .7s cubic-bezier(.45,.05,.25,1) .55s; z-index: 3; transform-style: preserve-3d; }
+.sw-bot::after { content: ""; position: absolute; left: -3px; right: -3px; bottom: -3px; height: 22px; background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%226%22%20height%3D%2210%22%20viewBox%3D%220%200%206%2010%22%3E%3Crect%20width%3D%226%22%20height%3D%2210%22%20fill%3D%22%23E996AB%22/%3E%3Cpath%20d%3D%22M3%200%20v10%22%20stroke%3D%22%23D27C93%22%20stroke-width%3D%222%22/%3E%3C/svg%3E"); background-size: 6px 10px; border: 3px solid var(--ink); border-radius: 0 0 6px 6px; }
+.sw-sl { top: 26px; width: 64px; height: 230px; border-radius: 20px 20px 8px 8px; transition: transform .6s cubic-bezier(.45,.05,.25,1); z-index: 4; }
+.sw-sl::after { content: ""; position: absolute; left: -3px; right: -3px; bottom: -3px; height: 20px; background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%226%22%20height%3D%2210%22%20viewBox%3D%220%200%206%2010%22%3E%3Crect%20width%3D%226%22%20height%3D%2210%22%20fill%3D%22%23E996AB%22/%3E%3Cpath%20d%3D%22M3%200%20v10%22%20stroke%3D%22%23D27C93%22%20stroke-width%3D%222%22/%3E%3C/svg%3E"); background-size: 6px 10px; border: 3px solid var(--ink); border-radius: 0 0 6px 6px; }
+.sw-sl.l { left: 30px; transform-origin: 100% 0; transform: rotate(14deg); }
+.sw-sl.r { left: 246px; transform-origin: 0 0; transform: rotate(-14deg); }
+.sw-neck { left: 132px; top: 17px; width: 76px; height: 78px; background: none; border: 0; z-index: 5; }
+.sw-pony { left: 196px; top: 60px; width: 18px; height: 16px; background: none; border: 0; z-index: 5; }
+.sw.folded .sw-sl.l { transform: rotateY(-180deg) translateX(-2px); }
+.sw.folded .sw-sl.r { transform: rotateY(180deg) translateX(2px); }
+.sw.folded .sw-bot { transform: rotateX(180deg); transition-delay: .55s; }
+.sw:not(.folded) .sw-sl { transition-delay: .7s; }
+.sw:not(.folded) .sw-bot { transition-delay: 0s; }
+.sw.folded .sw-sl.l { transform: rotateY(-180deg) translateX(-2px) scaleY(.55); }
+.sw.folded .sw-sl.r { transform: rotateY(180deg) translateX(2px) scaleY(.55); }
+.sw.folded { height: 190px; transition: height .5s ease .9s; }
+.sw { transition: height .5s ease; }
