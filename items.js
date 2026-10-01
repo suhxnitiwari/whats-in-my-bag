@@ -204,7 +204,7 @@ window.ITEMS = [
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel miroir double facettes', zip: 'front', l: 24.4, t: 55.4, w: 7.5, r: 0,
+        id: 'mirror', name: 'my chanel miroir double facettes', zip: 'shades', l: 24.4, t: 55.4, w: 7.5, r: 0,
         art: `<svg viewBox="0 0 120 120"><defs><linearGradient id="lacq" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A383B"/><stop offset=".35" stop-color="#0E0D0F"/><stop offset="1" stop-color="#1B1A1D"/></linearGradient></defs>
             <path d="M18 6 C40 3 80 3 102 6 C112 8 116 14 116 24 C118 48 118 72 116 96 C116 106 112 112 102 114 C80 117 40 117 18 114 C8 112 4 106 4 96 C2 72 2 48 4 24 C4 14 8 8 18 6Z" fill="url(#lacq)" ${S}/>
             <path d="M14 22 C26 12 50 10 70 12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".22"/><path d="M8 60 C8 40 10 28 18 18" fill="none" stroke="#fff" stroke-width="1.6" opacity=".14"/>

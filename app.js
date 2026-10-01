@@ -512,7 +512,7 @@ function fairyDust(x, y) {
 const POCKET_SAY = {
     devices: 'the if-i-lost-it-i’d-cry pocket.',
     main: 'the “i might need this” pocket. (i always do.)',
-    shades: 'the pocket for things i grab all day, and things i don’t want to deal with.',
+    shades: 'the pocket for things i grab all day, things i don’t want to deal with, and a mirror. i’m very self-reflective.',
     front: 'the girl pocket.'
 };
 const dumping = () => bagBtn.classList.contains('tip');
@@ -553,7 +553,42 @@ function backToPouch() {
 }
 
 /* ---------- picking something up ---------- */
+// going from one thing to another (a sticker, an app, a link) stacks the new page on top.
+// the page underneath is kept exactly as it was, so "back" lands you right where you left off
+const navStack = [];
+let curItem = null;
+const WEB_OK = /^https:\/\/(suhxnitiwari\.github\.io|listening-history\.onrender\.com)\//;
+function goTo(it) {
+    if (sheet.open && curItem) {
+        const frag = document.createDocumentFragment(); frag.append(...sheetBody.childNodes);
+        navStack.push({ it: curItem, frag, label: sheetLabel.textContent, top: sheet.scrollTop });
+    }
+    pickUp(it);
+    const prev = navStack[navStack.length - 1]; if (!prev) return;
+    sheetBody.insertAdjacentHTML('afterbegin', `<button type="button" class="nav-back mono" id="nav-back">‹ back to ${prev.label}</button>`);
+    $('#nav-back').onclick = goBack;
+    sheetBody.classList.remove('nav-in', 'nav-out'); void sheetBody.offsetWidth; sheetBody.classList.add('nav-in');
+}
+function goBack() {
+    const p = navStack.pop(); if (!p) return;
+    curItem = p.it; sheetLabel.textContent = p.label;
+    sheetBody.replaceChildren(p.frag);
+    sheet.scrollTop = p.top;
+    if (p.it.open === 'phone') AFTER.phone();   // restart the live clock
+    sheetBody.classList.remove('nav-in', 'nav-out'); void sheetBody.offsetWidth; sheetBody.classList.add('nav-out');
+}
+// one of my own sites: open it right here, inside the bag
+const openWeb = (href, title) => goTo({ id: 'web', name: title || new URL(href).hostname, open: () => `<div class="web"><div class="web-bar mono"><span>🔒 ${href.replace(/^https:\/\//, '').replace(/\/$/, '')}</span><a href="${href}" target="_blank" rel="noopener">new tab ↗</a></div><iframe src="${href}" title="${(title || '').replace(/"/g, '')}" loading="lazy"></iframe></div>` });
+sheetBody.addEventListener('click', e => {
+    const a = e.target.closest('a[href]');
+    if (!a || a.closest('.web-bar') || !WEB_OK.test(a.href)) return;
+    e.preventDefault();
+    openWeb(a.href, (a.querySelector('b') || a).textContent.trim().slice(0, 60));
+});
+sheet.addEventListener('close', () => { navStack.length = 0; curItem = null; });
+
 function pickUp(it) {
+    curItem = it;
     snoop(it.id);
     sheetLabel.textContent = it.name;
     sheetBody.innerHTML = typeof it.open === 'function' ? it.open() : (VIEWS[it.open] || (() => ''))();
@@ -655,6 +690,255 @@ const ROMANCE = [
     }
 ];
 
+// every app on my phone and ipad answers one question about me
+const APP_Q = {
+    photos: 'what does she photograph?', instagram: 'how does she show up?', linkedin: 'what does she do professionally?', spotify: 'what does she listen to?',
+    youtube: 'what does she watch to grow?', netflix: 'what does she watch?', prime: 'what does she watch?', calendar: 'what does her life look like?',
+    duolingo: 'what is she learning?', contacts: 'do you want to know her?', notes: 'what is she thinking about?',
+    maps: 'where does she go?', messages: 'who matters to her?', gmail: 'what’s waiting on her?', camera: 'what catches her eye?',
+    clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', settings: 'how is she wired?',
+    pinterest: 'what does she want her world to look like?', procreate: 'what does she make?', safari: 'what is she curious about?',
+    chatgpt: 'what rabbit hole is she in right now?', github: 'what is she building?', canvas: 'what is she studying?'
+};
+const addQ = (view, k) => {
+    if (!APP_Q[k] || view.querySelector('.appq')) return;
+    const p = document.createElement('p'); p.className = 'appq hand'; p.textContent = APP_Q[k];
+    const b = view.querySelector('.back'); b ? b.after(p) : view.prepend(p);
+};
+const GH = 'https://suhxnitiwari.github.io/';
+const POCKET_NAME = { devices: 'the if-i-lost-it-i’d-cry pocket', main: 'the big pocket', shades: 'the sunglasses pocket', front: 'the front pocket', side: 'the side pocket', makeup: 'the makeup bag', attached: 'tucked into something else' };
+const grab = id => { const it = ITEMS.find(i => i.id === id); if (it) goTo(it); };
+
+const MORE_APPS = {
+    maps: {
+        html: () => {
+            const pins = [
+                ['mccombs', 'McCombs', 30, 34, '#BF5700', 'where i study MIS and psychology. hook ’em 🤘'],
+                ['medici', 'Medici', 52, 46, '#7A4B2E', 'vanilla latte. every day. ten stamps, one free.'],
+                ['home', 'Home', 74, 30, '#2E6FB7', 'nice try. that one stays private 🏠'],
+                ['curb', 'the curb', 64, 68, '#D93025', 'it came out of nowhere. i will not be taking questions.'],
+                ['sat', 'Saturdays', 22, 70, '#1E8E3E', 'i built an app that plans the best day around austin.', GH + 'saturday-in-austin/'],
+                ['next', '???', 86, 78, '#8E24AA', 'wherever the boarding pass says. (it says “???”.)']
+            ];
+            return `<div class="mp">
+                <div class="mp-search">🔍 <span>Search Maps</span></div>
+                <div class="mp-map"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#EEF0E8"/><path d="M-5 58 C20 50 35 62 55 56 S85 48 105 54 V62 C85 56 70 66 55 64 S20 58 -5 66Z" fill="#AFD3EE"/><rect x="14" y="20" width="26" height="24" rx="2" fill="#D9EBC9"/><rect x="66" y="74" width="20" height="18" rx="2" fill="#D9EBC9"/><path d="M0 40 H100 M0 82 H100 M42 0 V100 M78 0 V100 M8 0 L30 100" stroke="#fff" stroke-width="3"/><path d="M0 40 H100 M42 0 V100" stroke="#F6D785" stroke-width="1.6"/></svg>
+                    ${pins.map(([k, n, x, y, c]) => `<button type="button" class="mp-pin" data-pin="${k}" style="left:${x}%;top:${y}%;--c:${c}"><i></i><span>${n}</span></button>`).join('')}
+                </div>
+                <div class="mp-card" id="mp-card"><b>tap a pin</b><span>these are the places i actually go.</span></div>
+            </div>`;
+        },
+        after: v => {
+            const pins = { mccombs: ['McCombs School of Business', 'where i study MIS and psychology. hook ’em 🤘'], medici: ['Medici Roasting', 'vanilla latte. every day. ten stamps, one free.'], home: ['Home', 'nice try. that one stays private 🏠'], curb: ['the curb', 'it came out of nowhere. i will not be taking questions.'], sat: ['Saturdays', 'i built an app that plans the best day around austin.', GH + 'saturday-in-austin/'], next: ['???', 'wherever the boarding pass says. (it says “???”.)'] };
+            v.querySelectorAll('.mp-pin').forEach(p => p.onclick = () => {
+                const [t, d, href] = pins[p.dataset.pin];
+                v.querySelectorAll('.mp-pin').forEach(x => x.classList.toggle('on', x === p));
+                $('#mp-card').innerHTML = `<b>${t}</b><span>${d}</span>${href ? `<a href="${href}" target="_blank" rel="noopener">Directions ↗</a>` : ''}`;
+            });
+        }
+    },
+    messages: {
+        html: () => `<div class="msg">
+            <p class="msg-h">Messages</p>
+            <button type="button" class="msg-row" data-who="amaira"><span class="msg-av" style="background:#F4A6BE">A</span><span><b>Amaira ♡</b><small class="blur">sister stuff sister stuff sister stuff</small></span></button>
+            <button type="button" class="msg-row" data-who="mom"><span class="msg-av" style="background:#B9A3E8">M</span><span><b>Mom</b><small class="blur">mom stuff mom stuff mom stuff mom</small></span></button>
+            <button type="button" class="msg-row" data-who="you"><span class="msg-av" style="background:#34C759">+</span><span><b>you?</b><small>new message</small></span></button>
+            <div class="msg-open" id="msg-open" hidden></div>
+            <a class="msg-world" href="${GH}suhani-world/" target="_blank" rel="noopener">the people and places that made me ↗</a>
+        </div>`,
+        after: v => v.querySelectorAll('.msg-row').forEach(r => r.onclick = () => {
+            const o = $('#msg-open'), w = r.dataset.who;
+            if (w === 'you') { $('#back').click(); sheetBody.querySelector('[data-app="contacts"]').click(); return; }
+            o.hidden = false;
+            o.innerHTML = w === 'amaira'
+                ? `<p>this chat is just for us ♡</p><button type="button" class="msg-btn" data-go="cards">see the cards she made me →</button>`
+                : `<p>this chat is just for us ♡</p>`;
+            o.querySelector('[data-go]') && (o.querySelector('[data-go]').onclick = () => grab('cards'));
+        })
+    },
+    gmail: {
+        html: () => `<div class="gm">
+            <div class="gm-search">☰ <span>Search in mail</span></div>
+            ${[['Primary', '99+', '#1A73E8'], ['UT Austin', '99+', '#BF5700'], ['Promotions', '99+', '#1E8E3E', 'sephora, aritzia, chanel. the gift card brands, back for more.'], ['Applications', '✦', '#8E24AA']].map(([n, c, col, sub]) => `<div class="gm-row"><span class="gm-dot" style="background:${col}"></span><span><b>${n}</b>${sub ? `<small>${sub}</small>` : ''}</span><em>${c}</em></div>`).join('')}
+            <button type="button" class="gm-btn" id="gm-read">Mark all as read</button>
+            <a class="gm-compose" href="mailto:suhanitiwari@utexas.edu?subject=${encodeURIComponent('hi from your bag ♡')}">✎ Compose</a>
+        </div>`,
+        after: () => { $('#gm-read').onclick = () => toast('no.'); }
+    },
+    camera: {
+        html: () => `<div class="cam"><div class="cam-vf"><img id="cam-img" src="assets/img/cafe.jpg" alt=""><span class="cam-grid"></span><span class="cam-flash" id="cam-flash"></span></div>
+            <p class="cam-modes mono"><span>VIDEO</span><b>PHOTO</b><span>PORTRAIT</span></p>
+            <div class="cam-bar"><img class="cam-thumb" id="cam-thumb" src="assets/img/me.jpg" alt=""><button type="button" class="cam-shutter" id="cam-shutter" aria-label="Take a photo"></button><span></span></div></div>`,
+        after: () => {
+            const shots = ['cafe', 'chicago', 'book', 'nyc', 'owala', 'saturday', 'gwc', 'listening'];
+            let i = 0;
+            $('#cam-shutter').onclick = () => {
+                const f = $('#cam-flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+                $('#cam-thumb').src = $('#cam-img').src;
+                i = (i + 1) % shots.length; $('#cam-img').src = `assets/img/${shots[i]}.jpg`;
+                toast(['another one for the camera roll.', 'this one’s going on the story.', 'okay one more.', 'perfect. (taking five more.)'][i % 4]);
+            };
+        }
+    },
+    clock: {
+        html: () => `<div class="clk">
+            <p class="clk-h">World Clock</p>
+            <div class="clk-row"><span><small>Today</small><b>Austin</b></span><em id="clk-atx"></em></div>
+            <div class="clk-row"><span><small>wherever the boarding pass says</small><b>???</b></span><em>--:--</em></div>
+            <p class="clk-h">Alarms</p>
+            <div class="clk-row"><span><b class="todo">what time do you actually wake up?</b></span></div>
+        </div>`,
+        after: () => { const t = () => { const e = $('#clk-atx'); if (e) { e.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' }); setTimeout(t, 15000); } }; t(); }
+    },
+    wallet: {
+        html: () => `<div class="wl">
+            <p class="wl-h">Wallet</p>
+            <button type="button" class="wl-pass" data-go="passport" style="--c:#1F3B73"><b>Boarding Pass</b><span>AUS → ???</span></button>
+            <button type="button" class="wl-pass" data-go="wallet" style="--c:#6B4026"><b>Medici</b><span>10 stamps = 1 free vanilla latte</span></button>
+            <button type="button" class="wl-pass" data-go="giftcards" style="--c:#C0577A"><b>Gift Cards</b><span>aritzia · chanel · sephora · balance: a mystery</span></button>
+            <p class="wl-fine">no real card numbers live here. nice try ♡</p>
+        </div>`,
+        after: v => v.querySelectorAll('[data-go]').forEach(b => b.onclick = () => grab(b.dataset.go))
+    },
+    findmy: {
+        html: () => `<div class="fm">
+            <p class="fm-h">Items</p>
+            ${['keys', 'headphones', 'ipad', 'stanley', 'passport', 'mirror', 'bear'].map(id => ITEMS.find(i => i.id === id)).filter(Boolean).map(it => `<div class="fm-row"><span class="fm-art">${it.art}</span><span><b>${it.name.replace(/^my /, '')}</b><small>${POCKET_NAME[it.zip] || 'somewhere in the bag'}</small></span><button type="button" data-find="${it.id}">Find</button></div>`).join('')}
+        </div>`,
+        after: v => v.querySelectorAll('[data-find]').forEach(b => b.onclick = () => {
+            if (b.dataset.find === 'keys') toast('*jingle jingle* found them. they were in the sunglasses pocket. again.');
+            setTimeout(() => grab(b.dataset.find), b.dataset.find === 'keys' ? 900 : 0);
+        })
+    },
+    settings: {
+        html: () => {
+            const rows = [
+                ['shades', 'Romanticize everything', document.body.classList.contains('shades'), ''],
+                ['glogg', 'Backup lipstick (Glögg)', true, 'non-negotiable.'],
+                ['latte', 'Vanilla latte, daily', true, 'medici already knows.'],
+                ['mirror', 'Self-reflection', true, 'always on. there’s a mirror in the sunglasses pocket for a reason.'],
+                ['todo', 'To-do list reminders', false, 'it’s overdue anyway.'],
+                ['curb', 'Curb detection', false, 'it came out of nowhere.']
+            ];
+            return `<div class="st"><p class="st-h">Settings</p>
+                <div class="st-me"><img src="assets/img/me.jpg" alt=""><span><b>Suhani Tiwari</b><small>Pisces sun · Gemini moon · Taurus rising</small></span></div>
+                ${rows.map(([k, n, on, say]) => `<label class="st-row"><span>${n}</span><input type="checkbox" data-st="${k}" data-say="${say}" ${on ? 'checked' : ''}><i></i></label>`).join('')}
+            </div>`;
+        },
+        after: v => v.querySelectorAll('[data-st]').forEach(c => c.onchange = () => {
+            const k = c.dataset.st;
+            if (k === 'shades') { document.body.classList.toggle('shades', c.checked); toast(c.checked ? 'see? it was always this pretty.' : 'ew. reality.'); return; }
+            if (k === 'glogg' || k === 'latte' || k === 'mirror') c.checked = true;
+            toast(c.dataset.say);
+        })
+    },
+    safari: {
+        html: () => {
+            const tabs = [
+                ['what’s my color season?', GH + 'hue-are-you/', '#E8B4C8'],
+                ['is this ingredient actually clean?', 'https://github.com/suhxnitiwari/label-tea', '#F3D6A4'],
+                ['what do i need on the final?', GH + 'survival-odds/', '#BFD7EA'],
+                ['what does my birth chart mean?', GH + 'astrology-results/', '#CBB8E8'],
+                ['best saturday in austin?', GH + 'saturday-in-austin/', '#BFE3C6'],
+                ['what did i listen to for four years?', 'https://listening-history.onrender.com', '#A8E6B8'],
+                ['can a period app actually be private?', GH + 'cadence-period-tracker/', '#F6C1C1'],
+                ['vogue: in the bag', 'https://www.vogue.com/video/series/in-the-bag', '#E6E2DC']
+            ];
+            return `<div class="sf"><p class="sf-h"><b>37 Tabs</b><button type="button" id="sf-close">Close All</button></p>
+                <div class="sf-grid">${tabs.map(([t, u, c]) => `<a class="sf-tab" href="${u}" target="_blank" rel="noopener"><span class="sf-prev" style="background:${c}"></span><b>${t}</b><small>${u.replace(/^https:\/\//, '').replace(/\/$/, '')}</small></a>`).join('')}</div>
+                <p class="sf-fine">+29 more. every question turns into a tab. some turn into whole websites.</p></div>`;
+        },
+        after: () => { $('#sf-close').onclick = () => toast('close all 37 tabs? absolutely not.'); }
+    },
+    chatgpt: {
+        html: () => `<div class="gpt"><div class="gpt-log" id="gpt-log"><p class="gpt-hi">What’s on your mind today?</p></div>
+            <div class="gpt-chips">${['what does my birth chart say about me?', 'is the curb legally at fault?', 'how many lipsticks is too many?', 'romanticize my monday'].map(q => `<button type="button" data-q="${q}">${q}</button>`).join('')}</div>
+            <form class="gpt-in" id="gpt-in"><input placeholder="Ask anything" aria-label="Ask anything"><button aria-label="Send">↑</button></form></div>`,
+        after: () => {
+            const A = {
+                'what does my birth chart say about me?': `pisces sun, gemini moon, taurus rising. you’ve asked me this 47 times. you built <a href="${GH}suhani-celestial/" target="_blank" rel="noopener">two</a> <a href="${GH}astrology-results/" target="_blank" rel="noopener">websites</a> about it.`,
+                'is the curb legally at fault?': 'legally? no. emotionally? absolutely.',
+                'how many lipsticks is too many?': 'you have a backup for your backup. you’re fine.',
+                'romanticize my monday': 'soft light, a warm vanilla latte, a playlist that knows you. you’re the main character. go.'
+            };
+            const log = $('#gpt-log');
+            const ask = q => {
+                log.insertAdjacentHTML('beforeend', `<p class="gpt-me">${q.replace(/</g, '&lt;')}</p><p class="gpt-ai">${A[q] || 'she’s 47 questions deep into her birth chart right now. try again later ♡'}</p>`);
+                log.scrollTop = log.scrollHeight;
+            };
+            sheetBody.querySelectorAll('[data-q]').forEach(b => b.onclick = () => ask(b.dataset.q));
+            $('#gpt-in').onsubmit = e => { e.preventDefault(); const i = e.target.querySelector('input'); if (i.value.trim()) ask(i.value.trim()); i.value = ''; };
+        }
+    },
+    github: {
+        html: () => `<div class="gh"><div class="gh-me"><img src="assets/img/me.jpg" alt=""><span><b>suhxnitiwari</b><small>building things where technology meets people</small></span><a href="https://github.com/suhxnitiwari" target="_blank" rel="noopener">Profile ↗</a></div>
+            <div class="gh-list" id="gh-list"><p class="gh-wait mono">loading what i’m building…</p></div></div>`,
+        after: () => {
+            fetch('https://api.github.com/users/suhxnitiwari/repos?sort=pushed&per_page=12').then(r => r.ok ? r.json() : Promise.reject()).then(rs => {
+                const el = $('#gh-list'); if (!el) return;
+                el.innerHTML = rs.filter(r => !r.fork && r.description).map(r => `<a class="gh-repo" href="${r.homepage || r.html_url}" target="_blank" rel="noopener"><b>${r.name}</b><span>${r.description.replace(/</g, '&lt;')}</span><small>${r.language ? `● ${r.language} · ` : ''}updated ${new Date(r.pushed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</small></a>`).join('');
+            }).catch(() => { const el = $('#gh-list'); if (el) el.innerHTML = '<a class="gh-repo" href="https://github.com/suhxnitiwari" target="_blank" rel="noopener"><b>see everything on github ↗</b></a>'; });
+        }
+    },
+    canvas: {
+        html: () => `<div class="cv"><p class="cv-h">Dashboard</p>
+            <div class="cv-cards"><div class="cv-card" style="--c:#BF5700"><span></span><b>MIS</b><small>McCombs School of Business</small></div><div class="cv-card" style="--c:#6E4BA8"><span></span><b>Psychology</b><small>why people choose what they choose</small></div></div>
+            <div class="cv-btns"><button type="button" id="cv-grades">Grades</button><button type="button" id="cv-todo">To Do</button></div>
+            <a class="cv-link" href="${GH}survival-odds/" target="_blank" rel="noopener">i built an app to survive the semester ↗</a></div>`,
+        after: () => { $('#cv-grades').onclick = () => toast('nice try. those stay in the bag.'); $('#cv-todo').onclick = () => grab('todo'); }
+    }
+};
+const openMoreApp = (k, view, home, back, backSel) => {
+    const app = MORE_APPS[k]; if (!app) return false;
+    view.classList.remove('procreate');
+    view.innerHTML = back + app.html();
+    addQ(view, k);
+    home.hidden = true; view.hidden = false;
+    $(backSel).onclick = () => { view.hidden = true; home.hidden = false; };
+    app.after && app.after(view);
+    return true;
+};
+
+// my laptop desktop, folder by folder. files open on top of the laptop, so "back" lands in the same window
+const PHOTOS = ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'];
+const FOLDERS = [
+    ['Job Applications', [
+        ['Résumé.pdf', 'view', 'padfolio', '#E8453C'],
+        ['roles i’m going for.txt', 'note', 'product marketing manager\nproduct manager\nbrand strategist\ntechnology consultant\nmanagement consultant\nUI/UX designer\n\n→ work where technology meets people\n\ndream companies:\nnetflix ☆ spotify ☆ duolingo', '#8E8E93'],
+        ['Acacia Advisors', 'view', 'acacia', '#2E6FB7'],
+        ['LinkedIn', 'link', 'https://www.linkedin.com/in/suhxnitiwari/', '#0A66C2']
+    ]],
+    ['Personal Projects', [
+        ['Listening History', 'web', 'https://listening-history.onrender.com/', 'img:listening'],
+        ['Saturday in Austin', 'view', 'saturday', 'img:saturday'],
+        ['Girls Can Be Engineers, Too!', 'view', 'book', 'img:book'],
+        ['Hue Are You', 'web', GH + 'hue-are-you/', '#E8B4C8'],
+        ['Survival Odds', 'web', GH + 'survival-odds/', '#BFD7EA'],
+        ['Cadence', 'web', GH + 'cadence-period-tracker/', '#F6C1C1'],
+        ['Charted', 'web', GH + 'astrology-results/', '#CBB8E8'],
+        ['Suhani Celestial', 'web', GH + 'suhani-celestial/', '#B9A3E8'],
+        ['Suhani World', 'web', GH + 'suhani-world/', '#BFE3C6'],
+        ['Label Tea', 'link', 'https://github.com/suhxnitiwari/label-tea', '#F3D6A4'],
+        ['What’s in my bag', 'self', '', '#F2C6C8'],
+        ['suhanitiwari.com', 'link', 'https://suhanitiwari.com', '#76344E']
+    ]],
+    ['Photographs', PHOTOS.map(f => [f + '.jpg', 'photo', f, 'img:' + f])],
+    ['MIS', [
+        ['RideFlow', 'link', 'https://suhanitiwari.com/home/work#mp-rideflow', '#1A73E8'],
+        ['Bevo Taco Checkout', 'link', 'https://github.com/suhxnitiwari/Bevo_Taco-Checkout', '#BF5700'],
+        ['My portfolio (ASP.NET)', 'link', 'https://github.com/suhxnitiwari/suhanitiwari-portfolio', '#76344E']
+    ]],
+    ['MKT', [
+        ['Owala Marathon Series', 'view', 'owala', 'img:owala'],
+        ['FuelFlow', 'view', 'fuelflow', 'img:fuelflow']
+    ]],
+    ['PSY', []],
+    ['EDP', []]
+];
+const fileIcon = (n, ic) => ic.startsWith('img:')
+    ? `<img src="assets/img/${ic.slice(4)}.jpg" alt="">`
+    : `<svg viewBox="0 0 40 48" aria-hidden="true"><path d="M4 2 h22 l10 10 v34 h-32z" fill="#fff" stroke="#C9C6C2" stroke-width="1.5"/><path d="M26 2 v10 h10" fill="#EEE" stroke="#C9C6C2" stroke-width="1.5"/><rect x="4" y="30" width="32" height="10" fill="${ic}"/><text x="20" y="38" text-anchor="middle" font-size="7" font-family="system-ui" font-weight="700" fill="#fff">${(n.match(/\.(\w+)$/) || [, 'APP'])[1].toUpperCase()}</text></svg>`;
+
 const VIEWS = {
     backuplip: () => {
         const U = (c, up) => `M${up ? '34 70' : '40 80'} C70 ${up ? 58 : 66} 100 50 128 56 C138 58 144 62 150 62 C156 62 162 58 172 56 C200 50 230 ${up ? 58 : 66} ${up ? '266 70' : '260 80'} C220 ${up ? 78 : 82} 190 80 150 82 C110 80 80 ${up ? 78 : 82} ${up ? '34 70' : '40 80'}Z`;
@@ -748,8 +1032,8 @@ const VIEWS = {
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
         <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
-        <div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div>
-        <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button></div>`,
+        <div class="bp-gate" id="bp-gate"><div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div><span class="bp-laser" aria-hidden="true"></span><span class="bp-stamp" aria-hidden="true">BOARDED ✓</span></div>
+        <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button> <span class="bp-light" id="bp-light" aria-hidden="true"></span></div>`,
     padfolio: () => `
         <h2>My <em>McCombs</em> padfolio</h2>
         <p class="note">my résumé on the left, my notes on the right, a baby pink pen in the middle. ready for anything.</p>
@@ -759,7 +1043,7 @@ const VIEWS = {
                 <div class="pf-resume" id="pf-resume" role="button" tabindex="0" aria-label="My résumé: tap to pull it out"><img src="assets/img/resume.png" alt="My résumé"><span class="pf-take">pull it out ↑</span><a class="pf-open" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">open the full résumé ↗</a></div>
                 <div class="bc" id="bc" role="button" tabindex="0" aria-label="My business card: tap to flip it"><span class="bc-in">
                     <span class="bc-f"><b>Suhani Tiwari</b><i>MIS + Psychology · UT Austin</i><em>product · brand · technology</em><span class="bc-heart">♡</span></span>
-                    <span class="bc-b"><a href="https://suhanitiwari.com" target="_blank" rel="noopener">suhanitiwari.com ↗</a><a href="https://www.linkedin.com/in/suhxnitiwari" target="_blank" rel="noopener">linkedin.com/in/suhxnitiwari ↗</a><a href="mailto:suhanitiwari@utexas.edu">suhanitiwari@utexas.edu ✉</a><em>let’s get coffee ☕</em></span>
+                    <span class="bc-b"><a href="https://suhanitiwari.com" target="_blank" rel="noopener">suhanitiwari.com ↗</a><a href="https://www.linkedin.com/in/suhxnitiwari" target="_blank" rel="noopener">linkedin.com/in/suhxnitiwari ↗</a><a href="https://www.instagram.com/hifromhani/" target="_blank" rel="noopener">instagram @hifromhani ↗</a><a href="mailto:suhanitiwari@utexas.edu">suhanitiwari@utexas.edu ✉</a><em>let’s get coffee ☕</em></span>
                 </span></div>
                 <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 30 150">
                     <path d="M15 8 c-6 -7 -13 -4 -10 1 c2 3 7 2 10 -1 c3 3 8 4 10 1 c3 -5 -4 -8 -10 -1z" fill="#F7A8C0" stroke="#3A2626" stroke-width="1.2"/><circle cx="15" cy="8" r="2" fill="#E57A9E" stroke="#3A2626" stroke-width="1"/>
@@ -776,14 +1060,19 @@ const VIEWS = {
                 <p>♡ product manager</p>
                 <p>♡ brand strategist</p>
                 <p>♡ technology consultant</p>
+                <p>♡ management consultant</p>
+                <p>♡ UI/UX designer</p>
                 <p class="pf-u">→ work where technology meets people</p>
+                <p style="margin-top:14px">dream companies:</p>
+                <p>☆ netflix ☆ spotify ☆ duolingo</p>
             </div></div>
         </div>`,
     cap: () => `
         <h2>My <em>cap</em></h2>
         <p class="note">a cap is a must.</p>
+        <div class="capfit" id="capfit"><img src="assets/img/me.jpg" alt="Me, in my blue coat"><button type="button" class="capfit-cap" id="capfit-cap" aria-label="My brown NY cap: tap to put it on me">${ITEMS.find(i => i.id === 'cap').art}</button></div>
         <p>Brown, with the NY stitched tone on tone. Goes with everything, especially the Chanel sunglasses. Bad hair day, sunny day, running-late day.</p>
-        <div class="row"><button class="btn solid" type="button" id="cap-on">Put it on</button></div>`,
+        <div class="row"><button class="btn solid" type="button" id="cap-on">Put it on me</button></div>`,
     romcom: () => `
         <h2><em>You Deserve Each Other</em></h2>
         <p class="note">sarah hogle. a paperback rom-com. it’s been in my backpack for three weeks. i keep saying i’ll read it.</p>
@@ -985,18 +1274,13 @@ const VIEWS = {
         </div>
         <div class="mbp" id="mbp" hidden><div class="mbp-screen" id="mbp-screen"><div class="desktop" id="desktop">
             <div class="menubar mono"><span></span><span id="lap-clock"></span></div>
-            <div class="dfolders">${[
-                ['Listening History', 'https://listening-history.onrender.com/'],
-                ['Saturday in Austin', 'saturday'],
-                ['RideFlow', 'https://suhanitiwari.com/home/work#mp-rideflow'],
-                ['Owala Marathon', 'owala'],
-                ['FuelFlow', 'fuelflow'],
-                ['Girls Can Be Engineers', 'book'],
-                ['Acacia Advisors', 'acacia'],
-                ['suhanitiwari.com', 'https://suhanitiwari.com']
-            ].map(([n, go]) => `<button type="button" class="dfolder" data-go="${go}">
+            <div class="dfolders">${FOLDERS.map(([n], i) => `<button type="button" class="dfolder" data-f="${i}">
                 <svg viewBox="0 0 100 78" aria-hidden="true"><path d="M4 12 a6 6 0 0 1 6 -6 h26 l8 8 h46 a6 6 0 0 1 6 6 v4 H4z" fill="#4E9BE0"/><rect x="4" y="18" width="92" height="56" rx="7" fill="#7EC4F5"/><rect x="4" y="18" width="92" height="56" rx="7" fill="none" stroke="#5FA9E6" stroke-width="1.2"/><path d="M8 66 h84 M8 69 h84" stroke="#6BB4EC" stroke-width="1"/></svg>
                 <span>${n}</span></button>`).join('')}</div>
+            <div class="fwin" id="fwin" hidden>
+                <div class="fwin-bar"><span class="fwin-tl"><button type="button" id="fwin-x" aria-label="Close this window"></button><i></i><i></i></span><b id="fwin-title"></b></div>
+                <div class="fwin-body"><nav class="fwin-side">${FOLDERS.map(([n], i) => `<button type="button" data-side="${i}">${n}</button>`).join('')}</nav><div class="fwin-main" id="fwin-main"></div></div>
+            </div>
             <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="the one helping me build this bag." aria-label="Claude" title="Claude"><span style="background:#D97757"><svg viewBox="0 0 40 40"><g stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M20 20 L29.0 20.0"/><path d="M20 20 L27.8 24.5"/><path d="M20 20 L24.5 27.8"/><path d="M20 20 L20.0 29.0"/><path d="M20 20 L15.5 27.8"/><path d="M20 20 L12.2 24.5"/><path d="M20 20 L11.0 20.0"/><path d="M20 20 L12.2 15.5"/><path d="M20 20 L15.5 12.2"/><path d="M20 20 L20.0 11.0"/><path d="M20 20 L24.5 12.2"/><path d="M20 20 L27.8 15.5"/></g></svg></span><i>Claude</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button></div>
         </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
         <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
@@ -1011,7 +1295,7 @@ const VIEWS = {
             </div>
         </div>
         <h2>Mirror, mirror: <em>the real me</em></h2>
-        <p class="note">chanel miroir double facettes: a regular mirror in the lid, a magnifying one below. yes, the blair waldorf one.</p>
+        <p class="note">chanel miroir double facettes: a regular mirror in the lid, a magnifying one below. yes, the blair waldorf one. it lives in my sunglasses pocket, because i’m a very self-reflective person.</p>
         <p>I’m Suhani. I study Management Information Systems and Psychology at UT Austin’s McCombs School of Business. I study why people choose what they choose, then build what they’d choose.</p>
         <p>I’m also a published children’s book author, the founder of two Girls Who Code chapters, and a digital artist who paints about growing up between two worlds.</p>
         <div class="row"><a class="btn solid" href="https://suhanitiwari.com" target="_blank" rel="noopener">My portfolio ↗</a></div>
@@ -1127,13 +1411,17 @@ const VIEWS = {
 
     ipad: () => `
         <h2>My <em>iPad</em></h2>
-        <p class="note">mostly pinterest and procreate, honestly</p>
+        <p class="note">where i go to wonder, study and make things. every app answers a question about me.</p>
         <div class="ipad-flat">
             <span class="ipad-pencil" aria-hidden="true"></span>
         <div class="ipad-big"><div class="ipad-screen">
             <div class="ipad-home" id="ipad-home">
                 <button type="button" class="papp" data-ip="pinterest"><span class="ic" style="background:#E60023"><svg viewBox="0 0 40 40"><path d="M20 9 c-8 0 -11 6 -9 10 c1 2 2 2 2 1 c-1 -3 1 -7 7 -7 c5 0 6 3 5 6 c-1 4 -3 5 -5 5 c-2 0 -2 -2 -1 -3 l1 -4 m0 0 l-3 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></span>Pinterest</button>
                 <button type="button" class="papp" data-ip="procreate"><span class="ic" style="background:#1B1B1F"><svg viewBox="0 0 40 40"><path d="M10 30 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="11" cy="30" r="3" fill="#B9A3E8"/></svg></span>Procreate</button>
+                <button type="button" class="papp" data-ip="safari"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="#2F8CF0"/><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width=".8" stroke-dasharray="1 2.1"/><path d="M27 13 L22 22 L13 27 L18 18Z" fill="#fff"/><path d="M27 13 L22 22 L18 18Z" fill="#E8453C"/></svg></span>Safari</button>
+                <button type="button" class="papp" data-ip="chatgpt"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><g fill="none" stroke="#111" stroke-width="2.2"><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(0 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(60 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(120 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(180 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(240 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(300 20 20)"/></g></svg></span>ChatGPT</button>
+                <button type="button" class="papp" data-ip="github"><span class="ic" style="background:#1B1F24"><svg viewBox="0 0 40 40"><path d="M20 8 a12 12 0 0 0 -3.8 23.4 c.6 .1 .8 -.3 .8 -.6 v-2.2 c-3.3 .7 -4 -1.4 -4 -1.4 -.6 -1.4 -1.3 -1.8 -1.3 -1.8 -1.1 -.7 .1 -.7 .1 -.7 1.2 .1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1 -.8 .4 -1.3 .8 -1.6 -2.7 -.3 -5.5 -1.3 -5.5 -5.9 0 -1.3 .5 -2.4 1.2 -3.2 -.1 -.3 -.5 -1.5 .1 -3.2 0 0 1 -.3 3.3 1.2 a11.5 11.5 0 0 1 6 0 c2.3 -1.5 3.3 -1.2 3.3 -1.2 .7 1.7 .2 2.9 .1 3.2 .8 .8 1.2 1.9 1.2 3.2 0 4.6 -2.8 5.6 -5.5 5.9 .4 .4 .8 1.1 .8 2.2 v3.3 c0 .3 .2 .7 .8 .6 A12 12 0 0 0 20 8z" fill="#fff"/></svg></span>GitHub</button>
+                <button type="button" class="papp" data-ip="canvas"><span class="ic" style="background:#E72429"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="6" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="31.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="27.8" r="1.8" fill="#fff"/><circle cx="20.0" cy="31.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="27.8" r="1.8" fill="#fff"/><circle cx="9.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="12.2" r="1.8" fill="#fff"/><circle cx="20.0" cy="9.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="12.2" r="1.8" fill="#fff"/></svg></span>Canvas</button>
             </div>
             <div class="ipad-view" id="ipad-view" hidden></div>
         </div></div>
@@ -1159,6 +1447,14 @@ const VIEWS = {
                     <button type="button" class="papp" data-app="duolingo"><span class="ic ic-duo"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="12" ry="11" fill="#fff"/><circle cx="15.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="24.5" cy="21" r="4" fill="#fff" stroke="#3C3C3C" stroke-width="1"/><circle cx="16" cy="21.5" r="2" fill="#3C3C3C"/><circle cx="24" cy="21.5" r="2" fill="#3C3C3C"/><path d="M18 26 l2 2.5 2 -2.5z" fill="#FFC800"/></svg></span>Duolingo</button>
                     <button type="button" class="papp" data-app="contacts"><span class="ic ic-ct"><svg viewBox="0 0 40 40"><circle cx="20" cy="16" r="6" fill="#fff"/><path d="M9 31 c1 -7 6 -10 11 -10 s10 3 11 10z" fill="#fff"/></svg></span>Contacts</button>
                     <button type="button" class="papp" data-app="notes"><span class="ic ic-notes"><svg viewBox="0 0 40 40"><rect x="7" y="7" width="26" height="26" rx="4" fill="#fff"/><rect x="7" y="7" width="26" height="8" rx="4" fill="#F7C744"/><rect x="7" y="11" width="26" height="4" fill="#F7C744"/><path d="M12 21 h16 M12 26 h16 M12 31 h10" stroke="#C9C6BE" stroke-width="1.6"/></svg></span>Notes</button>
+                    <button type="button" class="papp" data-app="maps"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><rect x="5" y="5" width="30" height="30" rx="4" fill="#E6F1DC"/><path d="M5 24 L35 14" stroke="#F6D785" stroke-width="4"/><path d="M18 5 L24 35" stroke="#fff" stroke-width="3"/><path d="M27 9 c-4 0 -6 3 -6 6 c0 4 6 10 6 10 s6 -6 6 -10 c0 -3 -2 -6 -6 -6z" fill="#E8453C"/><circle cx="27" cy="15" r="2" fill="#fff"/></svg></span>Maps</button>
+                    <button type="button" class="papp" data-app="messages"><span class="ic" style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M8 19 c0 -6 5.5 -9.5 12 -9.5 s12 3.5 12 9.5 -5.5 9.5 -12 9.5 c-1.6 0 -3.1 -.2 -4.5 -.7 L9.5 31 l1.6 -4.6 C9 24.6 8 22 8 19z" fill="#fff"/></svg></span>Messages</button>
+                    <button type="button" class="papp" data-app="camera"><span class="ic" style="background:#D9D9DC"><svg viewBox="0 0 40 40"><rect x="7" y="13" width="26" height="17" rx="4" fill="#3A383C"/><rect x="14" y="10" width="9" height="4" rx="1.5" fill="#3A383C"/><circle cx="20" cy="21.5" r="6" fill="#5B5960" stroke="#E8E8EA" stroke-width="2"/><circle cx="28.5" cy="16.5" r="1.3" fill="#F5C542"/></svg></span>Camera</button>
+                    <button type="button" class="papp" data-app="clock"><span class="ic" style="background:#111111"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="#fff"/><path d="M20 11 V20 L26 23" stroke="#111" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M20 20 L13 14" stroke="#F29B38" stroke-width="1.3"/><circle cx="20" cy="20" r="1.6" fill="#F29B38"/></svg></span>Clock</button>
+                    <button type="button" class="papp" data-app="gmail"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><path d="M8 13 v15 h5 V18 l7 5.5 7 -5.5 v10 h5 V13 l-3 -2 -9 7 -9 -7z" fill="#EA4335"/><path d="M8 13 v15 h5 V18z" fill="#4285F4"/><path d="M27 18 v10 h5 V13z" fill="#34A853"/><path d="M29 11 l3 2 v0 l-5 4z" fill="#FBBC04"/></svg></span>Gmail</button>
+                    <button type="button" class="papp" data-app="wallet"><span class="ic" style="background:#111111"><svg viewBox="0 0 40 40"><rect x="8" y="10" width="24" height="7" rx="2" fill="#4285F4"/><rect x="8" y="14" width="24" height="7" rx="2" fill="#F7C344"/><rect x="8" y="18" width="24" height="7" rx="2" fill="#34A853"/><path d="M7 22 h26 v8 a3 3 0 0 1 -3 3 h-20 a3 3 0 0 1 -3 -3z" fill="#E9E5DE"/></svg></span>Wallet</button>
+                    <button type="button" class="papp" data-app="findmy"><span class="ic" style="background:#2BB24C"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg></span>Find My</button>
+                    <button type="button" class="papp" data-app="settings"><span class="ic" style="background:#8E8E93"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="3.4 2.4"/><circle cx="20" cy="20" r="7.5" fill="#8E8E93" stroke="#fff" stroke-width="2.4"/><circle cx="20" cy="20" r="2.5" fill="#fff"/></svg></span>Settings</button>
                 </div>
                 <div class="app-view" id="app-view" hidden></div>
             </div>
@@ -1436,13 +1732,38 @@ const AFTER = {
         bottle.onclick = e => { if (e.target.closest('.pcap') && bottle.classList.contains('capoff')) { bottle.classList.remove('capoff'); btn.textContent = 'Take the cap off'; hint.textContent = 'cap’s back on ♡'; return; } spritz(); };
         bottle.style.cursor = 'pointer';
     },
-    boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
+    boarding: () => {
+        const gate = $('#bp-gate'), dest = [...gate.querySelectorAll('text')].filter(t => t.textContent.trim() === '???');
+        let busy = false;
+        const beep = () => { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1320; g.gain.value = .06; o.connect(g).connect(a.destination); o.start(); o.stop(a.currentTime + .14); } catch {} };
+        $('#bp-scan').onclick = () => {
+            if (busy) return; busy = true;
+            gate.classList.remove('scanned'); $('#bp-light').className = 'bp-light';
+            gate.classList.add('scanning');
+            setTimeout(() => {
+                gate.classList.remove('scanning'); gate.classList.add('scanned'); $('#bp-light').className = 'bp-light ok'; beep();
+                // the destination flips like a departures board, then lands where it always does
+                const codes = ['PAR', 'TYO', 'NYC', 'LIS', 'SEL', 'BCN', 'CPT', '???'];
+                codes.forEach((c, i) => setTimeout(() => { dest.forEach(t => t.textContent = c); if (i === codes.length - 1) { busy = false; toast('beep. you’re boarded. destination: wherever’s next ✈'); } }, 140 * (i + 1)));
+            }, reduce ? 0 : 1300);
+        };
+    },
     padfolio: () => {
         const pf = sheetBody.querySelector('.pf'), res = $('#pf-resume');
         const pull = e => { if (e.target.closest('.pf-open')) return; const out = pf.classList.toggle('res-out'); res.setAttribute('aria-label', out ? 'My résumé: tap to tuck it back in' : 'My résumé: tap to pull it out'); res.querySelector('.pf-take').textContent = out ? 'tuck it back ↓' : 'pull it out ↑'; if (out) toast('take one. seriously ♡'); };
         res.onclick = pull; res.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pull(e); } };
         const bc = $('#bc'); const flip = e => { if (e.target.closest('a')) return; const f = bc.classList.toggle('flip'); if (f) toast('tap a link ♡'); }; bc.onclick = flip; bc.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(e); } }; },
-    cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
+    cap: () => {
+        let on = false;
+        const fit = $('#capfit');
+        const flip = () => {
+            on = !on; fit.classList.toggle('on', on);
+            $('#cap-on').textContent = on ? 'Take it off, it’s hot' : 'Put it on me';
+            $('#capfit-cap').setAttribute('aria-label', on ? 'My brown NY cap: tap to take it off' : 'My brown NY cap: tap to put it on me');
+            toast(on ? 'cap on. bad hair day? never heard of her.' : 'off. it’s hot. literally.');
+        };
+        $('#cap-on').onclick = flip; $('#capfit-cap').onclick = flip;
+    },
     passport: () => {
         const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
         let at = 0;   // how many leaves have been turned
@@ -1497,6 +1818,7 @@ const AFTER = {
         const view = $('#app-view'), home = $('#home');
         const back = '<button type="button" class="back mono" id="back">‹ home</button>';
         sheetBody.querySelectorAll('[data-app]').forEach(b => b.onclick = () => {
+            if (openMoreApp(b.dataset.app, view, home, back, '#back')) return;
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
                     ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
@@ -1538,7 +1860,7 @@ const AFTER = {
                 render('all');
             } else if (b.dataset.app === 'notes') {
                 const NOTES = [
-                    ['roles i’m going for', 'product marketing manager\nproduct manager\nbrand strategist\ntechnology consultant\n\n→ work where technology meets people'],
+                    ['roles i’m going for', 'product marketing manager\nproduct manager\nbrand strategist\ntechnology consultant\nmanagement consultant\nUI/UX designer\n\n→ work where technology meets people\n\ndream companies:\nnetflix ☆ spotify ☆ duolingo'],
                     ['medici', 'vanilla latte. every day.\nbuy 10, get 1 free.'],
                     ['gift card balances', 'aritzia: ?\nchanel: ?\nsephora: ?\n(a mystery)'],
                     ['in my backpack rn', 'T.D. ♡\namaira’s cards\na speeding ticket (we don’t talk about it)\nan overdue to-do list']
@@ -1555,7 +1877,7 @@ const AFTER = {
                     $('#nt-back').onclick = list;
                     if (i < 0) view.querySelector('.nt-title').focus();
                 };
-                list(); view.hidden = false; home.hidden = true; return;
+                list(); addQ(view, 'notes'); view.hidden = false; home.hidden = true; return;
             } else if (b.dataset.app === 'contacts') {
                 view.innerHTML = back + `
                     <div class="ct">
@@ -1619,6 +1941,7 @@ const AFTER = {
                         <div class="ig-grid">${['cafe', 'chicago', 'book', 'nyc', 'gwc', 'me'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
                     </div>`;
             }
+            addQ(view, b.dataset.app);
             home.hidden = true; view.hidden = false;
             $('#back').onclick = () => { view.hidden = true; home.hidden = false; };
         });
@@ -1675,6 +1998,7 @@ const AFTER = {
         const back = '<button type="button" class="back mono" id="ip-back">‹ home</button>';
         sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {
             const k = b.dataset.ip;
+            if (openMoreApp(k, view, home, back, '#ip-back')) return;
             if (k === 'pinterest') {
                 const pins = ['art/embracing-cultural-identity', 'img/cake-solar-system', 'img/cafe', 'art/braid', 'posters/gossip-girl', 'img/nyc', 'img/cupcakes', 'art/coexistence-of-both-my-worlds', 'img/chicago', 'art/packing-home', 'img/cake-lego', 'art/vanity'];
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
@@ -1683,6 +2007,7 @@ const AFTER = {
                 view.classList.add('procreate');
             }
             if (k !== 'procreate') view.classList.remove('procreate');
+            addQ(view, k);
             home.hidden = true; view.hidden = false;
             $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
             view.querySelectorAll('.canvas').forEach(c => c.onclick = () => pickUp(ITEMS.find(i => i.id === 'sketchbook')));
@@ -1846,7 +2171,7 @@ const AFTER = {
             card.addEventListener('pointerup', e => {
                 if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
                 if (!moved) return;
-                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))${card.classList.contains('vert') ? ' rotate(90deg)' : ''}`;
+                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))`;
                 card.dataset.skip = '1';   // ignore the click the browser fires right after a drag
             });
         });
@@ -1866,11 +2191,11 @@ const AFTER = {
                 const extra = vert ? (card.offsetWidth - card.offsetHeight) / 2 : 0;
                 const lift = cr.bottom - wr.top + 12 + extra;   // clear the top of the wallet completely
                 card.style.transition = 'none';
-                card.style.transform = `translateY(calc(-36% - ${lift}px))${vert ? ' rotate(90deg)' : ''}`;
+                card.style.transform = `translateY(calc(-36% - ${lift}px))`;
                 const over = card.getBoundingClientRect().bottom - (vw.getBoundingClientRect().top - 12);
                 const fixed = over > 0 ? lift + over : lift;
                 card.style.transform = 'translateY(-36%)'; void card.offsetWidth; card.style.transition = '';
-                card.style.transform = `translateY(calc(-36% - ${fixed}px))${vert ? ' rotate(90deg)' : ''}`;
+                card.style.transform = `translateY(calc(-36% - ${fixed}px))`;
                 card.dataset.lift = fixed;
             });
             vw.style.marginTop = `${Math.round((card.classList.contains('vert') ? card.offsetWidth : card.offsetHeight) * 1.15)}px`;
@@ -2006,31 +2331,57 @@ const AFTER = {
                 mbp.hidden = true; $('#lap-closed').hidden = false;
             }
             busyLap = false;
-            $('#lap-note').textContent = on ? 'my desktop. every folder is a project.' : 'the stickers are load-bearing. tap one, or open it up.';
+            $('#lap-note').textContent = on ? 'my desktop. open a folder, any folder.' : 'the stickers are load-bearing. tap one, or open it up.';
             if (on) $('#lap-clock').textContent = new Date().toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
         };
         $('#lap-open').onclick = () => showDesk(true);
         window.__openLap = () => showDesk(true);
         $('#lap-close').onclick = () => showDesk(false);
-        sheetBody.querySelectorAll('.dfolder').forEach(f => f.onclick = () => {
-            const go = f.dataset.go;
-            if (go.startsWith('http')) window.open(go, '_blank', 'noopener');
-            else {
-                pickUp({ id: go, name: 'from my laptop', open: go });
-                // a way back to the desktop
-                sheetBody.insertAdjacentHTML('afterbegin', `<div class="finder-bar"><button type="button" class="tl" id="back-desk" aria-label="Close folder, back to my desktop"><i></i><i></i><i></i></button><button type="button" class="finder-back" id="back-desk-2">‹ Desktop</button><span>${f.querySelector('span').textContent}</span></div>`);
-                $('#back-desk-2').onclick = () => $('#back-desk').click();
-                $('#back-desk').onclick = () => { pickUp(ITEMS.find(i => i.id === 'laptop')); $('#lap-closed').hidden = true; $('#mbp').hidden = false; $('#mbp').classList.add('open'); $('#lap-close').hidden = false; $('#lap-note').textContent = 'my desktop. every folder is a project.'; };
-            }
+        // finder: a window on the desktop with every folder in the sidebar
+        const fwin = $('#fwin'), fmain = $('#fwin-main');
+        const openFolder = i => {
+            const [name, files] = FOLDERS[i];
+            fwin.hidden = false; $('#fwin-title').textContent = name;
+            fwin.querySelectorAll('[data-side]').forEach(b => b.classList.toggle('on', +b.dataset.side === i));
+            fmain.innerHTML = files.length
+                ? `<div class="fgrid">${files.map(([n, , , ic], j) => `<button type="button" class="ffile" data-file="${j}">${fileIcon(n, ic)}<span>${n}</span></button>`).join('')}</div><p class="fcount mono">${files.length} items</p>`
+                : '<p class="fempty">This folder is empty.<br><span class="hand">(for now.)</span></p>';
+            fmain.querySelectorAll('[data-file]').forEach(b => b.onclick = () => {
+                const [n, kind, t] = files[+b.dataset.file];
+                if (kind === 'view') goTo(ITEMS.find(x => x.id === t) || { id: t, name: n, open: t });
+                else if (kind === 'web') openWeb(t, n);
+                else if (kind === 'link') window.open(t, '_blank', 'noopener');
+                else if (kind === 'self') toast('you’re already in it ♡');
+                else if (kind === 'note') {
+                    fmain.innerHTML = `<button type="button" class="fback mono">‹ ${name}</button><div class="ftext"><b>${n}</b><pre>${t}</pre></div>`;
+                    fmain.querySelector('.fback').onclick = () => openFolder(i);
+                } else if (kind === 'photo') {
+                    let k = PHOTOS.indexOf(t);
+                    const show = () => { fmain.innerHTML = `<div class="fql"><button type="button" class="fback mono">‹ ${name}</button><img src="assets/img/${PHOTOS[k]}.jpg" alt=""><div class="fql-nav"><button type="button" data-d="-1" aria-label="Previous">‹</button><span class="mono">${PHOTOS[k]}.jpg</span><button type="button" data-d="1" aria-label="Next">›</button></div></div>`;
+                        fmain.querySelector('.fback').onclick = () => openFolder(i);
+                        fmain.querySelectorAll('[data-d]').forEach(d => d.onclick = () => { k = (k + +d.dataset.d + PHOTOS.length) % PHOTOS.length; show(); }); };
+                    show();
+                }
+            });
+        };
+        sheetBody.querySelectorAll('.dfolder').forEach(f => f.ondblclick = f.onclick = () => openFolder(+f.dataset.f));
+        fwin.querySelectorAll('[data-side]').forEach(b => b.onclick = () => openFolder(+b.dataset.side));
+        $('#fwin-x').onclick = () => { fwin.hidden = true; };
+        sheetBody.querySelectorAll('.dock-app').forEach(a => a.onclick = () => {
+            a.classList.remove('bounce'); void a.offsetWidth; a.classList.add('bounce');
+            const app = a.getAttribute('aria-label');
+            if (app === 'Finder') return openFolder(1);
+            if (app === 'Photos') return openFolder(2);
+            if (app === 'Notes') { openFolder(0); fmain.querySelector('[data-file="1"]').click(); return; }
+            toast(a.dataset.say);
         });
-        sheetBody.querySelectorAll('.dock-app').forEach(a => a.onclick = () => { a.classList.remove('bounce'); void a.offsetWidth; a.classList.add('bounce'); toast(a.dataset.say); });
         const label = $('#stk-label');
         sheetBody.querySelectorAll('.stk').forEach(g => {
             const k = STICKERS.find(x => x.id === g.dataset.sticker);
             const go = () => {
-                if (k.href) return window.open(k.href, '_blank', 'noopener');
+                if (k.href) return WEB_OK.test(k.href) ? openWeb(k.href, k.label.split(' → ')[1]) : window.open(k.href, '_blank', 'noopener');
                 const it = ITEMS.find(i => i.id === k.go);
-                pickUp(it || { id: k.go, name: k.label.split(' → ')[1], open: k.go });
+                goTo(it || { id: k.go, name: k.label.split(' → ')[1], open: k.go });
             };
             g.addEventListener('mouseenter', () => label.textContent = k.label);
             g.addEventListener('focus', () => label.textContent = k.label);
@@ -2231,6 +2582,9 @@ function type(el, text, speed = 24) {
 let toastTimer;
 function toast(msg) {
     const t = $('#toast');
+    // an open sheet sits in the browser's top layer, so the toast has to live inside it to be seen
+    const host = sheet.open ? sheet : document.body;
+    if (t.parentNode !== host) host.appendChild(t);
     t.textContent = msg; t.classList.add('on');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2400);
 }
