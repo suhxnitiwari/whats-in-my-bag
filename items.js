@@ -62,21 +62,30 @@ window.BAG = {
     </svg>`
 };
 
+/* a satin scrunchie: puffy ruffles around a hole, with a sheen on each ruffle */
+window.SCRUNCHIE = (cx, cy, r, c, dark, light) => {
+    const n = 9, out = [];
+    for (let k = 0; k < n; k++) {
+        const a = (k / n) * Math.PI * 2 + (k % 2 ? .12 : 0), x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r, deg = a * 180 / Math.PI + 90, rr = r * (k % 2 ? .62 : .7);
+        out.push(`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${deg.toFixed(1)})"><ellipse rx="${(rr * 1.05).toFixed(1)}" ry="${(rr * .82).toFixed(1)}" fill="${c}" stroke="#3A2626" stroke-width="2"/><path d="M${(-rr * .6).toFixed(1)} ${(-rr * .25).toFixed(1)} q${(rr * .5).toFixed(1)} ${(-rr * .55).toFixed(1)} ${(rr * 1.1).toFixed(1)} ${(-rr * .1).toFixed(1)}" fill="none" stroke="${light}" stroke-width="${(rr * .28).toFixed(1)}" stroke-linecap="round" opacity=".85"/><path d="M${(-rr * .2).toFixed(1)} ${(rr * .2).toFixed(1)} q${(rr * .2).toFixed(1)} ${(rr * .35).toFixed(1)} ${(rr * .55).toFixed(1)} ${(rr * .3).toFixed(1)}" fill="none" stroke="${dark}" stroke-width="1.6" stroke-linecap="round"/></g>`);
+    }
+    return out.join('') + `<circle cx="${cx}" cy="${cy}" r="${(r * .42).toFixed(1)}" fill="#FAF1EF" stroke="${dark}" stroke-width="1.5"/>`;
+};
+window.SCR_PINK = ['#F6B3B5', '#D98A8E', '#FFE3E2'];
+window.SCR_BROWN = ['#B26B55', '#7E4535', '#E2A891'];
 window.ITEMS = [
     {
         id: 'headphones', name: 'my airpods max', zip: 'devices', l: 67.7, t: 8.2, w: 16.0, r: -8,
-        art: `<svg viewBox="0 0 220 200"><defs>
+        art: `<svg viewBox="0 0 160 184"><defs>
             <pattern id="mesh" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#EFE6D6"/><circle cx="2.5" cy="2.5" r=".9" fill="#DDD0B8"/></pattern>
             <linearGradient id="cup" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3EADB"/><stop offset=".55" stop-color="#E2D4BC"/><stop offset="1" stop-color="#CDBB9E"/></linearGradient></defs>
-            <path d="M34 110 C34 20 186 20 186 110" fill="none" stroke="#C9CDD3" stroke-width="5" stroke-linecap="round"/>
-            <path d="M34 110 C34 20 186 20 186 110" fill="none" stroke="#3A2626" stroke-width="1.4"/>
-            <path d="M46 92 C52 40 168 40 174 92" fill="none" stroke="#3A2626" stroke-width="19" stroke-linecap="round"/>
-            <path d="M46 92 C52 40 168 40 174 92" fill="none" stroke="url(#mesh)" stroke-width="15" stroke-linecap="round"/>
-            <rect x="29" y="104" width="10" height="20" rx="2" fill="#D9DCE0" stroke="#3A2626" stroke-width="1.5"/>
-            <rect x="181" y="104" width="10" height="20" rx="2" fill="#D9DCE0" stroke="#3A2626" stroke-width="1.5"/>
-            <g transform="rotate(10 36 158)"><rect x="8" y="120" width="56" height="76" rx="22" fill="url(#cup)" ${S}/><rect x="14" y="126" width="44" height="64" rx="17" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/></g>
-            <g transform="rotate(-10 184 158)"><rect x="156" y="120" width="56" height="76" rx="22" fill="url(#cup)" ${S}/><rect x="162" y="126" width="44" height="64" rx="17" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/><circle cx="200" cy="128" r="3" fill="#C9CDD3" stroke="#3A2626" stroke-width="1"/></g>
-        </svg>`,
+            <path d="M24 92 V60 C24 22 50 8 80 8 C110 8 136 22 136 60 V92" fill="none" stroke="#C9CDD3" stroke-width="5"/>
+            <path d="M24 92 V60 C24 22 50 8 80 8 C110 8 136 22 136 60 V92" fill="none" stroke="#3A2626" stroke-width="1.4"/>
+            <path d="M34 58 C34 30 54 18 80 18 C106 18 126 30 126 58 C126 64 118 64 116 58 C114 40 100 32 80 32 C60 32 46 40 44 58 C42 64 34 64 34 58Z" fill="url(#mesh)" ${S} stroke-width="2.5"/>
+            <rect x="18" y="84" width="12" height="16" rx="3" fill="#D6D9DE" stroke="#3A2626" stroke-width="2"/><rect x="130" y="84" width="12" height="16" rx="3" fill="#D6D9DE" stroke="#3A2626" stroke-width="2"/>
+            <rect x="4" y="96" width="70" height="82" rx="24" fill="url(#cup)" ${S}/><rect x="11" y="103" width="56" height="68" rx="18" fill="none" stroke="#FBF5EA" stroke-width="2.5"/>
+            <rect x="86" y="96" width="70" height="82" rx="24" fill="url(#cup)" ${S}/><rect x="93" y="103" width="56" height="68" rx="18" fill="none" stroke="#FBF5EA" stroke-width="2.5"/>
+            <circle cx="144" cy="106" r="4" fill="#E9E2D3" stroke="#3A2626" stroke-width="1.5"/><rect x="128" y="96" width="9" height="3.5" rx="1.5" fill="#E9E2D3" stroke="#3A2626" stroke-width="1"/></svg>`,
         open: () => `
             <h2>What I’m <em>listening</em> to</h2>
             <p class="note">four years of my spotify, turned into a database i can ask anything</p>
@@ -127,7 +136,7 @@ window.ITEMS = [
     },
     {
         id: 'wallet', name: 'my wallet', zip: 'front', l: 79.0, t: 36.2, w: 9.7, r: -6,
-        art: `<svg viewBox="0 0 100 160"><defs><pattern id="mono" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="#4E3424"/><g fill="#B98A4E"><path d="M6 3 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z"/><path d="M19 16 l1.4 2.6 2.6 1.4 -2.6 1.4 -1.4 2.6 -1.4 -2.6 -2.6 -1.4 2.6 -1.4z"/><circle cx="19" cy="6" r="2.6" fill="none" stroke="#B98A4E" stroke-width="1.1"/><circle cx="6" cy="19" r="1.2"/></g></pattern></defs>
+        art: `<svg viewBox="0 0 100 160"><defs><pattern id="mono" width="44" height="44" patternTransform="scale(.5)" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#4E3424"/><g fill="#C29A5B"><text x="3" y="17" font-family="Georgia, serif" font-size="13" font-style="italic">L</text><text x="7.5" y="17" font-family="Georgia, serif" font-size="13">V</text><path d="M33 4 l2.2 4.4 4.4 2.2 -4.4 2.2 -2.2 4.4 -2.2 -4.4 -4.4 -2.2 4.4 -2.2z"/><circle cx="11" cy="33" r="6" fill="none" stroke="#C29A5B" stroke-width="1.2"/><path d="M11 29 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z M7 33 a2 2 0 0 1 4 0 a2 2 0 0 1 -4 0z M11 37 a2 2 0 0 1 0 -4 a2 2 0 0 1 0 4z M15 33 a2 2 0 0 1 -4 0 a2 2 0 0 1 4 0z"/><path d="M33 26 c3 0 5 2 5 7 c-5 0 -5 0 -5 0 c0 0 0 0 0 -7z M33 26 c-3 0 -5 2 -5 7 c5 0 5 0 5 0z M33 40 c3 0 5 -2 5 -7 c-5 0 -5 0 -5 0z M33 40 c-3 0 -5 -2 -5 -7 c5 0 5 0 5 0z"/><circle cx="33" cy="33" r="1.2" fill="#4E3424"/></g></pattern></defs>
             <path d="M84 150 q2 6 -1 10" stroke="#B3263E" stroke-width="4" fill="none" stroke-linecap="round"/>
             <rect x="4" y="4" width="92" height="146" rx="5" fill="url(#mono)" ${S}/>
             <path d="M5 8 v138" stroke="#2E1E14" stroke-width="2" opacity=".5"/>
@@ -231,9 +240,7 @@ window.ITEMS = [
     },
     {
         id: 'scrunchies', name: 'my silk scrunchies', zip: 'main', l: 34.3, t: 21.2, w: 16.9, r: 0,
-        art: `<svg viewBox="0 0 130 80">
-            <g><circle cx="42" cy="44" r="26" fill="none" stroke="#3A2626" stroke-width="20"/><circle cx="42" cy="44" r="26" fill="none" stroke="#F2B8C6" stroke-width="15"/><circle cx="42" cy="44" r="26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 9" opacity=".7"/><path d="M26 28 q8 -6 16 -4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/></g>
-            <g><circle cx="88" cy="38" r="26" fill="none" stroke="#3A2626" stroke-width="20"/><circle cx="88" cy="38" r="26" fill="none" stroke="#F1DEC2" stroke-width="15"/><circle cx="88" cy="38" r="26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 9" opacity=".75"/><path d="M72 22 q8 -6 16 -4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g></svg>`,
+        get art() { return `<svg viewBox="0 0 150 90">${window.SCRUNCHIE(48, 46, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(102, 42, 25, ...window.SCR_PINK)}</svg>`; },
         open: 'hairpony'
     },
     {
@@ -245,10 +252,11 @@ window.ITEMS = [
     },
     {
         id: 'comb', name: 'my wide-tooth comb', zip: 'main', l: 54.5, t: 20.5, w: 16.9, r: -10,
-        art: `<svg viewBox="0 0 170 64"><path d="M8 12 h154 a6 6 0 0 1 0 12 H8 a6 6 0 0 1 0 -12z" fill="#C48A57" ${S}/>
-            <g stroke="#C48A57" stroke-width="8" stroke-linecap="round">${[22,40,58,76,94,112,130,148].map(x => `<path d="M${x} 24 v32"/>`).join('')}</g>
-            <g stroke="#3A2626" stroke-width="1.4" opacity=".5">${[22,40,58,76,94,112,130,148].map(x => `<path d="M${x-4} 26 v28 M${x+4} 26 v28"/>`).join('')}</g>
-            <path d="M16 16 q50 -3 90 1" stroke="#E2B386" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+        art: `<svg viewBox="0 0 210 80"><defs><linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A7450"/><stop offset=".5" stop-color="#6E5A3A"/><stop offset="1" stop-color="#5A4A30"/></linearGradient></defs>
+            <g><path d="M16 28.1 q1 18 -2 29.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M24 28.6 q1 18 -2 29.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M32 29.1 q1 18 -2 29.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M40 29.6 q1 18 -2 28.7" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M48 30.0 q1 18 -2 28.3" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M56 30.5 q1 18 -2 27.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M64 31.0 q1 18 -2 27.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M72 31.5 q1 18 -2 27.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M80 32.0 q1 18 -2 26.7" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M88 32.4 q1 18 -2 26.3" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M96 32.9 q1 18 -2 25.9" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M104 33.4 q1 18 -2 25.5" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/><path d="M112 33.9 q1 18 -2 25.1" stroke="#7A6440" stroke-width="5.5" stroke-linecap="round" fill="none"/></g>
+            <path d="M6 30 C4 14 30 8 60 8 C100 8 128 14 150 24 C168 32 176 30 196 26 C206 24 208 38 198 42 C178 48 168 46 150 40 C132 34 120 36 112 40 L112 44 H14 C8 42 6 36 6 30Z" fill="url(#wood)" ${S} stroke-width="2.5"/>
+            <path d="M20 18 C60 12 110 14 146 26 M124 36 C150 30 170 40 196 32" fill="none" stroke="#A48C64" stroke-width="1.4" opacity=".7"/>
+            <path d="M30 13 q40 -5 80 0" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".18"/></svg>`,
         open: 'haircomb'
     },
     {
@@ -256,7 +264,7 @@ window.ITEMS = [
         art: `<svg viewBox="0 0 160 110"><path d="M28 72 C26 26 70 8 104 18 C128 26 140 46 138 70Z" fill="#5C4535" ${S}/>
             <path d="M82 13 C84 34 84 54 82 72 M58 18 C52 36 50 54 52 72 M112 22 C120 38 124 54 124 70" fill="none" stroke="#4A3628" stroke-width="2"/>
             <circle cx="84" cy="13" r="4" fill="#5C4535" stroke="#3A2626" stroke-width="2"/><circle cx="66" cy="34" r="1.8" fill="#3A2A20"/><circle cx="104" cy="34" r="1.8" fill="#3A2A20"/>
-            <path d="M70 40 l6 14 4 -12 4 12 6 -14" fill="none" stroke="#3E2D21" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>
+            <path d="M70 44 q10 -10 20 0" fill="none" stroke="#4A3628" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
             <path d="M18 72 Q80 86 146 70 Q150 92 96 100 Q38 102 18 72Z" fill="#4E3A2C" ${S}/>
             <path d="M30 78 Q80 90 136 76 M38 84 Q82 95 128 82" fill="none" stroke="#6B5444" stroke-width="1.2" stroke-dasharray="3 3"/>
             <path d="M40 30 q16 -14 36 -16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".12"/></svg>`,

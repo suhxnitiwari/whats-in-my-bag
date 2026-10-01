@@ -8,6 +8,7 @@ const phone = () => matchMedia('(max-width: 760px)').matches;
 
 /* ---------- the bag, with my caramel frappuccino charm clipped on (Sitara lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
+const loop = document.createElement('span'); loop.className = 'strap-loop'; loop.setAttribute('aria-hidden', 'true'); bagBtn.appendChild(loop);
 const charm = document.createElement('span');
 charm.className = 'charm';
 charm.setAttribute('role', 'button');
@@ -198,23 +199,32 @@ function hairView(state) {
     return `
         <h2>My <em>hair</em> stuff</h2>
         <p class="note">two silk scrunchies, a wooden claw clip, a wide-tooth comb. dark, long, and always done.</p>
-        <div class="hair-stage"><svg viewBox="0 0 200 300" class="hairdo" id="hairdo" data-state="${state}" style="--scr:#F2B8C6">
-            <path d="M10 300 C12 236 56 212 100 212 C144 212 188 236 190 300Z" fill="#F4D3DA" stroke="#3A2626" stroke-width="3"/>
-            <rect x="82" y="112" width="36" height="110" rx="14" fill="#C68E6A" stroke="#3A2626" stroke-width="2.5"/>
-            <g class="h-down"><path d="M52 82 C50 26 150 26 148 82 C150 150 160 210 156 268 Q100 290 44 268 C40 210 50 150 52 82Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/>
-                <path d="M78 60 C70 140 72 210 70 262 M100 50 C98 140 100 220 100 276 M122 60 C130 140 128 210 130 262" fill="none" stroke="#4A3430" stroke-width="2"/></g>
-            <g class="h-up"><path d="M52 86 C50 26 150 26 148 86 C140 116 60 116 52 86Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/>
-                <path d="M70 50 C84 70 92 88 100 100 M130 50 C116 70 108 88 100 100 M100 34 V100" fill="none" stroke="#4A3430" stroke-width="2"/></g>
-            <g class="h-pony"><path d="M92 100 C80 150 84 210 100 262 C116 210 120 150 108 100Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/><path d="M100 110 C96 160 98 210 100 250" stroke="#4A3430" stroke-width="2" fill="none"/>
-                <ellipse cx="100" cy="100" rx="20" ry="12" fill="var(--scr)" stroke="#3A2626" stroke-width="3"/><path d="M84 100 q4 -6 8 0 t8 0 t8 0 t8 0" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/></g>
-            <g class="h-claw"><path d="M100 98 C70 92 66 62 92 56 C120 50 132 78 112 92 C104 98 100 98 100 98Z" fill="#2A1C1A" stroke="#3A2626" stroke-width="3"/><path d="M84 48 q-8 -14 4 -22 M110 46 q8 -14 -2 -24" fill="none" stroke="#2A1C1A" stroke-width="7" stroke-linecap="round"/>
-                <g transform="translate(58 46) scale(.95)">${ITEMS.find(i => i.id === 'clip').art.replace('<svg viewBox="0 0 90 80">', '<svg width="90" height="80" viewBox="0 0 90 80">')}</g></g>
-            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 170 64">', '<svg x="18" y="0" width="164" height="62" viewBox="0 0 170 64">')}</g></g>
-            <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M30 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M168 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
+        <div class="hair-stage"><svg viewBox="0 0 220 300" class="hairdo" id="hairdo" data-state="${state}">
+            <path d="M8 300 C10 246 48 222 110 222 C172 222 210 246 212 300Z" fill="#F3A9BB" stroke="#3A2626" stroke-width="3"/>
+            <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
+            <path d="M92 190 h36 v40 q-18 10 -36 0z" fill="#C68E6A" stroke="#3A2626" stroke-width="2.5"/>
+            <g class="h-down">
+                <path d="M110 22 C62 22 46 62 50 110 C52 150 40 180 34 214 C28 246 38 270 52 280 C60 270 66 284 76 276 C84 288 96 278 104 286 C114 278 124 290 134 280 C144 288 156 276 164 282 C176 270 186 252 184 222 C180 186 168 150 170 110 C174 62 158 22 110 22Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M84 40 C70 90 76 130 64 170 C56 200 62 236 60 266 M110 30 C104 90 112 150 104 200 C100 230 108 258 104 280 M136 40 C148 90 142 130 154 170 C162 200 156 236 162 266" fill="none" stroke="#4A3127" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M70 200 q-8 16 2 30 q8 12 0 26 M150 200 q8 16 -2 30 q-8 12 0 26" fill="none" stroke="#5A3C30" stroke-width="2" stroke-linecap="round"/></g>
+            <g class="h-up">
+                <path d="M110 22 C64 22 50 58 54 104 C56 140 74 176 110 186 C146 176 164 140 166 104 C170 58 156 22 110 22Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M74 50 C88 70 100 86 110 98 M146 50 C132 70 120 86 110 98 M110 26 V98 M64 90 C80 96 96 100 110 102 M156 90 C140 96 124 100 110 102" fill="none" stroke="#4A3127" stroke-width="2" stroke-linecap="round"/></g>
+            <g class="h-pony">
+                <path d="M100 104 C84 140 80 180 92 214 C98 234 88 252 98 270 C104 260 112 272 116 262 C124 246 116 228 124 206 C134 176 132 138 120 104Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
+                <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
+            <g class="h-claw">
+                <path d="M110 112 C78 108 74 72 96 64 C116 56 142 70 136 92 C132 106 120 112 110 112Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
+                <path d="M88 78 q10 -16 26 -12 q16 4 18 18" fill="none" stroke="#4A3127" stroke-width="2.2"/>
+                <path d="M92 62 q-4 -16 6 -24 q2 10 8 14 M118 58 q2 -18 14 -22 q-2 12 2 20" fill="#2A1C17" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>
+                <g transform="translate(70 62) scale(.9)">${ITEMS.find(i => i.id === 'clip').art.replace('<svg viewBox="0 0 90 80">', '<svg width="90" height="80" viewBox="0 0 90 80">')}</g></g>
+            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 210 80">', '<svg x="40" y="0" width="150" height="57" viewBox="0 0 210 80">')}</g></g>
+            <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
         <div class="row hair-btns">
-            <button class="btn" type="button" data-hair="pony" data-scr="#F2B8C6">Pink scrunchie</button>
-            <button class="btn" type="button" data-hair="pony" data-scr="#F1DEC2">Champagne scrunchie</button>
+            <button class="btn" type="button" data-hair="pony" data-scr="pink">Pink scrunchie</button>
+            <button class="btn" type="button" data-hair="pony" data-scr="brown">Brown scrunchie</button>
             <button class="btn" type="button" data-hair="claw">Claw clip</button>
             <button class="btn" type="button" data-hair="comb">Comb it out</button>
         </div>`;
@@ -222,13 +232,13 @@ function hairView(state) {
 function hairAfter(state) {
     const svg = $('#hairdo'), lines = { pony: 'ponytail. silk, so no creases ♡', claw: 'claw clip. effortless (it took four tries).', comb: 'wide-tooth comb. no knots, no breakage.' };
     const set = (st, scr) => {
-        if (scr) svg.style.setProperty('--scr', scr);
+        if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 102, 13, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
         svg.dataset.state = '';
         requestAnimationFrame(() => { svg.dataset.state = st; });
         sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === st && (!scr || b.dataset.scr === scr)));
     };
     sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => { set(b.dataset.hair, b.dataset.scr); toast(lines[b.dataset.hair]); });
-    set(state, state === 'pony' ? '#F2B8C6' : null);
+    set(state, state === 'pony' ? 'pink' : null);
 }
 
 
@@ -402,16 +412,19 @@ const VIEWS = {
         const slot = (k, n) => { const i = idx(k); return i < 0 ? '' : `<div class="vslot" style="--n:${n}">${cardHTML(CARDS[i], i)}<span class="pocket"></span></div>`; };
         return `
         <h2>My <em>wallet</em></h2>
-        <p class="note">louis vuitton victorine. tap a card, or the zip pocket for cash.</p>
+        <p class="note">louis vuitton victorine. tap a card, or unzip the zip pocket.</p>
         <div class="vread" id="vread" aria-live="polite"></div>
         <div class="vw" id="vw">
             <button type="button" class="vw-closed" id="snap" aria-label="Open the wallet">${ITEMS.find(i => i.id === 'wallet').art}</button>
             <div class="vw-open" aria-hidden="true">
-                <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip for cash" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span><span class="cash" aria-hidden="true"><span class="note-bill" style="--i:0; --bg:#B9B4A8; --ink:#5E5A50"><b>₹500</b><i>भारत</i><em>₹500</em></span><span class="note-bill" style="--i:1; --bg:#EBC76A; --ink:#7A5A12"><b>₹200</b><i>भारत</i><em>₹200</em></span><span class="note-bill" style="--i:2; --bg:#B9A9DC; --ink:#4E3E80"><b>₹100</b><i>भारत</i><em>₹100</em></span><span class="note-bill" style="--i:3; --bg:#B7CFAE; --ink:#2F4A2A"><b>$20</b><i>USA</i><em>$20</em></span><span class="note-bill" style="--i:4; --bg:#CFDCC6; --ink:#3E5638"><b>$1</b><i>USA</i><em>$1</em></span></span></button>
+                <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip it" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span></button>
                 <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
                 <div class="vgusset"></div>
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>made in italy</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
+                <button type="button" class="vbills" id="vbills" aria-label="Bill compartment: take the cash out" aria-pressed="false">${[
+                    ['₹500', '#B9B4A8', '#4E4A40'], ['₹200', '#EBC76A', '#6A4A08'], ['₹100', '#B9A9DC', '#3E2E70'], ['$20', '#B7CFAE', '#24401F'], ['$1', '#CFDCC6', '#33502D']
+                ].map(([d, bg, ink], k) => `<span class="bill" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
             </div>
             <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
         </div>
@@ -626,55 +639,49 @@ const VIEWS = {
             </div>
         </div>`,
 
-    passport: () => `
-        <h2>My <em>passport</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">United States of America</span></h2>
-        <p class="note">six countries so far. the domestic trips live in my itineraries.</p>
-        <div class="pp-wrap"><div class="pp" id="pp">
-            <div class="pp-page pp-data">
-                <span class="pp-guil" aria-hidden="true"></span>
-                <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
-                <span class="pp-usa" aria-hidden="true">USA</span>
-                <span class="pp-photo"><img src="assets/img/me.jpg" alt=""></span>
-                <span class="pp-fields">
-                    <span><i>Type</i> <b>carry-on only</b></span>
-                    <span><i>Passport No.</i> <b>NO PEEKING ♡</b></span>
-                    <span><i>Surname</i> <b>TIWARI</b></span>
-                    <span><i>Given names</i> <b>SUHANI M</b></span>
-                    <span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span>
-                    <span><i>Date of birth</i> <b>a lady never tells</b></span>
-                    <span><i>Countries</i> <b>6 and counting</b></span>
-                    <span><i>Expires</i> <b>never stop going</b></span>
-                    <span><i>Authority</i> <b>my wanderlust</b></span>
-                </span>
-                <span class="pp-trail" aria-hidden="true">✈ · · · · · · · · · · · · · · · next stop: ?</span>
-            </div>
-            <button type="button" class="pp-flip" id="pp-flip" aria-label="Open my passport" aria-pressed="false">
-                <span class="pp-front">${ITEMS.find(i => i.id === 'passport').art}</span>
-                <span class="pp-back pp-page">
-                    <span class="pp-guil" aria-hidden="true"></span>
-                    <span class="pp-endorse">Endorsements</span>
-                    <span class="pp-ghost"><img src="assets/img/me.jpg" alt=""></span>
-                    <span class="pp-sig">Suhani Tiwari</span>
-                    <span class="pp-sigline">SIGNATURE OF BEARER</span>
-                </span>
-            </button>
-        </div></div>
-        <p class="pp-hint hand" id="pp-hint">tap the cover to open it</p>
-        <div class="stamps">${[
+    passport: () => {
+        const STAMP = [
             ['Thailand', '2010', '#C2185B', 'circle', '<path d="M0 -14 L-10 8 h20 Z M-4 -4 h8 M-6 2 h12" fill="none"/><path d="M0 -20 v6"/>'],
             ['Malaysia', '2010', '#1F6FD1', 'rect', '<path d="M-8 12 V-8 l2 -6 2 6 V12 M4 12 V-8 l2 -6 2 6 V12 M-4 -2 h8"/>'],
             ['Switzerland', '2016', '#D63031', 'oval', '<path d="M-16 10 L-6 -8 L0 2 L6 -10 L16 10Z" fill="none"/><path d="M-3 -2 h6 M0 -5 v6"/>'],
             ['France', '2016', '#2E4A7A', 'rect', '<path d="M0 -16 L-8 12 M0 -16 L8 12 M-5 2 h10 M-7 8 h14"/>'],
             ['Italy', '2016', '#18A39A', 'circle', '<rect x="-5" y="-14" width="10" height="26" rx="2" transform="rotate(5)" fill="none"/><path d="M-5 -6 h10 M-5 2 h10" transform="rotate(5)"/>'],
             ['Mexico', '2020', '#F0592B', 'oval', '<path d="M0 12 V-12 M0 -2 h-7 v-6 M0 4 h7 v-8" fill="none"/>']
-        ].map(([n, yr, c, shape, icon], i) => `<span class="stamp real" style="--r:${[-8, 6, -3, 9, -6, 4][i]}deg; --c:${c}">
+        ];
+        const stamp = (i, x, y, rot) => { const [n, yr, c, shape, icon] = STAMP[i]; return `<span class="stamp real" style="--r:${rot}deg; --c:${c}; left:${x}%; top:${y}%">
             <svg viewBox="0 0 120 92" aria-label="${n}, ${yr}">
                 ${shape === 'circle' ? '<circle cx="60" cy="46" r="40"/><circle cx="60" cy="46" r="34"/>' : shape === 'oval' ? '<ellipse cx="60" cy="46" rx="54" ry="38"/><ellipse cx="60" cy="46" rx="48" ry="32"/>' : '<rect x="8" y="8" width="104" height="76" rx="6"/><rect x="14" y="14" width="92" height="64" rx="4"/>'}
                 <g transform="translate(60 ${shape === 'rect' ? 40 : 42}) scale(.85)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
                 <text x="60" y="${shape === 'rect' ? 72 : 66}" text-anchor="middle" style="font-size:${n.length > 8 ? 9 : 10.5}px">${n.toUpperCase()}</text>
                 <text x="60" y="${shape === 'rect' ? 24 : 27}" text-anchor="middle" class="small yr">${yr}</text>
-            </svg></span>`).join('')}</div>
-        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`,
+            </svg></span>`; };
+        const visa = (num, scene, inner) => `<div class="pb-page visa scene-${scene}"><span class="pb-visas">Visas</span>${inner}<span class="pb-num">${num}</span></div>`;
+        // each leaf is a sheet of paper: a front (right-hand page) and a back (left-hand page once it's turned)
+        const leaves = [
+            [`<div class="pb-page pb-cover">${ITEMS.find(i => i.id === 'passport').art}</div>`,
+             `<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-sign-l"><span class="pp-guil"></span><span class="pp-endorse">Endorsements</span><span class="pp-ghost"><img src="assets/img/me.jpg" alt=""></span><span class="pp-sig">Suhani Tiwari</span><span class="pp-sigline">SIGNATURE OF BEARER</span></div></div></div>`],
+            [`<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-data"><span class="pp-guil"></span>
+                <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
+                <span class="pp-usa">USA</span><span class="pp-photo"><img src="assets/img/me.jpg" alt=""></span>
+                <span class="pp-fields"><span><i>Type</i> <b>carry-on only</b></span><span><i>Passport No.</i> <b>NO PEEKING ♡</b></span><span><i>Surname</i> <b>TIWARI</b></span><span><i>Given names</i> <b>SUHANI M</b></span><span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span><span><i>Date of birth</i> <b>a lady never tells</b></span><span><i>Countries</i> <b>6 and counting</b></span><span><i>Expires</i> <b>never stop going</b></span></span>
+                <span class="pp-trail">✈ · · · · · · · · · · · · · next stop: ?</span></div></div></div>`,
+             visa(2, 'waves', stamp(0, 8, 22, -8) + stamp(1, 40, 56, 6))],
+            [visa(3, 'waves', '<span class="pb-note">2010 · thailand & malaysia</span>'),
+             visa(4, 'peaks', stamp(2, 12, 18, -3) + stamp(3, 34, 58, 9))],
+            [visa(5, 'peaks', stamp(4, 18, 30, -6) + '<span class="pb-note">2016 · europe</span>'),
+             visa(6, 'sun', stamp(5, 22, 34, 4))],
+            [visa(7, 'sun', '<span class="pb-note">2020 · mexico. next stop: ?</span>'),
+             `<div class="pb-page pb-back"></div>`]
+        ];
+        return `
+        <h2>My <em>passport</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">United States of America</span></h2>
+        <p class="note">six countries so far. tap the cover, then flip through it like a book.</p>
+        <div class="pb-wrap"><div class="pb" id="pb" data-at="0" style="--n:${leaves.length}">${leaves.map(([f, bk], i) => `
+            <div class="pb-leaf" style="--i:${i}" data-leaf="${i}"><div class="pb-face pb-front">${f}</div><div class="pb-face pb-backface">${bk}</div></div>`).join('')}
+        </div></div>
+        <div class="row pb-ctrl"><button class="btn" type="button" id="pb-prev" aria-label="Previous page">‹ back</button><span class="hand" id="pb-where">tap the cover</span><button class="btn solid" type="button" id="pb-next" aria-label="Next page">open ›</button></div>
+        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`;
+    },
 
     sitara: () => `
         <h2>Hi, I’m <em>Sitara</em></h2>
@@ -709,31 +716,40 @@ function penView({ title, note, list, front, pen, pick }) {
         </div>` : ''}`;
 }
 
+
+/* my four bank cards are vertical designs, so they sit sideways in the wallet slots, like the real ones.
+   Names and colors match mine; no numbers, no logos. */
+const VC_CHIP = (x, y) => `<rect x="${x}" y="${y}" width="10" height="8" rx="1.6" fill="#E3C46E" stroke="#8A6A2A" stroke-width=".5"/><path d="M${x} ${y + 4} h10 M${x + 5} ${y} v8" stroke="#A88A3E" stroke-width=".4"/>`;
+const VC_TAP = (x, y, c) => `<path d="M${x} ${y} q2 2.5 0 5 M${x + 2} ${y - 1} q3 3.5 0 7 M${x + 4} ${y - 2} q4 4.5 0 9" fill="none" stroke="${c}" stroke-width=".8" stroke-linecap="round"/>`;
+const VCARD = {
+    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F5FC9"/><stop offset=".55" stop-color="#3D86E6"/><stop offset="1" stop-color="#1A4FAE"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vab)"/><circle cx="24" cy="44" r="17" fill="#8DBDF4" opacity=".35"/><circle cx="24" cy="44" r="12" fill="none" stroke="#C9E0FB" stroke-width=".6" opacity=".6"/>
+        ${VC_CHIP(30, 12)}<text transform="translate(9 10) rotate(90)" font-family="Instrument Sans" font-size="4" fill="#EAF3FF" letter-spacing=".4">SUHANI TIWARI</text>
+        <text transform="translate(44 44) rotate(90)" font-family="Bodoni Moda, serif" font-weight="600" font-size="6" fill="#fff" letter-spacing=".3">AMERICAN</text><text transform="translate(37 48) rotate(90)" font-family="Bodoni Moda, serif" font-weight="600" font-size="6" fill="#fff" letter-spacing=".3">EXPRESS</text>
+        <text x="8" y="78" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(30, 72, '#EAF3FF')}</svg>`,
+    amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B8963E"/><stop offset=".45" stop-color="#E4CB7C"/><stop offset="1" stop-color="#B08A33"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 L40 0 L8 46 L0 40Z" fill="#fff" opacity=".18"/><path d="M8 46 L40 0 L54 0 L54 18Z" fill="#8A6A2A" opacity=".14"/>
+        ${VC_CHIP(32, 14)}<text transform="translate(9 8) rotate(90)" font-family="Instrument Sans" font-size="4" fill="#3A2C10" letter-spacing=".4">SUHANI TIWARI</text>
+        <text transform="translate(46 32) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="4.6" fill="#2E2410" letter-spacing=".5">AMERICAN EXPRESS</text>
+        <text transform="translate(39 46) rotate(90)" font-family="Bodoni Moda, serif" font-size="5.6" fill="#2E2410" letter-spacing=".6">SKYMILES</text><text transform="translate(39 36) rotate(90)" font-family="Instrument Sans" font-size="3" fill="#2E2410">DELTA</text>
+        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(30, 74, '#3A2C10')}</svg>`,
+    bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A9ADB4"/><stop offset=".5" stop-color="#E2E4E8"/><stop offset="1" stop-color="#9DA1A8"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 30 L54 10 V24 L0 44Z" fill="#fff" opacity=".22"/>
+        ${VC_CHIP(32, 12)}<circle cx="12" cy="10" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/>
+        <text transform="translate(16 30) rotate(90)" font-family="Instrument Sans" font-size="3.6" fill="#33373D" letter-spacing=".8">BANK OF AMERICA</text>
+        <text x="40" y="78" font-family="Instrument Sans" font-style="italic" font-size="3" fill="#33373D" text-anchor="middle">Signature</text>${VC_TAP(10, 74, '#33373D')}</svg>`,
+    bofadebit: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C21F2B"/><stop offset=".5" stop-color="#E2403C"/><stop offset="1" stop-color="#B51C27"/></linearGradient></defs>
+        <rect width="54" height="86" fill="url(#vbr)"/><path d="M54 0 L0 60 V40 L36 0Z" fill="#fff" opacity=".07"/>
+        ${VC_CHIP(22, 12)}${VC_TAP(36, 14, '#fff')}
+        <text x="27" y="44" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="3.8" fill="#fff" letter-spacing=".8">BANK OF AMERICA</text>
+        <text x="44" y="66" text-anchor="end" font-family="Instrument Sans" font-weight="600" font-size="4.4" fill="#fff">debit</text>
+        <circle cx="10" cy="76" r="3.4" fill="none" stroke="#fff" stroke-width=".7"/><path d="M8.5 76 l1.5 -1.5 1.5 1.5" fill="none" stroke="#fff" stroke-width=".6"/></svg>`
+};
+
 function cardHTML(c, i) {
-    if (c.kind === 'bofadebit') return `
-        <button class="card bofadebit" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
-            <span class="bofa-top"><span class="chip"></span><svg class="tap" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span class="bofa-bank">BANK OF AMERICA</span>
-            <span class="foot"><span>SUHANI TIWARI</span><span class="visa"><b>VISA</b> Debit</span></span>
-        </button>`;
-    if (c.kind === 'amexgold') return `
-        <button class="card amexgold" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
-            <svg class="facet" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 60 L62 4 L100 30 Z" fill="#fff" opacity=".22"/><path d="M62 4 L100 30 L70 26 Z" fill="#fff" opacity=".35"/><path d="M30 60 L70 26 L100 30 Z" fill="#8A6A2A" opacity=".18"/></svg>
-            <span class="amex-top"><span class="amex-word">AMERICAN EXPRESS</span><span class="sky">SKYMILES</span></span>
-            <span class="chip"></span>
-            <span class="foot"><span>SUHANI TIWARI</span><span>MEMBER ♡</span></span>
-        </button>`;
-    if (c.kind === 'amexblue') return `
-        <button class="card amexblue" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
-            <span class="amex-top"><span></span><span class="amex-word big">AMERICAN<br>EXPRESS</span></span>
-            <span class="amex-mid"><span class="chip"></span><span class="ribbon">MEMBER SINCE <b>♡</b></span></span>
-            <span class="foot"><span>SUHANI TIWARI</span><svg viewBox="0 0 24 24" style="width:9%" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-        </button>`;
-    if (c.kind === 'bofa') return `
-        <button class="card bofa" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
-            <span class="bofa-top"><span class="chip"></span><svg class="tap" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#5E6670" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span class="bofa-bank">BANK OF AMERICA</span>
-            <span class="foot"><span>SUHANI TIWARI</span><span class="visa"><b>VISA</b> Signature</span></span>
+    if (VCARD[c.kind]) return `
+        <button class="card vert ${c.kind}" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
+            <span class="vface">${VCARD[c.kind]}</span>
         </button>`;
     if (c.kind === 'dl') return `
         <button class="card dl tx" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
@@ -795,13 +811,22 @@ const AFTER = {
     padfolio: () => { const pad = $('#pf-legal'); pad.addEventListener('focus', () => { if (!pad.dataset.used) { pad.dataset.used = 1; toast('taking notes like it’s a coffee chat ☕'); } }); },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
-        const pp = $('#pp'), b = $('#pp-flip');
-        b.onclick = () => {
-            const open = pp.classList.toggle('open');
-            b.setAttribute('aria-pressed', open); b.setAttribute('aria-label', open ? 'Close my passport' : 'Open my passport');
-            $('#pp-hint').textContent = open ? 'tap the top page to close it' : 'tap the cover to open it';
-            toast(open ? 'don’t look at the photo. okay fine, look.' : 'safe and sound ✈');
+        const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
+        let at = 0;   // how many leaves have been turned
+        const where = ['tap the cover', 'signature + my info', 'pages 2–3', 'pages 4–5', 'pages 6–7', 'the back cover'];
+        const draw = () => {
+            leaves.forEach((l, i) => { l.classList.toggle('turned', i < at); l.style.zIndex = i < at ? i + 1 : n - i + 1; });
+            pb.dataset.at = at; pb.classList.toggle('open', at > 0 && at < n); pb.classList.toggle('back', at === n);
+            $('#pb-where').textContent = where[at] || '';
+            $('#pb-prev').disabled = at === 0; $('#pb-next').disabled = at === n;
+            $('#pb-next').textContent = at === 0 ? 'open ›' : at === n - 1 ? 'close ›' : 'next page ›';
+            $('#pb-next').disabled = false; if (at === n) $('#pb-next').textContent = 'flip it back over';
         };
+        const go = d => { const k = Math.max(0, Math.min(n, at + d)); if (k === at) return; at = k; draw(); if (at === 1 && d > 0) toast('ugh, the photo. okay fine, look.'); };
+        $('#pb-next').onclick = () => { if (at === n) { at = 0; draw(); return; } go(1); }; $('#pb-prev').onclick = () => go(-1);
+        leaves.forEach((l, i) => l.onclick = () => { if (at === n) { at = 0; draw(); toast('closed. safe and sound ✈'); return; } go(i < at ? -1 : 1); });
+        pb.tabIndex = 0; pb.onkeydown = e => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); };
+        draw();
     },
     romcom: () => {
         let days = 21;
@@ -1010,7 +1035,7 @@ const AFTER = {
         const close = async () => {
             if (closing || !vw.classList.contains('open')) return;
             closing = true;
-            vw.classList.remove('cash-out');
+            vw.classList.remove('cash-out', 'medici-out', 'bills-out');
             vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
             vw.classList.remove('has-pick');
             vw.classList.remove('zip-open');
@@ -1036,16 +1061,28 @@ const AFTER = {
             if (!vw.classList.contains('zip-open')) {
                 vw.classList.add('zip-open'); z.setAttribute('aria-pressed', 'true'); z.setAttribute('aria-label', 'Zip pocket: zip it back up');
                 await new Promise(r => setTimeout(r, reduce ? 0 : 480));
-                vw.classList.add('cash-out'); toast('rupees for home, dollars for here ♡');
+                vw.classList.add('cash-out'); toast('my medici card ♡ a vanilla latte a day');
             } else {
                 vw.classList.remove('cash-out');
                 await new Promise(r => setTimeout(r, reduce ? 0 : 420));
-                vw.classList.remove('zip-open'); z.setAttribute('aria-pressed', 'false'); z.setAttribute('aria-label', 'Zip pocket: unzip for cash');
+                vw.classList.remove('zip-open'); z.setAttribute('aria-pressed', 'false'); z.setAttribute('aria-label', 'Zip pocket: unzip it');
             }
             zipping = false;
         };
+        // the bill compartment, behind the flap: rupees for home, dollars for here
+        $('#vbills').onclick = () => {
+            const out = vw.classList.toggle('bills-out');
+            $('#vbills').setAttribute('aria-pressed', out); $('#vbills').setAttribute('aria-label', out ? 'Bill compartment: tuck the cash back in' : 'Bill compartment: take the cash out');
+            toast(out ? 'rupees for home, dollars for here ♡' : 'cash tucked away');
+        };
         // the Medici card comes out with the cash. Tap it for a vanilla latte stamp.
         $('#medici').onclick = () => {
+            if (vw.classList.contains('medici-out')) {
+                vw.classList.remove('medici-out');
+                detail.innerHTML = '<p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p>';
+                toast('back in the zip pocket ♡'); return;
+            }
+            vw.classList.add('medici-out');
             const draw = () => {
                 const n = mediciStamps();
                 detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">Medici regulars card</p><h3>One vanilla latte, every day</h3>
@@ -1070,9 +1107,8 @@ const AFTER = {
             const c = CARDS[+card.dataset.card];
             vw.classList.add('has-pick');
             card.classList.add('picked');
-            card.closest('.vslot').style.zIndex = 30;
             // same orientation, same size: it just slides straight up, still tucked into its slot at the bottom
-            card.style.transform = 'translateY(-88%)';
+            card.style.transform = 'translateY(-52%)';
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });

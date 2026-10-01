@@ -1031,3 +1031,114 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .swatch-more { text-align: center; margin: 0 0 4px; min-height: 1.4em; }
 .pp-usa { top: 15cqw; left: 6cqw; }
 .pp-data .pp-photo { margin-top: 9cqw; }
+
+.hairdo { width: min(280px, 82%); }
+.hairdo .h-pony { transform-origin: 50% 34%; transform-box: view-box; }
+@keyframes combdown { 0% { transform: translateY(30px); opacity: 1; } 100% { transform: translateY(230px); opacity: 0; } }
+
+/* passport as a real little book: portrait pages, the spine in the middle, pages turn right to left */
+.pb-wrap { width: min(520px, 100%); margin: 8px auto 6px; perspective: 1800px; }
+.pb { position: relative; width: 100%; aspect-ratio: 176 / 125; transition: transform .6s var(--ease); transform: translateX(-25%); outline: none; }
+.pb.open { transform: none; }
+.pb.back { transform: translateX(25%); }
+.pb-leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.45,.05,.25,1); cursor: pointer; }
+.pb-leaf.turned { transform: rotateY(-180deg); }
+.pb-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.pb-backface { transform: rotateY(180deg); }
+.pb-page { position: absolute; inset: 0; overflow: hidden; border: 2px solid var(--ink); background: linear-gradient(180deg, #E4E9F7, #EEE6F1 55%, #F4E4EA); color: #22264A; container-type: inline-size; text-align: left; }
+.pb-front .pb-page { border-radius: 2px 10px 10px 2px; box-shadow: inset 8px 0 10px -8px rgba(0,0,0,.25); }
+.pb-backface .pb-page { border-radius: 10px 2px 2px 10px; box-shadow: inset -8px 0 10px -8px rgba(0,0,0,.25); }
+.pb-cover { background: #1E2A4A; display: grid; place-items: center; box-shadow: 0 16px 24px -14px rgba(0,0,0,.55) !important; }
+.pb-cover svg { width: 112%; max-width: none; margin: -6% 0; }
+.pb-back { background: #1E2A4A; }
+.pb-small { position: absolute; top: 5cqw; left: 0; right: 0; text-align: center; font: italic 400 4.4cqw var(--serif); color: #4A4E7A; }
+.pb-ghost { position: absolute; left: 10cqw; top: 20cqw; width: 42%; }
+.pb-ghost img, .pb-photo img { width: 100%; aspect-ratio: .8; object-fit: cover; object-position: 50% 25%; border-radius: 3px; mix-blend-mode: multiply; }
+.pb-ghost img { opacity: .5; }
+.pb-sig { position: absolute; left: 8cqw; bottom: 22cqw; font-family: var(--hand); font-size: 12cqw; color: #1C1F3F; transform: rotate(-6deg); }
+.pb-sigline { position: absolute; left: 8cqw; right: 8cqw; bottom: 14cqw; border-top: 1.5px solid #1C1F3F; padding-top: 1.5cqw; font: 600 3.2cqw var(--sans); letter-spacing: .06em; }
+.pb-data { padding: 6cqw 7cqw; display: flex; flex-direction: column; gap: 2cqw; }
+.pb-hd { font: 600 4.2cqw/1.1 var(--sans); letter-spacing: .06em; display: flex; flex-direction: column; gap: 1cqw; position: relative; }
+.pb-hd b { font: 600 5.6cqw/1.05 var(--serif); color: #2C2F6E; letter-spacing: .01em; }
+.pb-usa { font: 800 9cqw/1 var(--sans); color: #C8404A; opacity: .8; letter-spacing: .06em; position: relative; }
+.pb-photo { width: 44%; position: absolute; right: 7cqw; top: 26cqw; } .pb-photo img { filter: grayscale(1); }
+.pb-fields { display: flex; flex-direction: column; gap: 1cqw; position: relative; width: 52%; }
+.pb-fields > span { display: flex; flex-direction: column; }
+.pb-fields i { font: italic 400 3cqw/1.1 var(--sans); color: #4A4E7A; }
+.pb-fields b { font: 600 4.2cqw/1.15 var(--sans); color: #1C1F3F; }
+.pb-trail { margin-top: auto; font: 500 3.6cqw var(--mono); letter-spacing: .1em; border-top: 1px dashed rgba(44,47,110,.4); padding-top: 2cqw; position: relative; }
+.visa { background-color: #EEF0F8; }
+.visa.scene-waves { background-image: repeating-linear-gradient(170deg, rgba(214,90,110,.13) 0 14px, transparent 14px 30px), linear-gradient(180deg, #EAF0FA, #F5E6EC); }
+.visa.scene-peaks { background-image: linear-gradient(160deg, transparent 55%, rgba(110,130,190,.18) 55% 70%, transparent 70%), linear-gradient(200deg, transparent 50%, rgba(110,130,190,.22) 50% 68%, transparent 68%), linear-gradient(180deg, #F4E2E8, #E6EBF7); }
+.visa.scene-sun { background-image: radial-gradient(circle at 50% 38%, rgba(240,190,120,.35) 0 22%, transparent 23%), repeating-radial-gradient(circle at 50% 38%, transparent 0 14px, rgba(214,120,90,.08) 14px 15px), linear-gradient(180deg, #F6E6DC, #EAE8F6); }
+.pb-visas { position: absolute; top: 8cqw; left: 0; right: 0; text-align: center; font: italic 600 6cqw var(--serif); color: #2C2F6E; }
+.pb-num { position: absolute; bottom: 4cqw; left: 0; right: 0; text-align: center; font: 700 8cqw var(--serif); color: transparent; -webkit-text-stroke: 1px #6C5A8E; }
+.pb-note { position: absolute; left: 8cqw; right: 8cqw; bottom: 18cqw; text-align: center; font: 500 5cqw var(--hand); color: var(--plum); }
+.pb-page .stamp { position: absolute; width: 52%; transform: rotate(var(--r)); }
+.pb-ctrl { justify-content: center; align-items: center; gap: 14px; }
+.pb-ctrl .hand { min-width: 9em; text-align: center; color: var(--plum); font-size: 1.2rem; }
+@media (prefers-reduced-motion: reduce) { .pb-leaf, .pb { transition: none; } }
+
+/* the frappuccino PocketBac + McCombs strap clip to a webbing loop up on the shoulder, not a zipper */
+.bag .strap-loop { position: absolute; left: 3%; top: 9%; width: 5%; height: 6%; border: 3px solid #1A181C; border-right-color: #2B282E; border-radius: 6px 2px 2px 6px; background: transparent; z-index: 3; pointer-events: none; }
+.charm { left: -7%; top: 12%; }
+.charm.mccombs { left: -11%; top: 9%; }
+/* the bottle pocket is on the side: it sits behind the bag, only peeking out */
+.bag-art { position: relative; z-index: 2; }
+.bottle { right: -13%; bottom: 6%; width: 22%; z-index: 1; }
+.bottle .holder { left: -6%; right: -18%; }
+.bag .strap-loop { left: -1.5%; top: 9%; width: 6%; height: 5%; border-color: #55505A; border-width: 4px; z-index: 3; }
+.charm { left: -5%; top: 12.5%; }
+.charm.mccombs { left: -8.5%; top: 10%; }
+.bottle { right: -10%; }
+/* each panel keeps its cards inside its own layer, so a folding panel always covers the cards below it */
+.vpanel, .vgusset { isolation: isolate; }
+.vw.fold-left .p1 { z-index: 6; }
+.vw.fold-right .vflap { z-index: 7; }
+
+/* passport data page: bigger, readable type; photo under the header */
+.pb-hd b { font-size: 6.4cqw; }
+.pb-photo { top: 34cqw; width: 40%; }
+.pb-usa { font-size: 10cqw; }
+.pb-fields { width: 50%; gap: 1.6cqw; }
+.pb-fields i { font-size: 3.8cqw; }
+.pb-fields b { font-size: 5.2cqw; }
+.pb-trail { font-size: 4.2cqw; }
+
+/* vertical-design cards lie sideways in the slots, just like the real ones */
+.card.vert { padding: 0 !important; overflow: hidden; background: #ccc; container-type: size; }
+.card.vert .vface { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(-90deg); }
+.card.vert .vface svg { display: block; width: 100%; height: 100%; max-width: none; }
+.vslot .card.picked { transform: translateY(-52%); }
+.vw.has-pick { margin-top: 30px; }
+
+/* tap the Medici card: it comes all the way out; tap again and it tucks back into the zip pocket */
+.vw.cash-out.medici-out .medici-peek { transform: translate(-6%, -92%) rotate(-3deg) scale(1.25); z-index: 9; }
+
+/* the bill compartment sits behind the flap; the notes peek over its top edge */
+.vflap { z-index: 1; }
+.vw-open > .vbills { position: absolute; left: 70.5%; width: 21%; top: -9%; height: 40%; padding: 0; border: 0; background: none; cursor: pointer; z-index: 0; overflow: visible; }
+.vw.open .vw-open > .vbills { transform: none; }
+.vw.fold-left .vbills, .vw.fold-right .vbills { opacity: 0 !important; transition: opacity .15s; }
+.bill { position: absolute; left: calc(4% + var(--k) * 8%); bottom: 0; width: 62%; height: 100%; border: 2px solid var(--ink); border-radius: 3px; background: var(--bg);
+    background-image: radial-gradient(circle at 70% 30%, rgba(255,255,255,.35) 0 10px, transparent 11px), repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0 1px, transparent 1px 5px);
+    color: var(--ink); display: flex; flex-direction: column; align-items: flex-start; padding: 4px 6px; transform: rotate(calc(-6deg + var(--k) * 3deg)) translateY(52%); transform-origin: 50% 100%; transition: transform .55s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--k) * 50ms); }
+.bill b { font: 600 .82rem/1 var(--serif); } .bill i { font-style: normal; font-size: .42rem; line-height: 1.2; opacity: .75; margin-top: 2px; }
+.vw.bills-out .bill { transform: rotate(calc(-14deg + var(--k) * 7deg)) translateY(-8%); }
+.vbills:hover .bill { transform: rotate(calc(-6deg + var(--k) * 3deg)) translateY(44%); }
+.vw.bills-out .vbills:hover .bill { transform: rotate(calc(-14deg + var(--k) * 7deg)) translateY(-12%); }
+.vw.has-pick, .vw.bills-out { margin-top: 70px; }
+
+/* the monogram canvas, closer to the real one */
+.vw.p1-back .p1, .vw.flap-back .vflap { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2244%22%20height%3D%2244%22%20viewBox%3D%220%200%2044%2044%22%3E%3Crect%20width%3D%2244%22%20height%3D%2244%22%20fill%3D%22%234E3424%22/%3E%3Cg%20fill%3D%22%23C29A5B%22%3E%3Ctext%20x%3D%223%22%20y%3D%2217%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2213%22%20font-style%3D%22italic%22%3EL%3C/text%3E%3Ctext%20x%3D%227.5%22%20y%3D%2217%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2213%22%3EV%3C/text%3E%3Cpath%20d%3D%22M33%204%20l2.2%204.4%204.4%202.2%20-4.4%202.2%20-2.2%204.4%20-2.2%20-4.4%20-4.4%20-2.2%204.4%20-2.2z%22/%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2233%22%20r%3D%226%22%20fill%3D%22none%22%20stroke%3D%22%23C29A5B%22%20stroke-width%3D%221.2%22/%3E%3Cpath%20d%3D%22M11%2029%20a2%202%200%200%201%200%204%20a2%202%200%200%201%200%20-4z%20M7%2033%20a2%202%200%200%201%204%200%20a2%202%200%200%201%20-4%200z%20M11%2037%20a2%202%200%200%201%200%20-4%20a2%202%200%200%201%200%204z%20M15%2033%20a2%202%200%200%201%20-4%200%20a2%202%200%200%201%204%200z%22/%3E%3Cpath%20d%3D%22M33%2026%20c3%200%205%202%205%207%20c-5%200%20-5%200%20-5%200%20c0%200%200%200%200%20-7z%20M33%2026%20c-3%200%20-5%202%20-5%207%20c5%200%205%200%205%200z%20M33%2040%20c3%200%205%20-2%205%20-7%20c-5%200%20-5%200%20-5%200z%20M33%2040%20c-3%200%20-5%20-2%20-5%20-7%20c5%200%205%200%205%200z%22/%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2233%22%20r%3D%221.2%22%20fill%3D%22%234E3424%22/%3E%3C/g%3E%3C/svg%3E") !important; background-size: 44px 44px !important; background-color: #4E3424; }
+
+/* passport stays portrait when open; the signature + data pages are printed sideways, like the real one */
+.pb-plain { container-type: size; background: #E4E9F7; }
+.pb-rot { position: absolute; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(-90deg); }
+.pb-rot > .pp-page { position: absolute; inset: 0; border: 0; border-radius: 0; }
+.pb-rot > .pp-data { display: grid; grid-template-columns: 30% 1fr; grid-template-rows: auto 1fr auto; }
+.pp-sign-l .pp-endorse { top: 4cqw; } .pp-sign-l .pp-ghost { top: 12cqw; }
+/* padfolio: the legal pad wraps instead of stretching */
+.pf { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pf-right, .pf-legal { min-width: 0; }
+.pf-legal { overflow-wrap: anywhere; word-break: break-word; overflow-x: hidden; }
