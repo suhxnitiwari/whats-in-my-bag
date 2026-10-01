@@ -312,6 +312,7 @@ const VIEWS = {
                 <div class="vflap"><span class="vsnap"></span></div>
             </div>
         </div>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="vclose">Close the wallet</button></div>
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`;
     },
 
@@ -805,7 +806,29 @@ const AFTER = {
 
     wallet: () => {
         const vw = $('#vw'), detail = $('#card-detail'), read = $('#vread');
-        const open = () => { vw.classList.add('open'); vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1; };
+        const open = () => { if ($('#vclose')) $('#vclose').textContent = 'Close the wallet'; vw.classList.add('open'); vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1; };
+        // closing, like the real trifold: left side folds in, then the flap folds over, then it snaps
+        const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+        let closing = false;
+        const close = async () => {
+            if (closing || !vw.classList.contains('open')) return;
+            closing = true;
+            vw.classList.remove('cash-out');
+            vw.querySelectorAll('.vslot .card').forEach(x => x.classList.remove('picked'));
+            read.innerHTML = ''; read.classList.remove('show');
+            vw.classList.add('fold-left'); await wait(650);
+            vw.classList.add('fold-right'); await wait(650);
+            vw.classList.add('no-anim');
+            vw.classList.remove('open', 'fold-left', 'fold-right');
+            vw.querySelector('.vw-open').setAttribute('aria-hidden', 'true');
+            $('#snap').tabIndex = 0;
+            void vw.offsetWidth; vw.classList.remove('no-anim');
+            $('#vclose').textContent = 'Open the wallet';
+            vw.classList.add('snapped'); toast('snap ♡'); await wait(500); vw.classList.remove('snapped');
+            closing = false;
+        };
+        $('#vclose').onclick = () => vw.classList.contains('open') ? close() : open();
+        vw.querySelector('.vsnap').onclick = close;
         $('#snap').onclick = open;
         $('#vzip').onclick = () => { const on = vw.classList.toggle('cash-out'); if (on) toast('rupees for home, dollars for here ♡'); };
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {

@@ -804,3 +804,14 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .sketch-tools button.on { background: var(--ink); color: var(--cream); }
 .pencil-pad { background: #FDFBF7; }
 .pencil-pad canvas { height: 150px; }
+
+/* closing the trifold: left folds in, the flap folds over, then it snaps shut */
+.vw-open { perspective: 1400px; }
+.vw .vsnap { cursor: pointer; }
+.vw.fold-left .vzip { opacity: 0; transition: opacity .2s; }
+.vw.fold-left .p1 { transform-origin: 100% 50%; transform: rotateY(-178deg); filter: brightness(.8); transition: transform .6s cubic-bezier(.5,0,.3,1), filter .6s; transition-delay: 0s; backface-visibility: visible; z-index: 3; }
+.vw.fold-right .vflap { transform-origin: 0 50%; transform: rotateY(178deg); filter: brightness(.85); transition: transform .6s cubic-bezier(.5,0,.3,1), filter .6s; transition-delay: 0s; z-index: 4; }
+.vw.fold-right .vgusset, .vw.fold-right .p2 { transition-delay: 0s; }
+.vw.no-anim .vw-open > *, .vw.no-anim .vw-closed { transition: none !important; }
+.vw.snapped .vw-closed { animation: snapshut .45s cubic-bezier(.3,1.6,.5,1); }
+@keyframes snapshut { 0% { transform: translate(-50%, -50%) scale(.88); } 100% { transform: translate(-50%, -50%) scale(1); } }
