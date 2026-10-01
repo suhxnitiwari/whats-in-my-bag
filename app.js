@@ -341,8 +341,8 @@ const VIEWS = {
         <div class="row"><button class="btn solid" type="button" id="sip">Take a sip for me</button></div>`,
 
     sweater: () => `
-        <h2>My <em>cable knit</em></h2>
-        <p class="note">brown, cozy, always in my bag. i get cold easily.</p>
+        <h2>My Ralph Lauren <em>cable knit</em></h2>
+        <p class="note">camel, cozy, always in my bag. i get cold easily.</p>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
         <div class="row"><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
@@ -501,11 +501,50 @@ function penView({ title, note, list, front, pen, pick }) {
 }
 
 function cardHTML(c, i) {
+    if (c.kind === 'amexgold') return `
+        <button class="card amexgold" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
+            <svg class="facet" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 60 L62 4 L100 30 Z" fill="#fff" opacity=".22"/><path d="M62 4 L100 30 L70 26 Z" fill="#fff" opacity=".35"/><path d="M30 60 L70 26 L100 30 Z" fill="#8A6A2A" opacity=".18"/></svg>
+            <span class="amex-top"><span class="amex-word">AMERICAN EXPRESS</span><span class="sky">SKYMILES</span></span>
+            <span class="chip"></span>
+            <span class="foot"><span>SUHANI TIWARI</span><span>MEMBER ♡</span></span>
+        </button>`;
+    if (c.kind === 'amexblue') return `
+        <button class="card amexblue" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
+            <span class="amex-top"><span></span><span class="amex-word big">AMERICAN<br>EXPRESS</span></span>
+            <span class="amex-mid"><span class="chip"></span><span class="ribbon">MEMBER SINCE <b>♡</b></span></span>
+            <span class="foot"><span>SUHANI TIWARI</span><svg viewBox="0 0 24 24" style="width:9%" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </button>`;
+    if (c.kind === 'bofa') return `
+        <button class="card bofa" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
+            <span class="bofa-top"><span class="chip"></span><svg class="tap" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7 q4 5 0 10 M12 5 q6 7 0 14 M16 3 q8 9 0 18" fill="none" stroke="#5E6670" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span class="bofa-bank">BANK OF AMERICA</span>
+            <span class="foot"><span>SUHANI TIWARI</span><span class="visa"><b>VISA</b> Signature</span></span>
+        </button>`;
+    if (c.kind === 'dl') return `
+        <button class="card dl" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
+            <span class="dl-head"><span class="dl-state">Texas<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 l4.6 10.4 11.2 1 -8.5 7.4 2.6 11 -9.9 -5.9 -9.9 5.9 2.6 -11 -8.5 -7.4 11.2 -1z" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/></svg></span><span class="t">Driver license</span></span>
+            <span class="dl-body">
+                <img src="assets/img/me.jpg" alt="">
+                <span class="dl-fields">
+                    <span><i>name</i> Suhani Tiwari</span>
+                    <span><i>dob</i> a lady never tells</span>
+                    <span><i>weight</i> don’t ask</span>
+                    <span><i>address</i> wouldn’t you wanna knowwww</span>
+                    <span><i>class</i> C (for cute) <i>restr</i> curbs</span>
+                </span>
+            </span>
+            <span class="dl-fine">not an actual ID ♡ no curbs were harmed (mostly)</span>
+        </button>`;
     if (c.kind === 'id') return `
         <button class="card id" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
-            <span class="band"><span>The University of Texas at Austin</span></span>
-            <span class="who"><img src="assets/img/me.jpg" alt=""><span><span class="big" style="display:block">${c.big}</span><span class="t">Student · McCombs</span></span></span>
-            <span class="foot"><span>MIS + PSYCHOLOGY</span><span>CLASS OF 2027</span></span>
+            <span class="ut-left">
+                <span class="ut-word">TEXAS</span>
+                <span class="ut-sub">The University of Texas at Austin</span>
+                <span class="ut-name">SUHANI TIWARI</span>
+                <span class="ut-role">STUDENT</span>
+            </span>
+            <span class="ut-photo"><img src="assets/img/me.jpg" alt=""></span>
+            <span class="ut-bars" aria-hidden="true"></span>
         </button>`;
     return `
         <button class="card" type="button" style="--i:${i}; z-index:${10 - i}; background:${c.color}; color:${c.text}" data-card="${i}" aria-label="${c.title}">
@@ -567,6 +606,7 @@ const AFTER = {
             const c = CARDS[+card.dataset.card];
             w.querySelectorAll('.card').forEach(x => x.classList.toggle('picked', x === card));
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
+            if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });
         if (!reduce) setTimeout(open, 700); else open();
     },

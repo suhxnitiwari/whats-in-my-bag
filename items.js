@@ -152,8 +152,22 @@ window.ITEMS = [
         open: 'stanley'
     },
     {
-        id: 'sweater', name: 'my cable knit', zip: 'main', l: 9, t: 57, w: 13, r: -5,
-        art: `<svg viewBox="0 0 220 170"><defs><pattern id="knit" width="28" height="22" patternUnits="userSpaceOnUse"><rect width="28" height="22" fill="#8A5A3B"/><path d="M4 0 q6 11 0 22 M12 0 q-6 11 0 22" fill="none" stroke="#6E4428" stroke-width="3"/><path d="M18 0 q5 11 0 22 M24 0 q-5 11 0 22" fill="none" stroke="#A8744F" stroke-width="2.5"/></pattern></defs><rect x="14" y="20" width="192" height="138" rx="18" fill="url(#knit)" ${S}/><path d="M14 60 H206" ${S} stroke-width="2.5"/><rect x="14" y="136" width="192" height="22" rx="10" fill="#6E4428" ${S} stroke-width="2.5"/><path d="M28 136 v22 M44 136 v22 M60 136 v22 M76 136 v22 M92 136 v22 M108 136 v22 M124 136 v22 M140 136 v22 M156 136 v22 M172 136 v22 M188 136 v22" stroke="#5A3520" stroke-width="2"/><path d="M84 20 q26 22 52 0" fill="#6E4428" ${S} stroke-width="2.5"/></svg>`,
+        id: 'sweater', name: 'my ralph lauren cable knit', zip: 'main', l: 9, t: 57, w: 13, r: -5,
+        art: `<svg viewBox="0 0 240 170"><defs>
+            <pattern id="rib" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#A9744C"/><path d="M3 0 v10" stroke="#8C5D3A" stroke-width="2"/></pattern>
+            <pattern id="cable" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#B98258"/>
+                <path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#8E5E3A" stroke-width="2.6"/>
+                <path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#9A6842" stroke-width="2.2"/>
+                <path d="M19 0 v28" stroke="#A5704A" stroke-width="1.6" stroke-dasharray="2 2"/>
+            </pattern></defs>
+            <path d="M8 60 C4 90 6 130 14 150 L36 150 L40 64Z" fill="url(#cable)" ${S} stroke-width="2.5"/>
+            <rect x="26" y="34" width="200" height="124" rx="16" fill="url(#cable)" ${S}/>
+            <rect x="26" y="138" width="200" height="20" rx="8" fill="url(#rib)" ${S} stroke-width="2.5"/>
+            <path d="M92 34 C96 58 156 58 160 34" fill="url(#rib)" ${S} stroke-width="2.5"/>
+            <path d="M100 34 C104 50 148 50 152 34" fill="#7A4E30" ${S} stroke-width="2"/>
+            <rect x="118" y="36" width="16" height="6" rx="1.5" fill="#F4EFE6" stroke="#3A2626" stroke-width="1"/>
+            <path d="M40 46 q40 -8 80 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".14"/>
+        </svg>`,
         open: 'sweater'
     },
     {
@@ -242,6 +256,10 @@ window.EC = (bands, big) => `<svg viewBox="0 0 170 220" aria-hidden="true">
 /* my wallet: cards pop out like file folders. The first one is my student ID. */
 window.CARDS = [
     { kind: 'id', title: 'UT Austin student ID', big: 'Suhani Tiwari', sub: 'Management Information Systems + Psychology', metric: 'McCombs School of Business · Class of 2027 · 3.5 GPA', body: 'BBA in MIS and a BA in Psychology, with minors in Marketing and Educational Psychology. Two McCombs scholarships this year.' },
+    { kind: 'dl', title: 'Driver license', big: 'Suhani Tiwari', metric: 'Class: C (for cute) · Restrictions: curbs · Endorsements: none, yet', body: 'Weight: don’t ask. Address: wouldn’t you wanna knowwww. DOB: a lady never tells. Driving skill: see my car keys.' },
+    { kind: 'bofa', title: 'Bank of America card', big: 'Recent transactions', metric: 'Westman Atelier · Lancôme · Staples · Target · Bath & Body Works', body: 'Glögg (obviously). Lash Idôle. A 25-pack of Mildliners. InkJoy gel pens. One more Cozy Vanilla Almond PocketBac. Everything in this bag, basically.' },
+    { kind: 'amexgold', title: 'Amex Delta SkyMiles Gold', big: 'Where the miles went', metric: 'Thailand + Malaysia 2010 · Switzerland, France, Italy 2016 · Mexico 2020', body: 'The stamps are in my passport.', go: 'passport' },
+    { kind: 'amexblue', title: 'American Express (blue)', big: 'The everyday card', metric: 'Coffee runs · Target trips · gas for the car the curb keeps attacking', body: 'Not pictured: the receipts.' },
     { color: '#C74634', text: '#fff', title: 'Oracle', big: 'ERP Consultant Intern', tag: 'MEMBER SINCE 2026', metric: '$20M–$200M companies · 12-week Enterprise Sales Development program', body: 'Prospected enterprises, led discovery calls, and matched what they actually needed to Oracle NetSuite.' },
     { color: '#E8D5B0', text: INK, title: 'Acacia Advisors', big: '+20% traffic', tag: 'MEMBER SINCE 2025', metric: '+20% website traffic · +27% LinkedIn visits · $1M Azure AI go-to-market', body: 'Rewrote the messaging for their AI and cloud services, and built the go-to-market for a manufacturing AI product.' },
     { color: '#2B2B33', text: '#F2C6C8', title: 'Outlier', big: '1,000+ AI answers', tag: 'MEMBER SINCE 2024', metric: '1,000+ responses graded · Tier 3 → Tier 1 in four months', body: 'Graded AI answers for accuracy, safety and reasoning, and ranked outputs to train frontier models.' },

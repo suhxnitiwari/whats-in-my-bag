@@ -10,7 +10,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Sketchbook | A flip-through of my digital art |
 | Westman Atelier lipstick (Glögg), Lancôme Lash Idôle, Victoria's Secret makeup pouch | Makeup loves and skips (Morphe brushes included) |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
-| Wallet | Pops open to my cards: my UT Austin student ID, Oracle, Acacia Advisors, Outlier, Girls Who Code |
+| Wallet | Pops open to my cards: UT Austin student ID, a (joke) driver license, Bank of America, two Amex cards (no numbers, ever), plus Oracle, Acacia Advisors, Outlier, Girls Who Code |
 | Mildliner pouch | The full 25-pack: one highlighter for every tool on my résumé |
 | Paper Mate pouch | 20 InkJoy Gel pens: pick one and write anything on the notepad, plus my BIC mechanical pencils |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
@@ -21,7 +21,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Laptop | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
-| Cable knit sweater | Because I get cold easily |
+| Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
 
