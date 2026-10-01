@@ -376,7 +376,7 @@ $('#repack').addEventListener('click', () => {
 list.addEventListener('click', e => {
     const part = e.target.closest('[data-part]');
     if (part) {
-        if (part.dataset.part === 'mailbox') return toast('mailbox keys. mostly for packages i definitely needed 📦');
+        if (part.dataset.part === 'mailbox') return pickUp({ id: 'mailbox', name: 'my mailbox key', open: 'mailbox' });
         if (part.dataset.part === 'pencil') return pickUp(ITEMS.find(i => i.id === 'pencil'));
         return pickUp(part.dataset.part === 'bmw' ? ITEMS.find(i => i.id === 'keys') : { id: 'apartment', name: 'my apartment fob', open: 'apartment' });
     }
@@ -902,6 +902,33 @@ const SKIN_FX = {
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. do not disturb.']
 };
 const VIEWS = {
+    mailbox: () => `
+        <h2>My <em>mailbox</em></h2>
+        <p class="note">one gold key. it’s mostly packages i definitely needed. but this time there was a letter.</p>
+        <div class="mbx" id="mbx">
+            <svg viewBox="0 0 220 180" aria-hidden="true">
+                <rect x="10" y="10" width="200" height="160" rx="6" fill="#C9CCD2" stroke="#3A2626" stroke-width="3"/>
+                <rect x="30" y="30" width="160" height="120" rx="3" fill="#2E2A2C" stroke="#3A2626" stroke-width="2"/>
+                <g class="mbx-env"><rect x="55" y="70" width="110" height="64" rx="3" fill="#FFFDF7" stroke="#3A2626" stroke-width="2"/><path d="M55 72 L110 108 L165 72" fill="none" stroke="#3A2626" stroke-width="2"/><text x="110" y="128" text-anchor="middle" font-family="Kalam" font-size="10" fill="#76344E">to didi ♡</text></g>
+                <g class="mbx-door"><rect x="30" y="30" width="160" height="120" rx="3" fill="#B9BCC2" stroke="#3A2626" stroke-width="2.4"/><rect x="40" y="40" width="140" height="18" rx="2" fill="#A7AAB1"/><text x="110" y="53" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#5E6168" letter-spacing="2">MAIL</text>
+                    <g class="mbx-lock"><circle cx="164" cy="96" r="10" fill="#E2C47A" stroke="#3A2626" stroke-width="2"/><rect x="162.5" y="89" width="3" height="11" rx="1.2" fill="#3A2626"/></g></g>
+            </svg>
+        </div>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="mbx-key">Turn the key</button></div>
+        <div class="lc" id="lc" hidden>
+            <div class="lc-paper">
+                <span class="lc-holes" aria-hidden="true"><i></i><i></i><i></i></span>
+                <p class="lc-name">Amaira</p>
+                <h3 class="lc-title">My Lucky Charm</h3>
+                <p class="lc-body">My lucky charm is my sister. It makes me feel lucky because she is in my life. When i’m nervous or scared she helps me by comforting me. She became speical once I learned how to open my eyes. She helps me by givving me hugs when i’m sad. I feel lucky when i’m with her. She makes me feel speical by trying her best to make me happy. That is why my lucky charm is my super awsome sister.</p>
+                <svg class="lc-draw" viewBox="0 0 200 170" aria-label="Amaira's drawing: a cup that says I love you, a heart, and Didi"><g fill="none" stroke="#7A7472" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M70 40 q30 -30 60 0 q8 30 -4 50 M70 40 q-8 30 4 50" opacity=".35"/><path d="M60 168 q4 -40 40 -46 q36 6 40 46" opacity=".35"/>
+                    <path d="M58 64 h84 l-6 14 h-72z"/><path d="M64 78 l10 84 h52 l10 -84"/><path d="M84 112 c-10 -12 2 -22 16 -10 c14 -12 26 -2 16 10 l-16 16z"/></g>
+                    <text x="100" y="75" text-anchor="middle" font-family="Kalam" font-size="13" fill="#5E5856">I ♡ U</text>
+                    <text x="100" y="152" text-anchor="middle" font-family="Kalam" font-size="13" fill="#5E5856">DiDi</text></svg>
+            </div>
+            <p class="hand lc-say">my little sister wrote this. it lives with me now.</p>
+        </div>`,
     skinbag: () => `
         <h2>My <em>skincare</em> pouch</h2>
         <p class="note">another victoria’s secret pouch, just for skincare. unzip it, then put it all on me. drag a product onto my face.</p>
@@ -1683,6 +1710,21 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    mailbox: () => {
+        const mbx = $('#mbx'), btn = $('#mbx-key');
+        btn.onclick = () => {
+            if (!mbx.classList.contains('open')) {
+                mbx.classList.add('turn');
+                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('no packages. just a letter ♡'); }, reduce ? 0 : 550);
+            } else if ($('#lc').hidden) {
+                $('#lc').hidden = false; mbx.classList.add('taken'); btn.textContent = 'Put it back';
+                $('#lc').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+            } else {
+                $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn'); btn.textContent = 'Turn the key';
+            }
+        };
+        mbx.onclick = () => btn.click();
+    },
     skinbag: () => {
         AFTER.makeupbag();
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
