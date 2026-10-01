@@ -779,17 +779,14 @@ const VIEWS = {
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:200px; height:200px; margin:214px auto 14px; perspective:700px">
             <p class="cp-hint hand">drag the lid up or down</p>
-            <div style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#EDEFF2; overflow:hidden; box-shadow: inset 0 0 0 10px #141011">
-                <img src="assets/img/me.jpg" alt="Me, in the mirror" style="width:100%; height:100%; object-fit:cover; opacity:.92; filter: saturate(.9)">
-                <span style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.55), transparent 45%)"></span>
-            </div>
+            <div class="cp-base"><div class="cp-glass mag"><img src="assets/img/me.jpg" alt="Me, magnified"><span class="cp-shine"></span></div><span class="cp-tag">×2</span></div>
             <div id="lid" class="cp-lid">
-                <div class="cp-out"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M27 8 a12 12 0 1 0 0 24" fill="none" stroke="#E9E4DF" stroke-width="4"/><path d="M33 8 a12 12 0 1 1 0 24" fill="none" stroke="#E9E4DF" stroke-width="4"/></svg></div>
-                <div class="cp-in"><span></span></div>
+                <div class="cp-out"><svg viewBox="-20 -20 40 40" aria-hidden="true"><g fill="none" stroke-linecap="butt"><circle cx="0" cy="0" r="17" fill="#0B0A0B" stroke="#C9CDD2" stroke-width="2.2"/><circle cx="0" cy="0" r="14.6" fill="none" stroke="#5A5D62" stroke-width=".8"/><path d="M-1.2 -6.8 A7.6 7.6 0 1 0 -1.2 6.8" stroke="#F4F2EE" stroke-width="2.4"/><path d="M1.2 -6.8 A7.6 7.6 0 1 1 1.2 6.8" stroke="#F4F2EE" stroke-width="2.4"/></g></svg></div>
+                <div class="cp-in"><div class="cp-glass"><img src="assets/img/me.jpg" alt="Me, in the mirror"><span class="cp-shine"></span></div></div>
             </div>
         </div>
         <h2>Mirror, mirror: <em>the real me</em></h2>
-        <p class="note">my chanel double facettes. yes, the blair waldorf one. look who’s in it.</p>
+        <p class="note">chanel miroir double facettes: a regular mirror in the lid, a magnifying one below. yes, the blair waldorf one.</p>
         <p>I’m Suhani. I study Management Information Systems and Psychology at UT Austin’s McCombs School of Business. I study why people choose what they choose, then build what they’d choose.</p>
         <p>I’m also a published children’s book author, the founder of two Girls Who Code chapters, and a digital artist who paints about growing up between two worlds.</p>
         <div class="row"><a class="btn solid" href="https://suhanitiwari.com" target="_blank" rel="noopener">My portfolio ↗</a></div>

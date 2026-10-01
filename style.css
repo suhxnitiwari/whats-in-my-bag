@@ -1449,3 +1449,17 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .bottle .holder { left: -34%; right: -14%; border-left: 2.5px solid #3A2626; border-radius: 4px 14px 20px 6px; }
 .bottle .holder::before { box-shadow: -6px 0 0 -2px #1A181C; }
 .bag-art { z-index: 2; }
+
+/* Chanel Miroir Double Facettes: glossy black cushion-square, CC medallion, regular mirror in the lid, magnifying below */
+.cp-base, .cp-out, .cp-in { border-radius: 24% / 24%; }
+.cp-base { position: absolute; inset: 0; background: linear-gradient(135deg, #2F2D30, #0E0D0F 40%, #1A191C); border: 3px solid var(--ink); padding: 9px; box-shadow: 0 16px 24px -14px rgba(0,0,0,.6); }
+.cp-out { background: linear-gradient(140deg, #444246 0%, #121113 32%, #050506 70%, #1E1D20 100%); }
+.cp-out svg { width: 34%; }
+.cp-out::before { content: ""; position: absolute; left: 8%; top: 6%; width: 50%; height: 30%; border-radius: 50%; background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.28), transparent 60%); }
+.cp-in { padding: 9px; background: #0E0D0F; }
+.cp-in span { display: none; }
+.cp-glass { position: relative; width: 100%; height: 100%; border-radius: 20% / 20%; overflow: hidden; background: #E9ECEF; box-shadow: inset 0 0 0 1.5px #6E7378; }
+.cp-glass img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: saturate(.85) brightness(1.05); opacity: .9; }
+.cp-glass.mag img { transform: scale(1.9); transform-origin: 50% 35%; }
+.cp-shine { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.6), rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25)); }
+.cp-tag { position: absolute; right: 16px; bottom: 14px; font: 600 .7rem var(--mono); color: #fff; background: rgba(0,0,0,.45); padding: 1px 6px; border-radius: 999px; }
