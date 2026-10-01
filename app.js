@@ -1554,13 +1554,15 @@ const VIEWS = {
         <svg class="sw2" id="sw" data-f="3" viewBox="0 0 360 300" role="button" tabindex="0" aria-label="My pink cable knit V-neck sweater. Tap to fold or unfold it, one step at a time">
             <defs><pattern id="cable2" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/><path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#D9849C" stroke-width="2.6"/><path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#DE8CA2" stroke-width="2.2"/><path d="M19 0 v28" stroke="#E395A9" stroke-width="1.6" stroke-dasharray="2 2"/></pattern>
                 <pattern id="rib2" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern></defs>
-            <path class="top" d="M100 170 L100 46 Q100 30 116 28 L150 22 L180 72 L210 22 L244 28 Q260 30 260 46 L260 170" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M150 22 L180 72 L210 22 L200 20 L180 56 L160 20 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2"/>
-            <path d="M162 20 L180 54 L198 20 Z" fill="#FBEFF2"/>
-            <path d="M214 50 q3 -5 8 -5 l3 -3 2 1 -2 2 q2 2 1 5 M216 50 v3 M223 50 v3" fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round"/>
+            <!-- sleeves and the bottom sit behind the front, so they fold under it, not over it -->
             <g class="sl sl-l"><path d="M100 46 L100 126 L66 244 L36 236 L76 54 Q86 42 100 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M66 244 L36 236 L30 258 L60 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
             <g class="sl sl-r"><path d="M260 46 L260 126 L294 244 L324 236 L284 54 Q274 42 260 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M294 244 L324 236 L330 258 L300 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
             <g class="bot"><path d="M100 164 V254 H260 V164" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><rect x="100" y="250" width="160" height="24" rx="3" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+            <path class="top" d="M100 170 L100 46 Q100 30 116 28 L150 22 L180 72 L210 22 L244 28 Q260 30 260 46 L260 170" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M150 22 L180 72 L210 22 L200 20 L180 56 L160 20 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2"/>
+            <path d="M162 20 L180 54 L198 20 Z" fill="#FBEFF2"/>
+            <path class="sw-edge" d="M100 170 H260" stroke="#3A2626" stroke-width="3" stroke-linecap="round"/>
+            <path d="M214 50 q3 -5 8 -5 l3 -3 2 1 -2 2 q2 2 1 5 M216 50 v3 M223 50 v3" fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
         <p class="hand sw-hint" id="sw-hint">folded. tap it three times to unfold ↓</p>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>

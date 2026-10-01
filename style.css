@@ -2362,3 +2362,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .rz-lens { border: 12px solid #141010; outline: none; box-shadow: 0 0 0 2.5px #EFE3CF; border-radius: 12px; }
 .rz-lens::after { background: linear-gradient(180deg, rgba(46, 24, 18, .42), rgba(178, 110, 72, .16)); }
 .rz-bridge { width: 8%; height: 14px; margin-top: -26%; background: #141010; border-top: 2.5px solid #EFE3CF; border-radius: 10px 10px 4px 4px; }
+
+/* sweater: the folded bottom edge only shows once the hem is tucked up behind */
+.sw2 .sw-edge { opacity: 0; transition: opacity .3s; }
+.sw2[data-f="3"] .sw-edge { opacity: 1; transition-delay: .5s; }
