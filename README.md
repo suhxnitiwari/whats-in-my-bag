@@ -16,7 +16,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
-| Chanel mirror | The real me |
+| Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
 | Laptop | My real sticker layout; every sticker opens a project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |

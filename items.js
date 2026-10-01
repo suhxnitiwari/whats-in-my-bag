@@ -109,8 +109,8 @@ window.ITEMS = [
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel mirror', zip: 'main', l: 73, t: 90, w: 5.5, r: 0,
-        art: `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#141011" ${S}/><circle cx="60" cy="60" r="46" fill="none" stroke="#3A3033" stroke-width="2"/><circle cx="60" cy="60" r="18" fill="none" stroke="#E9E4DF" stroke-width="4"/><circle cx="60" cy="60" r="10" fill="#141011"/><path d="M40 30 q10 -8 22 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35"/></svg>`,
+        id: 'mirror', name: 'my chanel mirror (the blair waldorf one)', zip: 'main', l: 73, t: 90, w: 5.5, r: 0,
+        art: `<svg viewBox="0 0 120 120"><rect x="8" y="8" width="104" height="104" rx="22" fill="#141011" ${S}/><rect x="16" y="16" width="88" height="88" rx="16" fill="none" stroke="#3A3033" stroke-width="2"/><circle cx="60" cy="60" r="15" fill="none" stroke="#E9E4DF" stroke-width="4"/><circle cx="60" cy="60" r="7" fill="#141011"/><path d="M26 30 q12 -10 30 -8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/></svg>`,
         open: 'mirror'
     },
     {

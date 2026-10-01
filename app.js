@@ -274,7 +274,7 @@ const VIEWS = {
     keys: () => `
         <div class="fob" id="fob">${ITEMS.find(i => i.id === 'keys').art}</div>
         <h2>My BMW keys</h2>
-        <p class="note">full disclosure: i am not a good driver. whoops.</p>
+        <p class="note" style="font-size:1.8rem">whoops, i’m just a girl 🎀</p>
         <div class="fob-btns">
             <button class="btn" type="button" data-fob="lock">🔒 Lock</button>
             <button class="btn" type="button" data-fob="unlock">🔓 Unlock</button>
@@ -301,19 +301,20 @@ const VIEWS = {
 
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:220px; height:220px; margin:0 auto 14px; perspective:700px">
-            <div style="position:absolute; inset:0; border-radius:50%; border:3px solid var(--ink); background:#EDEFF2; overflow:hidden; box-shadow: inset 0 0 0 10px #141011">
+            <div style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#EDEFF2; overflow:hidden; box-shadow: inset 0 0 0 10px #141011">
                 <img src="assets/img/me.jpg" alt="Me, in the mirror" style="width:100%; height:100%; object-fit:cover; opacity:.92; filter: saturate(.9)">
                 <span style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.55), transparent 45%)"></span>
             </div>
-            <div id="lid" style="position:absolute; inset:0; border-radius:50%; border:3px solid var(--ink); background:#141011; transform-origin:50% 0; transition: transform 1s cubic-bezier(.2,.8,.2,1); display:grid; place-items:center">
+            <div id="lid" style="position:absolute; inset:0; border-radius:22%; border:3px solid var(--ink); background:#141011; transform-origin:50% 0; transition: transform 1s cubic-bezier(.2,.8,.2,1); display:grid; place-items:center">
                 <span style="width:34%; aspect-ratio:1; border-radius:50%; border:5px solid #E9E4DF"></span>
             </div>
         </div>
         <h2>Mirror, mirror: <em>the real me</em></h2>
-        <p class="note">my chanel double-facet mirror. look who’s in it.</p>
+        <p class="note">my chanel double facettes. yes, the blair waldorf one. look who’s in it.</p>
         <p>I’m Suhani. I study Management Information Systems and Psychology at UT Austin’s McCombs School of Business. I study why people choose what they choose, then build what they’d choose.</p>
         <p>I’m also a published children’s book author, the founder of two Girls Who Code chapters, and a digital artist who paints about growing up between two worlds.</p>
-        <div class="row"><a class="btn solid" href="https://suhanitiwari.com" target="_blank" rel="noopener">My portfolio ↗</a></div>`,
+        <div class="row"><a class="btn solid" href="https://suhanitiwari.com" target="_blank" rel="noopener">My portfolio ↗</a></div>
+        <p class="hand" style="font-size:1.5rem; color:var(--plum); margin:16px 0 0">you know you love me. xoxo ♡</p>`,
 
     stanley: () => `
         <h2>My pink <em>Stanley</em></h2>
