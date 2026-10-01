@@ -1588,14 +1588,14 @@ const VC_CHIP = (x, y) => `<rect x="${x}" y="${y}" width="10" height="8" rx="1.6
 const VC_TAP = (x, y, c) => `<path d="M${x} ${y} q2 2.5 0 5 M${x + 2} ${y - 1} q3 3.5 0 7 M${x + 4} ${y - 2} q4 4.5 0 9" fill="none" stroke="${c}" stroke-width=".8" stroke-linecap="round"/>`;
 const BOFA_FLAG = (x, y, c, w = 1) => `<g transform="translate(${x} ${y}) scale(${w})" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"><path d="M0 6 l5 -6 h9"/><path d="M3 9 l5 -6 h9"/><path d="M6 12 l5 -6 h9"/></g>`;
 const VCARD = {
-    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1857C4"/><stop offset=".5" stop-color="#2E80E3"/><stop offset="1" stop-color="#1A55BE"/></linearGradient><radialGradient id="vabm" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#9CCBF7"/><stop offset="1" stop-color="#5FA2EC"/></radialGradient></defs>
+    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1650C0"/><stop offset=".5" stop-color="#2A7BE0"/><stop offset="1" stop-color="#174CB6"/></linearGradient><radialGradient id="vabm" cx=".45" cy=".45" r=".6"><stop offset="0" stop-color="#7DB8F2"/><stop offset="1" stop-color="#2F7FDC"/></radialGradient></defs>
         <rect width="54" height="86" fill="url(#vab)"/>
-        <circle cx="24" cy="44" r="18" fill="url(#vabm)" opacity=".9"/><circle cx="24" cy="44" r="18" fill="none" stroke="#CFE5FB" stroke-width=".6"/>
-        <g fill="#2E80E3" opacity=".75"><path d="M17 56 c0 -8 3 -13 8 -14 c2 -4 7 -6 10 -2 c-3 0 -4 2 -4 4 c3 2 3 7 0 10 c2 2 1 4 -1 4z"/><path d="M24 42 c-1 -8 4 -14 12 -13 c-4 2 -6 5 -6 8 z"/><path d="M27 33 c3 -6 9 -8 13 -6 c-5 1 -8 3 -10 7z"/></g>
+        <circle cx="25" cy="42" r="27" fill="url(#vabm)" opacity=".85"/><circle cx="25" cy="42" r="27" fill="none" stroke="#BFE0FB" stroke-width=".5" opacity=".8"/><circle cx="25" cy="42" r="24" fill="none" stroke="#BFE0FB" stroke-width=".3" opacity=".6"/>
+        <g fill="#1F63C9" opacity=".8"><path d="M10 64 c-1 -10 2 -18 9 -21 c0 -9 7 -16 16 -15 c4 0 7 2 9 5 c-4 -1 -7 0 -8 2 c4 1 6 4 5 8 c-2 -2 -4 -2 -6 -1 c2 3 2 6 0 9 c3 1 4 4 2 7 c-3 -1 -5 0 -6 2 c-2 3 -4 4 -7 4z"/><path d="M22 30 c2 -7 9 -11 17 -9 c-6 1 -10 4 -12 8z"/></g>
+        <path d="M17 45 c3 -1 6 0 7 2 M18 50 c2 0 4 1 5 3" fill="none" stroke="#9CCBF7" stroke-width=".6" opacity=".7"/>
         ${VC_CHIP(32, 9)}<text transform="translate(8 9) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#EAF3FF" letter-spacing=".5">SUHANI TIWARI</text>
-        <rect x="38.5" y="44" width="11" height="36" fill="none" stroke="#fff" stroke-width=".5" opacity=".7"/>
-        <text transform="translate(46.5 46) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.6" fill="#fff" letter-spacing=".2">AMERICAN</text><text transform="translate(41.5 48) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.6" fill="#fff" letter-spacing=".4">EXPRESS</text>
-        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(28, 76, '#EAF3FF')}</svg>`,
+        <text transform="translate(48 50) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#fff" letter-spacing=".3">AMERICAN</text><text transform="translate(43 50) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#fff" letter-spacing=".55">EXPRESS</text>
+        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(30, 76, '#EAF3FF')}</svg>`,
     amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
         ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
@@ -1604,7 +1604,7 @@ const VCARD = {
         <text transform="translate(41 47) rotate(90)" font-family="Instrument Sans" font-size="5" fill="#2A200C" letter-spacing=".8">SKYMILES</text>
         <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}</svg>`,
     bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A6AAB1"/><stop offset=".5" stop-color="#E4E6EA"/><stop offset="1" stop-color="#9A9EA6"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 34 L54 14 V26 L0 46Z" fill="#fff" opacity=".22"/>
+        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 34 L54 14 V26 L0 46Z" fill="#fff" opacity=".22"/><path d="M54 30 L20 86 H40 L54 62Z" fill="#7E838B" opacity=".28"/><path d="M0 60 L28 86 H12 L0 74Z" fill="#fff" opacity=".18"/>
         ${VC_CHIP(32, 12)}<circle cx="11" cy="9" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/><path d="M9.6 9 h2.8 M11 7.6 v2.8" stroke="#5E646C" stroke-width=".5"/>
         ${BOFA_FLAG(16, 24, '#4A4F57', 1.1)}
         <text transform="translate(20 40) rotate(90)" font-family="Instrument Sans" font-weight="600" font-size="3" fill="#33373D" letter-spacing=".9">BANK OF AMERICA</text>
@@ -1626,7 +1626,7 @@ function cardHTML(c, i) {
             <span class="vface">${VCARD[c.kind]}</span>
         </button>`;
     if (c.kind === 'dl') return `
-        <button class="card dl tx" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title} (a joke one)">
+        <button class="card dl tx" type="button" style="--i:${i}; z-index:${10 - i}" data-card="${i}" aria-label="${c.title}">
             <svg class="tx-bg" viewBox="0 0 160 100" preserveAspectRatio="none" aria-hidden="true">
                 <path d="M8 2 h22 v26 l18 6 l14 -4 l10 4 v22 l-4 10 l-10 6 l-12 14 l-6 16 l-10 -2 l-10 -14 l-6 -12 l-8 -6 l-6 6 l-10 -6 l-6 -10 l4 -6 h10 Z" transform="translate(70 18) scale(.95)" fill="#F4B9C3" opacity=".55"/>
                 <path d="M0 70 q40 -10 80 6 t80 -4 V100 H0Z" fill="#C9D3F0" opacity=".45"/>
@@ -1636,9 +1636,9 @@ function cardHTML(c, i) {
             <span class="tx-head">
                 <span class="tx-flag" aria-hidden="true"><b>★</b><i></i><i></i></span>
                 <span class="tx-word">Texas<small>USA</small></span>
-                <span class="tx-kind">LEARNER<br>DRIVER LICENSE</span>
+                <span class="tx-kind">DRIVER LICENSE</span>
             </span>
-            <span class="tx-banner">STILL LEARNING ♡</span>
+            <span class="tx-banner">UNDER 21</span>
             <span class="tx-photo"><img src="assets/img/me.jpg" alt=""><span class="tx-sig">Suhani Tiwari</span></span>
             <span class="tx-fields">
                 <span><i>4d. DL:</i> <b>OOPS-143</b></span>

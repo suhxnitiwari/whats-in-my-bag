@@ -2037,3 +2037,13 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .mbag.scrub .mk.peek { transform: none; opacity: 1; transition-delay: 0s !important; }
 .mbag.scrub .mk { transition-delay: 0s !important; }
 .mbag.scrub .mk.peek { opacity: 1 !important; transform: translateX(calc(-50% + var(--x, 0px))) rotate(var(--a)) translateY(var(--rise, 0px)) !important; transition: transform .45s var(--ease), opacity .2s !important; }
+
+/* wallet, matched to the real one: cash lives behind every panel and only peeks over the top */
+.vw-open > .p1, .vw-open > .vgusset, .vw-open > .vzip { z-index: 1; }
+.vw-open > .p2, .vw-open > .vflap { z-index: 2; }
+/* my name, hot-stamped in gold on the middle panel */
+.vstamp { bottom: 7%; font: 600 clamp(.9rem, 2.1vw, 1.25rem)/1.25 var(--serif); letter-spacing: .14em; color: #E2BC5E; text-shadow: 0 1px 0 rgba(0,0,0,.25); z-index: 0; }
+.vstamp small { display: block; margin-top: 2px; font: 500 clamp(.38rem, .8vw, .5rem)/1.35 var(--sans, sans-serif); letter-spacing: .14em; }
+/* the license's age band, like the real one */
+.tx-kind { letter-spacing: .06em; }
+.vpanel.p2 .vstamp { z-index: 8; pointer-events: none; }
