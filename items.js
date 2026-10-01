@@ -568,7 +568,7 @@ window.ITEMS = [
         open: 'pads'
     },
     {
-        id: 'cards', name: 'amaira’s cards', zip: 'front', l: 0, t: 0, w: 9.8, r: -4,
+        id: 'cards', name: 'amaira’s cards', zip: 'devices', l: 0, t: 0, w: 9.8, r: -4,
         art: `<svg viewBox="0 0 120 100"><g transform="rotate(-12 50 55)"><rect x="10" y="20" width="70" height="60" fill="#F6C6D3" ${S} stroke-width="2"/><path d="M30 50 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 9z" fill="#E0457E"/></g>
     <g transform="rotate(6 70 55)"><rect x="34" y="16" width="72" height="62" fill="#FFFDF8" ${S} stroke-width="2"/><g font-family="Caveat, cursive" font-size="10" fill="#B13A6A"><text x="42" y="34">Happy</text><text x="42" y="46">Bithday</text><text x="42" y="58" fill="#3A5A9A">Didi!</text></g><path d="M86 40 l2 4 4 1 -3 3 1 4 -4 -2 -4 2 1 -4 -3 -3 4 -1z" fill="#F2C14E"/><path d="M84 62 c-4 -6 3 -10 6 -4 c3 -6 10 -2 6 4 l-6 7z" fill="#E0457E"/></g>
     <g transform="rotate(-3 60 70)"><rect x="18" y="52" width="66" height="40" fill="#FBF6EA" ${S} stroke-width="2"/><text x="24" y="66" font-family="Caveat, cursive" font-size="8" fill="#6A4FB0">xoxo,</text><text x="24" y="78" font-family="Caveat, cursive" font-size="9" fill="#6A4FB0">Amaira</text><path d="M64 60 q4 -6 8 0 q4 -6 8 0 q-8 10 -8 10 q-8 -10 -8 -10z" fill="#5BA7C4"/></g></svg>`,
