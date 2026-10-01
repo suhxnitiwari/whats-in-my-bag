@@ -1029,3 +1029,5 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .swatch.on { height: 104px; }
 .swatch span { font-size: 1.6rem; font-weight: 700; line-height: 1.1; text-align: center; }
 .swatch-more { text-align: center; margin: 0 0 4px; min-height: 1.4em; }
+.pp-usa { top: 15cqw; left: 6cqw; }
+.pp-data .pp-photo { margin-top: 9cqw; }
