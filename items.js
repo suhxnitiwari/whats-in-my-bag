@@ -119,8 +119,11 @@ window.ITEMS = [
         open: 'sketchbook'
     },
     {
-        id: 'lipstick', name: 'westman atelier, glögg', zip: 'makeup', l: 62.5, t: 86, w: 3.8, r: 16,
-        art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
+        id: 'lipstick', name: 'mac sleek satin lipstick', zip: 'makeup', l: 62.5, t: 86, w: 3.8, r: 16,
+        art: `<svg viewBox="0 0 70 150"><rect x="13" y="64" width="44" height="82" rx="3" fill="#141214" ${S}/><path d="M18 72 v66" stroke="#3A383C" stroke-width="3" stroke-linecap="round"/>
+            <rect x="15" y="56" width="40" height="10" rx="2" fill="#2A282C" ${S} stroke-width="2.2"/><rect x="21" y="36" width="28" height="22" rx="2" fill="#1E1C20" ${S} stroke-width="2.2"/>
+            <path d="M23 37 V16 C23 8 31 6 35 10 L47 24 V37Z" fill="#A85A5E" ${S} stroke-width="2.4"/><path d="M27 18 q3 -5 7 -5" fill="none" stroke="#D08A8E" stroke-width="2.4" stroke-linecap="round"/>
+            <text x="35" y="112" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="9" letter-spacing="1.6" fill="#F2F0EC" transform="rotate(-90 35 106)">M·A·C</text></svg>`,
         open: 'makeup'
     },
     {
@@ -416,7 +419,7 @@ window.ITEMS = [
     },
     {
         id: 'pads', name: 'pads', zip: 'front', l: 0, t: 0, w: 6.6, r: 0,
-        art: `<svg viewBox="0 0 90 90"><g transform="rotate(-8 45 45)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#F4B6CA" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#E995AF" stroke-width="2" stroke-dasharray="2 2"/><circle cx="45" cy="45" r="9" fill="#FBE3EA"/><path d="M41 45 q4 -6 8 0 q-4 6 -8 0z" fill="#E995AF"/></g>
+        art: `<svg viewBox="-4 0 112 100"><g transform="rotate(-8 45 45)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#F4B6CA" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#E995AF" stroke-width="2" stroke-dasharray="2 2"/><circle cx="45" cy="45" r="9" fill="#FBE3EA"/><path d="M41 45 q4 -6 8 0 q-4 6 -8 0z" fill="#E995AF"/></g>
     <g transform="rotate(10 50 56) translate(10 14)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#C9B6E8" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#A996D6" stroke-width="2" stroke-dasharray="2 2"/></g></svg>`,
         open: 'pads'
     },
@@ -428,8 +431,8 @@ window.ITEMS = [
         open: 'cards'
     },
     {
-        id: 'backup-lip', name: 'my backup lipstick', zip: 'shades', l: 0, t: 0, w: 2.6, r: 18,
-        get art() { return window.ITEMS.find(i => i.id === 'lipstick').art; },
+        id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'shades', l: 0, t: 0, w: 2.6, r: 18,
+        art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
         open: 'backuplip'
     },
     {

@@ -536,7 +536,7 @@ const COMBOS = [
     [['ticket', 'keys'], 'a speeding ticket and the car keys. we don’t talk about it.'],
     [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
     [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
-    [['backup-lip', 'makeup-pouch'], 'a lipstick in the makeup pouch AND a backup in the grab-it pocket. priorities.'],
+    [['backup-lip', 'makeup-pouch'], 'a mac lipstick in the makeup bag AND a westman backup in the grab-it pocket. priorities.'],
     [['bear', 'cards'], 'T.D. and a stack of her little sister’s cards. okay, now you know her soft spot.'],
     [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
@@ -571,8 +571,8 @@ sheet.addEventListener('click', e => {
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
     backuplip: () => `
-        <h2>the <em>backup</em> lipstick</h2>
-        <div class="big-obj" style="max-width:120px">${ITEMS.find(i => i.id === 'lipstick').art}</div>
+        <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
+        <div class="big-obj" style="max-width:120px">${ITEMS.find(i => i.id === 'backup-lip').art}</div>
         <p class="note" style="text-align:center">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
         <div class="swatch" id="bl-swatch"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="bl-swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#8E2A24" stroke-width="16" stroke-linecap="round" style="stroke-dasharray:260; stroke-dashoffset:260"/></svg></div>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="bl-go">Swipe it on</button></div>`,
@@ -602,7 +602,7 @@ const VIEWS = {
     pads: () => `
         <h2><em>pads</em></h2>
         <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
-        <p class="note">obviously. and yes, you can have one.</p>`,
+        <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>`,
 
     brushes: () => `
         <h2>My <em>Morphe</em> brushes</h2>
@@ -704,7 +704,8 @@ const VIEWS = {
         <p class="note">all of it lives in my victoria’s secret makeup pouch</p>
         <div class="lists">
             <div class="love"><h3>always in my bag</h3><ul>
-                <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period.</li>
+                <li><b>MAC Sleek Satin lipstick.</b> In the makeup bag.</li>
+                <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the grab-it pocket.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
                 <li><b>Hourglass Vanish Airbrush Concealer.</b> My favorite concealer. Full coverage, no creasing.</li>
@@ -742,7 +743,7 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-105px; --a:-34deg; --d:0ms" aria-label="Westman Atelier lipstick, Glögg">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
+                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-105px; --a:-34deg; --d:0ms" aria-label="MAC Sleek Satin lipstick">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
                 <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-21px; --a:-7deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
                 <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:21px; --a:7deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
                 <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:105px; --a:34deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
@@ -1496,7 +1497,7 @@ const AFTER = {
         bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
             // tap one: it swipes on in its real shade, and its name gets written underneath in that shade
             const SH = {
-                lipstick: ['#8E2A24', 'Westman Atelier · Glögg', 'lipstick'],
+                lipstick: ['#A85A5E', 'MAC Sleek Satin lipstick', 'lipstick'],
                 blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
                 mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
@@ -1689,15 +1690,36 @@ const AFTER = {
         };
         // tap a card: it slides straight up out of its slot, like pulling it out with a thumb. Tap again to tuck it back.
         const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
+        vw.querySelectorAll('.vslot .card').forEach(card => {
+            let d = null; card.style.touchAction = 'none';
+            card.addEventListener('pointerdown', e => { d = { y: e.clientY, h: card.offsetHeight, moved: false }; try { card.setPointerCapture(e.pointerId); } catch {} });
+            card.addEventListener('pointermove', e => {
+                if (!d) return; const dy = Math.min(0, e.clientY - d.y);
+                if (Math.abs(dy) > 6) d.moved = true; if (!d.moved) return;
+                card.style.transition = 'none'; card.style.transform = `translateY(calc(-36% + ${Math.max(dy, -d.h * 1.3)}px))`;
+            });
+            card.addEventListener('pointerup', e => {
+                if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
+                if (!moved) return;
+                card.dataset.dragged = '1';
+                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))`;
+            });
+        });
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {
             const was = card.classList.contains('picked');
             tuck();
-            if (was) { vw.classList.remove('has-pick'); return; }
+            if (was) { vw.classList.remove('has-pick'); vw.style.marginTop = ''; return; }
             const c = CARDS[+card.dataset.card];
             vw.classList.add('has-pick');
             card.classList.add('picked');
-            // same orientation, same size: it just slides straight up, still tucked into its slot at the bottom
-            card.style.transform = 'translateY(-88%)';
+            // the whole card comes out of its slot and floats above the wallet
+            requestAnimationFrame(() => {
+                const cr = card.getBoundingClientRect(), wr = vw.getBoundingClientRect();
+                const lift = cr.bottom - wr.top + 12;   // clear the top of the wallet completely
+                card.style.transform = `translateY(calc(-36% - ${lift}px))`;
+                card.dataset.lift = lift;
+            });
+            vw.style.marginTop = `${Math.round(card.offsetHeight * 1.15)}px`;
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });

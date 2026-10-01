@@ -1524,3 +1524,8 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .crumple.open .cr-flat { opacity: 1; transform: none; transition-delay: .1s; }
 .crumple.open .cr-ball { opacity: 0; transform: scale(1.6) rotate(40deg); }
 .crumple:not(.open):hover .cr-ball { transform: rotate(-8deg) scale(1.04); }
+
+/* a picked card comes all the way out of its slot */
+.vslot .card.picked { transform: translateY(-128%); }
+.vw.has-pick { transition: margin-top .55s cubic-bezier(.2,.8,.2,1); }
+.vslot .card { cursor: grab; }
