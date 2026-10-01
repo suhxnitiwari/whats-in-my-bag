@@ -320,13 +320,12 @@ window.ITEMS = [
                 <g fill="#F6BFD0"><circle cx="4" cy="34" r="1.8"/><circle cx="7" cy="36" r="1.3"/><circle cx="28" cy="38" r="1.8"/><circle cx="25" cy="40" r="1.2"/><circle cx="16" cy="40" r="1.4"/><circle cx="30" cy="4" r="1.5"/><circle cx="2" cy="4" r="1.3"/></g>
                 <path d="M2 30 q4 4 8 2 M24 34 q4 4 8 2" fill="none" stroke="#F6BFD0" stroke-width="1"/>
             </pattern></defs>
-            <rect x="8" y="98" width="48" height="136" rx="7" fill="url(#bowprint)" ${S}/>
-            <path d="M24 46 h16 L56 100 H8 Z" fill="#F6D0DB" ${S} stroke-linejoin="round"/>
-            <rect x="23" y="30" width="18" height="18" rx="3" fill="#F6D0DB" ${S}/>
-            <rect x="22" y="24" width="20" height="7" fill="#D9A441" ${S} stroke-width="2"/>
-            <rect x="21" y="6" width="22" height="19" rx="5" fill="#F6D0DB" ${S}/>
-            <path d="M14 108 v110" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
-            <path d="M30 56 l-7 34" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+            <path d="M18 36 C18 50 6 54 6 70 V228 Q6 236 14 236 H50 Q58 236 58 228 V70 C58 54 46 50 46 36Z" fill="#F7D3DC" ${S}/>
+            <rect x="7.5" y="112" width="49" height="110" fill="url(#bowprint)"/><path d="M7.5 112 H56.5 M7.5 222 H56.5" stroke="#E9B4C3" stroke-width="1"/>
+            <rect x="15" y="146" width="34" height="22" rx="2" fill="#FFFCFB" opacity=".9"/><text x="32" y="158" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="8" letter-spacing=".6" fill="#B07A2E">STANLEY</text><text x="32" y="165" text-anchor="middle" font-family="Instrument Sans" font-size="3.6" letter-spacing=".3" fill="#C98AA0">LOVESHACKFANCY</text>
+            <rect x="18" y="31" width="28" height="6" fill="#D9A441" ${S} stroke-width="2"/>
+            <g class="lid"><path d="M17 31 V12 Q17 4 25 4 H39 Q47 4 47 12 V31Z" fill="#F7D3DC" ${S}/><path d="M22 9 q6 -2 12 0" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".7"/></g>
+            <path d="M11 76 v140" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
         </svg>`,
         open: 'stanley'
     },

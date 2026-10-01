@@ -2210,3 +2210,11 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .pc-nav button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #555; background: #2A2A30; color: #fff; cursor: pointer; }
 .pc-nav b { display: block; font-size: .75rem; } .pc-nav small { display: block; font-size: .62rem; color: #B9B9C0; line-height: 1.35; margin-top: 2px; }
 @media (max-width: 760px) { .stacks { grid-template-columns: repeat(2, 1fr); } }
+
+/* stanley vs backpack, matched to the photo: about 4/5 the height of the bag, top just under the bag's top */
+.bottle { width: 25%; right: -6%; bottom: 6%; }
+.bottle .lid { transform-origin: 32px 31px; }
+.stan-big .lid { transform-origin: 32px 31px; }
+/* the side pocket only holds the bottom of the bottle, like the real bag */
+.bottle .holder { height: 30%; left: -22%; right: -12%; }
+.bottle .holder::after { top: 40%; height: 14%; }
