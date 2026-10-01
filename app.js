@@ -498,6 +498,16 @@ function snoop(id) {
     if (snooped.size === SNOOPABLE.length) { el.textContent = '100% snooped'; $('#ending').hidden = false; }
 }
 
+
+/* things opened from inside the makeup pouch get a way back to it (already unzipped) */
+function backToPouch() {
+    sheetBody.insertAdjacentHTML('afterbegin', '<button type="button" class="back-desk mono" id="back-pouch">‹ back to my makeup bag</button>');
+    $('#back-pouch').onclick = () => {
+        pickUp(ITEMS.find(i => i.id === 'makeup-pouch'));
+        const bag = $('#mbag'); if (bag && !bag.classList.contains('open')) $('#mpull').click();
+    };
+}
+
 /* ---------- picking something up ---------- */
 function pickUp(it) {
     snoop(it.id);
@@ -679,7 +689,7 @@ const VIEWS = {
         <h2>Lancôme <em>Lash Idôle</em></h2>
         <p class="note">my favorite mascara. lifts without the clumps.</p>
         <p>It lives in my Victoria’s Secret makeup pouch, right next to the Westman Glögg and my Morphe brushes.</p>
-        <div class="row"><button class="btn solid" type="button" id="see-makeup">All my makeup</button></div>`,
+`,
 
     makeupbag: () => `
         <h2>My <em>makeup pouch</em></h2>
@@ -705,7 +715,7 @@ const VIEWS = {
         <div class="swatch" id="swatch" aria-live="polite"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#D2A27E" stroke-width="16" stroke-linecap="round"/></svg><span class="hand" id="swatch-label"></span></div>
         <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden>take a closer look ↗</button></p>
         <p class="pen-note" id="mk-note">pull the zipper</p>
-        <div class="row" style="justify-content:center"><button class="btn" type="button" id="see-makeup2">All my makeup</button></div>`,
+`,
 
     apartment: () => `
         <div class="fob" style="width:110px">${SALTO_FOB}</div>
@@ -1453,7 +1463,7 @@ const AFTER = {
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
                 foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null]
             }[b.dataset.mk];
-            if (!SH) return pickUp({ id: 'brushes', name: 'my morphe brushes', open: 'brushes' });
+            if (!SH) { pickUp({ id: 'brushes', name: 'my morphe brushes', open: 'brushes' }); return backToPouch(); }
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const sw = $('#swatch'), lbl = $('#swatch-label');
             $('#swipe').setAttribute('stroke', SH[0]);
@@ -1461,9 +1471,8 @@ const AFTER = {
             lbl.textContent = SH[1]; lbl.style.color = SH[0];
             sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on');
             const more = $('#swatch-more');
-            if (SH[2]) { more.hidden = false; more.onclick = () => pickUp(ITEMS.find(i => i.id === SH[2])); } else more.hidden = true;
+            if (SH[2] && ITEMS.find(i => i.id === SH[2]).open !== 'makeup') { more.hidden = false; more.onclick = () => { pickUp(ITEMS.find(i => i.id === SH[2])); backToPouch(); }; } else more.hidden = true;
         });
-        $('#see-makeup2').onclick = () => pickUp({ id: 'makeup', name: 'my makeup', open: 'makeup' });
     },
     ipad: () => {
         const wrap = $('#mk-wrap'), btn = $('#mk-toggle');
@@ -1506,7 +1515,6 @@ const AFTER = {
     apartment: () => { $('#beep').onclick = () => toast('beep. door’s open. welcome home ♡'); },
     mascara: () => {
         setTimeout(() => $('#masc') && $('#masc').classList.add('out'), reduce ? 0 : 350);
-        $('#see-makeup').onclick = () => pickUp({ id: 'makeup', name: 'my makeup pouch', open: 'makeup' });
     },
 
     sketchbook: () => {
@@ -1919,4 +1927,7 @@ $('#put-back').addEventListener('click', () => { $('#ending').hidden = true; $('
 
 // "pull me" sits next to the first zipper's pull, and actually pulls it
 $('#bag-hint').addEventListener('click', e => { e.stopPropagation(); unzip(BAG.pockets[0]); });
+// the makeup list page is gone: anything that pointed at it opens the pouch
+VIEWS.makeup = VIEWS.makeupbag; AFTER.makeup = AFTER.makeupbag;
 })();
+
