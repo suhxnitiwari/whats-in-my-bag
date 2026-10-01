@@ -963,6 +963,8 @@ const ROMCOMS = [["the-hating-game","The Hating Game","Sally Thorne","Lucy and J
 const BIZBOOKS = [["onward", "Onward", "Howard Schultz"], ["the-design-of-everyday-things", "The Design of Everyday Things", "Don Norman"], ["inspired", "Inspired", "Marty Cagan"], ["creative-confidence", "Creative Confidence", "Tom Kelley & David Kelley"], ["the-innovators-dilemma", "The Innovator’s Dilemma", "Clayton Christensen"], ["competing-against-luck", "Competing Against Luck", "Clayton Christensen"], ["shoe-dog", "Shoe Dog", "Phil Knight"], ["creativity-inc", "Creativity, Inc.", "Ed Catmull"], ["alchemy", "Alchemy", "Rory Sutherland"], ["the-choice-factory", "The Choice Factory", "Richard Shotton"], ["decoded", "Decoded", "Phil Barden"], ["influence", "Influence", "Robert Cialdini"]];
 // procreate on my ipad: my ap portfolio and my published book, as stacks
 const AP_ART = [["Image 1", "Sketch: traditionalism versus modernism. Thought of essential questions, sketched the woman, decided on the color scheme."], ["Image 2", "Background pattern mirrored on the salwar kameez illustrates how culture is an inherent part of us."], ["Image 3", "Sketch: embracing cultural identity. Essential questions, sketch, colorblocked the rose, decided on the color scheme."], ["Image 4", "Airbrushing two contrasting colors to show how different ideas blend to create an integrated sense of self."], ["Image 5", "Sketch: decided on her pose, sketched my piece, decided the background and the pattern on the blouse."], ["Image 6", "Bold paint strokes in the background to showcase cultural identity."], ["Image 7", "Symmetrical mandala design in the background, continued color blocking on skin."], ["Image 8", "Sketch: used a tripod to take a picture holding scissors and cutting my hair, to show support for Mahsa Amini."], ["Image 9", "Continued use of red to show what a powerful force culture plays in our identity."], ["Image 10", "Navigating Indian-American identity: continued to creatively showcase my Indian-American heritage."], ["Image 11", "Colorblocked skin and bow, added shadows on the cube to give it form, drew two faces of the cube."], ["Image 12", "Embracing Indian heritage: designed a pattern and repeated it on the sleeve and dupatta, drew the jewelry."], ["Image 13", "Repeated the pattern on the sleeve and dupatta to show how ingrained culture is in our identities."], ["Image 14", "Sketch: coexistence of both my worlds. Sketched the flowers, especially the two roses, facing opposite directions."], ["Image 15", "Vibrant flag colors on a bold background capture the essence of Indian-American cultural identity."]];
+// my mailbox, flooded with cards from amaira
+const MAIL_CARDS = [["assets/mail/amaira-9970.jpg", "“Two Starbucks Girls.” us, at starbucks. obviously."], ["assets/mail/amaira-9971.jpg", "“Two Littl Grils Walking on the Street.” spelling: hers."], ["assets/mail/amaira-9972.jpg", "“I’ll love you! I love you! your the sweets sister ever! I’ll miss you!”"], ["assets/mail/amaira-9973.jpg", "a hot cocoa with an S on it. for me."], ["assets/mail/amaira-9974.jpg", "the two of us, hugging. “this love is just…” she ran out of room."], ["assets/mail/amaira-9975.jpg", "“Happy Valentine’s Day.”"], ["assets/mail/amaira-9976.jpg", "“Girl boss. To: the best sister ever, Didi. From: Amaira. xoxo, Amaripop. I am lucky to have you.”"], ["assets/mail/amaira-9978.jpg", "“Thinking a latte about you.”"], ["assets/mail/amaira-9979.jpg", "a sparkly latte cup, tucked inside a card."], ["assets/mail/amaira-9980.jpg", "“Dear didi, I hope you have a nice time in college. your the sweetest sister ever! I’ll love you forever.”"], ["assets/mail/amaira-9981.jpg", "“Happy Bithday Didi!” with a heart that says suhani & amaira."], ["assets/mail/amaira-9982.jpg", "“Merry Christmas and Happy New Year!! To: Didi From: Amaira.”"], ["assets/mail/amaira-9983.jpg", "“I Love You.”"]];
 const VIEWS = {
     onward: () => `
         <h2><em>Onward</em></h2>
@@ -971,7 +973,7 @@ const VIEWS = {
         <p class="hand bz-say" id="bz-say">pull one off the shelf</p>`,
     mailbox: () => `
         <h2>My <em>mailbox</em></h2>
-        <p class="note">one gold key. it’s mostly packages i definitely needed. but this time there was a letter.</p>
+        <p class="note">one gold key. it’s mostly packages i definitely needed. but every time i open it, it’s flooded with cards from my little sister.</p>
         <div class="mbx" id="mbx">
             <svg viewBox="0 0 220 180" aria-hidden="true">
                 <rect x="10" y="10" width="200" height="160" rx="6" fill="#C9CCD2" stroke="#3A2626" stroke-width="3"/>
@@ -982,6 +984,8 @@ const VIEWS = {
                     <g class="mbx-key"><g class="mbx-key-turn"><path d="M164 93.5 h26 v-3 h5 v3 h4 v5 h-35z" fill="#E7C24E" stroke="#3A2626" stroke-width="1.6" stroke-linejoin="round"/><path d="M170 98.5 v4 h3 v-3 h3 v4 h3 v-5" fill="#E7C24E" stroke="#3A2626" stroke-width="1.4" stroke-linejoin="round"/><rect x="198" y="84" width="22" height="24" rx="6" fill="#E7C24E" stroke="#3A2626" stroke-width="2"/><circle cx="209" cy="96" r="4" fill="#B9BCC2" stroke="#3A2626" stroke-width="1.4"/></g></g></g>
             </svg>
         </div>
+        <div class="mf" id="mf" aria-live="polite">${MAIL_CARDS.map(([src], k) => `<button type="button" class="mf-card" data-mf="${k}" style="--k:${k}; --r:${[-14, 9, -4, 16, -9, 5, -18, 12, -2, 7, -11, 15, -6][k]}deg; --x:${[-150, 120, -40, 170, -110, 30, -180, 80, -70, 150, 10, -130, 60][k]}px; --y:${[10, 26, 4, 40, 52, 18, 70, 64, 88, 92, 46, 110, 120][k]}px" aria-label="A card from Amaira"><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div>
+        <div class="mf-view" id="mf-view" hidden><button type="button" class="mf-x" id="mf-x" aria-label="Put it back">×</button><img id="mf-img" alt="A card my little sister made me"><p class="hand" id="mf-cap"></p><div class="row" style="justify-content:center"><button class="btn" type="button" id="mf-prev">‹</button><span class="mono" id="mf-n"></span><button class="btn solid" type="button" id="mf-next">next card ›</button></div></div>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="mbx-key">Turn the key</button></div>
         <div class="lc" id="lc" hidden>
             <div class="lc-paper">
@@ -1805,15 +1809,22 @@ const AFTER = {
                 // the gold key slides into the lock, turns, then the door swings open
                 mbx.classList.add('insert');
                 setTimeout(() => mbx.classList.add('turn'), reduce ? 0 : 650);
-                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('click. no packages. just a letter ♡'); }, reduce ? 0 : 1250);
+                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('click. no packages. just… a flood of cards from amaira ♡'); }, reduce ? 0 : 1250);
+                setTimeout(() => $('#mf').classList.add('out'), reduce ? 0 : 1550);
             } else if ($('#lc').hidden) {
                 $('#lc').hidden = false; mbx.classList.add('taken'); btn.textContent = 'Put it back';
                 $('#lc').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
             } else {
-                $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn', 'insert'); btn.textContent = 'Turn the key';
+                $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn', 'insert'); $('#mf').classList.remove('out'); $('#mf-view').hidden = true; btn.textContent = 'Turn the key';
             }
         };
         mbx.onclick = () => btn.click();
+        // tap a card in the pile to read it
+        let at = 0;
+        const show = k => { at = (k + MAIL_CARDS.length) % MAIL_CARDS.length; $('#mf-img').src = MAIL_CARDS[at][0]; $('#mf-cap').textContent = MAIL_CARDS[at][1]; $('#mf-n').textContent = `${at + 1} / ${MAIL_CARDS.length}`; $('#mf-view').hidden = false; };
+        sheetBody.querySelectorAll('[data-mf]').forEach(c => c.onclick = () => { show(+c.dataset.mf); $('#mf-view').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); });
+        $('#mf-next').onclick = () => show(at + 1); $('#mf-prev').onclick = () => show(at - 1);
+        $('#mf-x').onclick = () => { $('#mf-view').hidden = true; };
     },
     skinbag: () => {
         AFTER.makeupbag();
