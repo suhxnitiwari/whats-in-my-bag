@@ -696,3 +696,14 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vw.cash-out .note-bill { opacity: 1; transform: rotate(calc(-80deg + var(--i) * 12deg)) translateX(18px); }
 /* each slot is its own layer, lower slots in front, so every card peeks out of its own pocket */
 .vslot { z-index: calc(var(--n) + 1); }
+
+/* the water bottle pocket on the side of my backpack, with my Stanley in it */
+.bottle { position: absolute; right: -6%; bottom: 3%; width: 19%; z-index: 4; cursor: pointer; transform: rotate(4deg); transform-origin: 50% 100%; transition: transform .3s var(--ease); }
+.bottle svg { width: 100%; filter: drop-shadow(0 8px 8px rgba(59,21,36,.2)); }
+.bottle:hover, .bottle:focus-visible { transform: rotate(4deg) translateY(-6%); outline: none; }
+.bottle:focus-visible svg { outline: 3px dashed var(--plum); outline-offset: 4px; }
+.holder { position: absolute; left: -14%; right: -14%; bottom: -3%; height: 44%; border: 2.5px solid #3A2626; border-top-width: 3px; border-radius: 6px 6px 14px 14px;
+    background-color: rgba(28, 26, 30, .86);
+    background-image: radial-gradient(circle, rgba(255,255,255,.14) 1px, transparent 1.6px), radial-gradient(circle, rgba(255,255,255,.1) 1px, transparent 1.6px);
+    background-size: 6px 6px, 6px 6px; background-position: 0 0, 3px 3px; box-shadow: inset 0 3px 0 #4A474F; }
+.holder::before { content: ""; position: absolute; left: 0; right: 0; top: 4px; border-top: 1.5px dashed rgba(255,255,255,.35); }

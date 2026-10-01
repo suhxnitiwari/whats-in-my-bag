@@ -42,7 +42,7 @@ const doodles = [
 $('.doodles').innerHTML = doodles.map(([d, l, t, w]) => `<svg viewBox="0 0 40 40" style="left:${l}%; top:${t}%; width:${w}px">${d}</svg>`).join('');
 
 /* ---------- everything in the bag ---------- */
-list.innerHTML = ITEMS.map(it => `
+list.innerHTML = ITEMS.filter(it => it.zip !== 'side').map(it => `
     <li class="item" id="item-${it.id}" style="--l:${it.l}%; --t:${it.t}%; --w:${it.w}%; --r:${it.r}deg">
         <button type="button" data-item="${it.id}" aria-label="${it.name}" tabindex="-1">
             <span class="art">${it.art}</span><span class="tag">${it.name}</span>
@@ -95,10 +95,17 @@ function slide(pk, from, to) {
 
 // the side pocket: my Stanley is always out
 stage.classList.add('idle');
-ITEMS.filter(it => it.zip === 'side').forEach(it => {
-    const li = document.getElementById('item-' + it.id);
-    li.classList.add('out'); li.querySelector('button').tabIndex = 0;
-});
+// the side pocket: my Stanley stands in the backpack's water bottle holder
+const bottle = document.createElement('span');
+bottle.className = 'bottle';
+bottle.setAttribute('role', 'button');
+bottle.setAttribute('tabindex', '0');
+bottle.setAttribute('aria-label', 'My pink Stanley, in the backpack’s water bottle pocket');
+bottle.innerHTML = ITEMS.find(i => i.id === 'stanley').art + '<span class="holder" aria-hidden="true"></span>';
+bagBtn.appendChild(bottle);
+const openBottle = e => { e.stopPropagation(); e.preventDefault(); pickUp(ITEMS.find(i => i.id === 'stanley')); };
+bottle.addEventListener('click', openBottle);
+bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openBottle(e); });
 
 let busy = Promise.resolve();
 function unzip(pk) {
@@ -345,7 +352,7 @@ const VIEWS = {
         </ul></div>`,
 
     laptop: () => `
-        <h2>My <em>MacBook Pro</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">14-inch, space black</span></h2>
+        <h2>My <em>MacBook Pro</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">14-inch, silver</span></h2>
         <p class="note" id="lap-note">the stickers are load-bearing. tap one, or open it up.</p>
         <div class="lap-closed" id="lap-closed">
             <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>

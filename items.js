@@ -265,9 +265,9 @@ window.STICKERS = [
 ];
 
 window.LID = (big) => `<svg viewBox="0 0 210 300" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
-    <rect x="3" y="3" width="204" height="294" rx="14" fill="#2C2D31" ${S}/>
+    <rect x="3" y="3" width="204" height="294" rx="14" fill="#CDD0D5" ${S}/>
     <rect x="3" y="3" width="204" height="294" rx="14" fill="url(#brushed)" opacity=".5"/>
-    <defs><linearGradient id="brushed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs>
+    <defs><linearGradient id="brushed" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#9DA2A9" stop-opacity=".35"/></linearGradient></defs>
     ${window.STICKERS.map(k => big
         ? `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}" transform="translate(${k.x} ${k.y})"><g class="stk-in">${k.svg}</g></g>`
         : `<g transform="translate(${k.x} ${k.y})">${k.svg}</g>`).join('')}

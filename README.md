@@ -20,7 +20,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Chanel Double Facettes mirror (the Blair Waldorf one) | The real me |
 | iPad | Pinterest (my board), Procreate (my art), and a folder of things I built |
 | Apple Pencil Pro | A blank canvas: draw anything |
-| MacBook Pro 14" (space black) | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
+| MacBook Pro 14" (silver) | My real sticker layout (every sticker opens a project), and it opens to my desktop: one folder per project |
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Ralph Lauren cable knit sweater | Because I get cold easily |
