@@ -1216,3 +1216,10 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .charm.mccombs { z-index: 6; }
 
 .pf-pen { width: 22px; height: 46%; top: 22%; right: 1%; }
+
+/* the Stanley can be carried anywhere and dropped back into its pocket */
+.bottle svg { cursor: grab; }
+.bottle.free { z-index: 7; }
+.bottle.free .holder { z-index: -1; }
+.bottle.dragging svg { transition: none; cursor: grabbing; filter: drop-shadow(0 14px 14px rgba(59,21,36,.25)); }
+.bottle.free:not(.dragging) svg { transition: transform .4s cubic-bezier(.2,.9,.25,1.1); }

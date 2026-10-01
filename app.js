@@ -160,10 +160,43 @@ const openBottle = e => {
         } else { lid.classList.remove('closing'); bottle.classList.add('lid-open'); sips++; toast(sips === 1 ? 'sip ♡ (one more than usual)' : `sip #${sips}. who even am i`); }
         return;
     }
-    if (e.target.closest && e.target.closest('.holder')) { bottle.classList.remove('out', 'lid-open'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
+    if (e.target.closest && e.target.closest('.holder')) { bsvg.style.transform = ''; bottle.classList.remove('out', 'lid-open', 'free'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
     pickUp(ITEMS.find(i => i.id === 'stanley'));
 };
-bottle.addEventListener('click', openBottle);
+// grab the Stanley: pull it out of the side pocket, set it down anywhere, drag it back over the pocket to put it away
+let bdrag = null, bskip = false;
+const bsvg = bottle.querySelector('svg');
+bsvg.style.touchAction = 'none';
+bsvg.addEventListener('pointerdown', e => {
+    e.stopPropagation();
+    const cur = (bsvg.style.transform.match(/translate\(([-\d.]+)px, ([-\d.]+)px\)/) || [0, 0, 0]).slice(1).map(Number);
+    bdrag = { x: e.clientX, y: e.clientY, ox: cur[0], oy: cur[1], moved: false };
+    try { bsvg.setPointerCapture(e.pointerId); } catch {}
+});
+bsvg.addEventListener('pointermove', e => {
+    if (!bdrag) return;
+    const dx = e.clientX - bdrag.x, dy = e.clientY - bdrag.y;
+    if (!bdrag.moved && Math.hypot(dx, dy) < 6) return;
+    bdrag.moved = true;
+    bottle.classList.add('free', 'dragging');
+    const h = bsvg.getBoundingClientRect().height, lift = !bdrag.ox && !bdrag.oy && bottle.classList.contains('out') && !bottle.classList.contains('free') ? -h * .46 : 0;
+    bsvg.style.transform = `translate(${bdrag.ox + dx}px, ${bdrag.oy + dy + lift}px)`;
+});
+const bdrop = () => {
+    if (!bdrag) return;
+    const d = bdrag; bdrag = null; bottle.classList.remove('dragging');
+    if (!d.moved) return;
+    bskip = true;
+    const m = bsvg.style.transform.match(/translate\(([-\d.]+)px, ([-\d.]+)px\)/), x = m ? +m[1] : 0, y = m ? +m[2] : 0;
+    const h = bsvg.getBoundingClientRect().height;
+    if (Math.abs(x) < 50 && y > -h * .75 && y < h * .3) {   // dropped over its pocket: slide back in
+        bsvg.style.transform = ''; bottle.classList.remove('free', 'out', 'lid-open');
+        toast('back in its pocket ♡');
+    } else { bottle.classList.add('out'); toast('hydrated? we’ll see.'); }
+};
+bsvg.addEventListener('pointerup', bdrop);
+bsvg.addEventListener('pointercancel', bdrop);
+bottle.addEventListener('click', e => { if (bskip) { bskip = false; e.stopPropagation(); return; } openBottle(e); });
 bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openBottle(e); });
 
 let busy = Promise.resolve();
