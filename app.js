@@ -956,7 +956,16 @@ const DIGI_CARDS = {
         <g ${KM} fill="#8A8A8A"><text x="232" y="48" font-size="22">Dear Suhini</text><text x="232" y="92" font-size="36">You are</text><text x="236" y="136" font-size="32">best sister</text><text x="238" y="176" font-size="32">ever. and</text><text x="246" y="216" font-size="32">make</text><text x="244" y="256" font-size="32">“eyes</text><text x="244" y="296" font-size="32">Sparkle”</text></g></svg>`
 };
 
+// you deserve each other opens into every rom-com i’ll never shut up about. one book per chapter
+const ROMCOMS = [["the-hating-game","The Hating Game","Sally Thorne","Lucy and Joshua are executive assistants who share an office and can’t stand each other. Then they both go for the same promotion, and the games get complicated."],["the-unhoneymooners","The Unhoneymooners","Christina Lauren","Everyone at her twin sister’s wedding gets food poisoning except Olive and the groom’s grumpy brother Ethan. So they take the free Maui honeymoon, pretending to be newlyweds."],["people-we-meet-on-vacation","People We Meet on Vacation","Emily Henry","Best friends Poppy and Alex took a trip together every summer, until two years ago. Poppy talks him into one more vacation to fix whatever broke."],["you-deserve-each-other","You Deserve Each Other","Sarah Hogle","Naomi and Nicholas are engaged and secretly miserable. Neither wants to be the one to call it off, so each tries to make the other quit first."],["the-spanish-love-deception","The Spanish Love Deception","Elena Armas","Catalina needs a date to her sister’s wedding in Spain, and the only volunteer is Aaron, the coworker she can’t stand."],["by-a-thread","By a Thread","Lucy Score","Ally needs a steady paycheck. Dominic is the moody heir of a fashion empire. Working together at Label magazine is chaos from day one."],["the-devil-you-know","The Devil You Know","Elizabeth O’Roark","A slow burn with the one man she’s been warned about, who turns out to be exactly who she needed."],["the-ex-talk","The Ex Talk","Rachel Lynn Solomon","Public radio producer Shay and her rival Dominic get pushed to cohost a show about relationships as exes. They’ve never actually dated."],["funny-story","Funny Story","Emily Henry","Daphne’s fiancé leaves her for his best friend, so she moves in with Miles, the best friend’s ex. Then they start pretending to date."],["the-american-roommate-experiment","The American Roommate Experiment","Elena Armas","Rosie’s ceiling caves in, and she ends up sharing her apartment with Lucas, her best friend’s cousin, who’s in New York for a few weeks."],["the-worst-best-man","The Worst Best Man","Mia Sosa","Wedding planner Carolina was left at the altar. Years later she has to work with Max, the best man who talked his brother out of marrying her."],["the-love-hypothesis","The Love Hypothesis","Ali Hazelwood","To prove she’s moved on, PhD student Olive kisses the first man she sees: young, intimidating professor Adam Carlsen."]];
+// onward opens onto the rest of my business shelf
+const BIZBOOKS = [["onward", "Onward", "Howard Schultz"], ["the-design-of-everyday-things", "The Design of Everyday Things", "Don Norman"], ["inspired", "Inspired", "Marty Cagan"], ["creative-confidence", "Creative Confidence", "Tom Kelley & David Kelley"], ["the-innovators-dilemma", "The Innovator’s Dilemma", "Clayton Christensen"], ["competing-against-luck", "Competing Against Luck", "Clayton Christensen"], ["shoe-dog", "Shoe Dog", "Phil Knight"], ["creativity-inc", "Creativity, Inc.", "Ed Catmull"], ["alchemy", "Alchemy", "Rory Sutherland"], ["the-choice-factory", "The Choice Factory", "Richard Shotton"], ["decoded", "Decoded", "Phil Barden"], ["influence", "Influence", "Robert Cialdini"]];
 const VIEWS = {
+    onward: () => `
+        <h2><em>Onward</em></h2>
+        <p class="note">howard schultz. how starbucks fought for its life without losing its soul. it sits right next to the rest of the books behind the business.</p>
+        <div class="bz-shelf" id="bz">${BIZBOOKS.map(([f, t, a], k) => `<button type="button" class="bz-book" data-bz="${k}" aria-label="${t} by ${a}"><img src="assets/covers/${f}.jpg" alt=""></button>`).join('')}</div>
+        <p class="hand bz-say" id="bz-say">pull one off the shelf</p>`,
     mailbox: () => `
         <h2>My <em>mailbox</em></h2>
         <p class="note">one gold key. it’s mostly packages i definitely needed. but this time there was a letter.</p>
@@ -1186,10 +1195,14 @@ const VIEWS = {
         <div class="row"><button class="btn solid" type="button" id="cap-on">Put it on me</button></div>`,
     romcom: () => `
         <h2><em>You Deserve Each Other</em></h2>
-        <p class="note">sarah hogle. a paperback rom-com. it’s been in my backpack for three weeks. i keep saying i’ll read it.</p>
+        <p class="note">sarah hogle. one of the rom-coms i’ll never shut up about. open it: every chapter is another one.</p>
         <div class="rc-wrap"><div class="rc" id="rc">${[0,1,2,3,4,5].map(k => `<span class="rc-leaf" style="--k:${k}"></span>`).join('')}<div class="rc-page"><p class="hand">Chapter One</p><span></span><span></span><span></span><span></span><span></span></div><div class="rc-cover">${ITEMS.find(i => i.id === 'romcom').art}</div></div></div>
-        <p class="rc-stats mono">days in my backpack: <b id="rc-days">21</b> · pages read: <b>0</b></p>
-        <div class="row"><button class="btn solid" type="button" id="rc-read">Read it</button></div>`,
+        <div class="rcx" id="rcx" hidden>
+            <img id="rcx-cover" alt="">
+            <div><p class="rcx-ch mono" id="rcx-ch"></p><h3 id="rcx-t"></h3><p class="rcx-a" id="rcx-a"></p><p class="rcx-s" id="rcx-s"></p></div>
+        </div>
+        <p class="hand rcx-say">enemies to lovers, fake dating, happy endings: i know how every one ends and still can’t put them down.</p>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`,
     hairpony: () => `
         <h2>My silk <em>scrunchies</em></h2>
         <p class="note">two of them, pink and brown.</p>
@@ -1766,6 +1779,15 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    onward: () => {
+        sheetBody.querySelectorAll('[data-bz]').forEach(b => b.onclick = () => {
+            const on = !b.classList.contains('out');
+            sheetBody.querySelectorAll('.bz-book').forEach(x => x.classList.remove('out'));
+            if (on) b.classList.add('out');
+            const [, t, a] = BIZBOOKS[+b.dataset.bz];
+            $('#bz-say').textContent = on ? `${t} · ${a}` : 'pull one off the shelf';
+        });
+    },
     mailbox: () => {
         const mbx = $('#mbx'), btn = $('#mbx-key');
         btn.onclick = () => {
@@ -2127,15 +2149,23 @@ const AFTER = {
         draw();
     },
     romcom: () => {
-        let days = 21;
-        const rc = $('#rc'), btn = $('#rc-read');
-        const toggle = () => {
-            const open = rc.classList.toggle('open');
-            btn.textContent = open ? 'Close it' : 'Read it';
-            if (!open) { $('#rc-days').textContent = ++days; toast(days === 22 ? 'tomorrow. definitely tomorrow ♡' : 'okay… tomorrow. for real this time.'); }
-            else toast('chapter one. we’ve met before.');
+        const rc = $('#rc'), btn = $('#rc-read'), box = $('#rcx');
+        let ch = -1;
+        const show = () => {
+            const [f, t, au, syn] = ROMCOMS[ch];
+            $('#rcx-cover').src = `assets/covers/${f}.jpg`; $('#rcx-cover').alt = `${t} by ${au}`;
+            $('#rcx-ch').textContent = `chapter ${ch + 1} of ${ROMCOMS.length}`; $('#rcx-t').textContent = t; $('#rcx-a').textContent = au; $('#rcx-s').textContent = syn;
+            box.classList.remove('turn'); void box.offsetWidth; box.classList.add('turn');
+            $('#rcx-prev').hidden = ch === 0;
+            btn.textContent = ch === ROMCOMS.length - 1 ? 'Close it' : 'next chapter ›';
         };
-        btn.onclick = toggle; rc.onclick = toggle; rc.style.cursor = 'pointer';
+        const next = () => {
+            if (!rc.classList.contains('open')) { rc.classList.add('open'); ch = 0; box.hidden = false; return setTimeout(show, reduce ? 0 : 450); }
+            if (ch === ROMCOMS.length - 1) { rc.classList.remove('open'); box.hidden = true; ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast('the end. (i’ll start another one tonight.)'); }
+            ch++; show();
+        };
+        btn.onclick = next; rc.onclick = next; rc.style.cursor = 'pointer';
+        $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; show(); } };
     },
 
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
@@ -2175,28 +2205,54 @@ const AFTER = {
                     </div>`;
             } else if (b.dataset.app === 'netflix' || b.dataset.app === 'prime') {
                 const nf = b.dataset.app === 'netflix';
-                const list = nf ? ['bridgerton', 'ginny-and-georgia', 'mismatched', 'masaba-masaba', 'gilmore-girls'] : ['call-me-bae', 'mind-the-malhotras', 'off-campus'];
+                // my favorites page: shows on netflix, the romance movies on prime
+                const SHOWS = [['gossip-girl', 'Gossip Girl', '2007–2012'], ['jane-the-virgin', 'Jane the Virgin', '2014–2019'], ['modern-family', 'Modern Family', '2009–2020'], ['friends', 'Friends', '1994–2004'], ['desperate-housewives', 'Desperate Housewives', '2004–2012']];
+                const MOVIES = [['yeh-jawaani-hai-deewani', 'Yeh Jawaani Hai Deewani', '2013'], ['how-to-lose-a-guy-in-10-days', 'How to Lose a Guy in 10 Days', '2003'], ['jab-we-met', 'Jab We Met', '2007'], ['voicemails-for-isabelle', 'Voicemails for Isabelle', '2026'], ['tu-jhoothi-main-makkaar', 'Tu Jhoothi Main Makkaar', '2023'], ['rocky-aur-rani-kii-prem-kahaani', 'Rocky Aur Rani Kii Prem Kahaani', '2023'], ['student-of-the-year', 'Student of the Year', '2012']];
+                const list = nf ? SHOWS : MOVIES;
                 view.innerHTML = back + `
                     <div class="stream ${nf ? 'nf' : 'pv'}">
-                        <p class="stream-h">${nf ? 'Continue watching for Suhani' : 'Keep watching'}</p>
-                        <div class="posters">${list.map(f => `<img src="assets/posters/${f}.jpg" alt="${f.replace(/-/g, ' ')}">`).join('')}</div>
+                        <p class="stream-h">${nf ? 'Shows I rewatch on repeat' : 'Romance movies I’m in love with'}</p>
+                        <p class="stream-sub">${nf ? 'for sad days, lazy days, and the days i feel like a hopeless couch-potato blob. these always make me a little happier.' : 'for nights when i’m feeling a little delusional, hopelessly romantic, and in need of a happy ending.'}</p>
+                        <div class="posters">${list.map(([f, t, y]) => `<figure><img src="assets/posters/${f}.jpg" alt="${t}"><figcaption><b>${t}</b><small>${y}</small></figcaption></figure>`).join('')}</div>
+                        <a class="stream-more" href="https://suhanitiwari.com/home/favorites" target="_blank" rel="noopener">all my favorites ↗</a>
                     </div>`;
             } else if (b.dataset.app === 'youtube') {
+                // my comfort TED talks, same categories as my favorites page
                 const vids = [
-                    ['ted', 'Your Elusive Creative Genius', 'Elizabeth Gilbert · TED', '86x-u-tz0MA', 'elusive-creative-genius'],
-                    ['ted', 'Do Schools Kill Creativity?', 'Sir Ken Robinson · TED', 'iG9CE55wbtY', 'schools-kill-creativity'],
-                    ['ted', 'Every Kid Needs a Champion', 'Rita Pierson · TED', 'SFnMTHhKdkw', 'every-kid-needs-a-champion'],
-                    ['ted', 'How to Make Learning as Addictive as Social Media', 'Luis von Ahn · TED', 'P6FORpg0KVo', 'learning-as-addictive'],
-                    ['self', 'Change Your Mindset, Change the Game', 'Alia Crum · TEDx', '0tqq66zwa7g', 'change-your-mindset'],
-                    ['self', 'You Aren’t at the Mercy of Your Emotions', 'Lisa Feldman Barrett · TED', '0gks6ceq4eQ', 'your-brain-creates-emotions']
+                    ["Psychology", "Change Your Mindset, Change the Game", "Alia Crum, TEDx", "0tqq66zwa7g", "change-your-mindset"],
+                    ["Psychology", "You Aren’t at the Mercy of Your Emotions: Your Brain Creates Them", "Lisa Feldman Barrett, TED", "0gks6ceq4eQ", "your-brain-creates-emotions"],
+                    ["Learning", "How to Make Learning as Addictive as Social Media", "Luis von Ahn, TED", "P6FORpg0KVo", "learning-as-addictive"],
+                    ["Learning", "Education Reimagined: Student-Led Learning", "Catlin Tucker, TEDx", "NTHBdIeV-8o", "student-led-learning"],
+                    ["Learning", "Creativity in the Classroom (in 5 Minutes or Less!)", "Catherine Thimmesh, TEDx", "nASvIgSOCxw", "creativity-in-the-classroom"],
+                    ["Learning", "How to Design a Library That Makes Kids Want to Read", "Michael Bierut, TED", "YsA_JTeHJ6A", "library-kids-want-to-read"],
+                    ["Learning", "Every Kid Needs a Champion", "Rita Pierson, TED", "SFnMTHhKdkw", "every-kid-needs-a-champion"],
+                    ["Learning", "The Child-Driven Education", "Sugata Mitra, TED", "nsKPvQCMATw", "child-driven-education"],
+                    ["Learning", "Do Schools Kill Creativity?", "Sir Ken Robinson, TED", "iG9CE55wbtY", "schools-kill-creativity"],
+                    ["Creativity", "Your Elusive Creative Genius", "Elizabeth Gilbert, TED", "86x-u-tz0MA", "elusive-creative-genius"],
+                    ["Creativity", "4 Lessons in Creativity", "Julie Burstein, TED", "sY0Pf_pfqCI", "lessons-in-creativity"],
+                    ["Creativity", "Tales of Creativity and Play", "Tim Brown, TED", "RjwUn-aA0VY", "creativity-and-play"],
+                    ["Creativity", "Designers, Think Big!", "Tim Brown, TED", "UAinLaT42xY", "designers-think-big"],
+                    ["Creativity", "Success, Failure and the Drive to Keep Creating", "Elizabeth Gilbert, TED", "_waBFUg_oT8", "drive-to-keep-creating"],
+                    ["Becoming", "The Power of Believing That You Can Improve", "Carol Dweck, TED", "_X0mgOOSpLU", "power-of-believing"],
+                    ["Becoming", "Grit: The Power of Passion and Perseverance", "Angela Lee Duckworth, TED", "H14bBuluwB8", "grit"],
+                    ["Becoming", "How Every Child Can Thrive by Five", "Molly Wright, TED", "aISXCw0Pi94", "thrive-by-five"],
+                    ["Life & People", "What Makes a Good Life?", "Robert Waldinger, TED", "8KkKuTCFvzI", "what-makes-a-good-life"],
+                    ["Life & People", "There’s More to Life Than Being Happy", "Emily Esfahani Smith, TED", "y9Trdafp83U", "more-to-life-than-being-happy"],
+                    ["Ideas & Brands", "How Airbnb Designs for Trust", "Joe Gebbia, Airbnb co-founder, TED", "16cM-RFid9U", "airbnb-designs-for-trust"],
+                    ["Ideas & Brands", "How to Build the Future in Four Steps", "Jason Kilar, Hulu founding CEO, TEDx", "EMiJMod9vsk", "build-the-future"],
+                    ["Ideas & Brands", "How to Connect While Apart", "Eric Yuan, Zoom founder, TED", "01qATwnoD_E", "connect-while-apart"],
+                    ["Ideas & Brands", "Choice, Happiness and Spaghetti Sauce", "Malcolm Gladwell, TED", "iIiAAhUeR6Y", "spaghetti-sauce"],
+                    ["Ideas & Brands", "How to Make Choosing Easier", "Sheena Iyengar, TED", "1pq5jnM1C-A", "choosing-easier"],
+                    ["Ideas & Brands", "How to Get Your Ideas to Spread", "Seth Godin, TED", "xBIVlM435Zg", "ideas-to-spread"],
+                    ["Ideas & Brands", "The Paradox of Choice", "Barry Schwartz, TED", "VO6XEQIsCoM", "paradox-of-choice"]
                 ];
                 const render = f => {
                     view.querySelector('.yt-feed').innerHTML = (f === 'all' || f === 'grwm' ? `<a class="yt-row" href="https://www.youtube.com/results?search_query=get+ready+with+me" target="_blank" rel="noopener"><span class="yt-thumb grwm">GRWM ♡</span><span><b>get ready with me</b><small>a whole genre, honestly</small></span></a>` : '') +
                         vids.filter(v => f === 'all' || v[0] === f).map(v => `<a class="yt-row" href="https://www.youtube.com/watch?v=${v[3]}" target="_blank" rel="noopener"><img class="yt-thumb" src="assets/videos/${v[4]}.jpg" alt=""><span><b>${v[1]}</b><small>${v[2]}</small></span></a>`).join('');
                     view.querySelectorAll('.yt-chips button').forEach(c => c.classList.toggle('on', c.dataset.f === f));
                 };
-                view.innerHTML = back + `<div class="yt"><p class="yt-logo"><span>▶</span> YouTube</p>
-                    <div class="yt-chips">${[['all', 'All'], ['grwm', 'GRWM'], ['ted', 'TED Talks'], ['self', 'Self-improvement']].map(([k, l]) => `<button type="button" data-f="${k}">${l}</button>`).join('')}</div>
+                view.innerHTML = back + `<div class="yt"><p class="yt-logo"><span>▶</span> YouTube</p><p class="yt-why">some people have comfort shows. i have comfort TED talks.</p>
+                    <div class="yt-chips">${[['all', 'All'], ['grwm', 'GRWM'], ['Psychology', 'Psychology'], ['Learning', 'Learning'], ['Creativity', 'Creativity'], ['Becoming', 'Becoming'], ['Life & People', 'Life & People'], ['Ideas & Brands', 'Ideas & Brands']].map(([k, l]) => `<button type="button" data-f="${k}">${l}</button>`).join('')}</div>
                     <div class="yt-feed"></div></div>`;
                 view.querySelectorAll('.yt-chips button').forEach(c => c.onclick = () => render(c.dataset.f));
                 render('all');

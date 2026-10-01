@@ -360,7 +360,7 @@ window.ITEMS = [
         open: 'nb2'
     },
     {
-        id: 'romcom', name: 'you deserve each other (unread)', zip: 'main', l: 9.4, t: 58.8, w: 11.8, r: -7,
+        id: 'romcom', name: 'you deserve each other', zip: 'main', l: 9.4, t: 58.8, w: 11.8, r: -7,
         art: `<svg viewBox="0 0 120 180"><rect x="2" y="2" width="116" height="176" rx="2" fill="#B5215E" ${S}/>
             <g font-family="Kalam, Caveat, cursive" fill="#F6EBDD"><text x="11" y="11" font-size="4.6">“The perfect dose of</text><text x="11" y="16.5" font-size="4.6">sweet, hilarious <tspan font-style="italic">joy</tspan>.”</text><text x="12" y="22" font-size="4.2">–CHRISTINA LAUREN</text></g>
             <g fill="#F6EBDD" stroke="#E9D9C6" stroke-width=".4"><rect x="60" y="2" width="9" height="23" rx="1"/><rect x="88" y="2" width="9" height="26" rx="1"/></g>
@@ -532,6 +532,17 @@ window.ITEMS = [
         id: 'chargers', name: 'my chargers (a tangled mess)', zip: 'main', l: 0, t: 0, w: 13, r: -8,
         get art() { return `<svg viewBox="40 20 320 260">${window.CHARGERS.list.map(c => window.CHARGERS.cable(c, 0)).join('')}</svg>`; },
         open: 'chargers'
+    },
+    {
+        id: 'onward', name: 'onward, howard schultz', zip: 'main', l: 0, t: 0, w: 15, r: 5,
+        art: `<svg viewBox="0 0 160 240"><rect x="3" y="3" width="154" height="234" rx="3" fill="#FBFAF6" ${S}/><path d="M10 6 v228" stroke="#E4E0D6" stroke-width="3"/>
+            <text x="80" y="24" text-anchor="middle" font-family="Bodoni Moda" font-size="14" fill="#7A1F22">Howard Schultz</text><text x="80" y="34" text-anchor="middle" font-family="Instrument Sans" font-size="5" fill="#7A1F22">with Joanne Gordon</text>
+            <circle cx="80" cy="106" r="54" fill="#00704A"/><circle cx="80" cy="106" r="42" fill="#FBFAF6"/><circle cx="80" cy="106" r="36" fill="#00704A"/>
+            <path d="M80 80 l4 9 10 1 -8 6 3 10 -9 -6 -9 6 3 -10 -8 -6 10 -1z" fill="#FBFAF6"/><path d="M60 112 q6 16 20 18 q14 -2 20 -18 M64 124 q-8 6 -6 16 M96 124 q8 6 6 16" stroke="#FBFAF6" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="48" cy="66" r="11" fill="#00704A"/><text x="48" y="69" text-anchor="middle" font-family="Instrument Sans" font-size="4" fill="#fff">#1 NYT</text>
+            <text x="80" y="198" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="40" fill="#00704A">Onward</text>
+            <text x="80" y="214" text-anchor="middle" font-family="Bodoni Moda" font-size="6.6" fill="#7A1F22">How Starbucks Fought for Its Life</text><text x="80" y="223" text-anchor="middle" font-family="Bodoni Moda" font-size="6.6" fill="#7A1F22">without Losing Its Soul</text></svg>`,
+        open: 'onward'
     },
     {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,
