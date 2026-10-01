@@ -899,7 +899,7 @@ const SKIN_INFO = {
 const SKIN_FX = {
     dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'skin activator serum on. hydrated, plump, glowing.'], goldpump: ['glow2', 'suprême c on. vitamin c. brighter, more even.'],
     lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
-    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. do not disturb.']
+    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. sleepy. bye bye 💤']
 };
 const VIEWS = {
     mailbox: () => `
@@ -933,7 +933,7 @@ const VIEWS = {
         <h2>My <em>skincare</em> pouch</h2>
         <p class="note">another victoria’s secret pouch, just for skincare. unzip it, then put it all on me. drag a product onto my face.</p>
         <div class="face" id="face">
-            <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare">
+            <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true">
             <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
                 <filter id="fx-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
                 <filter id="fx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
@@ -946,15 +946,11 @@ const VIEWS = {
                 <g class="fx" data-fx="glow2" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="375" cy="390" rx="130" ry="180" fill="#FFE9D6" opacity=".2"/></g>
                 <g class="fx" data-fx="bright" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="300" cy="350" rx="40" ry="16" fill="#FFE8DA" opacity=".55"/><ellipse cx="435" cy="348" rx="46" ry="16" fill="#FFE8DA" opacity=".55"/></g>
                 <g class="fx" data-fx="lips"><path d="M318 477 C328 466 350 461 372 465 C386 468 396 473 402 478 C396 494 380 506 358 506 C336 506 324 494 318 477Z" fill="#A85A5A" opacity=".5" style="mix-blend-mode:multiply" filter="url(#fx-soft)"/><g filter="url(#fx-soft)"><ellipse cx="356" cy="490" rx="16" ry="4" fill="#fff" opacity=".75"/><ellipse cx="381" cy="487" rx="7" ry="2.4" fill="#fff" opacity=".6"/><ellipse cx="350" cy="469" rx="9" ry="2" fill="#fff" opacity=".5"/></g></g>
-                <g class="fx" data-fx="lids" filter="url(#fx-soft)">
-                    <ellipse cx="297" cy="317" rx="35" ry="16" fill="url(#lidL)"/><path d="M262 316 Q297 334 333 315" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M272 322 l-3 6 M284 326 l-2 6 M297 327 l0 6 M310 326 l2 6 M322 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
-                    <ellipse cx="431" cy="316" rx="42" ry="17" fill="url(#lidR)"/><path d="M390 315 Q431 335 473 314" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M402 322 l-3 6 M416 326 l-2 6 M431 328 l0 6 M446 326 l2 6 M460 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
-                </g>
-                <g class="fx" data-fx="patches" filter="url(#fx-soft)">
-                    <path d="M344 333 C320 343 284 341 252 326 C236 352 244 396 280 404 C314 410 340 382 344 333Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
-                    <path d="M386 333 C410 343 450 341 482 324 C498 352 490 396 452 404 C416 410 390 382 386 333Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
-                    <path d="M262 346 C262 370 278 390 300 392 M472 344 C474 370 458 390 436 392" fill="none" stroke="#FFF3BF" stroke-width="3" stroke-linecap="round" opacity=".6"/>
-                    <path d="M290 360 l12 4 M314 374 l10 -2 M420 360 l-12 4 M446 374 l-10 -2" stroke="#B8891A" stroke-width="1.2" opacity=".5"/></g>
+                                <g class="fx" data-fx="patches" filter="url(#fx-soft)">
+                    <path d="M332 338 C312 350 282 352 258 344 C246 370 254 406 284 412 C314 416 336 390 332 338Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
+                    <path d="M384 338 C404 350 440 350 466 340 C478 366 470 404 440 410 C410 414 388 390 384 338Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.6"/>
+                    <path d="M266 360 C266 382 280 400 300 402 M458 358 C460 380 448 398 428 400" fill="none" stroke="#FFF3BF" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+                    <path d="M290 372 l12 4 M312 386 l10 -2 M412 372 l-12 4 M436 386 l-10 -2" stroke="#B8891A" stroke-width="1.2" opacity=".5"/></g>
             </svg>
             <span class="face-hint hand" id="face-hint">drop products here ↓</span>
         </div>
@@ -1732,12 +1728,12 @@ const AFTER = {
         const apply = k => {
             const [fx, line] = SKIN_FX[k];
             if (k === 'patches' && applied.has('patches')) {
-                applied.delete('patches'); face.querySelectorAll('[data-fx="patches"], [data-fx="lids"]').forEach(g => g.classList.remove('on'));
-                return toast('patches off. eyes open. glowing.');
+                applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); face.classList.remove('asleep');
+                return toast('patches off. i’m up. glowing.');
             }
             applied.add(k);
             const g = face.querySelector(`[data-fx="${fx}"]`); if (g) g.classList.add('on'); else face.classList.add(fx);
-            if (k === 'patches') face.querySelector('[data-fx="lids"]').classList.add('on');
+            if (k === 'patches') face.classList.add('asleep');
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
             $('#face-hint').textContent = applied.size >= 7 ? 'fully skincared ♡' : `${applied.size} of 7 on`;
             toast(line + (k === 'patches' ? '' : ''));
