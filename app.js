@@ -1,4 +1,4 @@
-/* What's in my bag? Tap the bag, everything falls out (stop-motion style), tap anything to pick it up. */
+/* What's in my bag? Every zipper is a pocket. Pull one and its things fall out (stop-motion style); tap anything to pick it up. */
 (() => {
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
@@ -49,56 +49,108 @@ list.innerHTML = ITEMS.map(it => `
         </button>
     </li>`).join('');
 
-let isOpen = false, busy = false;
-bagBtn.addEventListener('click', e => { if (!e.target.closest('.charm')) isOpen ? pickUp({ id: 'bag', name: 'my backpack', open: 'bag' }) : spill(); });
-
-// out it all comes, one thing at a time, like stop motion
-async function spill() {
-    if (busy) return; busy = true;
-    isOpen = true;
-    bagArt.innerHTML = BAG.open;
-    stage.classList.add('open');
-    bagBtn.setAttribute('aria-expanded', 'true');
-    bagBtn.setAttribute('aria-label', 'My backpack, now open');
-    $('#bag-hint').textContent = '';
-    const bagBox = bagBtn.getBoundingClientRect();
-    for (const it of ITEMS) {
-        const li = document.getElementById('item-' + it.id);
-        li.classList.add('out');
-        li.querySelector('button').tabIndex = 0;
-        if (!reduce) {
-            const box = li.getBoundingClientRect();
-            const dx = phone() ? 0 : bagBox.left + bagBox.width / 2 - (box.left + box.width / 2);
-            const dy = phone() ? -40 : bagBox.top + bagBox.height * .35 - (box.top + box.height / 2);
-            const base = phone() ? '' : 'translate(-50%, -50%) ';
-            li.animate([
-                { transform: `${base}translate(${dx}px, ${dy}px) scale(.15) rotate(${it.r * 4}deg)`, opacity: 0 },
-                { transform: `${base}translate(${dx * .45}px, ${dy * .45 - 60}px) scale(.8) rotate(${-it.r * 2}deg)`, opacity: 1, offset: .55 },
-                { transform: `${base}rotate(${it.r}deg)`, opacity: 1 }
-            ], { duration: 620, easing: 'steps(7, end)', fill: 'none' });
-            await new Promise(r => setTimeout(r, 170));
-        }
-    }
-    $('#after').hidden = false;
-    busy = false;
+/* ---------- the zippers ---------- */
+const svgNS = 'http://www.w3.org/2000/svg';
+const zips = bagArt.querySelector('.zips');
+const open = new Set();
+BAG.pockets.forEach(pk => {
+    const g = document.createElementNS(svgNS, 'g');
+    g.innerHTML = `
+        <path class="teeth" d="${pk.d}"/>
+        <path class="gap" d="${pk.d}"/>
+        <g class="pull" tabindex="0" role="button" aria-label="Unzip: ${pk.label}" aria-pressed="false">
+            <rect x="-10" y="-5" width="20" height="32" rx="6"/><circle cx="0" cy="17" r="3.4"/>
+        </g>`;
+    zips.appendChild(g);
+    const path = g.querySelector('.gap'), pull = g.querySelector('.pull'), len = path.getTotalLength();
+    path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
+    pk.el = { g, path, pull, len };
+    place(pk, 0);
+    const toggle = e => { e.stopPropagation(); open.has(pk.id) ? zipUp(pk) : unzip(pk); };
+    pull.addEventListener('click', toggle);
+    pull.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
+    // tapping the pocket itself works too, not just the tiny pull
+    path.addEventListener('click', toggle);
+    g.querySelector('.teeth').addEventListener('click', toggle);
+});
+function place(pk, t) {
+    const { path, pull, len } = pk.el;
+    const pt = path.getPointAtLength(len * t);
+    pull.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
+    path.style.strokeDashoffset = len * (1 - t);
+}
+function slide(pk, from, to) {
+    // ten stop-motion steps on a plain timer (frame timers pause in background tabs, which stalled the queue)
+    return new Promise(res => {
+        if (reduce) { place(pk, to); return res(); }
+        let step = 0;
+        const timer = setInterval(() => {
+            step++;
+            place(pk, from + (to - from) * step / 10);
+            if (step >= 10) { clearInterval(timer); res(); }
+        }, 52);
+    });
 }
 
-// back in the bag
-$('#repack').addEventListener('click', () => {
-    if (busy) return;
-    ITEMS.forEach(it => {
-        const li = document.getElementById('item-' + it.id);
-        li.classList.remove('out');
-        li.querySelector('button').tabIndex = -1;
+
+// the side pocket: my Stanley is always out
+ITEMS.filter(it => it.zip === 'side').forEach(it => {
+    const li = document.getElementById('item-' + it.id);
+    li.classList.add('out'); li.querySelector('button').tabIndex = 0;
+});
+
+let busy = Promise.resolve();
+function unzip(pk) {
+    busy = busy.then(async () => {
+        if (open.has(pk.id)) return;
+        open.add(pk.id);
+        pk.el.pull.setAttribute('aria-pressed', 'true');
+        pk.el.pull.setAttribute('aria-label', `Zip up: ${pk.label}`);
+        pk.el.g.classList.add('open');
+        $('#bag-hint').textContent = '';
+        await slide(pk, 0, 1);
+        const bagBox = bagBtn.getBoundingClientRect();
+        for (const it of ITEMS.filter(i => i.zip === pk.id)) {
+            const li = document.getElementById('item-' + it.id);
+            li.classList.add('out');
+            li.querySelector('button').tabIndex = 0;
+            if (!reduce) {
+                const box = li.getBoundingClientRect();
+                const dx = phone() ? 0 : bagBox.left + bagBox.width / 2 - (box.left + box.width / 2);
+                const dy = phone() ? -40 : bagBox.top + bagBox.height * .3 - (box.top + box.height / 2);
+                const base = phone() ? '' : 'translate(-50%, -50%) ';
+                li.animate([
+                    { transform: `${base}translate(${dx}px, ${dy}px) scale(.15) rotate(${it.r * 4}deg)`, opacity: 0 },
+                    { transform: `${base}translate(${dx * .45}px, ${dy * .45 - 60}px) scale(.8) rotate(${-it.r * 2}deg)`, opacity: 1, offset: .55 },
+                    { transform: `${base}rotate(${it.r}deg)`, opacity: 1 }
+                ], { duration: 620, easing: 'steps(7, end)' });
+                await new Promise(r => setTimeout(r, 150));
+            }
+        }
+        $('#after').hidden = false;
     });
-    stage.classList.remove('open');
-    bagArt.innerHTML = BAG.closed;
-    bagBtn.setAttribute('aria-expanded', 'false');
-    bagBtn.removeAttribute('aria-label');
-    $('#bag-hint').textContent = 'tap to open ↓';
-    $('#after').hidden = true;
-    document.body.classList.remove('shades');
-    isOpen = false;
+    return busy;
+}
+function zipUp(pk) {
+    busy = busy.then(async () => {
+        if (!open.has(pk.id)) return;
+        ITEMS.filter(i => i.zip === pk.id).forEach(it => {
+            const li = document.getElementById('item-' + it.id);
+            li.classList.remove('out'); li.querySelector('button').tabIndex = -1;
+        });
+        await slide(pk, 1, 0);
+        open.delete(pk.id);
+        pk.el.g.classList.remove('open');
+        pk.el.pull.setAttribute('aria-pressed', 'false');
+        pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
+        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; }
+    });
+    return busy;
+}
+$('#unzip-all').addEventListener('click', () => { $('#stage').scrollIntoView({ block: 'center', behavior: 'auto' }); BAG.pockets.forEach(pk => unzip(pk)); });
+$('#repack').addEventListener('click', () => {
+    BAG.pockets.forEach(pk => zipUp(pk));
+    document.body.classList.remove('shades', 'cozy');
     bagBtn.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
 });
 
@@ -171,7 +223,7 @@ const VIEWS = {
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel, the 30-pack. one pen for every strength i’ve got.',
+        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel, the 30-pack. pick a color.',
         list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
@@ -321,6 +373,28 @@ const VIEWS = {
         <div class="stats"><div><b>MIS</b><span>BBA, Management Information Systems</span></div><div><b>+ Psych</b><span>BA in Psychology, alongside it</span></div><div><b>’27</b><span>Class of 2027</span></div></div>
         <p>Minors in Marketing and Educational Psychology. Scott Hemsell Memorial Scholarship and the Gerald and Linda Ridgely Endowed Presidential Scholarship (2026 to 2027), and University Honors.</p>
         <div class="row"><a class="btn solid" href="https://suhanitiwari.com/home/study#mccombs" target="_blank" rel="noopener">Why McCombs ↗</a></div>`,
+
+    ipad: () => `
+        <h2>My <em>iPad</em></h2>
+        <p class="note">every app on my home screen is something i built</p>
+        <div class="apps">${[
+            ['Listening History', 'LH', '#F4A7B9', 'https://listening-history.onrender.com/'],
+            ['Saturday in Austin', 'SA', '#8FD19E', 'https://suhxnitiwari.github.io/saturday-in-austin/'],
+            ['suhanitiwari.com', 'ST', '#F7D54A', 'https://suhanitiwari.com'],
+            ['What’s in my bag?', '👜', '#B9A3E8', 'https://github.com/suhxnitiwari/whats-in-my-bag']
+        ].map(([n, t, c, h]) => `<a class="app" href="${h}" target="_blank" rel="noopener"><span class="icon" style="background:${c}">${t}</span><span>${n}</span></a>`).join('')}</div>`,
+
+    phone: () => `
+        <h2>My <em>phone</em></h2>
+        <p class="note">lives in the sunglasses pocket. here’s an app i redesigned for it.</p>
+        <div class="shot" style="background:var(--mint); padding:20px"><img src="assets/img/starbucks.jpg" alt="My Starbucks app prototype" style="max-width:380px; margin:0 auto; border-radius:14px"></div>
+        <p><b>The Starbucks app, reimagined:</b> “set the vibe” AI recommendations, with a roadmap ranked by RICE scoring.</p>`,
+
+    passport: () => `
+        <h2>My <em>passport</em></h2>
+        <p class="note">stamps only. the domestic trips live in my itineraries.</p>
+        <div class="stamps">${Array.from({ length: 6 }, (_, i) => `<span class="stamp" style="--r:${(i % 3 - 1) * 8}deg"><span class="todo">add a country</span></span>`).join('')}</div>
+        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`,
 
     sitara: () => `
         <h2>Hi, I’m <em>Sitara</em></h2>
@@ -498,9 +572,13 @@ function pensAfter(list) {
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
         const p = list[+b.dataset.pen];
-        note.innerHTML = `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`;
+        // highlighters tell you which tool they are; gel pens just write in their color
+        note.innerHTML = p.note
+            ? `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`
+            : `<span style="color:${p.c}; font-size:1.9rem">hi, i’m suhani ♡</span> <span class="mono" style="color:var(--muted)">${p.name}</span>`;
     };
 }
+
 function type(el, text, speed = 24) {
     return new Promise(res => {
         el.classList.add('caret');

@@ -7,31 +7,26 @@ const INK = '#3A2626';
 const S = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
 
 window.BAG = {
-    /* my real backpack: black Samsonite, red accents, red zipper pulls */
-    closed: `<svg viewBox="0 0 300 340" aria-hidden="true">
-        <path d="M112 50 C112 18 188 18 188 50" fill="none" ${S} stroke-width="14"/>
-        <path d="M112 50 C112 18 188 18 188 50" fill="none" stroke="#35323A" stroke-width="7" stroke-linecap="round"/>
-        <rect x="40" y="44" width="220" height="284" rx="56" fill="#222024" ${S}/>
-        <path d="M58 118 C58 78 242 78 242 118 L242 150 L58 150Z" fill="#2B292E" ${S}/>
-        <rect x="130" y="96" width="40" height="10" rx="3" fill="#B9BCC2" ${S} stroke-width="2"/>
-        <path d="M84 104 l12 12 M216 104 l-12 12" stroke="#D23B3B" stroke-width="4" stroke-linecap="round"/>
-        <rect x="70" y="150" width="160" height="162" rx="40" fill="#2B292E" ${S}/>
-        <rect x="140" y="170" width="20" height="132" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
-        <path d="M140 208 h20 M140 284 h20" stroke="#D23B3B" stroke-width="4"/>
-        <path d="M82 160 C120 150 180 150 218 160" fill="none" stroke="#4A474F" stroke-width="2" stroke-dasharray="3 5"/>
-        <g ${S} stroke-width="2"><path d="M124 150 l-10 14" /><rect x="106" y="160" width="12" height="16" rx="3" fill="#C9CCD2"/><path d="M176 150 l10 14"/><rect x="182" y="160" width="12" height="16" rx="3" fill="#C9CCD2"/></g>
-        <path d="M112 168 v6 M188 168 v6" stroke="#D23B3B" stroke-width="3"/>
-    </svg>`,
-    open: `<svg viewBox="0 0 300 340" aria-hidden="true">
-        <path d="M112 50 C112 18 188 18 188 50" fill="none" ${S} stroke-width="14"/>
-        <rect x="40" y="44" width="220" height="284" rx="56" fill="#222024" ${S}/>
-        <ellipse cx="150" cy="96" rx="100" ry="40" fill="#141215" ${S}/>
-        <path d="M60 30 C90 62 210 62 240 30 C236 6 64 6 60 30Z" fill="#2B292E" ${S} transform="rotate(-12 150 30)"/>
-        <rect x="104" y="70" width="10" height="34" rx="3" fill="#F4A7B9" ${S} stroke-width="2" transform="rotate(-12 109 87)"/>
-        <rect x="170" y="64" width="44" height="30" rx="4" fill="#F2C6C8" ${S} stroke-width="2" transform="rotate(10 192 79)"/>
-        <rect x="70" y="150" width="160" height="162" rx="40" fill="#2B292E" ${S}/>
-        <rect x="140" y="170" width="20" height="132" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
-        <path d="M140 208 h20 M140 284 h20" stroke="#D23B3B" stroke-width="4"/>
+    /* my real backpack: black Samsonite, red accents. Four zippers, back to front:
+       devices (laptop + iPad), main (notebooks, pens, makeup), the sunglasses pocket up top, the front pocket */
+    pockets: [
+        { id: 'devices', label: 'devices', d: 'M52 104 C52 40 248 40 248 104' },
+        { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
+        { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
+        { id: 'front', label: 'wallet & passport', d: 'M80 196 C84 176 216 176 220 196' }
+    ],
+    closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
+        <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
+        <path d="M118 46 C118 12 182 12 182 46" fill="none" stroke="#35323A" stroke-width="7" stroke-linecap="round"/>
+        <rect x="36" y="40" width="228" height="298" rx="58" fill="#1C1A1E" ${S}/>
+        <path d="M48 120 C48 60 252 60 252 120 L252 330 L48 330Z" fill="#232126"/>
+        <path d="M80 150 C80 120 220 120 220 150 L220 176 L80 176Z" fill="#2B292E" ${S} stroke-width="2.5"/>
+        <rect x="134" y="152" width="32" height="8" rx="2.5" fill="#B9BCC2" ${S} stroke-width="1.5"/>
+        <path d="M98 156 l10 10 M202 156 l-10 10" stroke="#D23B3B" stroke-width="4" stroke-linecap="round"/>
+        <rect x="70" y="182" width="160" height="140" rx="38" fill="#2B292E" ${S}/>
+        <rect x="140" y="198" width="20" height="112" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
+        <path d="M140 228 h20 M140 292 h20" stroke="#D23B3B" stroke-width="4"/>
+        <g class="zips"></g>
     </svg>`,
     /* my McCombs keychain (a stand-in drawing until I swap in a photo of the real one) */
     mccombs: `<svg viewBox="0 0 80 120" aria-hidden="true">
@@ -62,7 +57,7 @@ window.BAG = {
 
 window.ITEMS = [
     {
-        id: 'headphones', name: 'my headphones', l: 12, t: 16, w: 15, r: -12,
+        id: 'headphones', name: 'my headphones', zip: 'devices', l: 24, t: 38, w: 11, r: -12,
         art: `<svg viewBox="0 0 220 190"><path d="M36 128 C20 30 200 30 184 128" fill="none" ${S} stroke-width="16"/><path d="M36 128 C20 30 200 30 184 128" fill="none" stroke="#F2C6C8" stroke-width="7" stroke-linecap="round"/><rect x="12" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="158" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="22" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><rect x="168" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><path d="M104 24 q10 -14 20 0" fill="none" ${S} stroke-width="2"/><circle cx="92" cy="10" r="4" fill="${INK}"/><path d="M96 10 V-6" ${S} stroke-width="2"/></svg>`,
         open: () => `
             <h2>What I’m <em>listening</em> to</h2>
@@ -73,78 +68,93 @@ window.ITEMS = [
             <div class="row"><a class="btn solid" href="https://listening-history.onrender.com/" target="_blank" rel="noopener">Open Listening History ↗</a><a class="btn" href="https://github.com/suhxnitiwari/listening-history" target="_blank" rel="noopener">Code ↗</a></div>`
     },
     {
-        id: 'sketchbook', name: 'my sketchbook', l: 70, t: 15, w: 12, r: 9,
+        id: 'sketchbook', name: 'my sketchbook', zip: 'main', l: 24, t: 63, w: 9, r: 9,
         art: `<svg viewBox="0 0 180 220"><rect x="14" y="10" width="156" height="200" rx="10" fill="#8E9A6E" ${S}/><path d="M14 30 H4 M14 60 H4 M14 90 H4 M14 120 H4 M14 150 H4 M14 180 H4" ${S}/><rect x="132" y="10" width="12" height="200" fill="#F4A7B9" ${S}/><rect x="42" y="56" width="76" height="52" rx="4" fill="#FFFBF8" ${S} transform="rotate(-4 80 82)"/><text x="80" y="88" text-anchor="middle" font-family="Caveat" font-size="24" fill="${INK}" transform="rotate(-4 80 82)">sketches</text><path d="M60 150 q12 -18 24 0 t24 0" fill="none" ${S} stroke-width="2"/><circle cx="104" cy="170" r="6" fill="#F2C6C8" ${S} stroke-width="2"/></svg>`,
         open: 'sketchbook'
     },
     {
-        id: 'lipstick', name: 'westman atelier, glögg', l: 29, t: 12, w: 5, r: 18,
+        id: 'lipstick', name: 'westman atelier, glögg', zip: 'main', l: 63, t: 86, w: 3.6, r: 18,
         art: `<svg viewBox="0 0 70 200"><rect x="14" y="80" width="42" height="110" rx="10" fill="#E8EFF6" ${S}/><rect x="18" y="60" width="34" height="26" rx="4" fill="#DCE6F0" ${S}/><path d="M22 60 V24 C22 10 48 4 48 18 V60Z" fill="#7A1E2E" ${S}/><path d="M28 30 q6 -8 14 -12" fill="none" stroke="#B4475A" stroke-width="3" stroke-linecap="round"/><text x="35" y="160" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#9AA8B8" transform="rotate(-90 35 140)" letter-spacing="1.5">WESTMAN ATELIER</text></svg>`,
         open: 'makeup'
     },
     {
-        id: 'mascara', name: 'lancôme lash idôle', l: 35, t: 12, w: 3.6, r: -22,
+        id: 'mascara', name: 'lancôme lash idôle', zip: 'main', l: 67, t: 86, w: 2.8, r: -22,
         art: `<svg viewBox="0 0 50 230"><rect x="8" y="10" width="34" height="210" rx="6" fill="#E8C3B4" ${S}/><rect x="14" y="18" width="22" height="84" rx="3" fill="#1E1414"/><rect x="14" y="120" width="22" height="92" rx="3" fill="#1E1414"/><path d="M8 110 H42" ${S}/><text x="25" y="165" text-anchor="middle" font-family="Bodoni Moda" font-size="11" fill="#E8C3B4" transform="rotate(-90 25 165)" letter-spacing="1">IDÔLE</text><text x="25" y="60" text-anchor="middle" font-family="Bodoni Moda" font-size="7" fill="#E8C3B4" transform="rotate(-90 25 60)" letter-spacing="1">LANCÔME</text></svg>`,
         open: 'makeup'
     },
     {
-        id: 'wallet', name: 'my wallet', l: 89, t: 46, w: 11, r: -8,
+        id: 'wallet', name: 'my wallet', zip: 'front', l: 77, t: 57, w: 11, r: -8,
         art: `<svg viewBox="0 0 200 140"><rect x="6" y="10" width="188" height="124" rx="12" fill="#5A3A26" ${S}/><path d="M6 20 C6 14 10 10 16 10 H184 C190 10 194 14 194 20 V74 L100 118 L6 74Z" fill="#6B4730" ${S}/><g fill="#C99A5B"><path d="M40 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M160 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M100 26 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M40 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M160 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/></g><text x="100" y="66" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="15" letter-spacing="4" fill="#E8C36A">SUHANI</text><circle cx="100" cy="104" r="9" fill="#E8C36A" ${S} stroke-width="2.5"/><path d="M4 30 h4 M4 60 h4 M4 90 h4" stroke="#B3263E" stroke-width="4"/></svg>`,
         open: 'wallet'
     },
     {
-        id: 'pouch', name: 'my mildliner pouch', l: 10, t: 81, w: 9.5, r: -10,
+        id: 'pouch', name: 'my mildliner pouch', zip: 'main', l: 30, t: 87, w: 6.5, r: -10,
         art: `<svg viewBox="0 0 130 170"><g>${['#F7E06B', '#B9A3E8', '#F29B6B', '#F4A7B9', '#8FD19E', '#8CC4F0', '#E8A1C4', '#F2C572', '#9ED3C3'].map((c, i) => `<g transform="rotate(${(i - 4) * 6.5} 65 120)"><rect x="58" y="10" width="14" height="110" rx="4" fill="#FFFDF9" ${S} stroke-width="2"/><rect x="58" y="4" width="14" height="18" rx="4" fill="${c}" ${S} stroke-width="2"/></g>`).join('')}</g><path d="M14 74 C14 64 116 64 116 74 L110 158 C108 166 22 166 20 158Z" fill="#F7F4F1" ${S}/><path d="M14 74 C40 84 90 84 116 74" fill="none" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 74 C40 84 90 84 116 74" fill="none" ${S} stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="42" cy="122" r="11" fill="#8E2D6E" ${S} stroke-width="2"/><circle cx="38" cy="119" r="1.6" fill="#fff"/><circle cx="46" cy="119" r="1.6" fill="#fff"/><path d="M37 125 q5 5 10 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M112 78 l6 10" ${S} stroke-width="2"/><rect x="113" y="86" width="8" height="12" rx="3" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
         open: 'mildliners'
     },
     {
-        id: 'penpouch', name: 'my paper mate pouch', l: 23, t: 84, w: 14, r: 5,
+        id: 'penpouch', name: 'my paper mate pouch', zip: 'main', l: 41, t: 90, w: 11, r: 5,
         art: `<svg viewBox="0 0 230 110"><g>${['#E63F7A', '#7B4FD1', '#1F6FD1', '#18A39A', '#F0592B', '#D6336C', '#9B59D0', '#2E86DE'].map((c, i) => `<rect x="${30 + i * 16}" y="${4 + (i % 3) * 5}" width="12" height="40" rx="5" fill="${c}" ${S} stroke-width="2"/>`).join('')}</g><g>${['#7FC6E8', '#F4A7B9', '#B9A3E8'].map((c, i) => `<g transform="rotate(${-14 + i * 7} ${170 + i * 12} 40)"><rect x="${166 + i * 12}" y="2" width="8" height="44" rx="3" fill="${c}" fill-opacity=".55" ${S} stroke-width="1.8"/><rect x="${166 + i * 12}" y="-4" width="8" height="8" rx="2" fill="#FFFDF9" ${S} stroke-width="1.8"/></g>`).join('')}</g><rect x="10" y="30" width="210" height="74" rx="18" fill="#F6CFD6" ${S}/><path d="M160 30 C190 30 214 40 220 60 L220 44 C220 36 214 30 206 30Z" fill="#F8E7A9" opacity=".9"/><path d="M150 32 q30 10 70 32" fill="none" stroke="#F8E7A9" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M26 44 H204" ${S} stroke-dasharray="5 5"/><rect x="150" y="76" width="48" height="16" rx="2" fill="#FFFBF2" ${S} stroke-width="1.5"/><text x="174" y="87" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="${INK}" letter-spacing=".5">CICIMELON</text><circle cx="212" cy="46" r="5" fill="#C9CCD2" ${S} stroke-width="1.5"/></svg>`,
         open: 'gelpens'
 
     },
     {
-        id: 'sunglasses', name: 'my sunglasses', l: 38, t: 86, w: 13, r: -6,
+        id: 'sunglasses', name: 'my sunglasses', zip: 'shades', l: 74, t: 12, w: 12, r: -6,
         art: `<svg viewBox="0 0 240 110"><defs><linearGradient id="lens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2226"/><stop offset="1" stop-color="#9C979C"/></linearGradient></defs><path d="M8 26 L-2 12" ${S} stroke-width="6"/><path d="M232 26 L242 12" ${S} stroke-width="6"/><rect x="8" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="136" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="18" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><rect x="146" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><path d="M104 40 Q120 28 136 40" fill="none" ${S} stroke-width="8"/><path d="M104 40 Q120 28 136 40" fill="none" stroke="#1E1414" stroke-width="4"/><rect x="4" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><rect x="228" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><path d="M26 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/><path d="M154 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/></svg>`,
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my car keys', l: 53, t: 87, w: 7.5, r: 14,
+        id: 'keys', name: 'my car keys', zip: 'shades', l: 88, t: 13, w: 6, r: 14,
         art: `<svg viewBox="0 0 150 170"><circle cx="40" cy="30" r="24" fill="none" stroke="#D9A441" stroke-width="7"/><circle cx="40" cy="30" r="24" fill="none" ${S} stroke-width="2"/><rect x="40" y="56" width="70" height="104" rx="30" fill="#2A2226" ${S}/><circle cx="75" cy="84" r="13" fill="#C9CDD3" ${S} stroke-width="2.5"/><circle cx="75" cy="84" r="7" fill="#E8EDF2" ${S} stroke-width="1.5"/><rect x="60" y="108" width="30" height="10" rx="5" fill="#5E5559"/><rect x="60" y="124" width="30" height="10" rx="5" fill="#5E5559"/><rect x="60" y="140" width="30" height="10" rx="5" fill="#5E5559"/><path d="M10 50 q-6 20 10 30" fill="none" stroke="#F4A7B9" stroke-width="6" stroke-linecap="round"/><path d="M14 80 l6 -4 4 8z" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel mirror', l: 88, t: 14, w: 7, r: 0,
+        id: 'mirror', name: 'my chanel mirror', zip: 'main', l: 73, t: 90, w: 5.5, r: 0,
         art: `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#141011" ${S}/><circle cx="60" cy="60" r="46" fill="none" stroke="#3A3033" stroke-width="2"/><circle cx="60" cy="60" r="18" fill="none" stroke="#E9E4DF" stroke-width="4"/><circle cx="60" cy="60" r="10" fill="#141011"/><path d="M40 30 q10 -8 22 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35"/></svg>`,
         open: 'mirror'
     },
     {
-        id: 'makeup-pouch', name: 'my makeup pouch', l: 50, t: 11, w: 12, r: -4,
+        id: 'makeup-pouch', name: 'my makeup pouch', zip: 'main', l: 55, t: 90, w: 10, r: -4,
         art: `<svg viewBox="0 0 200 130"><defs><pattern id="vs" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(0)"><rect width="16" height="16" fill="#F7C9D6"/><rect width="8" height="16" fill="#F29BB6"/></pattern></defs><path d="M14 40 C14 22 186 22 186 40 L178 116 C176 124 24 124 22 116Z" fill="url(#vs)" ${S}/><path d="M22 40 H178" ${S} stroke-dasharray="5 5"/><rect x="164" y="30" width="18" height="16" rx="4" fill="#D9A441" ${S} stroke-width="2.5"/><path d="M173 46 v16" ${S} stroke-width="2.5"/><circle cx="173" cy="66" r="5" fill="#fff" ${S} stroke-width="2"/><rect x="40" y="4" width="10" height="42" rx="3" fill="#E8EFF6" ${S} stroke-width="2" transform="rotate(-8 45 25)"/><path d="M68 44 V14 q8 -14 16 0 V44Z" fill="#3A2626" ${S} stroke-width="2"/><circle cx="76" cy="10" r="9" fill="#F2D7C8" ${S} stroke-width="2"/></svg>`,
         open: 'makeup'
     },
     {
-        id: 'stanley', name: 'my pink stanley', l: 29, t: 46, w: 4.6, r: 6,
+        id: 'stanley', name: 'my pink stanley', zip: 'side', l: 68, t: 52, w: 3.6, r: 6,
         art: `<svg viewBox="0 0 60 220"><defs><pattern id="bows" width="30" height="34" patternUnits="userSpaceOnUse"><rect width="30" height="34" fill="#FFF7F2"/><path d="M15 10 q-8 -7 -10 0 q2 6 10 0 q8 -7 10 0 q-2 6 -10 0 l-4 10 M15 10 l4 10" fill="none" stroke="#F4A7B9" stroke-width="1.6" stroke-linecap="round"/><circle cx="4" cy="26" r="1.8" fill="#F4A7B9"/><circle cx="26" cy="28" r="1.5" fill="#F4A7B9"/></pattern></defs><rect x="10" y="44" width="40" height="170" rx="12" fill="url(#bows)" ${S}/><rect x="12" y="34" width="36" height="14" fill="#D9A441" ${S} stroke-width="2.5"/><rect x="14" y="8" width="32" height="28" rx="8" fill="#D9C8F0" ${S}/><path d="M22 10 C22 -4 38 -4 38 10" fill="none" ${S} stroke-width="4"/><rect x="24" y="12" width="12" height="8" rx="3" fill="#F7C9D6" ${S} stroke-width="2"/></svg>`,
         open: 'stanley'
     },
     {
-        id: 'sweater', name: 'my cable knit', l: 12, t: 48, w: 17, r: -5,
+        id: 'sweater', name: 'my cable knit', zip: 'main', l: 9, t: 57, w: 13, r: -5,
         art: `<svg viewBox="0 0 220 170"><defs><pattern id="knit" width="28" height="22" patternUnits="userSpaceOnUse"><rect width="28" height="22" fill="#8A5A3B"/><path d="M4 0 q6 11 0 22 M12 0 q-6 11 0 22" fill="none" stroke="#6E4428" stroke-width="3"/><path d="M18 0 q5 11 0 22 M24 0 q-5 11 0 22" fill="none" stroke="#A8744F" stroke-width="2.5"/></pattern></defs><rect x="14" y="20" width="192" height="138" rx="18" fill="url(#knit)" ${S}/><path d="M14 60 H206" ${S} stroke-width="2.5"/><rect x="14" y="136" width="192" height="22" rx="10" fill="#6E4428" ${S} stroke-width="2.5"/><path d="M28 136 v22 M44 136 v22 M60 136 v22 M76 136 v22 M92 136 v22 M108 136 v22 M124 136 v22 M140 136 v22 M156 136 v22 M172 136 v22 M188 136 v22" stroke="#5A3520" stroke-width="2"/><path d="M84 20 q26 22 52 0" fill="#6E4428" ${S} stroke-width="2.5"/></svg>`,
         open: 'sweater'
     },
     {
-        id: 'notebooks', name: 'my erin condren notebooks', l: 70, t: 80, w: 11, r: 8,
+        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 20, t: 87, w: 9, r: 8,
         get art() { return `<span style="display:grid"><span style="grid-area:1/1; transform:rotate(-9deg) translate(-8%, 2%)">${window.EC(['#C2407A', '#F4C6D2', '#8A9AA6', '#F3EDE3'])}</span><span style="grid-area:1/1; transform:rotate(4deg) translate(4%, -3%)">${window.EC(['#5E7486', '#F3EDE3', '#C2407A', '#F4C6D2'])}</span></span>`; },
         open: 'notebooks'
     },
     {
-        id: 'binder', name: 'my pink binder', l: 87, t: 83, w: 11, r: -6,
+        id: 'binder', name: 'my pink binder', zip: 'main', l: 8, t: 87, w: 9, r: -6,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'
     },
     {
-        id: 'laptop', name: 'my laptop', l: 73, t: 45, w: 10.5, r: -8,
+        id: 'ipad', name: 'my ipad', zip: 'devices', l: 21, t: 14, w: 11, r: 5,
+        art: `<svg viewBox="0 0 220 160"><rect x="4" y="4" width="212" height="152" rx="16" fill="#2A2629" ${S}/><rect x="14" y="14" width="192" height="132" rx="8" fill="#F7E9EC"/>${[['#F4A7B9', 'LH'], ['#8FD19E', 'SA'], ['#B9A3E8', 'P'], ['#F7D54A', 'ST']].map(([c, t], i) => `<rect x="${34 + i * 42}" y="44" width="30" height="30" rx="8" fill="${c}" ${S} stroke-width="2"/><text x="${49 + i * 42}" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${INK}">${t}</text>`).join('')}<rect x="60" y="104" width="100" height="18" rx="9" fill="#FFFDF9" ${S} stroke-width="2"/><text x="110" y="117" text-anchor="middle" font-family="Caveat" font-size="13" fill="${INK}">made by me</text></svg>`,
+        open: 'ipad'
+    },
+    {
+        id: 'phone', name: 'my phone', zip: 'shades', l: 82, t: 31, w: 5, r: -10,
+        art: `<svg viewBox="0 0 90 180"><rect x="4" y="4" width="82" height="172" rx="16" fill="#F2C6C8" ${S}/><rect x="20" y="16" width="26" height="26" rx="8" fill="#E9A9B6" ${S} stroke-width="2"/><circle cx="33" cy="29" r="7" fill="#3A2626"/><circle cx="56" cy="22" r="3" fill="#3A2626"/><path d="M30 120 C10 104 12 86 24 86 C30 86 32 92 32 95 C32 92 34 86 40 86 C52 86 54 104 30 120Z" fill="#FFFBF8" ${S} stroke-width="2"/><text x="45" y="150" text-anchor="middle" font-family="Caveat" font-size="16" fill="${INK}">s.t.</text></svg>`,
+        open: 'phone'
+    },
+    {
+        id: 'passport', name: 'my passport', zip: 'front', l: 91, t: 53, w: 7, r: 10,
+        art: `<svg viewBox="0 0 110 150"><rect x="6" y="6" width="98" height="138" rx="8" fill="#22325A" ${S}/><circle cx="55" cy="62" r="18" fill="none" stroke="#D9B45A" stroke-width="2.5"/><path d="M42 62 h26 M55 49 v26" stroke="#D9B45A" stroke-width="2"/><text x="55" y="30" text-anchor="middle" font-family="Bodoni Moda" font-size="11" letter-spacing="2" fill="#D9B45A">PASSPORT</text><rect x="38" y="104" width="34" height="14" rx="2" fill="none" stroke="#D9B45A" stroke-width="2"/><rect x="70" y="2" width="16" height="30" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
+        open: 'passport'
+    },
+    {
+        id: 'laptop', name: 'my laptop', zip: 'devices', l: 8, t: 19, w: 9.5, r: -8,
         get art() { return window.LID(false); },
         open: 'laptop'
     }
@@ -227,38 +237,38 @@ window.PENS = [
     { name: 'Canva', c: '#C7E3A1', note: 'Posters, decks and social graphics.' }
 ];
 
-/* my Paper Mate pouch: the InkJoy Gel 30-pack, 0.7mm. One gel pen for every strength from my How I Work page. */
+/* my Paper Mate pouch: the InkJoy Gel 30-pack, 0.7mm. Just pens. */
 window.GELPENS = [
-    { name: 'Relator', c: '#E63F7A', note: 'CliftonStrengths #1 · I build close, genuine relationships and love working hard alongside people toward a shared goal.' },
-    { name: 'Empathy', c: '#7B4FD1', note: 'CliftonStrengths #2 · I sense what people are feeling by putting myself in their shoes, often before they say a word.' },
-    { name: 'Individualization', c: '#1F6FD1', note: 'CliftonStrengths #3 · I notice what makes each person unique, and how different people can work together best.' },
-    { name: 'Developer', c: '#18A39A', note: 'CliftonStrengths #4 · I see the potential in people and get real satisfaction from helping them grow.' },
-    { name: 'Communication', c: '#F0592B', note: 'CliftonStrengths #5 · I put thoughts into words easily, whether it’s a conversation or a presentation.' },
-    { name: 'Assertive', c: '#D6336C', note: 'DISC trait · Rarely hesitates when confronted with challenges and is eager to take charge.' },
-    { name: 'Goal-Oriented', c: '#9B59D0', note: 'DISC trait · Sets ambitious goals and works diligently toward achieving them.' },
-    { name: 'Challenge-Driven', c: '#2E86DE', note: 'DISC trait · Views challenges as opportunities to prove myself.' },
-    { name: 'Decisive', c: '#27AE60', note: 'DISC trait · Analyzes situations rapidly, identifies the best course of action, and implements it.' },
-    { name: 'Self-Reliant', c: '#E84393', note: 'DISC trait · Takes ownership of my work from start to finish.' },
-    { name: 'Leadership', c: '#6C5CE7', note: 'DISC strength · Sees the big picture, sets long-term goals, and inspires others to follow.' },
-    { name: 'Resilience', c: '#0984E3', note: 'DISC strength · Thrives in high-stakes environments where quick thinking and determination are required.' },
-    { name: 'Strategic Thinking', c: '#00B894', note: 'DISC strength · Focuses on what truly matters and eliminates distractions or obstacles.' },
-    { name: 'Problem Solving', c: '#E17055', note: 'DISC strength · Identifies and fixes problems before others even notice them.' },
-    { name: 'Ownership', c: '#B83280', note: 'What motivates me · Ownership and autonomy.' },
-    { name: 'Recognition', c: '#8E44AD', note: 'What motivates me · Recognition and achievement.' },
-    { name: 'A Real Challenge', c: '#3867D6', note: 'What motivates me · Give me the hard problem.' },
-    { name: 'Clear', c: '#20BF6B', note: 'How I communicate · Clear and to the point.' },
-    { name: 'Outcome-Focused', c: '#FA8231', note: 'How I communicate · Focused on outcomes.' },
-    { name: 'Persuasive', c: '#C2185B', note: 'How I communicate · Persuasive and action-oriented.' },
-    { name: 'Artistic', c: '#5F27CD', note: 'RIASEC: A, 91.7 · Driven by self-expression and originality. I do my best work with creative freedom and variety.' },
-    { name: 'Social', c: '#2D98DA', note: 'RIASEC: S, 67.5 · I care about people and love helping wherever I can.' },
-    { name: 'Enterprising', c: '#0FB9B1', note: 'RIASEC: E, 66.7 · I step into leadership when it’s needed and enjoy having real influence on the outcome.' },
-    { name: 'Original Thinking', c: '#EB3B5A', note: 'RIASEC strength · Original thinking.' },
-    { name: 'Expression', c: '#A55EEA', note: 'RIASEC strength · Visual and verbal expression.' },
-    { name: 'Ideation', c: '#4B7BEC', note: 'RIASEC strength · Brainstorming and ideation.' },
-    { name: 'Adaptability', c: '#26DE81', note: 'RIASEC strength · Adaptability to new approaches.' },
-    { name: 'Creative Freedom', c: '#FD9644', note: 'What energizes me · Creative freedom.' },
-    { name: 'Variety', c: '#D63031', note: 'What energizes me · Variety.' },
-    { name: 'Helping People', c: '#341F97', note: 'What energizes me · Helping people.' }
+    { name: 'Berry', c: '#E63F7A' },
+    { name: 'Violet', c: '#7B4FD1' },
+    { name: 'Blue', c: '#1F6FD1' },
+    { name: 'Teal', c: '#18A39A' },
+    { name: 'Orange', c: '#F0592B' },
+    { name: 'Raspberry', c: '#D6336C' },
+    { name: 'Lilac', c: '#9B59D0' },
+    { name: 'Sky', c: '#2E86DE' },
+    { name: 'Green', c: '#27AE60' },
+    { name: 'Pink', c: '#E84393' },
+    { name: 'Indigo', c: '#6C5CE7' },
+    { name: 'Ocean', c: '#0984E3' },
+    { name: 'Mint', c: '#00B894' },
+    { name: 'Coral', c: '#E17055' },
+    { name: 'Magenta', c: '#B83280' },
+    { name: 'Purple', c: '#8E44AD' },
+    { name: 'Royal', c: '#3867D6' },
+    { name: 'Lime', c: '#20BF6B' },
+    { name: 'Tangerine', c: '#FA8231' },
+    { name: 'Rose', c: '#C2185B' },
+    { name: 'Grape', c: '#5F27CD' },
+    { name: 'Cerulean', c: '#2D98DA' },
+    { name: 'Aqua', c: '#0FB9B1' },
+    { name: 'Red', c: '#EB3B5A' },
+    { name: 'Lavender', c: '#A55EEA' },
+    { name: 'Cornflower', c: '#4B7BEC' },
+    { name: 'Spring', c: '#26DE81' },
+    { name: 'Apricot', c: '#FD9644' },
+    { name: 'Cherry', c: '#D63031' },
+    { name: 'Navy', c: '#341F97' }
 ];
 
 /* my laptop: projects as file folders */

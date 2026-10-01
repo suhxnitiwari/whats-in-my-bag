@@ -11,7 +11,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Westman Atelier lipstick (Glögg), Lancôme Lash Idôle, Victoria's Secret makeup pouch | Makeup loves and skips (Morphe brushes included) |
 | Wallet | Pops open to my cards: my UT Austin student ID, Oracle, Acacia Advisors, Outlier, Girls Who Code |
 | Mildliner pouch | The full 25-pack: one highlighter for every tool on my résumé |
-| Paper Mate pouch | InkJoy Gel 30-pack: one pen per strength (CliftonStrengths, DISC, RIASEC), plus my BIC mechanical pencils |
+| Paper Mate pouch | InkJoy Gel 30-pack (tap one, it writes in that color), plus my BIC mechanical pencils |
 | Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |

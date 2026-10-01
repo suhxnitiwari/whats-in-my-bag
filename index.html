@@ -20,22 +20,23 @@
 <main>
     <section class="intro">
         <h1><span class="q">what’s in</span> <em>my bag?</em></h1>
-        <p class="lede">I carry my whole life in this backpack. Tap it and everything falls out. Tap anything that falls out and it’ll tell you something about me.</p>
+        <p class="lede">I carry my whole life in this backpack. Every zipper is a different pocket. Pull one and see what falls out, then tap anything to pick it up.</p>
+        <p class="all"><button type="button" class="btn" id="unzip-all">Unzip everything</button></p>
     </section>
 
     <section class="stage" id="stage" aria-label="My backpack and everything in it">
         <!-- tiny doodles scattered on the page, like stickers -->
         <div class="doodles" aria-hidden="true"></div>
 
-        <button class="bag" id="bag" type="button" aria-expanded="false" aria-controls="items">
+        <div class="bag" id="bag" role="group" aria-label="My backpack: pull a zipper to open a pocket">
             <span class="bag-art" id="bag-art"></span>
-            <span class="bag-hint hand" id="bag-hint">tap to open ↓</span>
-        </button>
+            <span class="bag-hint hand" id="bag-hint">pull a zipper ↓</span>
+        </div>
 
         <ul class="items" id="items" aria-label="Things in my bag"></ul>
     </section>
 
-    <p class="after mono" id="after" hidden>✦ Everything’s out. Tap anything. <button type="button" id="repack" class="link">Pack it back up</button></p>
+    <p class="after mono" id="after" hidden>✦ Tap anything. <button type="button" id="repack" class="link">Zip it all back up</button></p>
 </main>
 
 <footer class="foot">
