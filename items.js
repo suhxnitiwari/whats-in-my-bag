@@ -130,8 +130,25 @@ window.ITEMS = [
         open: 'makeup'
     },
     {
-        id: 'stanley', name: 'my pink stanley', zip: 'side', l: 68, t: 52, w: 3.6, r: 6,
-        art: `<svg viewBox="0 0 60 220"><defs><pattern id="bows" width="30" height="34" patternUnits="userSpaceOnUse"><rect width="30" height="34" fill="#FFF7F2"/><path d="M15 10 q-8 -7 -10 0 q2 6 10 0 q8 -7 10 0 q-2 6 -10 0 l-4 10 M15 10 l4 10" fill="none" stroke="#F4A7B9" stroke-width="1.6" stroke-linecap="round"/><circle cx="4" cy="26" r="1.8" fill="#F4A7B9"/><circle cx="26" cy="28" r="1.5" fill="#F4A7B9"/></pattern></defs><rect x="10" y="44" width="40" height="170" rx="12" fill="url(#bows)" ${S}/><rect x="12" y="34" width="36" height="14" fill="#D9A441" ${S} stroke-width="2.5"/><rect x="14" y="8" width="32" height="28" rx="8" fill="#D9C8F0" ${S}/><path d="M22 10 C22 -4 38 -4 38 10" fill="none" ${S} stroke-width="4"/><rect x="24" y="12" width="12" height="8" rx="3" fill="#F7C9D6" ${S} stroke-width="2"/></svg>`,
+        id: 'stanley', name: 'my pink stanley', zip: 'side', l: 68, t: 52, w: 4, r: 4,
+        art: `<svg viewBox="0 0 64 240"><defs>
+            <pattern id="bowprint" width="32" height="44" patternUnits="userSpaceOnUse">
+                <rect width="32" height="44" fill="#FFFCFB"/>
+                <g fill="none" stroke="#F3AFC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 14 C10 6 4 8 6 13 C8 17 14 16 16 14 C18 16 24 17 26 13 C28 8 22 6 16 14Z"/>
+                    <path d="M16 14 C14 20 11 25 9 29 M16 14 C18 20 21 25 23 29"/>
+                </g>
+                <g fill="#F6BFD0"><circle cx="4" cy="34" r="1.8"/><circle cx="7" cy="36" r="1.3"/><circle cx="28" cy="38" r="1.8"/><circle cx="25" cy="40" r="1.2"/><circle cx="16" cy="40" r="1.4"/><circle cx="30" cy="4" r="1.5"/><circle cx="2" cy="4" r="1.3"/></g>
+                <path d="M2 30 q4 4 8 2 M24 34 q4 4 8 2" fill="none" stroke="#F6BFD0" stroke-width="1"/>
+            </pattern></defs>
+            <rect x="8" y="98" width="48" height="136" rx="7" fill="url(#bowprint)" ${S}/>
+            <path d="M24 46 h16 L56 100 H8 Z" fill="#F6D0DB" ${S} stroke-linejoin="round"/>
+            <rect x="23" y="30" width="18" height="18" rx="3" fill="#F6D0DB" ${S}/>
+            <rect x="22" y="24" width="20" height="7" fill="#D9A441" ${S} stroke-width="2"/>
+            <rect x="21" y="6" width="22" height="19" rx="5" fill="#F6D0DB" ${S}/>
+            <path d="M14 108 v110" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+            <path d="M30 56 l-7 34" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+        </svg>`,
         open: 'stanley'
     },
     {
