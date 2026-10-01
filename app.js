@@ -469,11 +469,11 @@ const VIEWS = {
         <div class="pf">
             <div class="pf-left">
                 <div class="pf-stack" aria-hidden="true"><span></span><span></span></div>
-                <a class="pf-resume" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener" aria-label="My résumé (opens in a new tab)"><img src="assets/img/resume.png" alt="My résumé"><span class="pf-take">take one ↗</span></a>
-                <button type="button" class="bc" id="bc" aria-label="My business card: tap to flip it"><span class="bc-in">
+                <div class="pf-resume" id="pf-resume" role="button" tabindex="0" aria-label="My résumé: tap to pull it out"><img src="assets/img/resume.png" alt="My résumé"><span class="pf-take">pull it out ↑</span><a class="pf-open" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">open the full résumé ↗</a></div>
+                <div class="bc" id="bc" role="button" tabindex="0" aria-label="My business card: tap to flip it"><span class="bc-in">
                     <span class="bc-f"><b>Suhani Tiwari</b><i>MIS + Psychology · UT Austin</i><em>product · brand · technology</em><span class="bc-heart">♡</span></span>
-                    <span class="bc-b"><span>suhanitiwari.com</span><span>linkedin.com/in/suhxnitiwari</span><span>suhanitiwari@utexas.edu</span><em>let’s get coffee ☕</em></span>
-                </span></button>
+                    <span class="bc-b"><a href="https://suhanitiwari.com" target="_blank" rel="noopener">suhanitiwari.com ↗</a><a href="https://www.linkedin.com/in/suhxnitiwari" target="_blank" rel="noopener">linkedin.com/in/suhxnitiwari ↗</a><a href="mailto:suhanitiwari@utexas.edu">suhanitiwari@utexas.edu ✉</a><em>let’s get coffee ☕</em></span>
+                </span></div>
                 <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 30 150">
                     <path d="M15 8 c-6 -7 -13 -4 -10 1 c2 3 7 2 10 -1 c3 3 8 4 10 1 c3 -5 -4 -8 -10 -1z" fill="#F7A8C0" stroke="#3A2626" stroke-width="1.2"/><circle cx="15" cy="8" r="2" fill="#E57A9E" stroke="#3A2626" stroke-width="1"/>
                     <rect x="10" y="10" width="10" height="8" rx="2" fill="#FBD3DF" stroke="#3A2626" stroke-width="1.2"/>
@@ -1055,7 +1055,11 @@ const AFTER = {
         bottle.style.cursor = 'pointer';
     },
     boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
-    padfolio: () => { $('#bc').onclick = () => { const f = $('#bc').classList.toggle('flip'); if (f) toast('take one. seriously ♡'); }; },
+    padfolio: () => {
+        const pf = sheetBody.querySelector('.pf'), res = $('#pf-resume');
+        const pull = e => { if (e.target.closest('.pf-open')) return; const out = pf.classList.toggle('res-out'); res.setAttribute('aria-label', out ? 'My résumé: tap to tuck it back in' : 'My résumé: tap to pull it out'); res.querySelector('.pf-take').textContent = out ? 'tuck it back ↓' : 'pull it out ↑'; if (out) toast('take one. seriously ♡'); };
+        res.onclick = pull; res.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pull(e); } };
+        const bc = $('#bc'); const flip = e => { if (e.target.closest('a')) return; const f = bc.classList.toggle('flip'); if (f) toast('tap a link ♡'); }; bc.onclick = flip; bc.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(e); } }; },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
         const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
