@@ -7,16 +7,35 @@ const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-
 const phone = () => matchMedia('(max-width: 760px)').matches;
 const moved = {};   // things you've dragged somewhere else on the table
 
-/* ---------- the bag, with my caramel frappuccino charm clipped on (Sitara lives in it) ---------- */
+/* ---------- the line under the title changes every 5 seconds ---------- */
+const LEDES = [
+    'I carry my whole life in this backpack.',
+    'Pull the zipper. Everything falls out.',
+    'Chargers at the very bottom. Always one knot.',
+    'A rom-com, a journal and way too much skincare.',
+    'Basically a résumé you can unzip.'
+];
+{
+    const lede = document.getElementById('lede');
+    let li = 0;
+    if (lede) setInterval(() => {
+        li = (li + 1) % LEDES.length;
+        if (reduce) { lede.textContent = LEDES[li]; return; }
+        lede.classList.add('swap');
+        setTimeout(() => { lede.textContent = LEDES[li]; lede.classList.remove('swap'); }, 350);
+    }, 5000);
+}
+
+/* ---------- the bag, with my caramel frappuccino charm clipped on (my hand sanitizer lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
 const charm = document.createElement('span');
 charm.className = 'charm';
 charm.setAttribute('role', 'button');
 charm.setAttribute('tabindex', '0');
-charm.setAttribute('aria-label', 'My Bath & Body Works caramel frappuccino charm: Sitara lives in it. Ask her anything');
+charm.setAttribute('aria-label', 'My Bath & Body Works caramel frappuccino charm, with my hand sanitizer inside');
 charm.innerHTML = BAG.charm;
 bagBtn.appendChild(charm);
-const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sitara', name: 'my caramel frappuccino charm', open: 'sitara' }); };
+const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sanitizer', name: 'my caramel frappuccino charm', open: 'sanitizer' }); };
 charm.addEventListener('click', openCharm);
 charm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCharm(e); });
 
@@ -1048,7 +1067,7 @@ const VIEWS = {
         <p class="note">another victoria’s secret pouch, just for skincare. here’s everything in it ↓</p>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['patches', 120, -147, -35, 0, -34], ['pinkpump', 190, -105, -25, 60, -6], ['dropper', 172, -63, -15, 120, 0], ['lash', 176, -21, -5, 180, 0], ['goldpump', 190, 21, 5, 240, 0], ['laneige', 64, 63, 15, 300, -40], ['lamer', 84, 108, 25, 360, -40], ['sisley', 86, 155, 35, 420, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['pinkpump', 190, -147, -35, 0, 0], ['goldpump', 190, -105, -25, 0, 0], ['dropper', 172, -63, -15, 0, 0], ['lamer', 84, -21, -5, 0, -40], ['sisley', 86, 21, 5, 0, -40], ['lash', 176, 63, 15, 0, 0], ['laneige', 64, 108, 25, 0, -40], ['patches', 120, 155, 35, 0, -34]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -1265,7 +1284,7 @@ const VIEWS = {
     bag: () => `
         <h2>My <em>backpack</em></h2>
         <p class="note">it goes everywhere with me. class, work, coffee, back to class.</p>
-        <p>Everything I actually carry is on the table. Tap any of it. Or ask Sitara, the little charm hanging off the zipper.</p>`,
+        <p>Everything I actually carry is on the table. Tap any of it.</p>`,
 
     makeup: () => `
         <div class="lipstick-big" id="lip">
@@ -1293,6 +1312,7 @@ const VIEWS = {
                 <li><b>MAC Sleek Satin lipstick, Espresso Yourself.</b> In the makeup bag.</li>
                 <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the grab-it pocket.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
+                <li><b>Estée Lauder Futurist Aqua Brilliance Watery Glow Primer.</b> My primer. Goes on before the foundation.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
                 <li><b>Hourglass Vanish Airbrush Concealer.</b> My favorite concealer. Full coverage, no creasing.</li>
                 <li><b>Lancôme Lash Idôle mascara.</b> My favorite mascara. Lifts without the clumps.</li>
@@ -1329,12 +1349,13 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-105px; --a:-34deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
-                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-21px; --a:-7deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
-                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:21px; --a:7deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
-                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:105px; --a:34deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
-                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-63px; --a:-21deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
-                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:63px; --a:21deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
+                <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-126px; --a:-36deg; --d:0ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
+                <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:-42px; --a:-12deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
+                <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:0px; --a:0deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
+                <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:42px; --a:12deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
+                <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:126px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
+                <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-84px; --a:-24deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
+                <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:84px; --a:24deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vs2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#F7C9D6"/><rect width="11" height="22" fill="#F29BB6"/></pattern></defs>
@@ -1686,20 +1707,14 @@ const VIEWS = {
         <button type="button" class="pb-tucked" id="pb-tucked" aria-label="The boarding pass tucked inside my passport: pull it out">${ITEMS.find(i => i.id === 'boarding').art}<span class="hand">tucked inside: a boarding pass. pull it out ↗</span></button>`;
     },
 
-    sitara: () => `
-        <h2>Hi, I’m <em>Sitara</em></h2>
-        <p class="note">suhani’s AI guide, and the charm on her bag. there’s a cozy vanilla almond hand sanitizer inside. go ahead, squirt some.</p>
+    sanitizer: () => `
+        <h2>Cozy Vanilla <em>Almond</em></h2>
+        <p class="note">the hand sanitizer that lives in my caramel frappuccino charm. go ahead, squirt some.</p>
         <div class="sani" id="sani">
             <button type="button" class="sani-charm" id="sani-charm" aria-label="Squeeze the hand sanitizer">${BAG.charm}</button>
-            <svg class="sani-hand" viewBox="0 0 200 110" aria-hidden="true"><path d="M14 70 C10 50 40 44 60 50 C90 58 120 58 150 50 C172 44 192 52 188 70 C182 96 140 106 100 106 C60 106 18 96 14 70Z" fill="#E9B998" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M40 66 C70 80 130 80 160 66" fill="none" stroke="#CF9877" stroke-width="2" stroke-linecap="round"/><ellipse id="sani-pool" cx="100" cy="72" rx="0" ry="0" fill="#EAF6FF" stroke="#B9D6EC" stroke-width="1.5" opacity=".9"/><ellipse id="sani-shine" cx="92" cy="68" rx="0" ry="0" fill="#fff"/></svg>
+            <svg class="sani-hand" viewBox="0 0 200 210" aria-hidden="true"><g id="sani-palm"><rect x="-11" y="-36" width="22" height="52" rx="11" transform="translate(56 132) rotate(-46)"/><rect x="56" y="40" width="22" height="80" rx="11"/><rect x="80" y="26" width="22" height="94" rx="11"/><rect x="104" y="34" width="21" height="86" rx="10.5"/><rect x="127" y="56" width="19" height="70" rx="9.5"/><path d="M54 98 H146 V150 C146 176 128 192 100 192 C72 192 54 176 54 150 Z"/><rect x="70" y="170" width="60" height="50"/></g><use href="#sani-palm" fill="#E9B998" stroke="#3A2626" stroke-width="6" stroke-linejoin="round"/><use href="#sani-palm" fill="#E9B998"/><path d="M66 126 C86 134 116 132 138 116" fill="none" stroke="#CF9877" stroke-width="2.5" stroke-linecap="round"/><path d="M64 146 C80 152 96 162 108 180" fill="none" stroke="#CF9877" stroke-width="2.5" stroke-linecap="round"/><ellipse id="sani-pool" cx="100" cy="146" rx="0" ry="0" fill="#EAF6FF" stroke="#B9D6EC" stroke-width="1.5" opacity=".9"/><ellipse id="sani-shine" cx="93" cy="142" rx="0" ry="0" fill="#fff"/></svg>
         </div>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="sani-go">Squirt some</button><button class="btn" type="button" id="sani-rub" hidden>Rub it in</button></div>
-        <div class="chat" id="chat" aria-live="polite"></div>
-        <div class="row" id="chips">
-            <button class="btn" type="button" data-q="0">What does she actually do?</button>
-            <button class="btn" type="button" data-q="1">Why a backpack?</button>
-            <button class="btn" type="button" data-q="2">Is she a good driver?</button>
-        </div>`
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="sani-go">Squirt some</button><button class="btn" type="button" id="sani-rub" hidden>Rub it in</button></div>`
 };
 
 function penView({ title, note, list, front, pen, pick }) {
@@ -1870,6 +1885,15 @@ const AFTER = {
         setTimeout(() => sheetBody.querySelector('#routine li') && sheetBody.querySelector('#routine li').classList.add('now'), 0);
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
         const face = $('#face'), applied = new Set();
+        // products come out of the pouch in the order i put them on: everything done stays out, the next one pops up, the rest wait inside
+        const stage = () => {
+            const n = ROUTINE.findIndex(r => !applied.has(r));
+            sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => {
+                const i = ROUTINE.indexOf(b.dataset.sk);
+                b.classList.toggle('later', n >= 0 && i > n); b.classList.toggle('next', i === n);
+            });
+        };
+        stage();
         const apply = k => {
             const [fx, line] = SKIN_FX[k];
             // in order, please
@@ -1880,6 +1904,7 @@ const AFTER = {
             }
             if (k === 'patches' && applied.has('patches')) {
                 applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); clearTimeout(face.zzz); clearTimeout(face.wake); face.classList.remove('asleep', 'patched');
+                stage();
                 return toast('patches off. i’m up. glowing.');
             }
             applied.add(k);
@@ -1892,13 +1917,17 @@ const AFTER = {
             sheetBody.querySelectorAll('#routine li').forEach(li => { li.classList.toggle('done', applied.has(li.dataset.step)); li.classList.toggle('now', li.dataset.step === ROUTINE.find(r => !applied.has(r))); });
             const nx = ROUTINE.find(r => !applied.has(r));
             $('#routine-next').textContent = nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch ↑` : 'night routine done. goodnight ♡';
-            toast(line + (k === 'patches' ? '' : ''));
+            stage();
+            toast(line);
         };
         // la mer goes on with its little spoon, under my eyes only
         const spoon = $('#lm-spoon'), touched = new Set();
         const UNDER = [[300, 352, 46, 24, 'l'], [436, 350, 50, 24, 'r']];
         let honeyAt = 0;
         const spoonTime = b => {
+            const next = ROUTINE.find(r => !applied.has(r));
+            if (next !== 'lamer') return toast(`not yet, babe. step ${ROUTINE.indexOf(next) + 1} is ${SKIN_INFO[next][2]}.`);
+            touched.clear();
             b.classList.add('use');
             spoon.hidden = false;
             toast('use the little spoon. smooth it under my eyes only ↓');
@@ -2441,6 +2470,7 @@ const AFTER = {
                 blush: ['#C98E86', 'Westman Atelier · Baby Cheeks, Mimi', 'blush'],
                 mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
+                primer: ['#E3C3BA', 'Estée Lauder Futurist Aqua Brilliance · watery glow', null],
                 foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null]
             }[b.dataset.mk];
             if (!SH) { pickUp({ id: 'brushes', name: 'my morphe brushes', open: 'brushes' }); return backToPouch(); }
@@ -2898,7 +2928,7 @@ const AFTER = {
         cp.addEventListener('pointerup', up); cp.addEventListener('pointercancel', up);
     },
 
-    sitara: () => {
+    sanitizer: () => {
         // the sanitizer inside my charm: squeeze, a glob drops into your hand, rub it in
         let globs = 0;
         const squirt = () => {
@@ -2908,7 +2938,7 @@ const AFTER = {
             const c = charm.getBoundingClientRect(), h = hand.getBoundingClientRect(), b = sani.getBoundingClientRect();
             const drop = document.createElement('span'); drop.className = 'sani-drop';
             drop.style.left = (c.left + c.width * .49 - b.left) + 'px'; drop.style.top = (c.top + c.height * .93 - b.top) + 'px';
-            drop.style.setProperty('--fall', (h.top + h.height * .6 - (c.top + c.height * .93)) + 'px');
+            drop.style.setProperty('--fall', (h.top + h.height * .69 - (c.top + c.height * .93)) + 'px');
             sani.appendChild(drop);
             setTimeout(() => {
                 drop.remove(); globs++;
@@ -2927,28 +2957,6 @@ const AFTER = {
                 const r = hand.getBoundingClientRect(); fairyDust(r.left + r.width / 2, r.top + r.height / 2);
                 globs = 0; $('#sani-rub').hidden = true; toast('clean hands, smelling like a vanilla latte ♡');
             }, reduce ? 0 : 900);
-        };
-        const chat = $('#chat');
-        const answers = [
-            'She studies why people choose what they choose, then builds around it. MIS and Psychology at UT Austin, with internships at Oracle, Acacia Advisors and Outlier.',
-            'Because she carries her whole life around in it. Laptop, sketchbook, the Westman lipstick. It felt more honest than a résumé.',
-            'She asked me to tell you the truth: no. Whoops. But she is very good at everything that doesn’t involve reversing.'
-        ];
-        const say = (text, me) => {
-            const row = document.createElement('div');
-            row.className = 'msg' + (me ? ' me' : '');
-            row.innerHTML = me ? '<div class="b"></div>' : '<img src="assets/img/sitara.jpg" alt=""><div class="b"></div>';
-            chat.appendChild(row);
-            const b = row.querySelector('.b');
-            if (me || reduce) { b.textContent = text; return Promise.resolve(); }
-            return type(b, text);
-        };
-        say('Hi! I’m Sitara ✦ I live in Suhani’s caramel frappuccino charm, right next to her Cozy Vanilla Almond hand sanitizer. Ask me anything about her.');
-        $('#chips').onclick = async e => {
-            const b = e.target.closest('[data-q]'); if (!b) return;
-            await say(b.textContent, true);
-            await new Promise(r => setTimeout(r, 350));
-            say(answers[+b.dataset.q]);
         };
     }
 };

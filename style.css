@@ -108,7 +108,7 @@ button { font: inherit; color: inherit; }
 .item button:hover .tag, .item button:focus-visible .tag { opacity: 1; }
 .after { text-align: center; color: var(--muted); margin: 18px 0 0; position: relative; z-index: 2; }
 
-/* the bag charm (Sitara) hangs off the bag */
+/* the bag charm (my hand sanitizer holder) hangs off the bag */
 .charm { position: absolute; left: -4%; top: 44%; width: 19%; z-index: 4; transform-origin: 50% 0; animation: swing 3s ease-in-out infinite; cursor: pointer; }
 .charm svg { filter: drop-shadow(0 6px 6px rgba(59, 21, 36, .25)); }
 .charm:focus-visible { outline: 3px dashed var(--plum); outline-offset: 4px; border-radius: 12px; }
@@ -2056,7 +2056,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .sani-charm svg { display: block; width: 100%; height: auto; }
 .sani-charm.squeeze { animation: sani-sq .45s ease; }
 @keyframes sani-sq { 30% { transform: scale(1.06, .9); } 60% { transform: scale(.96, 1.05); } }
-.sani-hand { width: min(260px, 70%); margin-top: 40px; }
+.sani-hand { width: min(170px, 50%); margin-top: 24px; transform-origin: 50% 100%; }
 .sani-hand.rub { animation: sani-rub .9s ease-in-out; }
 @keyframes sani-rub { 15%, 55% { transform: translateX(-8px) rotate(-3deg); } 35%, 75% { transform: translateX(8px) rotate(3deg); } }
 .sani-hand ellipse { transition: rx .3s, ry .3s; }
@@ -2319,3 +2319,19 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .jw-base { z-index: 2; }
 .jw:not(.open) .jw-base { visibility: hidden; }
 .jw:not(.open) { min-height: 180px; }
+
+/* skincare pouch: products come out in routine order. the next one bobs, the rest wait inside */
+.mbag.skin.open .mk.later { opacity: 0; transform: translateX(calc(-50% + var(--x, 0px))) rotate(calc(var(--a) * .2)) translateY(70%); pointer-events: none; }
+.mbag.skin.open .mk.later svg *, .mbag.skin.open .mk.later span { pointer-events: none; }
+.mbag.skin.open .mk.next svg { filter: drop-shadow(0 0 10px rgba(230, 63, 122, .55)); animation: sk-bob 1.4s ease-in-out infinite; }
+.mbag.skin.open .mk.next span { font-weight: 700; }
+@keyframes sk-bob { 50% { transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) { .mbag.skin.open .mk.next svg { animation: none; } }
+
+/* the rotating line under the title fades between lines */
+#lede { transition: opacity .35s ease, transform .35s ease; }
+#lede.swap { opacity: 0; transform: translateY(4px); }
+
+/* la mer's spoon: keep it out of the face overlay's full-size svg rule so it's actually grabbable */
+.face .lm-spoon { width: 34px; }
+.face .lm-spoon svg { position: static; inset: auto; width: 100%; height: auto; pointer-events: none; }

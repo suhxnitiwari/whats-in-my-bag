@@ -247,6 +247,23 @@ window.ITEMS = [
         open: 'makeup'
     },
     {
+        // same size as the charlotte tilbury tube: black crimped top, blush tube, gold cap
+        id: 'primer', name: 'estée lauder futurist aqua brilliance primer', zip: 'makeup', l: 0, t: 0, w: 4, r: 0,
+        art: `<svg viewBox="0 0 80 220"><defs><linearGradient id="ptube" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#EEDDD8"/><stop offset=".5" stop-color="#FBF2EF"/><stop offset="1" stop-color="#E4CFC9"/></linearGradient><linearGradient id="pgold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B8913E"/><stop offset=".45" stop-color="#F3DC94"/><stop offset="1" stop-color="#A57E2E"/></linearGradient></defs>
+            <path d="M8 6 H72 V12 L70 28 H10 L8 12 Z" fill="#141212" ${S} stroke-width="2"/><path d="M14 9 L22 25" stroke="#4A4646" stroke-width="2" stroke-linecap="round"/>
+            <path d="M10 28 H70 L62 168 H18 Z" fill="url(#ptube)" ${S}/>
+            <path d="M10.4 33 H69.6" stroke="#C9A24E" stroke-width="2.4"/>
+            <text x="40" y="50" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="8" fill="#2A2222" letter-spacing=".6">ESTĒE</text>
+            <text x="40" y="59" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="8" fill="#2A2222" letter-spacing=".6">LAUDER</text>
+            <path d="M24 63 H56" stroke="#C9A24E" stroke-width="1"/>
+            <text x="40" y="74" text-anchor="middle" font-family="Bodoni Moda" font-size="6.5" fill="#2A2222">Futurist</text>
+            <text x="40" y="82" text-anchor="middle" font-family="Bodoni Moda" font-size="6.5" fill="#2A2222">Aqua Brilliance</text>
+            <text x="40" y="90" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="4.6" fill="#4A3E3E">Watery Glow Primer</text>
+            <rect x="18" y="166" width="44" height="48" rx="3" fill="url(#pgold)" ${S}/><path d="M24 170 v40" stroke="#FFF3CF" stroke-width="2" opacity=".7"/>
+        </svg>`,
+        open: 'makeup'
+    },
+    {
         id: 'foundation', name: 'charlotte tilbury beautiful skin, 6n', zip: 'makeup', l: 0, t: 0, w: 4, r: 0,
         art: `<svg viewBox="0 0 80 220"><defs><linearGradient id="ctube" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F3DCCB"/><stop offset=".5" stop-color="#FBEDE2"/><stop offset="1" stop-color="#E8C8B2"/></linearGradient><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C98F72"/><stop offset=".45" stop-color="#F0C5AC"/><stop offset="1" stop-color="#B57A5E"/></linearGradient></defs>
             <rect x="8" y="6" width="64" height="14" rx="2" fill="#1E1414" ${S} stroke-width="2"/><path d="M12 10 h56 M12 15 h56" stroke="#4A3A3A" stroke-width="1"/>
@@ -389,7 +406,7 @@ window.ITEMS = [
         open: 'nb2'
     },
     {
-        id: 'romcom', name: 'you deserve each other', zip: 'main', l: 9.4, t: 58.8, w: 11.8, r: -7,
+        id: 'romcom', name: 'you deserve each other', zip: 'main', l: 9.4, t: 58.8, w: 12.5, r: -7,
         art: `<svg viewBox="0 0 120 180"><rect x="2" y="2" width="116" height="176" rx="2" fill="#B5215E" ${S}/>
             <g font-family="Kalam, Caveat, cursive" fill="#F6EBDD"><text x="11" y="11" font-size="4.6">“The perfect dose of</text><text x="11" y="16.5" font-size="4.6">sweet, hilarious <tspan font-style="italic">joy</tspan>.”</text><text x="12" y="22" font-size="4.2">–CHRISTINA LAUREN</text></g>
             <g fill="#F6EBDD" stroke="#E9D9C6" stroke-width=".4"><rect x="60" y="2" width="9" height="23" rx="1"/><rect x="88" y="2" width="9" height="26" rx="1"/></g>
@@ -485,8 +502,8 @@ window.ITEMS = [
         open: 'perfume'
     },
     {
-        id: 'journal', name: 'my “believing in herself” journal', zip: 'main', l: 0, t: 0, w: 11.8, r: 5,
-        art: `<svg viewBox="0 0 125 176"><path d="M14 3 q-6 -2 -10 6" fill="none" stroke="#C2306A" stroke-width="2.4"/>
+        id: 'journal', name: 'my “believing in herself” journal', zip: 'main', l: 0, t: 0, w: 12.5, r: 5,
+        art: `<svg viewBox="0 0 125 176" preserveAspectRatio="none" style="aspect-ratio: 2 / 3"><path d="M14 3 q-6 -2 -10 6" fill="none" stroke="#C2306A" stroke-width="2.4"/>
             <rect x="3" y="3" width="119" height="170" rx="6" fill="#E0457E" ${S}/><path d="M6 6 v164" stroke="#C9356C" stroke-width="2"/>
             <g font-family="Caveat, cursive" fill="#FFF6F2" text-anchor="middle"><text x="62" y="40" font-size="20">her</text><text x="60" y="60" font-size="20">greatest</text><text x="62" y="80" font-size="20">power is</text><text x="62" y="101" font-size="22">believing</text><text x="58" y="120" font-size="18">in</text></g>
             <text x="62" y="141" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="22" fill="#D9AE52">herself</text><path d="M30 146 q34 -2 70 -10" fill="none" stroke="#D9AE52" stroke-width="1.4"/><path d="M98 128 c-1.4 -1.6 -3.4 .2 -1.6 2 l1.6 1.4 1.6 -1.4 c1.8 -1.8 -.2 -3.6 -1.6 -2z" fill="#D9AE52"/></svg>`,
@@ -552,7 +569,7 @@ window.ITEMS = [
         open: 'chargers'
     },
     {
-        id: 'onward', name: 'onward, howard schultz', zip: 'main', l: 0, t: 0, w: 15, r: 5,
+        id: 'onward', name: 'onward, howard schultz', zip: 'main', l: 0, t: 0, w: 12.5, r: 5,
         art: `<svg viewBox="0 0 160 240"><rect x="3" y="3" width="154" height="234" rx="3" fill="#FBFAF6" ${S}/><path d="M10 6 v228" stroke="#E4E0D6" stroke-width="3"/>
             <text x="80" y="24" text-anchor="middle" font-family="Bodoni Moda" font-size="14" fill="#7A1F22">Howard Schultz</text><text x="80" y="34" text-anchor="middle" font-family="Instrument Sans" font-size="5" fill="#7A1F22">with Joanne Gordon</text>
             <circle cx="80" cy="106" r="54" fill="#00704A"/><circle cx="80" cy="106" r="42" fill="#FBFAF6"/><circle cx="80" cy="106" r="36" fill="#00704A"/>
