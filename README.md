@@ -8,7 +8,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 |---|---|
 | Headphones | My listening data: four years of Spotify in a SQL warehouse |
 | Sketchbook | A flip-through of my digital art |
-| Westman Atelier lipstick (Glögg), Lancôme Lash Idôle, Victoria's Secret makeup pouch | Makeup loves and skips (Morphe brushes included) |
+| Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Lancôme Lash Idôle and my Morphe brushes pop out |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
 | Wallet | Pops open to my cards: UT Austin student ID, a (joke) Texas driver license, Bank of America credit (grey) and debit (red), Delta Gold, Amex Blue Cash Everyday. No numbers, ever. |
 | Mildliner pouch | The full 25-pack: one highlighter for every tool on my résumé |

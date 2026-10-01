@@ -519,3 +519,22 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 /* headings on the dark phone apps stay readable */
 .sheet-body .sp-h, .sheet-body .stream-h { color: #fff; }
 .sheet-body .sp-card span { color: #CFCFCF; }
+
+/* the makeup pouch: unzip it and the lipstick, mascara and brushes pop up out of it */
+.mbag { position: relative; width: min(340px, 90%); margin: 0 auto; padding-top: 170px; }
+.mbag-inside { position: absolute; left: 0; right: 0; bottom: 60px; height: 230px; display: flex; justify-content: center; align-items: flex-end; gap: 22px; pointer-events: none; }
+.mk { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: 0; padding: 0; cursor: pointer; transform: translateY(150px); opacity: 0; transition: transform .7s var(--ease) var(--d), opacity .3s var(--d); }
+.mk svg { height: 150px; width: auto; }
+.mk.brushes svg { height: 165px; }
+.mk span { font-family: var(--hand); font-size: 1.15rem; color: var(--plum); white-space: nowrap; }
+.mbag.open .mbag-inside { pointer-events: auto; }
+.mbag.open .mk { transform: none; opacity: 1; }
+.mbag.open .mk:hover svg { transform: translateY(-6px); }
+.mk svg { transition: transform .25s; }
+.mbag-front { position: relative; z-index: 2; cursor: pointer; }
+.mbag-front .mgap { stroke-dasharray: 244; stroke-dashoffset: 244; transition: stroke-dashoffset .7s steps(8); }
+.mbag.open .mbag-front .mgap { stroke-dashoffset: 0; }
+.mpull { position: absolute; top: 12%; left: 6%; width: 22px; height: 36px; border: 0; padding: 0; background: none; cursor: pointer; transition: left .7s steps(8); }
+.mpull span { display: block; width: 100%; height: 100%; border-radius: 6px; background: #D9A441; border: 2.5px solid var(--ink); }
+.mbag.open .mpull { left: calc(90% - 22px); }
+.mpull:focus-visible span { outline: 3px dashed var(--plum); outline-offset: 3px; }

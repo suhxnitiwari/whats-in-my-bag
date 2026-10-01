@@ -231,6 +231,27 @@ const VIEWS = {
         <p>It lives in my Victoria’s Secret makeup pouch, right next to the Westman Glögg and my Morphe brushes.</p>
         <div class="row"><button class="btn solid" type="button" id="see-makeup">All my makeup loves &amp; skips</button></div>`,
 
+    makeupbag: () => `
+        <h2>My <em>makeup pouch</em></h2>
+        <p class="note">victoria’s secret, pink stripes. unzip it.</p>
+        <div class="mbag" id="mbag">
+            <div class="mbag-inside" aria-live="polite">
+                <button type="button" class="mk" data-mk="lipstick" style="--d:0ms" aria-label="Westman Atelier lipstick, Glögg">${ITEMS.find(i => i.id === 'lipstick').art}<span>westman, glögg</span></button>
+                <button type="button" class="mk" data-mk="mascara" style="--d:120ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>lash idôle</span></button>
+                <button type="button" class="mk brushes" data-mk="brushes" style="--d:240ms" aria-label="Morphe brushes"><svg viewBox="0 0 90 200"><g stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round">${[[-12, '#1E1414'], [0, '#3A2D2D'], [12, '#1E1414']].map(([r, c], i) => `<g transform="rotate(${r} 45 190)"><rect x="39" y="70" width="12" height="120" rx="5" fill="${c}"/><rect x="38" y="52" width="14" height="22" rx="2" fill="#D9D9D9"/><path d="M38 52 C34 30 40 8 45 6 C50 8 56 30 52 52Z" fill="${i === 1 ? '#C9A27E' : '#E9D7C3'}"/></g>`).join('')}</g></svg><span>morphe brushes</span></button>
+            </div>
+            <div class="mbag-front">
+                <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vs2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#F7C9D6"/><rect width="11" height="22" fill="#F29BB6"/></pattern></defs>
+                    <path d="M14 34 C14 14 286 14 286 34 L274 154 C272 166 28 166 26 154Z" fill="url(#vs2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+                    <path class="mzip" d="M28 34 H272" stroke="#3A2626" stroke-width="3" stroke-dasharray="6 6"/>
+                    <path class="mgap" d="M28 34 H272" stroke="#2A1E22" stroke-width="10" stroke-linecap="round"/>
+                </svg>
+                <button type="button" class="mpull" id="mpull" aria-label="Unzip the makeup pouch"><span></span></button>
+            </div>
+        </div>
+        <p class="pen-note" id="mk-note">pull the zipper</p>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="see-makeup2">My makeup loves &amp; skips</button></div>`,
+
     sketchbook: () => `
         <div class="spread" id="spread">
             <div class="l"><img id="art-img" src="" alt=""></div>
@@ -620,6 +641,21 @@ const AFTER = {
         });
     },
 
+    makeupbag: () => {
+        const bag = $('#mbag'), note = $('#mk-note');
+        const toggle = () => {
+            const open = bag.classList.toggle('open');
+            $('#mpull').setAttribute('aria-label', open ? 'Zip the makeup pouch' : 'Unzip the makeup pouch');
+            note.textContent = open ? 'tap anything' : 'pull the zipper';
+        };
+        $('#mpull').onclick = toggle;
+        bag.querySelector('.mbag-front svg').onclick = () => { if (!bag.classList.contains('open')) toggle(); };
+        bag.querySelectorAll('.mk').forEach(b => b.onclick = () => {
+            if (b.dataset.mk === 'brushes') return pickUp({ id: 'makeup', name: 'morphe brushes', open: 'makeup' });
+            pickUp(ITEMS.find(i => i.id === b.dataset.mk));
+        });
+        $('#see-makeup2').onclick = () => pickUp({ id: 'makeup', name: 'my makeup', open: 'makeup' });
+    },
     mascara: () => {
         setTimeout(() => $('#masc') && $('#masc').classList.add('out'), reduce ? 0 : 350);
         $('#see-makeup').onclick = () => pickUp({ id: 'makeup', name: 'my makeup pouch', open: 'makeup' });
