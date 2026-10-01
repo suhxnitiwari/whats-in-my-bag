@@ -1323,3 +1323,8 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 /* a picked card comes most of the way out of its slot */
 .vslot .card.picked { transform: translateY(-88%); }
 .vw.has-pick { margin-top: clamp(90px, 14vw, 130px); }
+/* the zip edge belongs to the left panel: it folds over with it (hinge = the left panel's right edge) */
+.vw .vw-open > .vzip { transform-origin: 1300% 50%; }
+.vw.open .vw-open > .vzip { transition: transform .6s cubic-bezier(.5,0,.3,1), opacity .2s; transition-delay: 0s; }
+.vw.fold-left .vzip { opacity: 1 !important; transform: rotateY(178deg); z-index: 6; }
+.vw.fold-left .vzip .zpull, .vw.fold-left .vzip .zgap { visibility: hidden; }
