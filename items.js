@@ -145,6 +145,10 @@ window.SKIN = {
         <text x="67" y="86" text-anchor="middle" font-family="Instrument Sans" font-size="4.2" fill="#E8D7BE" letter-spacing=".6">THE EYE CONCENTRATE</text>
         <g class="top"><path d="M30 54 v-14 q0 -10 10 -10 h54 q10 0 10 10 v14z" fill="url(#sklc)" stroke="#3A2626" stroke-width="2.4"/><path d="M32 46 h70" stroke="#C9AEA2" stroke-width="1.2" opacity=".7"/></g>
         <ellipse class="dab" cx="67" cy="54" rx="28" ry="4" fill="#F4EEE4"/></svg>`,
+    laneige: `<svg viewBox="0 0 80 70"><defs><linearGradient id="sklz" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E5A1B6"/><stop offset=".45" stop-color="#F7CFDA"/><stop offset="1" stop-color="#D98CA4"/></linearGradient></defs>
+        <path d="M8 36 h64 v22 q0 8 -8 8 h-48 q-8 0 -8 -8z" fill="#F4C7D3" fill-opacity=".85" stroke="#3A2626" stroke-width="2.2"/><path d="M14 44 h52 v12 q0 4 -4 4 h-44 q-4 0 -4 -4z" fill="#D9557A" opacity=".55"/>
+        <g class="top"><rect x="6" y="14" width="68" height="24" rx="5" fill="url(#sklz)" stroke="#3A2626" stroke-width="2.2"/><text x="40" y="30" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="8" letter-spacing="2.4" fill="#fff">LANEIGE</text></g>
+        <ellipse class="dab" cx="40" cy="36" rx="22" ry="3" fill="#E77A9A"/></svg>`,
     sisley: `<svg viewBox="0 0 110 100"><defs><linearGradient id="sksy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B08A3E"/><stop offset=".3" stop-color="#F1DCA0"/><stop offset=".55" stop-color="#C9A55A"/><stop offset=".8" stop-color="#EBD08E"/><stop offset="1" stop-color="#A5803A"/></linearGradient></defs>
         <path d="M10 46 h90 l-4 40 q-1 8 -9 8 h-64 q-8 0 -9 -8z" fill="#F6E4E4" stroke="#3A2626" stroke-width="2.4"/><path d="M14 74 l10 20 M30 78 l6 16 M80 78 l-6 16 M96 74 l-10 20 M14 74 h82" stroke="#E2CACA" stroke-width="1.4" fill="none"/>
         <text x="55" y="62" text-anchor="middle" font-family="Bodoni Moda" font-size="9.5" fill="#9A7414" letter-spacing=".8">SUPREMŸA</text><text x="55" y="71" text-anchor="middle" font-family="Bodoni Moda" font-size="5.2" fill="#9A7414" letter-spacing=".6">LA NUIT</text>

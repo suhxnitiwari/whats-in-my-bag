@@ -892,15 +892,44 @@ const SKIN_INFO = {
     goldpump: ['Westman Atelier, the gold pump', 'one pump.', 'gold pump'],
     patches: ['24K gold under-eye patches', 'gold under my eyes. instant “i slept” energy.', 'eye patches'],
     lamer: ['La Mer The Eye Concentrate', 'lid off, a tap with the little wand.', 'la mer'],
-    sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley']
+    sisley: ['Sisley Supremÿa La Nuit', 'the gold lid comes off. night cream.', 'sisley'],
+    laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige']
+};
+// what each one does when it lands on me
+const SKIN_FX = {
+    dropper: ['dew', 'serum on. dewy.'], pinkpump: ['glow', 'one pump. glowing.'], goldpump: ['glow2', 'another pump. glowing more.'],
+    lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
+    laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. do not disturb.']
 };
 const VIEWS = {
     skinbag: () => `
         <h2>My <em>skincare</em> pouch</h2>
-        <p class="note">another victoria’s secret pouch, just for skincare. unzip it.</p>
+        <p class="note">another victoria’s secret pouch, just for skincare. unzip it, then put it all on me. drag a product onto my face.</p>
+        <div class="face" id="face">
+            <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare">
+            <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
+                <filter id="fx-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+                <filter id="fx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
+                <linearGradient id="lidL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9786A"/><stop offset="1" stop-color="#B98676"/></linearGradient>
+                <linearGradient id="lidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6957F"/><stop offset="1" stop-color="#D2A390"/></linearGradient>
+                <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D873"/><stop offset=".45" stop-color="#D8A82A"/><stop offset=".7" stop-color="#F3D06A"/><stop offset="1" stop-color="#C9961E"/></linearGradient>
+            </defs>
+                <g class="fx" data-fx="dew" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="330" cy="400" rx="60" ry="40" fill="#fff" opacity=".35"/><ellipse cx="490" cy="390" rx="70" ry="45" fill="#fff" opacity=".3"/><ellipse cx="350" cy="190" rx="90" ry="40" fill="#fff" opacity=".25"/><ellipse cx="330" cy="420" rx="22" ry="10" fill="#fff" opacity=".6"/></g>
+                <g class="fx" data-fx="glow" filter="url(#fx-blur)" style="mix-blend-mode:soft-light"><ellipse cx="375" cy="390" rx="140" ry="190" fill="#FFE2C8" opacity=".55"/></g>
+                <g class="fx" data-fx="glow2" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="375" cy="390" rx="130" ry="180" fill="#FFE9D6" opacity=".2"/></g>
+                <g class="fx" data-fx="bright" filter="url(#fx-blur)" style="mix-blend-mode:screen"><ellipse cx="300" cy="350" rx="40" ry="16" fill="#FFE8DA" opacity=".55"/><ellipse cx="435" cy="348" rx="46" ry="16" fill="#FFE8DA" opacity=".55"/></g>
+                <g class="fx" data-fx="lips"><path d="M318 477 C328 466 350 461 372 465 C386 468 396 473 402 478 C396 494 380 506 358 506 C336 506 324 494 318 477Z" fill="#A85A5A" opacity=".5" style="mix-blend-mode:multiply" filter="url(#fx-soft)"/><g filter="url(#fx-soft)"><ellipse cx="356" cy="490" rx="16" ry="4" fill="#fff" opacity=".75"/><ellipse cx="381" cy="487" rx="7" ry="2.4" fill="#fff" opacity=".6"/><ellipse cx="350" cy="469" rx="9" ry="2" fill="#fff" opacity=".5"/></g></g>
+                <g class="fx" data-fx="lids" filter="url(#fx-soft)">
+                    <ellipse cx="297" cy="317" rx="35" ry="16" fill="url(#lidL)"/><path d="M262 316 Q297 334 333 315" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M272 322 l-3 6 M284 326 l-2 6 M297 327 l0 6 M310 326 l2 6 M322 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
+                    <ellipse cx="431" cy="316" rx="42" ry="17" fill="url(#lidR)"/><path d="M390 315 Q431 335 473 314" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round"/><path d="M402 322 l-3 6 M416 326 l-2 6 M431 328 l0 6 M446 326 l2 6 M460 322 l3 6" stroke="#2A1410" stroke-width="1.6" stroke-linecap="round"/>
+                </g>
+                <g class="fx" data-fx="patches"><path d="M262 344 C272 360 318 364 336 342 C346 352 338 378 310 384 C284 388 260 372 262 344Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.5" opacity=".95"/><path d="M392 342 C412 364 456 362 474 340 C480 368 458 388 430 386 C404 384 388 366 392 342Z" fill="url(#gold)" stroke="#A97E14" stroke-width="1.5" opacity=".95"/><path d="M280 360 l10 6 M300 370 l8 -4 M412 362 l10 5 M440 372 l10 -4" stroke="#FFF1B0" stroke-width="2" opacity=".7"/></g>
+            </svg>
+            <span class="face-hint hand" id="face-hint">drop products here ↓</span>
+        </div>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                ${[['patches', 130, -105, -34, 0, -30], ['pinkpump', 205, -63, -21, 90, 0], ['dropper', 185, -21, -7, 180, 0], ['goldpump', 205, 21, 7, 270, 0], ['lamer', 90, 72, 18, 360, -54], ['sisley', 92, 132, 30, 450, -16]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
+                ${[['patches', 120, -126, -36, 0, -34], ['pinkpump', 190, -84, -24, 70, -6], ['dropper', 172, -42, -12, 140, 0], ['goldpump', 190, 0, 0, 210, 0], ['laneige', 64, 42, 12, 280, -40], ['lamer', 84, 90, 24, 350, -40], ['sisley', 86, 140, 34, 420, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vsk2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#FFF5F3"/><rect width="11" height="22" fill="#F6D3DB"/></pattern></defs>
@@ -923,7 +952,7 @@ const VIEWS = {
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="chg-reset">Throw them back in the bag</button></div>`,
     backuplip: () => {
         return `
-        <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
+        <h2>the <em>backup</em> lipstick: westman atelier</h2>
         <p class="note">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
         <div class="lipwrap">
             <div class="lip-slot"><button type="button" class="lip-stick" id="lip-stick" aria-label="My Westman Glögg lipstick: pick it up and drag it across my lips">${ITEMS.find(i => i.id === 'backup-lip').art}</button></div>
@@ -1653,7 +1682,52 @@ const AFTER = {
     skinbag: () => {
         AFTER.makeupbag();
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
+        const face = $('#face'), applied = new Set();
+        const apply = k => {
+            const [fx, line] = SKIN_FX[k];
+            if (k === 'patches' && applied.has('patches')) {
+                applied.delete('patches'); face.querySelectorAll('[data-fx="patches"], [data-fx="lids"]').forEach(g => g.classList.remove('on'));
+                return toast('patches off. eyes open. glowing.');
+            }
+            applied.add(k);
+            const g = face.querySelector(`[data-fx="${fx}"]`); if (g) g.classList.add('on'); else face.classList.add(fx);
+            if (k === 'patches') face.querySelector('[data-fx="lids"]').classList.add('on');
+            face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
+            $('#face-hint').textContent = applied.size >= 7 ? 'fully skincared ♡' : `${applied.size} of 7 on`;
+            toast(line + (k === 'patches' ? '' : ''));
+        };
+        // pick a product up out of the pouch and drop it on my face
+        let drag = null;
+        sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => {
+            b.addEventListener('pointerdown', e => {
+                if (!$('#mbag').classList.contains('open')) return;
+                drag = { b, x: e.clientX, y: e.clientY, ghost: null };
+                try { b.setPointerCapture(e.pointerId); } catch {}
+            });
+            b.addEventListener('pointermove', e => {
+                if (!drag || drag.b !== b) return;
+                if (!drag.ghost) {
+                    if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 8) return;
+                    drag.ghost = document.createElement('div'); drag.ghost.className = 'sk-ghost'; drag.ghost.innerHTML = SKIN[b.dataset.sk];
+                    drag.ghost.style.width = Math.min(90, b.querySelector('svg').getBoundingClientRect().width) + 'px';
+                    sheet.appendChild(drag.ghost);
+                }
+                drag.ghost.style.left = e.clientX + 'px'; drag.ghost.style.top = e.clientY + 'px';
+                const r = face.getBoundingClientRect(); face.classList.toggle('target', e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom);
+            });
+            const end = e => {
+                if (!drag || drag.b !== b) return;
+                const d = drag; drag = null; face.classList.remove('target');
+                if (!d.ghost) return;
+                d.ghost.remove(); b.dataset.skip = '1';
+                const r = face.getBoundingClientRect();
+                if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) apply(b.dataset.sk);
+            };
+            b.addEventListener('pointerup', end); b.addEventListener('pointercancel', end);
+        });
         sheetBody.querySelectorAll('.mk[data-sk]').forEach(b => b.onclick = () => {
+            if (b.dataset.skip) { delete b.dataset.skip; return; }
+            apply(b.dataset.sk);
             const k = b.dataset.sk, used = b.classList.toggle('use');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const lbl = $('#swatch-label'), sw = $('#swatch');
