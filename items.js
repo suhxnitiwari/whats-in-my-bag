@@ -73,6 +73,46 @@ window.SCRUNCHIE = (cx, cy, r, c, dark, light) => {
 };
 window.SCR_PINK = ['#F6B3B5', '#D98A8E', '#FFE3E2'];
 window.SCR_BROWN = ['#B26B55', '#7E4535', '#E2A891'];
+
+/* my three chargers, always knotted together at the very bottom of the bag.
+   each cable is a list of points; t = 0 is the knot, t = 1 is laid out straight */
+window.CHARGERS = (() => {
+    const C = [
+        { id: 'mac', name: 'macbook charger', col: '#F4F3F0', lane: 345 },
+        { id: 'phone', name: 'iphone charger', col: '#E6E4E1', lane: 300 },
+        { id: 'head', name: 'headphone charger', col: '#EFE6D6', lane: 258 }
+    ];
+    const N = 13;
+    C.forEach((c, k) => {
+        c.knot = Array.from({ length: N }, (_, i) => {
+            if (i === 0) return [[120, 230, 300][k], [70, 250, 90][k]];
+            if (i === N - 1) return [[300, 90, 130][k], [235, 205, 60][k]];
+            const a = k * 2.1 + i * 1.75, r = 22 + 34 * Math.abs(Math.sin(i * 1.27 + k * 1.9));
+            return [200 + r * Math.cos(a), 150 + r * .8 * Math.sin(a)];
+        });
+        c.flat = Array.from({ length: N }, (_, i) => [60 + i * (290 / (N - 1)), c.lane + Math.sin(i * 1.1 + k) * 6]);
+    });
+    const at = (c, t) => c.knot.map((p, i) => [p[0] + (c.flat[i][0] - p[0]) * t, p[1] + (c.flat[i][1] - p[1]) * t]);
+    const smooth = P => P.reduce((d, p, i) => {
+        if (!i) return `M${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+        const a = P[i - 2] || P[i - 1], b = P[i - 1], n = P[i + 1] || p;
+        return d + ` C${(b[0] + (p[0] - a[0]) / 6).toFixed(1)} ${(b[1] + (p[1] - a[1]) / 6).toFixed(1)} ${(p[0] - (n[0] - b[0]) / 6).toFixed(1)} ${(p[1] - (n[1] - b[1]) / 6).toFixed(1)} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+    }, '');
+    const ang = (a, b) => Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+    // the plug you pull (usb-c), and what's on the other end
+    const plug = (p, q) => `<g transform="translate(${p[0].toFixed(1)} ${p[1].toFixed(1)}) rotate(${ang(q, p).toFixed(1)})"><rect x="-2" y="-6" width="18" height="12" rx="3" fill="#FAFAF8" stroke="#3A2626" stroke-width="2"/><rect x="16" y="-3.5" width="8" height="7" rx="1.5" fill="#C9CCD2" stroke="#3A2626" stroke-width="1.4"/></g>`;
+    const tail = (c, p, q) => c.id === 'mac'
+        ? `<g transform="translate(${p[0].toFixed(1)} ${p[1].toFixed(1)}) rotate(${ang(q, p).toFixed(1)})"><rect x="-34" y="-20" width="38" height="40" rx="8" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.2"/><circle cx="-15" cy="0" r="4" fill="#E2E2DE"/><rect x="-44" y="-8" width="10" height="4" fill="#C9CCD2" stroke="#3A2626" stroke-width="1"/><rect x="-44" y="4" width="10" height="4" fill="#C9CCD2" stroke="#3A2626" stroke-width="1"/></g>`
+        : c.id === 'phone'
+            ? `<g transform="translate(${p[0].toFixed(1)} ${p[1].toFixed(1)}) rotate(${ang(q, p).toFixed(1)})"><rect x="-24" y="-13" width="26" height="26" rx="6" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.2"/><rect x="-32" y="-7" width="8" height="3.5" fill="#C9CCD2" stroke="#3A2626" stroke-width="1"/><rect x="-32" y="3.5" width="8" height="3.5" fill="#C9CCD2" stroke="#3A2626" stroke-width="1"/></g>`
+            : plug(p, q);
+    const cable = (c, t, extra = '') => {
+        const P = at(c, t), d = smooth(P);
+        return `<g class="chg" data-c="${c.id}" ${extra}><path d="${d}" fill="none" stroke="#3A2626" stroke-width="9" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c.col}" stroke-width="5.5" stroke-linecap="round"/>${tail(c, P[0], P[1])}${plug(P[N - 1], P[N - 2])}</g>`;
+    };
+    return { list: C, at, cable, N };
+})();
+
 window.ITEMS = [
     {
         id: 'headphones', name: 'my airpods max', zip: 'devices', l: 67.7, t: 8.2, w: 16.0, r: -8,
@@ -435,6 +475,11 @@ window.ITEMS = [
         id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'shades', l: 0, t: 0, w: 3.9, r: 18,
         art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
         open: 'backuplip'
+    },
+    {
+        id: 'chargers', name: 'my chargers (a tangled mess)', zip: 'main', l: 0, t: 0, w: 13, r: -8,
+        get art() { return `<svg viewBox="40 20 320 260">${window.CHARGERS.list.map(c => window.CHARGERS.cable(c, 0)).join('')}</svg>`; },
+        open: 'chargers'
     },
     {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,

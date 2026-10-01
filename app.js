@@ -940,6 +940,12 @@ const fileIcon = (n, ic) => ic.startsWith('img:')
     : `<svg viewBox="0 0 40 48" aria-hidden="true"><path d="M4 2 h22 l10 10 v34 h-32z" fill="#fff" stroke="#C9C6C2" stroke-width="1.5"/><path d="M26 2 v10 h10" fill="#EEE" stroke="#C9C6C2" stroke-width="1.5"/><rect x="4" y="30" width="32" height="10" fill="${ic}"/><text x="20" y="38" text-anchor="middle" font-size="7" font-family="system-ui" font-weight="700" fill="#fff">${(n.match(/\.(\w+)$/) || [, 'APP'])[1].toUpperCase()}</text></svg>`;
 
 const VIEWS = {
+    chargers: () => `
+        <h2>My <em>chargers</em></h2>
+        <p class="note">macbook, iphone, headphones. always at the very bottom of my bag. always one knot.</p>
+        <svg class="chg-svg" id="chg-svg" viewBox="20 20 360 360" role="img" aria-label="Three tangled chargers. Drag a plug to pull its cable free, starting with whichever one is on top"></svg>
+        <p class="hand chg-note" id="chg-note">drag a plug out. the one on top comes free first.</p>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="chg-reset">Throw them back in the bag</button></div>`,
     backuplip: () => {
         const U = (c, up) => `M${up ? '34 70' : '40 80'} C70 ${up ? 58 : 66} 100 50 128 56 C138 58 144 62 150 62 C156 62 162 58 172 56 C200 50 230 ${up ? 58 : 66} ${up ? '266 70' : '260 80'} C220 ${up ? 78 : 82} 190 80 150 82 C110 80 80 ${up ? 78 : 82} ${up ? '34 70' : '40 80'}Z`;
         const L = up => `M${up ? '34 70' : '40 80'} C80 ${up ? 86 : 84} 110 84 150 84 C190 84 220 ${up ? 86 : 84} ${up ? '266 70' : '260 80'} C230 ${up ? 116 : 112} 190 ${up ? 130 : 128} 150 ${up ? 130 : 128} C110 ${up ? 130 : 128} 70 ${up ? 116 : 112} ${up ? '34 70' : '40 80'}Z`;
@@ -948,7 +954,7 @@ const VIEWS = {
         <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
         <p class="note">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
         <div class="lipwrap">
-            <div class="lip-stick" aria-hidden="true">${ITEMS.find(i => i.id === 'backup-lip').art}</div>
+            <div class="lip-slot"><button type="button" class="lip-stick" id="lip-stick" aria-label="My Westman Glögg lipstick: pick it up and drag it across my lips">${ITEMS.find(i => i.id === 'backup-lip').art}</button></div>
             <svg class="lipface" id="lipface" viewBox="0 0 300 160" role="img" aria-label="My lips. Drag across them to put the lipstick on me">
                 <defs><mask id="lip-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="160"><g id="lip-paint"></g></mask></defs>
                 <rect width="300" height="160" rx="18" fill="#E9B998"/>
@@ -956,10 +962,10 @@ const VIEWS = {
                 <g class="lp-natural">${lips(false, '#C99486')}
                     <g stroke="#EBC6B8" stroke-width="1.4" stroke-linecap="round" opacity=".9">${[70, 92, 112, 132, 150, 168, 188, 208, 228].map((x, k) => `<path d="M${x} ${92 + (k % 2) * 4} l${k % 2 ? 2 : -2} ${10 + (k % 3) * 4}"/>`).join('')}<path d="M100 62 l-3 8 M196 62 l3 8 M150 68 v6"/></g></g>
                 <g class="lp-color" mask="url(#lip-mask)">${lips(false, '#8E2A24')}<path d="M118 100 q32 10 64 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/></g>
-                <g class="lp-happy">${lips(true, '#8E2A24')}<path d="M116 104 q34 12 68 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".38"/></g>
+                <g class="lp-happy">${lips(false, '#8E2A24')}<path d="M118 100 q32 10 64 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/></g>
             </svg>
         </div>
-        <p class="hand lip-say" id="lip-say">your turn: put it on me. drag across my lips ↔</p>
+        <p class="hand lip-say" id="lip-say">pick up the lipstick and put it on me ↔</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="bl-go">Swipe it on for me</button></div>`;
     },
     cards: () => `
@@ -1647,6 +1653,51 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    chargers: () => {
+        const svg = $('#chg-svg'), CH = window.CHARGERS, note = $('#chg-note');
+        // the knot: headphone cable on top, then the iphone one, the macbook brick at the very bottom
+        const order = ['head', 'phone', 'mac'];
+        const t = { mac: 0, phone: 0, head: 0 }, free = new Set();
+        const draw = () => {
+            const by = id => CH.list.find(c => c.id === id);
+            // drawing order: freed cables stay in their lanes, the knot is drawn bottom to top
+            svg.innerHTML = [...order].reverse().map(id => CH.cable(by(id), t[id], free.has(id) ? 'class="chg done"' : '')).join('') +
+                CH.list.map(c => { const P = CH.at(c, t[c.id]), e = P[CH.N - 1]; return `<circle class="chg-grab" data-grab="${c.id}" cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="20"/>` + (free.has(c.id) ? `<text class="chg-lbl" x="${c.flat[0][0] - 6}" y="${c.lane - 26}">${c.name} ✓</text>` : ''); }).join('');
+        };
+        const blockedBy = id => order.slice(0, order.indexOf(id)).find(o => !free.has(o));
+        const tween = (id, to, done) => { const from = t[id], t0 = performance.now(); const step = now => { const k = Math.min(1, (now - t0) / 380); t[id] = from + (to - from) * (1 - Math.pow(1 - k, 3)); draw(); if (k < 1) requestAnimationFrame(step); else done && done(); }; requestAnimationFrame(step); };
+        const pt = e => { const r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal; return [vb.x + (e.clientX - r.left) / r.width * vb.width, vb.y + (e.clientY - r.top) / r.height * vb.height]; };
+        let drag = null;
+        svg.addEventListener('pointerdown', e => {
+            const g = e.target.closest('[data-grab]'); if (!g) return;
+            const id = g.dataset.grab; if (free.has(id)) return;
+            e.preventDefault(); try { svg.setPointerCapture(e.pointerId); } catch {}
+            drag = { id, start: pt(e), stuck: blockedBy(id) };
+            const c = CH.list.find(x => x.id === id);
+            note.textContent = drag.stuck ? `the ${c.name} is stuck under the ${CH.list.find(x => x.id === drag.stuck).name}.` : `pulling the ${c.name}…`;
+        });
+        svg.addEventListener('pointermove', e => {
+            if (!drag) return;
+            const p = pt(e), d = Math.hypot(p[0] - drag.start[0], p[1] - drag.start[1]);
+            t[drag.id] = drag.stuck ? Math.min(.08, d / 900) : Math.min(1, d / 170);
+            draw();
+        });
+        const up = () => {
+            if (!drag) return;
+            const { id, stuck } = drag; drag = null;
+            if (stuck) { svg.classList.remove('nope'); void svg.getBoundingClientRect(); svg.classList.add('nope'); toast('it won’t budge. something’s on top of it.'); return tween(id, 0); }
+            if (t[id] > .55) tween(id, 1, () => {
+                free.add(id); draw();
+                const left = order.filter(o => !free.has(o));
+                note.textContent = left.length ? 'one down. keep going.' : 'all three, untangled. it’ll be a knot again by tuesday.';
+                if (!left.length) toast('untangled! put that on my résumé.');
+            });
+            else tween(id, 0);
+        };
+        svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
+        $('#chg-reset').onclick = () => { free.clear(); order.forEach(id => tween(id, 0)); note.textContent = 'back in the bag. and… they’re knotted again.'; };
+        draw();
+    },
     backuplip: () => {
         const face = $('#lipface'), paint = $('#lip-paint'), say = $('#lip-say'), NS = 'http://www.w3.org/2000/svg';
         // sample points inside my lips so we know how much is covered
@@ -1658,18 +1709,36 @@ const AFTER = {
             pts.forEach(p => { if (!p[2] && (p[0] - x) ** 2 + (p[1] - y) ** 2 < 225) p[2] = true; });
             const k = pts.filter(p => p[2]).length / pts.length;
             if (!done) say.textContent = k < .3 ? 'keep going…' : k < .65 ? 'ooh. a little more ♡' : k < .85 ? 'almost, get the corners' : say.textContent;
-            if (!done && k >= .85) { done = true; face.classList.add('happy'); say.textContent = 'so much happier now ♡ thank you'; toast('glögg. instant mood ♡'); }
+            if (!done && k >= .85) { done = true; face.classList.add('happy'); say.textContent = 'glögg on. thank you ♡'; toast('glögg. instant mood ♡'); $('#bl-go').textContent = 'Wipe it off'; }
         };
         const toSvg = e => { const r = face.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 300, (e.clientY - r.top) / r.height * 160]; };
-        let down = false, last = null;
-        face.style.touchAction = 'none';
-        face.addEventListener('pointerdown', e => { down = true; last = toSvg(e); dab(...last); try { face.setPointerCapture(e.pointerId); } catch {} });
-        face.addEventListener('pointermove', e => {
-            if (!down) return; const p = toSvg(e), n = Math.ceil(Math.hypot(p[0] - last[0], p[1] - last[1]) / 6);
+        // pick up the lipstick: its bullet tip follows you, and it only paints where the tip touches my lips
+        const stick = $('#lip-stick'), wrap = stick.closest('.lipwrap');
+        let held = false, last = null;
+        stick.style.touchAction = 'none'; face.style.touchAction = 'none';
+        const onLips = e => { const r = face.getBoundingClientRect(); return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom; };
+        const follow = e => {
+            const w = stick.offsetParent.getBoundingClientRect();
+            stick.style.left = (e.clientX - w.left - stick.offsetWidth / 2) + 'px';
+            stick.style.top = (e.clientY - w.top - stick.offsetHeight * .03) + 'px';
+        };
+        stick.addEventListener('pointerdown', e => {
+            e.preventDefault(); held = true; stick.classList.add('held'); follow(e); last = null;
+            try { stick.setPointerCapture(e.pointerId); } catch {}
+            say.textContent = done ? say.textContent : 'now swipe it across my lips ↔';
+        });
+        stick.addEventListener('pointermove', e => {
+            if (!held) return; follow(e);
+            if (!onLips(e)) { last = null; return; }
+            const p = toSvg(e);
+            if (!last) { dab(...p); last = p; return; }
+            const n = Math.ceil(Math.hypot(p[0] - last[0], p[1] - last[1]) / 6);
             for (let k = 1; k <= n; k++) dab(last[0] + (p[0] - last[0]) * k / n, last[1] + (p[1] - last[1]) * k / n);
             last = p;
         });
-        const up = () => { down = false; }; face.addEventListener('pointerup', up); face.addEventListener('pointercancel', up);
+        const drop = () => { if (!held) return; held = false; last = null; stick.classList.remove('held'); stick.style.left = ''; stick.style.top = ''; };
+        stick.addEventListener('pointerup', drop); stick.addEventListener('pointercancel', drop);
+        face.addEventListener('pointerdown', () => { if (!held) toast('pick up the lipstick first ←'); });
         // or let the button do it: two swipes, upper lip then lower
         $('#bl-go').onclick = () => {
             if (done) { paint.innerHTML = ''; pts.forEach(p => p[2] = false); done = false; face.classList.remove('happy'); say.textContent = 'wiped off. dry again. put it back on me ↔'; $('#bl-go').textContent = 'Swipe it on for me'; return; }
@@ -2583,7 +2652,30 @@ function pensAfter(list) {
     const pens = $('#pens'), note = $('#pen-note');
     const tele = $('#tele-btn'), pf = $('#pouch-front');
     const setTele = up => { pf.classList.toggle('down', up); pens.classList.toggle('open', up); if (tele) tele.textContent = up ? 'Pull it back up' : 'Push it down'; note.textContent = up ? pens.dataset.pick : 'zipped and standing tall'; };
-    if (tele) { tele.onclick = () => setTele(!pens.classList.contains('open')); pf.onclick = () => setTele(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
+    if (tele) {
+        tele.onclick = () => setTele(!pens.classList.contains('open'));
+        // or slide the white sleeve down (and back up) yourself, as slowly as you like
+        const sleeve = pf.querySelector('.tele-sleeve'), svgT = pf.querySelector('svg');
+        let drag = null, skip = false;
+        pf.style.cursor = 'grab'; pf.style.touchAction = 'none';
+        pf.addEventListener('pointerdown', e => { drag = { y: e.clientY, from: pens.classList.contains('open') ? 66 : 0, moved: false }; try { pf.setPointerCapture(e.pointerId); } catch {} });
+        pf.addEventListener('pointermove', e => {
+            if (!drag) return;
+            const k = 120 / svgT.getBoundingClientRect().width, v = Math.max(0, Math.min(66, drag.from + (e.clientY - drag.y) * k));
+            if (Math.abs(e.clientY - drag.y) > 3) drag.moved = true;
+            if (!drag.moved) return;
+            drag.v = v; sleeve.style.transition = 'none'; sleeve.style.transform = `translateY(${v}px)`;
+            pens.classList.toggle('open', v > 33);
+        });
+        const end = () => {
+            if (!drag) return; const d = drag; drag = null;
+            sleeve.style.transition = ''; sleeve.style.transform = '';
+            if (!d.moved) return setTele(!pens.classList.contains('open'));
+            skip = true; setTele(d.v > 33);
+        };
+        pf.addEventListener('pointerup', end); pf.addEventListener('pointercancel', end);
+        pf.addEventListener('click', e => { if (skip) { skip = false; e.stopPropagation(); } });
+    }
     const cc = $('#cc-btn');
     if (cc) zipperPouch(pf, pens, cc, note);
     setTimeout(() => { if (tele) setTele(true); else if (cc) cc.click(); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);

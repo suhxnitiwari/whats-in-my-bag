@@ -2007,3 +2007,23 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .pf-curl[hidden] { display: none; }
 .pf-prev { position: absolute; left: 8px; top: -2px; z-index: 20; border: 0; background: none; color: var(--plum); cursor: pointer; font-size: .7rem; text-transform: none; }
 .dtool[data-tool="whiteout"] svg { width: 150px; }
+
+/* chargers: pull the top cable out first */
+.chg-svg { display: block; width: min(560px, 100%); margin: 0 auto; touch-action: none; user-select: none; }
+.chg-grab { fill: transparent; cursor: grab; }
+.chg-grab:hover { fill: rgba(242,141,180,.25); }
+.chg.done .chg-grab, .chg-svg .chg.done ~ .chg-grab { cursor: default; }
+.chg-lbl { font: 600 13px var(--hand); fill: var(--plum); }
+.chg-note { text-align: center; font-size: 1.4rem; color: var(--plum); min-height: 1.6em; }
+.chg-svg.nope { animation: chg-nope .35s; }
+@keyframes chg-nope { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+/* backup lipstick, to scale: about as tall as my lips are wide. pick it up; the bullet tip is what paints */
+.lipwrap { max-width: 600px; gap: 22px; }
+.lip-slot { position: relative; flex: none; width: min(120px, 22%); aspect-ratio: 70 / 150; }
+.lip-stick { position: absolute; left: 0; top: 0; width: 100%; padding: 0; border: 0; background: none; cursor: grab; transform: rotate(-14deg); transform-origin: 50% 3%; transition: left .5s cubic-bezier(.3,1.2,.5,1), top .5s cubic-bezier(.3,1.2,.5,1), transform .3s; z-index: 5; filter: drop-shadow(0 6px 8px rgba(40,20,20,.25)); }
+.lip-stick svg { display: block; width: 100%; height: auto; }
+.lip-stick:hover { transform: rotate(-10deg) translateY(-4px); }
+.lip-stick.held { position: absolute; transition: transform .2s; transform: rotate(-38deg); cursor: grabbing; z-index: 30; }
+.lipwrap { position: relative; }
+.lipface { cursor: default; }
