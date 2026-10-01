@@ -160,6 +160,29 @@ window.SKIN = {
         <ellipse class="dab" cx="55" cy="47" rx="40" ry="4" fill="#FBF1EE"/></svg>`
 };
 
+/* my jewelry: drawn from the real pieces */
+const CHAIN = (d, beads) => `<path d="${d}" fill="none" stroke="#C99A3A" stroke-width="2.2"/><path d="${d}" fill="none" stroke="#F3D58A" stroke-width="1" stroke-dasharray="2 2.4"/>${beads || ''}`;
+const ELISA = (stone, inner) => `<g transform="translate(120 150)"><path d="M-30 0 L-22 -15 H22 L30 0 L22 15 H-22Z" fill="#E9C46A" stroke="#9C7420" stroke-width="1.6"/><path d="M-30 0 L-22 -15 H22 L30 0 L22 15 H-22Z" fill="none" stroke="#FFF1C2" stroke-width=".8" stroke-dasharray="1 1.6" transform="scale(.93)"/>
+    <path d="M-25 0 L-18 -11 H18 L25 0 L18 11 H-18Z" fill="${stone}" stroke="#9C7420" stroke-width="1"/>${inner}
+    <path d="M-20 -11 l3 3 M20 -11 l-3 3 M-20 11 l3 -3 M20 11 l-3 -3" stroke="#E9C46A" stroke-width="2"/></g>`;
+window.JEWELS = {
+    evil: `<svg viewBox="0 0 240 210">${CHAIN('M14 10 C24 150 216 150 226 10')}
+        ${[[42, 98, 'moon'], [62, 122, 'inf'], [88, 138, 'clover'], [120, 144, 'eye'], [152, 138, 'pearl'], [178, 122, 'drop'], [198, 98, 'shoe']].map(([x, y, k]) => `<g transform="translate(${x} ${y + 12})">${{
+            moon: '<path d="M-7 -8 a10 10 0 1 0 10 14 a8 8 0 1 1 -10 -14z" fill="#1E2A6E" stroke="#C99A3A" stroke-width="1.2"/><circle cx="-4" cy="2" r="1" fill="#8FB0F0"/><circle cx="0" cy="6" r="1" fill="#8FB0F0"/>',
+            inf: '<path d="M-10 0 c0 -6 8 -6 10 0 c2 6 10 6 10 0 c0 -6 -8 -6 -10 0 c-2 6 -10 6 -10 0z" fill="none" stroke="#E2B24A" stroke-width="3"/>',
+            clover: '<g fill="#F2F4F8" stroke="#C99A3A" stroke-width="1"><circle cx="-5" cy="-5" r="6"/><circle cx="5" cy="-5" r="6"/><circle cx="-5" cy="5" r="6"/><circle cx="5" cy="5" r="6"/></g><circle r="4" fill="#2C4A9E"/>',
+            eye: '<ellipse rx="16" ry="9" fill="#F2F4F8" stroke="#C99A3A" stroke-width="1.4"/><circle r="6" fill="#3B6FD8"/><circle r="3" fill="#0E1A44"/><circle cx="-1.5" cy="-1.5" r="1" fill="#fff"/>',
+            pearl: '<circle r="6.5" fill="#FBF8F0" stroke="#D8D0C0" stroke-width="1"/><circle cx="-2" cy="-2" r="2" fill="#fff"/>',
+            drop: '<path d="M0 -10 C6 -2 8 4 0 10 C-8 4 -6 -2 0 -10Z" fill="#2B3E8C" stroke="#C99A3A" stroke-width="1"/><path d="M-2 -2 l2 -4" stroke="#8FB0F0" stroke-width="1"/>',
+            shoe: '<path d="M-8 8 V-2 a8 8 0 0 1 16 0 V8" fill="none" stroke="#F2F4F8" stroke-width="5"/><path d="M-8 8 V-2 a8 8 0 0 1 16 0 V8" fill="none" stroke="#C99A3A" stroke-width="1" stroke-dasharray="1.5 2"/>'
+        }[k]}</g><path d="M${x} ${y} v${12 - 9}" stroke="#C99A3A" stroke-width="1.2"/>`).join('')}
+        <circle cx="14" cy="10" r="4" fill="#E2B24A"/></svg>`,
+    tx: `<svg viewBox="0 0 240 190">${CHAIN('M20 8 C26 130 92 140 96 150 M144 150 C148 140 214 130 220 8', Array.from({ length: 12 }, (_, k) => { const t = k / 11, x = 20 + (96 - 20) * t, y = 8 + 142 * t * t; return `<circle cx="${(20 + 76 * t).toFixed(0)}" cy="${(8 + 130 * Math.sin(t * 1.5)).toFixed(0)}" r="1.6" fill="#E9C46A"/>`; }).join(''))}
+        ${ELISA('#F5EEE2', '<path d="M-18 -11 L18 11 M18 -11 L-18 11" stroke="#fff" stroke-width=".6" opacity=".5"/><text x="0" y="6" text-anchor="middle" font-family="Bodoni Moda, serif" font-weight="600" font-size="15" fill="#C99A3A" letter-spacing="1">TX</text>')}</svg>`,
+    teal: `<svg viewBox="0 0 240 190">${CHAIN('M20 8 C26 130 92 140 96 150 M144 150 C148 140 214 130 220 8')}
+        ${ELISA('#0F5A5C', '<path d="M-18 -11 L-4 0 L-18 11 M18 -11 L4 0 L18 11 M-4 0 H4" stroke="#3FA3A0" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-10 -8 l8 6" stroke="#9FE0D8" stroke-width="1.6" opacity=".7"/>')}</svg>`
+};
+
 window.ITEMS = [
     {
         id: 'headphones', name: 'my airpods max', zip: 'devices', l: 67.7, t: 8.2, w: 16.0, r: -8,
@@ -284,6 +307,11 @@ window.ITEMS = [
             <g transform="translate(16 40)"><g fill="none" stroke="#D8B36A" stroke-width="1.6"><path d="M-0.6 -3.4 A3.6 3.6 0 1 0 -0.6 3.4"/><path d="M0.6 -3.4 A3.6 3.6 0 1 1 0.6 3.4"/></g></g><g transform="translate(234 40)"><g fill="none" stroke="#D8B36A" stroke-width="1.6"><path d="M-0.6 -3.4 A3.6 3.6 0 1 0 -0.6 3.4"/><path d="M0.6 -3.4 A3.6 3.6 0 1 1 0.6 3.4"/></g></g>
             <path d="M20 16 Q40 12 70 12" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/></svg>`,
         open: 'sunglasses'
+    },
+    {
+        id: 'jewelry', name: 'my little jewelry box', zip: 'shades', l: 0, t: 0, w: 9.4, r: -5,
+        art: `<svg viewBox="0 0 120 80"><rect x="6" y="20" width="108" height="54" rx="10" fill="#F2B8C6" ${S}/><path d="M6 40 H114" ${S} stroke-width="2"/><rect x="10" y="8" width="100" height="34" rx="10" fill="#F6C9D4" ${S}/><path d="M18 14 h84" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/><rect x="52" y="34" width="16" height="12" rx="3" fill="#E2B24A" ${S} stroke-width="2"/><circle cx="60" cy="40" r="2" fill="#9C7420"/></svg>`,
+        open: 'jewelry'
     },
     {
         id: 'keys', name: 'my keys', zip: 'shades', l: 93.0, t: 14.4, w: 11.7, r: 4,

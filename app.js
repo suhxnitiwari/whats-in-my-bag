@@ -1001,6 +1001,14 @@ function chapterBook(list, bye) {
     $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; turn(-1); } };
 }
 const VIEWS = {
+    jewelry: () => `
+        <h2>My little <em>jewelry box</em></h2>
+        <p class="note">three necklaces, always with me. tap the box, then pick one up.</p>
+        <div class="jw" id="jw">
+            <div class="jw-lid" aria-hidden="true"></div>
+            <div class="jw-base">${[['evil', 'Swarovski Symbolic evil eye necklace', 'a moon, infinity, a clover, the evil eye, a pearl, a blue drop and a horseshoe. every lucky charm at once.'], ['tx', 'Kendra Scott Elisa necklace, TX', 'texas, in gold, on ivory.'], ['teal', 'Kendra Scott Elisa necklace, Dark Teal Green Illusion', 'the dark teal one.']].map(([k, n, d]) => `<button type="button" class="jw-slot" data-j="${k}" data-n="${n}" data-d="${d}" aria-label="${n}">${JEWELS[k]}</button>`).join('')}</div>
+        </div>
+        <p class="hand jw-say" id="jw-say">tap the box to open it</p>`,
     onward: () => `
         <h2><em>Onward</em></h2>
         <p class="note">howard schultz. how starbucks fought for its life without losing its soul. open it: every chapter is another book behind the business.</p>
@@ -1821,6 +1829,17 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    jewelry: () => {
+        const jw = $('#jw'), say = $('#jw-say');
+        jw.addEventListener('click', e => {
+            if (!jw.classList.contains('open')) { jw.classList.add('open'); say.textContent = 'pick one up'; return; }
+            const slot = e.target.closest('[data-j]'); if (!slot) return;
+            const up = !slot.classList.contains('up');
+            jw.querySelectorAll('.jw-slot').forEach(x => x.classList.remove('up'));
+            if (up) slot.classList.add('up');
+            say.textContent = up ? `${slot.dataset.n}. ${slot.dataset.d}` : 'pick one up';
+        });
+    },
     mailbox: () => {
         const mbx = $('#mbx'), btn = $('#mbx-key');
         btn.onclick = () => {
