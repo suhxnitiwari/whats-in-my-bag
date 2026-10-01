@@ -2356,3 +2356,8 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .study-say { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 8px 0 14px; }
 @media (max-width: 560px) { .study-wrap { flex-direction: column-reverse; align-items: center; } .study-hp { flex-basis: auto; width: 90px; margin: 0; } .study { margin: 0; width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .study-hp { animation: none; } }
+
+/* the sunglasses you drag around: chunky black square frames with a cream edge, brown gradient lenses */
+.rz-lens { border: 12px solid #141010; outline: none; box-shadow: 0 0 0 2.5px #EFE3CF; border-radius: 12px; }
+.rz-lens::after { background: linear-gradient(180deg, rgba(46, 24, 18, .42), rgba(178, 110, 72, .16)); }
+.rz-bridge { width: 8%; height: 14px; margin-top: -26%; background: #141010; border-top: 2.5px solid #EFE3CF; border-radius: 10px 10px 4px 4px; }

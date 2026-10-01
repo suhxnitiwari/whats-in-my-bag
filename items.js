@@ -326,16 +326,15 @@ window.ITEMS = [
     },
     {
         id: 'sunglasses', name: 'my chanel sunglasses', zip: 'shades', l: 84.6, t: 3.8, w: 13.2, r: -6,
-        art: `<svg viewBox="0 0 250 106"><defs><linearGradient id="lens2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6E5650"/><stop offset=".55" stop-color="#B08F86"/><stop offset="1" stop-color="#E7C9BE"/></linearGradient></defs>
-            <path d="M6 30 L-2 34 L0 62 L8 60Z" fill="#D6B596" stroke="#3A2626" stroke-width="1.8"/><path d="M244 30 L252 34 L250 62 L242 60Z" fill="#D6B596" stroke="#3A2626" stroke-width="1.8"/>
-            <path d="M14 26 Q14 12 28 12 H104 Q118 12 118 26 V76 Q118 90 104 90 H28 Q14 90 14 76Z" fill="#D6B596" stroke="#3A2626" stroke-width="2.4"/><path d="M132 26 Q132 12 146 12 H222 Q236 12 236 26 V76 Q236 90 222 90 H146 Q132 90 132 76Z" fill="#D6B596" stroke="#3A2626" stroke-width="2.4"/>
-            <path d="M14 26 Q14 12 28 12 H104 Q118 12 118 26 V76 Q118 90 104 90 H28 Q14 90 14 76Z" fill="#141214" transform="translate(66 51) scale(.97 .94) translate(-66 -53)"/><path d="M132 26 Q132 12 146 12 H222 Q236 12 236 26 V76 Q236 90 222 90 H146 Q132 90 132 76Z" fill="#141214" transform="translate(184 51) scale(.97 .94) translate(-184 -53)"/>
-            <path d="M114 34 Q125 28 136 34 V44 Q125 40 114 44Z" fill="#141214" stroke="#3A2626" stroke-width="1.6"/>
-            <path d="M28 34 Q28 26 36 26 H96 Q104 26 104 34 V68 Q104 76 96 76 H36 Q28 76 28 68Z" fill="#D6B596"/><path d="M146 34 Q146 26 154 26 H214 Q222 26 222 34 V68 Q222 76 214 76 H154 Q146 76 146 68Z" fill="#D6B596"/>
-            <path d="M28 34 Q28 26 36 26 H96 Q104 26 104 34 V68 Q104 76 96 76 H36 Q28 76 28 68Z" fill="url(#lens2)" transform="translate(66 51) scale(.95) translate(-66 -51)"/><path d="M146 34 Q146 26 154 26 H214 Q222 26 222 34 V68 Q222 76 214 76 H154 Q146 76 146 68Z" fill="url(#lens2)" transform="translate(184 51) scale(.95) translate(-184 -51)"/>
-            <path d="M34 34 L58 34 L44 50Z M152 34 L176 34 L162 50Z" fill="#fff" opacity=".14"/>
-            <g transform="translate(16 40)"><g fill="none" stroke="#D8B36A" stroke-width="1.6"><path d="M-0.6 -3.4 A3.6 3.6 0 1 0 -0.6 3.4"/><path d="M0.6 -3.4 A3.6 3.6 0 1 1 0.6 3.4"/></g></g><g transform="translate(234 40)"><g fill="none" stroke="#D8B36A" stroke-width="1.6"><path d="M-0.6 -3.4 A3.6 3.6 0 1 0 -0.6 3.4"/><path d="M0.6 -3.4 A3.6 3.6 0 1 1 0.6 3.4"/></g></g>
-            <path d="M20 16 Q40 12 70 12" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/></svg>`,
+        art: `<svg viewBox="0 0 250 106"><defs><linearGradient id="lens2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1812"/><stop offset=".5" stop-color="#5E3020"/><stop offset="1" stop-color="#B26E48"/></linearGradient></defs>
+            <!-- square black frames, a thin cream edge all the way round, brown gradient lenses, the cream CC on each arm -->
+            <path d="M8 18 Q8 10 16 10 H104 Q112 10 112 18 V86 Q112 96 102 96 H18 Q8 96 8 86Z" fill="#EFE3CF" stroke="#3A2626" stroke-width="1.6"/><path d="M138 18 Q138 10 146 10 H234 Q242 10 242 18 V86 Q242 96 232 96 H148 Q138 96 138 86Z" fill="#EFE3CF" stroke="#3A2626" stroke-width="1.6"/>
+            <path d="M106 18 Q125 30 144 18 V54 Q125 46 106 54Z" fill="#EFE3CF" stroke="#3A2626" stroke-width="1.6"/>
+            <g fill="#141010"><path d="M8 18 Q8 10 16 10 H104 Q112 10 112 18 V86 Q112 96 102 96 H18 Q8 96 8 86Z" transform="translate(60 53) scale(.955 .94) translate(-60 -53)"/><path d="M138 18 Q138 10 146 10 H234 Q242 10 242 18 V86 Q242 96 232 96 H148 Q138 96 138 86Z" transform="translate(190 53) scale(.955 .94) translate(-190 -53)"/><path d="M104 22 Q125 34 146 22 V51 Q125 44 104 51Z"/></g>
+            <path d="M23 30 Q23 24 29 24 H91 Q97 24 97 30 V76 Q97 82 91 82 H29 Q23 82 23 76Z" fill="url(#lens2)"/><path d="M153 30 Q153 24 159 24 H221 Q227 24 227 30 V76 Q227 82 221 82 H159 Q153 82 153 76Z" fill="url(#lens2)"/>
+            <g transform="translate(16 20)"><g fill="none" stroke="#EFE3CF" stroke-width="2" stroke-linecap="round"><path d="M-1 -4 A4.2 4.2 0 1 0 -1 4"/><path d="M1 -4 A4.2 4.2 0 1 1 1 4"/></g></g><g transform="translate(234 20)"><g fill="none" stroke="#EFE3CF" stroke-width="2" stroke-linecap="round"><path d="M-1 -4 A4.2 4.2 0 1 0 -1 4"/><path d="M1 -4 A4.2 4.2 0 1 1 1 4"/></g></g>
+            <path d="M28 30 L56 30 L38 52Z M158 30 L186 30 L168 52Z" fill="#fff" opacity=".12"/>
+            <path d="M16 16 Q40 13 74 14 M146 16 Q170 13 204 14" stroke="#fff" stroke-width="2" fill="none" opacity=".22" stroke-linecap="round"/></svg>`,
         open: 'sunglasses'
     },
     {
