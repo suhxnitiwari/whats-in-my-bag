@@ -61,14 +61,14 @@ button { font: inherit; color: inherit; }
 .stage {
     position: relative; z-index: 2;
     width: min(1180px, calc(100% - 32px));
-    aspect-ratio: 16 / 11;   /* everything on the table is drawn to one real-world scale: the backpack (~32 cm) is 22% wide */
+    aspect-ratio: 16 / 13.5;   /* everything on the table is drawn to one real-world scale: the backpack (~32 cm) is 30% wide */
     margin: clamp(16px, 3vw, 32px) auto 0;
 }
 .doodles { position: absolute; inset: 0; pointer-events: none; }
 .doodles svg { position: absolute; opacity: .7; }
 
 .bag {
-    position: absolute; left: 50%; top: 50%; width: 22%;
+    position: absolute; left: 50%; top: 47%; width: 30%;
     transform: translate(-50%, -50%);
     background: none; border: 0; padding: 0; cursor: pointer; z-index: 3;
     transition: width .7s var(--ease), top .7s var(--ease);
@@ -596,3 +596,13 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .yt-thumb.grwm { display: grid; place-items: center; background: linear-gradient(135deg, #F4A7B9, #F7E06B); font-family: var(--hand); font-size: 1rem; color: #3A2626; }
 .yt-row b { display: block; font-size: .7rem; line-height: 1.25; font-weight: 600; }
 .yt-row small { display: block; margin-top: 2px; font-size: .6rem; color: #606060; }
+
+/* before any zipper is pulled, the backpack is the star: big, and right up front */
+.stage.idle .bag { width: 40%; top: 36%; }
+.stage .bag { transition: width .7s var(--ease), top .7s var(--ease); }
+/* Pinterest profile header */
+.pin-head { display: flex; align-items: center; gap: 10px; margin: 6px 0 12px; font-family: -apple-system, system-ui, sans-serif; }
+.pin-head img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.pin-head b { display: block; font-size: .9rem; color: #111; }
+.pin-head small { font-size: .7rem; color: #767676; }
+.pin-btn { margin-left: auto; padding: 7px 12px; border-radius: 999px; background: #E60023; color: #fff; font-size: .72rem; font-weight: 700; text-decoration: none; }

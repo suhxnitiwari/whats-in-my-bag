@@ -94,6 +94,7 @@ function slide(pk, from, to) {
 
 
 // the side pocket: my Stanley is always out
+stage.classList.add('idle');
 ITEMS.filter(it => it.zip === 'side').forEach(it => {
     const li = document.getElementById('item-' + it.id);
     li.classList.add('out'); li.querySelector('button').tabIndex = 0;
@@ -104,6 +105,7 @@ function unzip(pk) {
     busy = busy.then(async () => {
         if (open.has(pk.id)) return;
         open.add(pk.id);
+        stage.classList.remove('idle');
         pk.el.pull.setAttribute('aria-pressed', 'true');
         pk.el.pull.setAttribute('aria-label', `Zip up: ${pk.label}`);
         pk.el.g.classList.add('open');
@@ -143,7 +145,7 @@ function zipUp(pk) {
         pk.el.g.classList.remove('open');
         pk.el.pull.setAttribute('aria-pressed', 'false');
         pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
-        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; }
+        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; stage.classList.add('idle'); }
     });
     return busy;
 }
@@ -695,7 +697,7 @@ const AFTER = {
             const k = b.dataset.ip;
             if (k === 'pinterest') {
                 const pins = ['art/embracing-cultural-identity', 'img/cake-solar-system', 'img/cafe', 'art/braid', 'posters/gossip-girl', 'img/nyc', 'img/cupcakes', 'art/coexistence-of-both-my-worlds', 'img/chicago', 'art/packing-home', 'img/cake-lego', 'art/vanity'];
-                view.innerHTML = back + `<p class="ip-title">my board</p><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
+                view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
             } else if (k === 'procreate') {
                 view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="canvases">${ART.map(([t, , f], i) => `<button type="button" class="canvas" data-page="${i}"><img src="assets/art/${f}.jpg" alt=""><span>${t}</span></button>`).join('')}</div>`;
                 view.classList.add('procreate');

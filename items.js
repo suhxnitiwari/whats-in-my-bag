@@ -57,7 +57,7 @@ window.BAG = {
 
 window.ITEMS = [
     {
-        id: 'headphones', name: 'my headphones', zip: 'devices', l: 52, t: 14, w: 12, r: -8,
+        id: 'headphones', name: 'my headphones', zip: 'devices', l: 52, t: 12, w: 14, r: -8,
         art: `<svg viewBox="0 0 220 190"><path d="M36 128 C20 30 200 30 184 128" fill="none" ${S} stroke-width="16"/><path d="M36 128 C20 30 200 30 184 128" fill="none" stroke="#F2C6C8" stroke-width="7" stroke-linecap="round"/><rect x="12" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="158" y="104" width="50" height="72" rx="24" fill="#F4A7B9" ${S}/><rect x="22" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><rect x="168" y="116" width="30" height="48" rx="14" fill="#FFFBF8" ${S} stroke-width="2"/><path d="M104 24 q10 -14 20 0" fill="none" ${S} stroke-width="2"/><circle cx="92" cy="10" r="4" fill="${INK}"/><path d="M96 10 V-6" ${S} stroke-width="2"/></svg>`,
         open: () => `
             <h2>What I’m <em>listening</em> to</h2>
@@ -68,7 +68,7 @@ window.ITEMS = [
             <div class="row"><a class="btn solid" href="https://listening-history.onrender.com/" target="_blank" rel="noopener">Open Listening History ↗</a><a class="btn" href="https://github.com/suhxnitiwari/listening-history" target="_blank" rel="noopener">Code ↗</a></div>`
     },
     {
-        id: 'sketchbook', name: 'my sketchbook', zip: 'main', l: 29, t: 57, w: 13, r: 6,
+        id: 'sketchbook', name: 'my sketchbook', zip: 'main', l: 44, t: 84, w: 15, r: 6,
         art: `<svg viewBox="0 0 180 220"><rect x="14" y="10" width="156" height="200" rx="10" fill="#8E9A6E" ${S}/><path d="M14 30 H4 M14 60 H4 M14 90 H4 M14 120 H4 M14 150 H4 M14 180 H4" ${S}/><rect x="132" y="10" width="12" height="200" fill="#F4A7B9" ${S}/><rect x="42" y="56" width="76" height="52" rx="4" fill="#FFFBF8" ${S} transform="rotate(-4 80 82)"/><text x="80" y="88" text-anchor="middle" font-family="Caveat" font-size="24" fill="${INK}" transform="rotate(-4 80 82)">sketches</text><path d="M60 150 q12 -18 24 0 t24 0" fill="none" ${S} stroke-width="2"/><circle cx="104" cy="170" r="6" fill="#F2C6C8" ${S} stroke-width="2"/></svg>`,
         open: 'sketchbook'
     },
@@ -88,43 +88,43 @@ window.ITEMS = [
         open: 'mascara'
     },
     {
-        id: 'wallet', name: 'my wallet', zip: 'front', l: 79, t: 52, w: 8.5, r: -8,
+        id: 'wallet', name: 'my wallet', zip: 'front', l: 80, t: 47, w: 10, r: -8,
         art: `<svg viewBox="0 0 200 140"><rect x="6" y="10" width="188" height="124" rx="12" fill="#5A3A26" ${S}/><path d="M6 20 C6 14 10 10 16 10 H184 C190 10 194 14 194 20 V74 L100 118 L6 74Z" fill="#6B4730" ${S}/><g fill="#C99A5B"><path d="M40 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M160 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M100 26 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M40 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M160 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/></g><text x="100" y="66" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="15" letter-spacing="4" fill="#E8C36A">SUHANI</text><circle cx="100" cy="104" r="9" fill="#E8C36A" ${S} stroke-width="2.5"/><path d="M4 30 h4 M4 60 h4 M4 90 h4" stroke="#B3263E" stroke-width="4"/></svg>`,
         open: 'wallet'
     },
     {
-        id: 'pouch', name: 'my mildliner pouch', zip: 'main', l: 54, t: 88, w: 7, r: -8,
+        id: 'pouch', name: 'my mildliner pouch', zip: 'main', l: 75, t: 84, w: 8, r: -8,
         art: `<svg viewBox="0 0 130 170"><g>${['#F7E06B', '#B9A3E8', '#F29B6B', '#F4A7B9', '#8FD19E', '#8CC4F0', '#E8A1C4', '#F2C572', '#9ED3C3'].map((c, i) => `<g transform="rotate(${(i - 4) * 6.5} 65 120)"><rect x="58" y="10" width="14" height="110" rx="4" fill="#FFFDF9" ${S} stroke-width="2"/><rect x="58" y="4" width="14" height="18" rx="4" fill="${c}" ${S} stroke-width="2"/></g>`).join('')}</g><path d="M14 74 C14 64 116 64 116 74 L110 158 C108 166 22 166 20 158Z" fill="#F7F4F1" ${S}/><path d="M14 74 C40 84 90 84 116 74" fill="none" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 74 C40 84 90 84 116 74" fill="none" ${S} stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="42" cy="122" r="11" fill="#8E2D6E" ${S} stroke-width="2"/><circle cx="38" cy="119" r="1.6" fill="#fff"/><circle cx="46" cy="119" r="1.6" fill="#fff"/><path d="M37 125 q5 5 10 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M112 78 l6 10" ${S} stroke-width="2"/><rect x="113" y="86" width="8" height="12" rx="3" fill="#F4A7B9" ${S} stroke-width="2"/></svg>`,
         open: 'mildliners'
     },
     {
-        id: 'penpouch', name: 'my paper mate pouch', zip: 'main', l: 43, t: 90, w: 14, r: 4,
+        id: 'penpouch', name: 'my paper mate pouch', zip: 'main', l: 61, t: 82, w: 16, r: 4,
         art: `<svg viewBox="0 0 230 110"><g>${['#E63F7A', '#7B4FD1', '#1F6FD1', '#18A39A', '#F0592B', '#D6336C', '#9B59D0', '#2E86DE'].map((c, i) => `<rect x="${30 + i * 16}" y="${4 + (i % 3) * 5}" width="12" height="40" rx="5" fill="${c}" ${S} stroke-width="2"/>`).join('')}</g><g>${['#7FC6E8', '#F4A7B9', '#B9A3E8'].map((c, i) => `<g transform="rotate(${-14 + i * 7} ${170 + i * 12} 40)"><rect x="${166 + i * 12}" y="2" width="8" height="44" rx="3" fill="${c}" fill-opacity=".55" ${S} stroke-width="1.8"/><rect x="${166 + i * 12}" y="-4" width="8" height="8" rx="2" fill="#FFFDF9" ${S} stroke-width="1.8"/></g>`).join('')}</g><rect x="10" y="30" width="210" height="74" rx="18" fill="#F6CFD6" ${S}/><path d="M160 30 C190 30 214 40 220 60 L220 44 C220 36 214 30 206 30Z" fill="#F8E7A9" opacity=".9"/><path d="M150 32 q30 10 70 32" fill="none" stroke="#F8E7A9" stroke-width="10" stroke-linecap="round" opacity=".8"/><path d="M26 44 H204" ${S} stroke-dasharray="5 5"/><rect x="150" y="76" width="48" height="16" rx="2" fill="#FFFBF2" ${S} stroke-width="1.5"/><text x="174" y="87" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="${INK}" letter-spacing=".5">CICIMELON</text><circle cx="212" cy="46" r="5" fill="#C9CCD2" ${S} stroke-width="1.5"/></svg>`,
         open: 'gelpens'
 
     },
     {
-        id: 'sunglasses', name: 'my sunglasses', zip: 'shades', l: 76, t: 10, w: 10, r: -6,
+        id: 'sunglasses', name: 'my sunglasses', zip: 'shades', l: 71, t: 8, w: 12, r: -6,
         art: `<svg viewBox="0 0 240 110"><defs><linearGradient id="lens" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2226"/><stop offset="1" stop-color="#9C979C"/></linearGradient></defs><path d="M8 26 L-2 12" ${S} stroke-width="6"/><path d="M232 26 L242 12" ${S} stroke-width="6"/><rect x="8" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="136" y="20" width="96" height="74" rx="16" fill="#1E1414" ${S}/><rect x="18" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><rect x="146" y="30" width="76" height="54" rx="10" fill="url(#lens)"/><path d="M104 40 Q120 28 136 40" fill="none" ${S} stroke-width="8"/><path d="M104 40 Q120 28 136 40" fill="none" stroke="#1E1414" stroke-width="4"/><rect x="4" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><rect x="228" y="22" width="8" height="30" rx="2" fill="#D9A441" ${S} stroke-width="2"/><path d="M26 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/><path d="M154 38 l14 -4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/></svg>`,
         open: 'sunglasses'
     },
     {
-        id: 'keys', name: 'my keys', zip: 'shades', l: 91, t: 11, w: 11, r: 4,
+        id: 'keys', name: 'my keys', zip: 'shades', l: 90, t: 10, w: 13, r: 4,
         get art() { return window.KEYRING(false); },
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel mirror (the blair waldorf one)', zip: 'main', l: 76, t: 90, w: 5, r: 0,
+        id: 'mirror', name: 'my chanel mirror (the blair waldorf one)', zip: 'main', l: 80, t: 61, w: 6, r: 0,
         art: `<svg viewBox="0 0 120 120"><rect x="8" y="8" width="104" height="104" rx="22" fill="#141011" ${S}/><rect x="16" y="16" width="88" height="88" rx="16" fill="none" stroke="#3A3033" stroke-width="2"/><circle cx="60" cy="60" r="15" fill="none" stroke="#E9E4DF" stroke-width="4"/><circle cx="60" cy="60" r="7" fill="#141011"/><path d="M26 30 q12 -10 30 -8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/></svg>`,
         open: 'mirror'
     },
     {
-        id: 'makeup-pouch', name: 'my victoria’s secret makeup pouch', zip: 'main', l: 66, t: 90, w: 13, r: -4,
+        id: 'makeup-pouch', name: 'my victoria’s secret makeup pouch', zip: 'main', l: 89, t: 84, w: 15, r: -4,
         art: `<svg viewBox="0 0 200 130"><defs><pattern id="vs" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(0)"><rect width="16" height="16" fill="#F7C9D6"/><rect width="8" height="16" fill="#F29BB6"/></pattern></defs><path d="M14 40 C14 22 186 22 186 40 L178 116 C176 124 24 124 22 116Z" fill="url(#vs)" ${S}/><path d="M22 40 H178" ${S} stroke-dasharray="5 5"/><rect x="164" y="30" width="18" height="16" rx="4" fill="#D9A441" ${S} stroke-width="2.5"/><path d="M173 46 v16" ${S} stroke-width="2.5"/><circle cx="173" cy="66" r="5" fill="#fff" ${S} stroke-width="2"/><rect x="40" y="4" width="10" height="42" rx="3" fill="#E8EFF6" ${S} stroke-width="2" transform="rotate(-8 45 25)"/><path d="M68 44 V14 q8 -14 16 0 V44Z" fill="#3A2626" ${S} stroke-width="2"/><circle cx="76" cy="10" r="9" fill="#F2D7C8" ${S} stroke-width="2"/></svg>`,
         open: 'makeupbag'
     },
     {
-        id: 'stanley', name: 'my pink stanley', zip: 'side', l: 66, t: 50, w: 5, r: 3,
+        id: 'stanley', name: 'my pink stanley', zip: 'side', l: 69, t: 47, w: 6, r: 3,
         art: `<svg viewBox="0 0 64 240"><defs>
             <pattern id="bowprint" width="32" height="44" patternUnits="userSpaceOnUse">
                 <rect width="32" height="44" fill="#FFFCFB"/>
@@ -146,7 +146,7 @@ window.ITEMS = [
         open: 'stanley'
     },
     {
-        id: 'sweater', name: 'my ralph lauren cable knit', zip: 'main', l: 11, t: 56, w: 20, r: -4,
+        id: 'sweater', name: 'my ralph lauren cable knit', zip: 'main', l: 13, t: 50, w: 23, r: -4,
         art: `<svg viewBox="0 0 240 170"><defs>
             <pattern id="rib" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#A9744C"/><path d="M3 0 v10" stroke="#8C5D3A" stroke-width="2"/></pattern>
             <pattern id="cable" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#B98258"/>
@@ -165,27 +165,27 @@ window.ITEMS = [
         open: 'sweater'
     },
     {
-        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 25, t: 86, w: 14, r: 6,
+        id: 'notebooks', name: 'my erin condren notebooks', zip: 'main', l: 27, t: 86, w: 15, r: 6,
         get art() { return `<span style="display:grid"><span style="grid-area:1/1; transform:rotate(-9deg) translate(-8%, 2%)">${window.EC(['#C2407A', '#F4C6D2', '#8A9AA6', '#F3EDE3'])}</span><span style="grid-area:1/1; transform:rotate(4deg) translate(4%, -3%)">${window.EC(['#5E7486', '#F3EDE3', '#C2407A', '#F4C6D2'])}</span></span>`; },
         open: 'notebooks'
     },
     {
-        id: 'binder', name: 'my pink binder', zip: 'main', l: 9, t: 85, w: 16, r: -5,
+        id: 'binder', name: 'my pink binder', zip: 'main', l: 10, t: 86, w: 17, r: -5,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'
     },
     {
-        id: 'ipad', name: 'my ipad', zip: 'devices', l: 27, t: 14, w: 17, r: 4,
+        id: 'ipad', name: 'my ipad', zip: 'devices', l: 30, t: 11, w: 20, r: 4,
         art: `<svg viewBox="0 0 220 160"><rect x="4" y="4" width="212" height="152" rx="16" fill="#2A2629" ${S}/><rect x="14" y="14" width="192" height="132" rx="8" fill="#F7E9EC"/><rect x="58" y="46" width="40" height="40" rx="10" fill="#E60023" ${S} stroke-width="2"/><path d="M78 56 c-10 0 -13 8 -11 13 c1 3 3 3 3 1 c-1 -4 1 -9 8 -9 c6 0 8 4 7 8 c-1 5 -4 7 -6 6 c-2 0 -2 -2 -1 -4 l1 -5 m0 0 l-4 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><rect x="122" y="46" width="40" height="40" rx="10" fill="#1B1B1F" ${S} stroke-width="2"/><path d="M132 78 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="133" cy="78" r="3" fill="#B9A3E8"/><text x="78" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Pinterest</text><text x="142" y="104" text-anchor="middle" font-family="Instrument Sans" font-size="9" fill="${INK}">Procreate</text></svg>`,
         open: 'ipad'
     },
     {
-        id: 'phone', name: 'my phone', zip: 'shades', l: 84, t: 28, w: 5, r: -8,
+        id: 'phone', name: 'my phone', zip: 'shades', l: 82, t: 24, w: 6, r: -8,
         art: `<svg viewBox="0 0 90 180"><rect x="4" y="4" width="82" height="172" rx="16" fill="#F2C6C8" ${S}/><rect x="20" y="16" width="26" height="26" rx="8" fill="#E9A9B6" ${S} stroke-width="2"/><circle cx="33" cy="29" r="7" fill="#3A2626"/><circle cx="56" cy="22" r="3" fill="#3A2626"/><path d="M30 120 C10 104 12 86 24 86 C30 86 32 92 32 95 C32 92 34 86 40 86 C52 86 54 104 30 120Z" fill="#FFFBF8" ${S} stroke-width="2"/><text x="45" y="150" text-anchor="middle" font-family="Caveat" font-size="16" fill="${INK}">s.t.</text></svg>`,
         open: 'phone'
     },
     {
-        id: 'passport', name: 'my passport', zip: 'front', l: 91, t: 52, w: 6, r: 8,
+        id: 'passport', name: 'my passport', zip: 'front', l: 92, t: 47, w: 7, r: 8,
         art: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
             <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
                 <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>
@@ -203,7 +203,7 @@ window.ITEMS = [
         open: 'passport'
     },
     {
-        id: 'laptop', name: 'my laptop', zip: 'devices', l: 9, t: 22, w: 15, r: -6,
+        id: 'laptop', name: 'my laptop', zip: 'devices', l: 10, t: 19, w: 18, r: -6,
         get art() { return window.LID(false); },
         open: 'laptop'
     }
