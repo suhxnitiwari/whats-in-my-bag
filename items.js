@@ -177,7 +177,7 @@ window.JEWELS = {
             shoe: '<path d="M-8 8 V-2 a8 8 0 0 1 16 0 V8" fill="none" stroke="#F2F4F8" stroke-width="5"/><path d="M-8 8 V-2 a8 8 0 0 1 16 0 V8" fill="none" stroke="#C99A3A" stroke-width="1" stroke-dasharray="1.5 2"/>'
         }[k]}</g><path d="M${x} ${y} v${12 - 9}" stroke="#C99A3A" stroke-width="1.2"/>`).join('')}
         <circle cx="14" cy="10" r="4" fill="#E2B24A"/></svg>`,
-    tx: `<svg viewBox="0 0 240 190">${CHAIN('M20 8 C26 130 92 140 96 150 M144 150 C148 140 214 130 220 8', Array.from({ length: 12 }, (_, k) => { const t = k / 11, x = 20 + (96 - 20) * t, y = 8 + 142 * t * t; return `<circle cx="${(20 + 76 * t).toFixed(0)}" cy="${(8 + 130 * Math.sin(t * 1.5)).toFixed(0)}" r="1.6" fill="#E9C46A"/>`; }).join(''))}
+    tx: `<svg viewBox="0 0 240 190">${CHAIN('M20 8 C26 130 92 140 96 150 M144 150 C148 140 214 130 220 8', [[[20, 8], [26, 130], [92, 140], [96, 150]], [[220, 8], [214, 130], [148, 140], [144, 150]]].map(P => Array.from({ length: 9 }, (_, k) => { const t = (k + 1) / 10, u = 1 - t, x = u ** 3 * P[0][0] + 3 * u * u * t * P[1][0] + 3 * u * t * t * P[2][0] + t ** 3 * P[3][0], y = u ** 3 * P[0][1] + 3 * u * u * t * P[1][1] + 3 * u * t * t * P[2][1] + t ** 3 * P[3][1]; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.7" fill="#E9C46A" stroke="#B88A2C" stroke-width=".5"/>`; }).join('')).join(''))}
         ${ELISA('#F5EEE2', '<path d="M-18 -11 L18 11 M18 -11 L-18 11" stroke="#fff" stroke-width=".6" opacity=".5"/><text x="0" y="6" text-anchor="middle" font-family="Bodoni Moda, serif" font-weight="600" font-size="15" fill="#C99A3A" letter-spacing="1">TX</text>')}</svg>`,
     teal: `<svg viewBox="0 0 240 190">${CHAIN('M20 8 C26 130 92 140 96 150 M144 150 C148 140 214 130 220 8')}
         ${ELISA('#0F5A5C', '<path d="M-18 -11 L-4 0 L-18 11 M18 -11 L4 0 L18 11 M-4 0 H4" stroke="#3FA3A0" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-10 -8 l8 6" stroke="#9FE0D8" stroke-width="1.6" opacity=".7"/>')}</svg>`
@@ -310,7 +310,9 @@ window.ITEMS = [
     },
     {
         id: 'jewelry', name: 'my little jewelry box', zip: 'shades', l: 0, t: 0, w: 9.4, r: -5,
-        art: `<svg viewBox="0 0 120 80"><rect x="6" y="20" width="108" height="54" rx="10" fill="#F2B8C6" ${S}/><path d="M6 40 H114" ${S} stroke-width="2"/><rect x="10" y="8" width="100" height="34" rx="10" fill="#F6C9D4" ${S}/><path d="M18 14 h84" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/><rect x="52" y="34" width="16" height="12" rx="3" fill="#E2B24A" ${S} stroke-width="2"/><circle cx="60" cy="40" r="2" fill="#9C7420"/></svg>`,
+        art: `<svg viewBox="0 0 120 84"><defs><pattern id="jwq" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#F4C3CF"/><path d="M0 0 H10 M0 0 V10" stroke="#E7A9B9" stroke-width="1"/></pattern></defs>
+            <rect x="6" y="10" width="108" height="68" rx="12" fill="url(#jwq)" ${S}/><path d="M6 46 H114" ${S} stroke-width="2"/><path d="M14 16 h92" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+            <rect x="50" y="38" width="20" height="16" rx="4" fill="#E2B24A" ${S} stroke-width="2"/><circle cx="60" cy="46" r="2.4" fill="#9C7420"/></svg>`,
         open: 'jewelry'
     },
     {
