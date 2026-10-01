@@ -28,7 +28,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Brown cap | A cap is a must |
 | Boarding pass (front pocket) | Destination: wherever's next |
 | McCombs padfolio | Résumés in the pocket (links to my résumé), a pen, a legal pad you can write on |
-| Two silk scrunchies, a wooden claw clip, a wide-tooth comb | Try each one on |
+| Two silk scrunchies and a wide-tooth comb | Try each one on |
 | Pink Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |

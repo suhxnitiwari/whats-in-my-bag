@@ -8,7 +8,6 @@ const phone = () => matchMedia('(max-width: 760px)').matches;
 
 /* ---------- the bag, with my caramel frappuccino charm clipped on (Sitara lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
-const loop = document.createElement('span'); loop.className = 'strap-loop'; loop.setAttribute('aria-hidden', 'true'); bagBtn.appendChild(loop);
 const charm = document.createElement('span');
 charm.className = 'charm';
 charm.setAttribute('role', 'button');
@@ -50,6 +49,14 @@ list.innerHTML = ITEMS.filter(it => it.zip !== 'side' && it.zip !== 'attached').
         </button>
     </li>`).join('');
 
+/* the frappuccino PocketBac and the McCombs strap are clipped to the third zipper's pull, and ride along with it */
+function hangCharms(pt) {
+    const vb = bagArt.querySelector('svg').viewBox.baseVal;
+    const x = (pt.x - vb.x) / vb.width * 100, y = (pt.y + 17 - vb.y) / vb.height * 100;
+    const c = bagBtn.querySelector('.charm:not(.mccombs)'), m = bagBtn.querySelector('.charm.mccombs');
+    if (c) { c.style.left = `${x - 9.5}%`; c.style.top = `${y - 1}%`; }
+    if (m) { m.style.left = `${x - 8}%`; m.style.top = `${y - 1.5}%`; }
+}
 /* ---------- the zippers ---------- */
 const svgNS = 'http://www.w3.org/2000/svg';
 const zips = bagArt.querySelector('.zips');
@@ -109,6 +116,7 @@ function place(pk, t) {
     const { path, pull, len } = pk.el;
     const pt = path.getPointAtLength(len * t);
     pull.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
+    if (pk.id === 'shades') hangCharms(pt);
     path.style.strokeDashoffset = len * (1 - t);
 }
 function slide(pk, from, to) {
@@ -217,6 +225,7 @@ $('#repack').addEventListener('click', () => {
 list.addEventListener('click', e => {
     const part = e.target.closest('[data-part]');
     if (part) {
+        if (part.dataset.part === 'mailbox') return toast('mailbox keys. mostly for packages i definitely needed 📦');
         if (part.dataset.part === 'pencil') return pickUp(ITEMS.find(i => i.id === 'pencil'));
         return pickUp(part.dataset.part === 'bmw' ? ITEMS.find(i => i.id === 'keys') : { id: 'apartment', name: 'my apartment fob', open: 'apartment' });
     }
@@ -229,7 +238,7 @@ list.addEventListener('click', e => {
 function hairView(state) {
     return `
         <h2>My <em>hair</em> stuff</h2>
-        <p class="note">two silk scrunchies, a wooden claw clip, a wide-tooth comb. dark, long, and always done.</p>
+        <p class="note">two silk scrunchies and a wide-tooth comb. dark, long, and always done.</p>
         <div class="hair-stage"><svg viewBox="0 0 220 300" class="hairdo" id="hairdo" data-state="${state}">
             <path d="M8 300 C10 246 48 222 110 222 C172 222 210 246 212 300Z" fill="#F3A9BB" stroke="#3A2626" stroke-width="3"/>
             <path d="M30 262 q12 8 22 30 M190 262 q-12 8 -22 30" fill="none" stroke="#D9849C" stroke-width="2"/>
@@ -245,23 +254,18 @@ function hairView(state) {
                 <path d="M100 104 C84 140 80 180 92 214 C98 234 88 252 98 270 C104 260 112 272 116 262 C124 246 116 228 124 206 C134 176 132 138 120 104Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
                 <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
                 <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
-            <g class="h-claw">
-                <path d="M110 112 C78 108 74 72 96 64 C116 56 142 70 136 92 C132 106 120 112 110 112Z" fill="#2A1C17" stroke="#3A2626" stroke-width="3"/>
-                <path d="M88 78 q10 -16 26 -12 q16 4 18 18" fill="none" stroke="#4A3127" stroke-width="2.2"/>
-                <path d="M92 62 q-4 -16 6 -24 q2 10 8 14 M118 58 q2 -18 14 -22 q-2 12 2 20" fill="#2A1C17" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>
-                <g transform="translate(70 62) scale(.9)">${ITEMS.find(i => i.id === 'clip').art.replace('<svg viewBox="0 0 90 80">', '<svg width="90" height="80" viewBox="0 0 90 80">')}</g></g>
+
             <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 210 80">', '<svg x="40" y="0" width="150" height="57" viewBox="0 0 210 80">')}</g></g>
             <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
         <div class="row hair-btns">
             <button class="btn" type="button" data-hair="pony" data-scr="pink">Pink scrunchie</button>
             <button class="btn" type="button" data-hair="pony" data-scr="brown">Brown scrunchie</button>
-            <button class="btn" type="button" data-hair="claw">Claw clip</button>
             <button class="btn" type="button" data-hair="comb">Comb it out</button>
         </div>`;
 }
 function hairAfter(state) {
-    const svg = $('#hairdo'), lines = { pony: 'ponytail. silk, so no creases ♡', claw: 'claw clip. effortless (it took four tries).', comb: 'wide-tooth comb. no knots, no breakage.' };
+    const svg = $('#hairdo'), lines = { pony: 'ponytail. silk, so no creases ♡', comb: 'wide-tooth comb. no knots, no breakage.' };
     const set = (st, scr) => {
         if (scr) svg.querySelector('.scr-on').innerHTML = window.SCRUNCHIE(110, 102, 13, ...(scr === 'brown' ? window.SCR_BROWN : window.SCR_PINK));
         svg.dataset.state = '';
@@ -304,12 +308,23 @@ const VIEWS = {
         <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button></div>`,
     padfolio: () => `
         <h2>My <em>McCombs</em> padfolio</h2>
-        <p class="note">my résumé on the left, my notes on the right, a black paper mate in the middle. ready for anything.</p>
+        <p class="note">my résumé on the left, my notes on the right, a baby pink pen in the middle. ready for anything.</p>
         <div class="pf">
             <div class="pf-left">
                 <div class="pf-stack" aria-hidden="true"><span></span><span></span></div>
                 <a class="pf-resume" href="https://suhanitiwari.com/resume" target="_blank" rel="noopener" aria-label="My résumé (opens in a new tab)"><img src="assets/img/resume.png" alt="My résumé"><span class="pf-take">take one ↗</span></a>
-                <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 16 150"><rect x="5" y="0" width="6" height="10" rx="2" fill="#2B2B2E" stroke="#111" stroke-width="1"/><rect x="3" y="9" width="10" height="92" rx="4" fill="#141416" stroke="#000" stroke-width="1"/><path d="M11 12 h3 v46 l-2 3 h-1z" fill="#2E2E33" stroke="#000" stroke-width=".8"/><rect x="3" y="100" width="10" height="30" rx="2" fill="#3A3A40" stroke="#000" stroke-width="1"/><path d="M4 104 h8 M4 109 h8 M4 114 h8 M4 119 h8 M4 124 h8" stroke="#55555C" stroke-width="1.2"/><path d="M3 130 L8 146 L13 130Z" fill="#141416" stroke="#000" stroke-width="1"/><path d="M7.6 146 v4" stroke="#9A9AA0" stroke-width="1"/><path d="M6 20 v70" stroke="#fff" stroke-width="1.2" opacity=".2"/></svg></span>
+                <button type="button" class="bc" id="bc" aria-label="My business card: tap to flip it"><span class="bc-in">
+                    <span class="bc-f"><b>Suhani Tiwari</b><i>MIS + Psychology · UT Austin</i><em>product · brand · technology</em><span class="bc-heart">♡</span></span>
+                    <span class="bc-b"><span>suhanitiwari.com</span><span>linkedin.com/in/suhxnitiwari</span><span>suhanitiwari@utexas.edu</span><em>let’s get coffee ☕</em></span>
+                </span></button>
+                <span class="pf-pen" aria-hidden="true"><svg viewBox="0 0 30 150">
+                    <path d="M15 8 c-6 -7 -13 -4 -10 1 c2 3 7 2 10 -1 c3 3 8 4 10 1 c3 -5 -4 -8 -10 -1z" fill="#F7A8C0" stroke="#3A2626" stroke-width="1.2"/><circle cx="15" cy="8" r="2" fill="#E57A9E" stroke="#3A2626" stroke-width="1"/>
+                    <rect x="10" y="10" width="10" height="8" rx="2" fill="#FBD3DF" stroke="#3A2626" stroke-width="1.2"/>
+                    <rect x="9" y="17" width="12" height="86" rx="5" fill="#F9C4D3" stroke="#3A2626" stroke-width="1.4"/>
+                    <path d="M20 20 h3 v40 l-2.5 3 h-.5z" fill="#F3B0C4" stroke="#3A2626" stroke-width="1"/><path d="M21.5 52 c-1.6 -1.6 -3.6 0 -1.4 2.2 l1.4 1.4 1.4 -1.4 c2.2 -2.2 .2 -3.8 -1.4 -2.2z" fill="#E0568F"/>
+                    <rect x="9" y="102" width="12" height="22" rx="2" fill="#F7D9E2" stroke="#3A2626" stroke-width="1.2"/><path d="M10 106 h10 M10 110 h10 M10 114 h10 M10 118 h10" stroke="#E7A9BC" stroke-width="1"/>
+                    <path d="M9 124 L15 140 L21 124Z" fill="#F9C4D3" stroke="#3A2626" stroke-width="1.2"/><path d="M15 140 v5" stroke="#8A8A90" stroke-width="1.2"/>
+                    <path d="M12 24 v74" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg></span>
             </div>
             <div class="pf-right"><div class="pf-legal" aria-label="My legal pad: the roles I'm going for">
                 <p>roles i’m going for:</p>
@@ -332,7 +347,6 @@ const VIEWS = {
         <p class="rc-stats mono">days in my backpack: <b id="rc-days">21</b> · pages read: <b>0</b></p>
         <div class="row"><button class="btn solid" type="button" id="rc-read">Read it</button></div>`,
     hairpony: () => hairView('pony'),
-    hairclaw: () => hairView('claw'),
     haircomb: () => hairView('comb'),
 
     bag: () => `
@@ -426,7 +440,7 @@ const VIEWS = {
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="see-makeup2">My makeup loves &amp; skips</button></div>`,
 
     apartment: () => `
-        <div class="fob" style="width:110px">${APT_FOB}</div>
+        <div class="fob" style="width:110px">${SALTO_FOB}</div>
         <h2>My <em>apartment</em> fob</h2>
         <p class="note">this one i can handle.</p>
         <p>Address: wouldn’t you wanna knowwww.</p>
@@ -854,7 +868,7 @@ function cardHTML(c, i) {
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
     boarding: () => { $('#bp-scan').onclick = () => toast('beep. boarding group: whenever i get there ✈'); },
-    padfolio: () => {},
+    padfolio: () => { $('#bc').onclick = () => { const f = $('#bc').classList.toggle('flip'); if (f) toast('take one. seriously ♡'); }; },
     cap: () => { let on = false; $('#cap-on').onclick = () => { on = !on; $('#cap-on').textContent = on ? 'Take it off' : 'Put it on'; toast(on ? 'bad hair day? never heard of her.' : 'okay, hair’s actually done today ♡'); }; },
     passport: () => {
         const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
@@ -886,7 +900,6 @@ const AFTER = {
         btn.onclick = toggle; rc.onclick = toggle; rc.style.cursor = 'pointer';
     },
     hairpony: () => hairAfter('pony'),
-    hairclaw: () => hairAfter('claw'),
     haircomb: () => hairAfter('comb'),
 
     makeup: () => setTimeout(() => $('#lip') && $('#lip').classList.add('off'), 350),
