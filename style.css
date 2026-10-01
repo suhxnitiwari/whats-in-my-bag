@@ -2142,3 +2142,9 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .face [data-fx="patches"].on path { pointer-events: auto; cursor: pointer; }
 .face [data-fx="patches"] { transition: opacity .9s ease, transform .45s ease; transform-box: view-box; }
 .face [data-fx="patches"].peel { transform: translate(-14px, -26px) rotate(-6deg); opacity: 0 !important; transition: transform .45s ease, opacity .45s ease; }
+/* eye patches: the real photo of me in them, then i doze off */
+.face .face-patched { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .8s ease; }
+.face.patched .face-patched { opacity: 1; }
+.face [data-fx="patches"].on { opacity: 0; }
+.face.asleep [data-fx="patches"].on { opacity: 1; }
+.face.smooth .face-patched { filter: contrast(.96) brightness(1.03) saturate(1.05); }
