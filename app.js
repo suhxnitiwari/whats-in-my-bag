@@ -150,7 +150,13 @@ let sips = 0;
 const openBottle = e => {
     e.stopPropagation(); e.preventDefault();
     const out = bottle.classList.contains('out');
-    if (!out) { bottle.classList.add('out'); bottle.setAttribute('aria-label', 'My pink Stanley, out of the pocket. Tap the lid to open it, the bottle for my water tracker, the pocket to put it back'); return; }
+    if (!out) {
+        // one tap: up out of the side pocket, then set down on the floor next to the bag
+        bottle.classList.add('out'); bottle.setAttribute('aria-label', 'My pink Stanley, out of the pocket. Tap the lid to open it, the bottle for my water tracker, the pocket to put it back');
+        setTimeout(() => { bottle.classList.add('free'); bsvg.style.transform = `translate(${Math.round(bsvg.getBoundingClientRect().width * 1.1)}px, 0px)`; }, reduce ? 0 : 420);
+        toast('out she comes. tap the lid for a sip, drag her back to put her away.');
+        return;
+    }
     if (e.target.closest && e.target.closest('.lid')) {
         const lid = bottle.querySelector('.lid');
         if (bottle.classList.contains('lid-open')) {
@@ -350,45 +356,82 @@ list.addEventListener('click', e => {
 });
 
 
-/* my hair things: two silk scrunchies, a wooden claw clip, a wide-tooth comb. Try each one on. */
+/* gift cards = store credit from every online order i didn't return in time */
+const GIFTCARDS = [
+    { id: 'aritzia', name: 'Aritzia', front: '<span class="gc-word">ARITZIA</span>', why: 'an online order. return window: missed.', bal: 'enough for one (1) sweater', last: '0731' },
+    { id: 'chanel', name: 'Chanel', front: '<span class="gc-word">CHANEL</span><span class="gc-sub">BEAUTY</span>', why: 'a return, mailed one day late.', bal: 'a lipstick, maybe two', last: '1910' },
+    { id: 'sephora', name: 'Sephora', front: '<span class="gc-stripes"></span><span class="gc-word">SEPHORA</span>', why: 'the box sat by my door for 31 days.', bal: 'a mystery, honestly', last: '1969' }
+];
+
+/* my hair things: two silk scrunchies and a wide-tooth comb. A little hair salon: pick a style, pick a scrunchie, comb it out. */
+const SCRUNCHIES = { pink: ['#F4A7B9', '#D9788F', 'pink silk'], brown: ['#8A5A3E', '#5E3A26', 'brown silk'] };
+const HAIR_STYLES = { down: 'Down', pony: 'Ponytail', braid: 'Braid', half: 'Half up, half down' };
+const HAIR_LINES = { down: 'down and wavy. main character hours.', pony: 'high pony. running late energy.', braid: 'braided and tied off ♡', half: 'half up, half down. effortless (it took 20 minutes).' };
+// a scrunchie: a puffy ring of silk gathered around a point
+const scrunchie = (x, y, r = 10) => `<g class="scr" transform="translate(${x} ${y})">${Array.from({ length: 9 }, (_, k) => {
+    const a = k / 9 * Math.PI * 2; return `<circle cx="${(Math.cos(a) * r).toFixed(1)}" cy="${(Math.sin(a) * r * .62).toFixed(1)}" r="${(r * .62).toFixed(1)}"/>`;
+}).join('')}<path d="M${-r * .9} 0 q${r * .9} ${r * .5} ${r * 1.8} 0" fill="none" stroke="var(--scr-d)" stroke-width="1.2" opacity=".6"/></g>`;
+// a few lighter strands so the hair reads as hair
+const strands = (list) => list.map(d => `<path d="${d}" fill="none" stroke="#6B4A3A" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>`).join('');
+// sleek hair on the head, every strand pulled toward one point
+const sleek = (gx, gy) => `<ellipse cx="150" cy="128" rx="64" ry="74" fill="#3A2620"/>` + strands([
+    `M100 92 Q125 ${gy - 10} ${gx} ${gy}`, `M120 66 Q140 ${gy - 20} ${gx} ${gy}`, `M180 66 Q160 ${gy - 20} ${gx} ${gy}`, `M200 92 Q175 ${gy - 10} ${gx} ${gy}`,
+    `M92 140 Q120 ${gy + 4} ${gx} ${gy}`, `M208 140 Q180 ${gy + 4} ${gx} ${gy}`, `M150 58 Q150 ${gy - 30} ${gx} ${gy}`]);
+const curtain = top => `<path d="M88 ${top} C78 200 66 262 76 338 C96 356 110 340 122 352 C136 362 150 346 164 354 C180 362 196 342 210 352 C226 350 230 336 224 338 C234 262 222 200 212 ${top} Z" fill="#3A2620"/>` +
+    strands(['M100 150 C92 210 92 270 98 336', 'M124 160 C118 220 122 280 120 344', 'M150 160 C146 230 152 290 150 348', 'M176 160 C182 220 178 280 180 346', 'M200 150 C208 210 208 270 204 338']);
+function hairSVG() {
+    const braid = Array.from({ length: 8 }, (_, k) => {
+        const y = 204 + k * 15, s = k % 2 ? 1 : -1;
+        return `<g transform="rotate(${s * 28} ${150 + s * 5} ${y})"><ellipse class="bl" style="--k:${k}" cx="${150 + s * 5}" cy="${y}" rx="15" ry="10" fill="#3A2620" stroke="#24150F" stroke-width="1.5"/></g>`;
+    }).join('');
+    return `<svg class="salon-svg" viewBox="0 0 300 380" role="img" aria-label="The back of my head">
+        <path d="M30 380 C34 300 86 262 126 252 L174 252 C214 262 266 300 270 380Z" fill="#E6B593"/>
+        <rect x="128" y="176" width="44" height="84" rx="16" fill="#D9A47F"/>
+        <path d="M70 380 C72 330 92 306 112 300 L188 300 C208 306 228 330 230 380Z" fill="#F2A6B8"/>
+        <path d="M112 302 L118 254 M188 302 L182 254" stroke="#F2A6B8" stroke-width="7" stroke-linecap="round"/>
+        <g class="hs" data-s="down">${curtain(110)}<ellipse cx="150" cy="128" rx="64" ry="74" fill="#3A2620"/>${strands(['M150 58 C130 90 120 120 112 160', 'M150 58 C170 90 180 120 188 160', 'M150 58 C150 100 150 130 150 170'])}</g>
+        <g class="hs" data-s="half">${curtain(140)}${sleek(150, 104)}<path d="M142 108 C130 140 138 176 146 214 Q152 222 158 212 C166 176 172 140 158 108Z" fill="#3A2620" stroke="#24150F" stroke-width="1"/>${strands(['M150 112 C146 150 150 180 152 210'])}${scrunchie(150, 104)}</g>
+        <g class="hs" data-s="pony">${sleek(150, 92)}<path d="M140 96 C112 150 126 230 136 300 C142 318 160 318 164 300 C176 230 190 150 160 96Z" fill="#3A2620" stroke="#24150F" stroke-width="1"/>${strands(['M148 100 C136 170 142 240 146 304', 'M154 100 C162 170 160 240 156 306'])}${scrunchie(150, 92)}</g>
+        <g class="hs" data-s="braid">${sleek(150, 192)}${braid}<path class="bl" style="--k:8" d="M144 322 C140 338 146 352 150 358 C154 352 160 338 156 322Z" fill="#3A2620"/>${scrunchie(150, 324, 8)}</g>
+    </svg>`;
+}
 function hairView(state) {
-    const st = state === 'claw' || state === 'pony' ? 'pink' : state === 'comb' ? 'pony' : state;
+    const scr = state === 'brown' ? 'brown' : 'pink';
+    const st = state === 'braid' ? 'braid' : state === 'comb' ? 'down' : 'pony';
     return `
-        <h2>My <em>hair</em> stuff</h2>
-        <p class="note">two silk scrunchies and a wide-tooth comb. dark, long, and always done.</p>
+        <h2>My <em>hair</em> salon</h2>
+        <p class="note">two silk scrunchies and a wide-tooth comb. pick a style, pick a scrunchie, then comb it out.</p>
         <p class="hair-hint hand" id="hair-hint"></p>
-        <div class="hair-pic" id="hairpic" data-state="${st}">
-            ${['pink', 'brown', 'pony', 'braid'].map(k => `<img src="assets/img/hair-${k}.jpg?v=1790828952" data-k="${k}" alt="">`).join('')}
+        <div class="salon" id="hairpic" data-style="${st}" style="--scr:${SCRUNCHIES[scr][0]}; --scr-d:${SCRUNCHIES[scr][1]}" data-scr="${scr}">
+            ${hairSVG()}
             <div class="hp-comb" id="hp-comb" aria-hidden="true">${ITEMS.find(i => i.id === 'comb').art}</div>
             <span class="hp-shine" aria-hidden="true"></span>
         </div>
-        <div class="row hair-btns">
-            <button class="btn" type="button" data-hair="pink">Pink scrunchie</button>
-            <button class="btn" type="button" data-hair="brown">Brown scrunchie</button>
-            <button class="btn" type="button" data-hair="pony">Ponytail</button>
-            <button class="btn" type="button" data-hair="braid">Braid it</button>
+        <div class="salon-ctrl">
+            <p class="mono">style</p>
+            <div class="row hair-btns">${Object.entries(HAIR_STYLES).map(([k, t]) => `<button class="btn" type="button" data-hair="${k}">${t}</button>`).join('')}</div>
+            <p class="mono">scrunchie</p>
+            <div class="row hair-btns">${Object.entries(SCRUNCHIES).map(([k, [c, , t]]) => `<button class="scr-pick" type="button" data-scr="${k}" aria-label="${t} scrunchie" style="--c:${c}"><span></span>${t}</button>`).join('')}</div>
         </div>`;
 }
-function hairAfter(state) {
+function hairAfter() {
     const pic = $('#hairpic'), hint = $('#hair-hint'), comb = $('#hp-comb');
-    const lines = { pink: 'pink silk scrunchie. no creases ♡', brown: 'the brown one. goes with the cap.', pony: 'high pony. running late energy.', braid: 'braided and tied off with the pink one ♡' };
-    const set = k => { pic.dataset.state = k; sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === k)); hint.textContent = 'drag the comb down through it ↓'; };
-    // braiding, step by step: the braid weaves down from the nape a little more with every tap
-    const STEPS = ['gather it all at the nape', 'split it into three', 'right strand over the middle', 'left strand over the middle', 'keep going…', 'almost there…', 'tie it off with the pink scrunchie ♡'];
-    let step = -1;
-    const braidImg = pic.querySelector('img[data-k="braid"]');
-    const braidStep = () => {
-        if (pic.dataset.state !== 'braiding') { step = -1; pic.dataset.state = 'braiding'; sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === 'braid')); }
-        step = Math.min(STEPS.length - 1, step + 1);
-        const done = step === STEPS.length - 1;
-        braidImg.style.setProperty('--p', done ? '120%' : `${12 + step * 13}%`);
-        hint.textContent = done ? 'braided ♡' : `step ${step + 1} of ${STEPS.length}: ${STEPS[step]}. tap “braid it” again →`;
-        if (done) { setTimeout(() => { pic.dataset.state = 'braid'; braidImg.style.removeProperty('--p'); }, 650); toast('braided and tied off ♡'); }
+    const sync = () => {
+        sheetBody.querySelectorAll('[data-hair]').forEach(b => b.classList.toggle('solid', b.dataset.hair === pic.dataset.style));
+        sheetBody.querySelectorAll('.scr-pick').forEach(b => b.setAttribute('aria-pressed', b.dataset.scr === pic.dataset.scr));
+        hint.textContent = pic.dataset.style === 'down' ? 'drag the comb down through it ↓' : `${HAIR_STYLES[pic.dataset.style].toLowerCase()} with the ${SCRUNCHIES[pic.dataset.scr][2]} one. drag the comb to smooth it ↓`;
     };
     sheetBody.querySelectorAll('[data-hair]').forEach(b => b.onclick = () => {
-        if (b.dataset.hair === 'braid' && pic.dataset.state !== 'braid') return braidStep();
-        if (b.dataset.hair === 'braid') { step = -1; return braidStep(); }
-        set(b.dataset.hair); toast(lines[b.dataset.hair]);
+        pic.dataset.style = b.dataset.hair;
+        // restart the braid weave so it braids itself down from the nape every time
+        if (b.dataset.hair === 'braid') { pic.classList.remove('weave'); void pic.offsetWidth; pic.classList.add('weave'); }
+        sync(); toast(HAIR_LINES[b.dataset.hair]);
+    });
+    sheetBody.querySelectorAll('.scr-pick').forEach(b => b.onclick = () => {
+        const [c, d, t] = SCRUNCHIES[b.dataset.scr];
+        pic.dataset.scr = b.dataset.scr; pic.style.setProperty('--scr', c); pic.style.setProperty('--scr-d', d);
+        if (pic.dataset.style === 'down') { pic.dataset.style = 'pony'; }
+        sync(); toast(b.dataset.scr === 'pink' ? 'pink silk scrunchie. no creases ♡' : 'the brown one. goes with everything.');
     });
     // comb it: drag the wide-tooth comb down the hair; a few passes and it shines
     let d = null, passes = 0; pic.style.touchAction = 'none';
@@ -401,7 +444,8 @@ function hairAfter(state) {
     });
     const up = () => { if (!d) return; d = null; comb.style.transition = ''; comb.style.transform = ''; };
     pic.addEventListener('pointerup', up); pic.addEventListener('pointercancel', up);
-    set(pic.dataset.state);
+    if (pic.dataset.style === 'braid') pic.classList.add('weave');
+    sync();
 }
 
 
@@ -484,7 +528,7 @@ const COMBOS = [
     [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
     [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
-    [['passport', 'wallet'], 'passport and a boarding pass to “???” tucked inside. she’s always halfway somewhere.'],
+    [['passport', 'wallet'], 'a passport with six countries in it. she’s always halfway somewhere.'],
     [['romcom', 'journal'], 'one book she’s not reading, one journal she always writes in.'],
     [['keys', 'stanley'], 'car keys and a full stanley. she is not coming back for hours.']
 ];
@@ -612,12 +656,28 @@ const ROMANCE = [
 ];
 
 const VIEWS = {
-    backuplip: () => `
+    backuplip: () => {
+        const U = (c, up) => `M${up ? '34 70' : '40 80'} C70 ${up ? 58 : 66} 100 50 128 56 C138 58 144 62 150 62 C156 62 162 58 172 56 C200 50 230 ${up ? 58 : 66} ${up ? '266 70' : '260 80'} C220 ${up ? 78 : 82} 190 80 150 82 C110 80 80 ${up ? 78 : 82} ${up ? '34 70' : '40 80'}Z`;
+        const L = up => `M${up ? '34 70' : '40 80'} C80 ${up ? 86 : 84} 110 84 150 84 C190 84 220 ${up ? 86 : 84} ${up ? '266 70' : '260 80'} C230 ${up ? 116 : 112} 190 ${up ? 130 : 128} 150 ${up ? 130 : 128} C110 ${up ? 130 : 128} 70 ${up ? 116 : 112} ${up ? '34 70' : '40 80'}Z`;
+        const lips = (up, fill) => `<path d="${U(0, up)}" fill="${fill}"/><path d="${L(up)}" fill="${fill}"/><path d="M${up ? '34 70' : '40 80'} C90 84 120 82 150 83 C180 82 210 84 ${up ? '266 70' : '260 80'}" fill="none" stroke="#5A2622" stroke-width="2" opacity=".55"/>`;
+        return `
         <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
-        <div class="big-obj" style="max-width:120px">${ITEMS.find(i => i.id === 'backup-lip').art}</div>
-        <p class="note" style="text-align:center">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
-        <div class="swatch" id="bl-swatch"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="bl-swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#8E2A24" stroke-width="16" stroke-linecap="round" style="stroke-dasharray:260; stroke-dashoffset:260"/></svg></div>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="bl-go">Swipe it on</button></div>`,
+        <p class="note">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
+        <div class="lipwrap">
+            <div class="lip-stick" aria-hidden="true">${ITEMS.find(i => i.id === 'backup-lip').art}</div>
+            <svg class="lipface" id="lipface" viewBox="0 0 300 160" role="img" aria-label="My lips. Drag across them to put the lipstick on me">
+                <defs><mask id="lip-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="160"><g id="lip-paint"></g></mask></defs>
+                <rect width="300" height="160" rx="18" fill="#E9B998"/>
+                <path d="M0 150 Q150 172 300 150 V160 H0Z" fill="#DCA98A"/>
+                <g class="lp-natural">${lips(false, '#C99486')}
+                    <g stroke="#EBC6B8" stroke-width="1.4" stroke-linecap="round" opacity=".9">${[70, 92, 112, 132, 150, 168, 188, 208, 228].map((x, k) => `<path d="M${x} ${92 + (k % 2) * 4} l${k % 2 ? 2 : -2} ${10 + (k % 3) * 4}"/>`).join('')}<path d="M100 62 l-3 8 M196 62 l3 8 M150 68 v6"/></g></g>
+                <g class="lp-color" mask="url(#lip-mask)">${lips(false, '#8E2A24')}<path d="M118 100 q32 10 64 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/></g>
+                <g class="lp-happy">${lips(true, '#8E2A24')}<path d="M116 104 q34 12 68 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".38"/></g>
+            </svg>
+        </div>
+        <p class="hand lip-say" id="lip-say">your turn: put it on me. drag across my lips ↔</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="bl-go">Swipe it on for me</button></div>`;
+    },
     cards: () => `
         <h2><em>amaira’s</em> cards</h2>
         <p class="note">my little sister makes me cards. i keep them. all of them. they live in my backpack.</p>
@@ -638,9 +698,20 @@ const VIEWS = {
         <div class="big-obj">${ITEMS.find(i => i.id === 'ticket').art}</div>
         <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>`,
     giftcards: () => `
-        <h2>some <em>gift cards</em></h2>
-        <div class="big-obj">${ITEMS.find(i => i.id === 'giftcards').art}</div>
-        <p class="note">aritzia, chanel, sephora. balances: a mystery. saving them for a special occasion that never comes.</p>`,
+        <h2>some <em>gift cards</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(store credit, technically)</span></h2>
+        <p class="note">i online shop. i mean to return things. then the return window closes while the box sits by my door, and i get store credit instead. tap a card to flip it.</p>
+        <div class="gcs" id="gcs">${GIFTCARDS.map((g, k) => `
+            <button type="button" class="gc gc-${g.id}" style="--k:${k}" data-gc="${k}" aria-label="${g.name} card: tap to flip it over">
+                <span class="gc-face gc-front">${g.front}<span class="gc-chip-txt">GIFT CARD</span></span>
+                <span class="gc-face gc-back">
+                    <span class="gc-stripe"></span>
+                    <span class="gc-bk"><b>${g.name.toUpperCase()} · MERCHANDISE CREDIT</b>
+                        <small>issued for: ${g.why}</small>
+                        <span class="gc-scratch" data-scratch><span class="gc-bal">balance: ${g.bal}</span><span class="gc-foil">scratch for balance ✦</span></span>
+                        <span class="gc-bar"></span><small class="mono">•••• •••• •••• ${g.last}</small></span>
+                </span>
+            </button>`).join('')}</div>
+        <p class="hand gc-tally" id="gc-tally">3 cards. 0 returns made on time.</p>`,
     pads: () => `
         <h2><em>pads</em></h2>
         <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
@@ -664,12 +735,16 @@ const VIEWS = {
         </div>
         <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the bottom-right corner to open it</p>`,
     perfume: () => `
-        <h2>My <em>perfume</em></h2>
-        <p class="note">philosophy amazing grace ballet rose, eau de parfum. front pocket, always.</p>
+        <h2>My <em>personality</em>, in a bottle</h2>
+        <p class="note">philosophy amazing grace ballet rose. it says “grace lets you move to your own rhythm” right on the label. that’s just me.</p>
         <div class="pf-bottle" id="pf-bottle">${ITEMS.find(i => i.id === 'perfume').art}</div>
-        <p class="hand pf-hint" id="pf-hint">pull the cap off ✨</p>
+        <p class="hand pf-hint" id="pf-hint">pull the cap off, then spritz to get to know me ✨</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="spritz">Take the cap off</button></div>
-        <div class="notes3"><div><b>top</b><span>lychee · cassie flower</span></div><div><b>heart</b><span>dewy peony · jasmine petals · rose absolute</span></div><div><b>base</b><span>ambrette seeds · palisandre wood · ballet pink musk</span></div></div>`,
+        <div class="notes3 pf-me">${[
+            ['top', 'first impression', 'lychee · cassie flower', 'bright, a little sweet, and talking to you before the elevator doors close.'],
+            ['heart', 'once you know me', 'dewy peony · jasmine petals · rose absolute', 'soft, a hopeless romantic, pink about everything.'],
+            ['base', 'what stays', 'ambrette seeds · palisandre wood · ballet pink musk', 'warm and steady. still in the room after i’ve left it.']
+        ].map(([k, when, n, me]) => `<div data-layer="${k}"><b>${k} · ${when}</b><span>${n}</span><em class="hand">${me}</em></div>`).join('')}</div>`,
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
         <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
@@ -860,9 +935,9 @@ const VIEWS = {
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color and type. switch pens mid-sentence.',
-        list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
-        pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
+        title: 'My <em>Paper Mate</em> pouch', note: '20 paper mate inkjoy gel pens and 5 bic mechanical pencils, sharing one pouch. drag the zipper slowly. pick one up and draw.',
+        list: GELPENS_AND_PENCILS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen or a pencil, then draw on the page ↓',
+        pen: (c, p) => p && p.pencil ? PENCIL_SVG(c) : `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
 
     sunglasses: () => `
@@ -953,7 +1028,7 @@ const VIEWS = {
     sweater: () => `
         <h2>My pink Ralph Lauren <em>cable knit</em></h2>
         <p class="note">pink, cable knit, always in my bag. i get cold easily.</p>
-        <svg class="sw2 folded" id="sw" viewBox="0 0 360 300" role="img" aria-label="My pink cable knit V-neck sweater">
+        <svg class="sw2" id="sw" data-f="3" viewBox="0 0 360 300" role="button" tabindex="0" aria-label="My pink cable knit V-neck sweater. Tap to fold or unfold it, one step at a time">
             <defs><pattern id="cable2" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/><path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#D9849C" stroke-width="2.6"/><path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#DE8CA2" stroke-width="2.2"/><path d="M19 0 v28" stroke="#E395A9" stroke-width="1.6" stroke-dasharray="2 2"/></pattern>
                 <pattern id="rib2" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern></defs>
             <path class="top" d="M100 170 L100 46 Q100 30 116 28 L150 22 L180 72 L210 22 L244 28 Q260 30 260 46 L260 170" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
@@ -964,6 +1039,7 @@ const VIEWS = {
             <g class="sl sl-r"><path d="M260 46 L260 126 L294 244 L324 236 L284 54 Q274 42 260 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M294 244 L324 236 L330 258 L300 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
             <g class="bot"><path d="M100 164 V254 H260 V164" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><rect x="100" y="250" width="160" height="24" rx="3" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
         </svg>
+        <p class="hand sw-hint" id="sw-hint">folded. tap it three times to unfold ↓</p>
         <p>It’s 100 degrees in Austin and 62 in every single classroom. The sweater comes to class, the library and every restaurant with the AC turned all the way up.</p>
         <div class="row"><button class="btn" type="button" id="sw-fold">Unfold it</button><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
@@ -977,8 +1053,7 @@ const VIEWS = {
                     <li>Intro to Data Science</li><li>Intro to Decision Science</li><li>Statistics for Business</li>
                 </ul></div>
                 <div class="ecb-cover"><div class="ecb-front">${window.EC([['#5B83C0', '#F4E6EE'], ['#FBEFF3', '#D64F8C'], ['#D44E8C', '#F4C9DA'], ['#FBEFF3', '#5B83C0']])}</div><div class="ecb-back"></div></div></div>
-        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>
-        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>`,
     nb2: () => `
         <h2>My <em>Erin Condren</em> notebook</h2>
         <p class="note">the pink one.</p>
@@ -987,10 +1062,7 @@ const VIEWS = {
                 <div class="ecb-cover"><div class="ecb-front">${window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']])}</div><div class="ecb-back"></div></div>
             </div>
         </div>
-        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap a notebook to open it. tap again to close.</p>
-        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>
-        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>
-        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>`,
 
     binder: () => `
         <h2>My <em>pink binder</em></h2>
@@ -1056,26 +1128,16 @@ const VIEWS = {
     ipad: () => `
         <h2>My <em>iPad</em></h2>
         <p class="note">mostly pinterest and procreate, honestly</p>
-        <div class="mk-wrap" id="mk-wrap">
-          <div class="mk-stage" id="mk-stage">
-            <div class="mk-lid" id="mk-lid">
-              <div class="mk-back"><span class="mk-cam"></span><span class="mk-pencil-b"></span></div>
-              <div class="mk-front">
-                <span class="mk-pencil" aria-hidden="true"></span>
+        <div class="ipad-flat">
+            <span class="ipad-pencil" aria-hidden="true"></span>
         <div class="ipad-big"><div class="ipad-screen">
             <div class="ipad-home" id="ipad-home">
                 <button type="button" class="papp" data-ip="pinterest"><span class="ic" style="background:#E60023"><svg viewBox="0 0 40 40"><path d="M20 9 c-8 0 -11 6 -9 10 c1 2 2 2 2 1 c-1 -3 1 -7 7 -7 c5 0 6 3 5 6 c-1 4 -3 5 -5 5 c-2 0 -2 -2 -1 -3 l1 -4 m0 0 l-3 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></span>Pinterest</button>
                 <button type="button" class="papp" data-ip="procreate"><span class="ic" style="background:#1B1B1F"><svg viewBox="0 0 40 40"><path d="M10 30 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="11" cy="30" r="3" fill="#B9A3E8"/></svg></span>Procreate</button>
-                <button type="button" class="papp" data-ip="made"><span class="ic folder-ic">${['#F4A7B9', '#8FD19E', '#F7D54A', '#B9A3E8'].map(c => `<i style="background:${c}"></i>`).join('')}</span>Made by me</button>
             </div>
             <div class="ipad-view" id="ipad-view" hidden></div>
         </div></div>
-              </div>
-            </div>
-            <div class="mk-base"><div class="mk-keys"><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 3"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 3"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 2"></i><i style="grid-column:span 6"></i><i style="grid-column:span 2"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i><i style="grid-column:span 1"></i></div><div class="mk-pad"></div></div>
-          </div>
-        </div>
-        <div class="row" style="justify-content:center"><button class="btn" type="button" id="mk-toggle">Close it</button></div>`,
+        </div>`,
 
     phone: () => `
         <h2>My <em>phone</em></h2>
@@ -1142,7 +1204,6 @@ const VIEWS = {
         <div class="pb-wrap"><div class="pb" id="pb" data-at="0" style="--n:${leaves.length}">${leaves.map(([f, bk], i) => `
             <div class="pb-leaf" style="--i:${i}" data-leaf="${i}"><div class="pb-face pb-front">${f}</div><div class="pb-face pb-backface">${bk}</div></div>`).join('')}
         </div></div>
-        <div class="pb-boarding"><div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div><p class="hand" style="text-align:center; color:var(--plum); margin:0">tucked inside: a boarding pass to “???”. wherever’s next.</p></div>
         <div class="row pb-ctrl"><button class="btn" type="button" id="pb-prev" aria-label="Previous page">‹ back</button><span class="hand" id="pb-where">tap the cover</span><button class="btn solid" type="button" id="pb-next" aria-label="Next page">open ›</button></div>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`;
     },
@@ -1165,20 +1226,22 @@ function penView({ title, note, list, front, pen, pick }) {
         <div class="pouch-scene">
             <div class="pens${list.length > 12 ? ' many' : ''}" id="pens" data-pick="${pick}" style="--step:${Math.min(11, 150 / Math.max(1, list.length - 1))}deg">${list.map((p, i) => `
                 <button class="pen" type="button" style="--i:${i}; --mid:${(list.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
-                    ${pen(p.c)}<span class="lbl">${p.name}</span>
+                    ${pen(p.c, p)}<span class="lbl">${p.name}</span>
                 </button>`).join('')}</div>
             <div class="pouch-front${list === PENS ? ' tele-front' : ' cc-front'}" id="pouch-front">${front}</div>
         </div>
-        ${list === GELPENS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="cc-btn">Unzip it</button></div>' : ''}
+        ${list === GELPENS_AND_PENCILS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="cc-btn">Unzip it</button></div>' : ''}
         ${list === PENS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="tele-btn">Push it down</button></div>' : ''}
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
-        ${list === GELPENS ? `<div class="pad"><div id="pad-text" class="pad-text" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Notepad: type in the pen color you picked" data-placeholder="pick a pen, then type anything…"></div></div>` : ''}
-        ${list === GELPENS ? `<div class="in-pencil">
-            <div class="pencil-top"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
-            <div><p class="mono" style="margin:0 0 4px; color:var(--plum)">Plus my BIC Xtra-Smooth mechanical pencils</p>
-            <p style="margin:0">For anything still in draft, so it’s all erasable. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>
-            <div class="sketch-tools"><button type="button" class="on" data-tool="pencil">✏️ pencil</button><button type="button" data-tool="eraser">◻︎ eraser</button><button type="button" data-tool="clear">clear</button></div>
-            <div class="pad pencil-pad"><canvas id="pencil-canvas" aria-label="Sketch pad: draw in pencil, then erase"></canvas><span class="pad-hint" id="pencil-hint">sketch something, then erase it…</span></div>
+        ${list === GELPENS_AND_PENCILS ? `<div class="desk">
+            <div class="desk-tools">
+                <button type="button" class="dtool" data-tool="eraser" aria-label="My Tombow MONO eraser: erases pencil only">${MONO_SVG}<span>mono eraser</span></button>
+                <button type="button" class="dtool" data-tool="whiteout" aria-label="Whiteout: covers pen">${WHITEOUT_SVG}<span>whiteout</span></button>
+                <button type="button" class="desk-erase btn" id="desk-erase" hidden>Erase</button>
+                <button type="button" class="desk-clear" id="desk-clear">new page</button>
+            </div>
+            <div class="pad desk-pad" id="desk-pad"><canvas id="ink-canvas" aria-hidden="true"></canvas><canvas id="graphite-canvas" aria-label="Notebook page: draw with the pen or pencil you picked"></canvas><span class="pad-hint" id="desk-hint">pick a pen or pencil, then draw here…</span></div>
+            <p class="mono desk-now" id="desk-now">holding: nothing yet</p>
         </div>` : ''}`;
 }
 
@@ -1283,7 +1346,36 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
-    backuplip: () => { $('#bl-go').onclick = () => { const sw = $('#bl-swatch'); sw.classList.remove('on'); void sw.offsetWidth; sw.classList.add('on'); $('#bl-swipe').style.animation = 'none'; void sw.offsetWidth; $('#bl-swipe').style.animation = 'swipe-on .9s cubic-bezier(.3,.7,.3,1) .15s forwards'; toast('ahh. lips: saved.'); }; },
+    backuplip: () => {
+        const face = $('#lipface'), paint = $('#lip-paint'), say = $('#lip-say'), NS = 'http://www.w3.org/2000/svg';
+        // sample points inside my lips so we know how much is covered
+        const shapes = [...face.querySelectorAll('.lp-natural > path[fill]')], pts = [];
+        for (let x = 40; x <= 260; x += 8) for (let y = 50; y <= 130; y += 6) { const P = face.createSVGPoint(); P.x = x; P.y = y; if (shapes.some(sh => sh.isPointInFill(P))) pts.push([x, y, false]); }
+        let done = false;
+        const dab = (x, y) => {
+            const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 15); c.setAttribute('fill', '#fff'); paint.appendChild(c);
+            pts.forEach(p => { if (!p[2] && (p[0] - x) ** 2 + (p[1] - y) ** 2 < 225) p[2] = true; });
+            const k = pts.filter(p => p[2]).length / pts.length;
+            if (!done) say.textContent = k < .3 ? 'keep going…' : k < .65 ? 'ooh. a little more ♡' : k < .85 ? 'almost, get the corners' : say.textContent;
+            if (!done && k >= .85) { done = true; face.classList.add('happy'); say.textContent = 'so much happier now ♡ thank you'; toast('glögg. instant mood ♡'); }
+        };
+        const toSvg = e => { const r = face.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 300, (e.clientY - r.top) / r.height * 160]; };
+        let down = false, last = null;
+        face.style.touchAction = 'none';
+        face.addEventListener('pointerdown', e => { down = true; last = toSvg(e); dab(...last); try { face.setPointerCapture(e.pointerId); } catch {} });
+        face.addEventListener('pointermove', e => {
+            if (!down) return; const p = toSvg(e), n = Math.ceil(Math.hypot(p[0] - last[0], p[1] - last[1]) / 6);
+            for (let k = 1; k <= n; k++) dab(last[0] + (p[0] - last[0]) * k / n, last[1] + (p[1] - last[1]) * k / n);
+            last = p;
+        });
+        const up = () => { down = false; }; face.addEventListener('pointerup', up); face.addEventListener('pointercancel', up);
+        // or let the button do it: two swipes, upper lip then lower
+        $('#bl-go').onclick = () => {
+            if (done) { paint.innerHTML = ''; pts.forEach(p => p[2] = false); done = false; face.classList.remove('happy'); say.textContent = 'wiped off. dry again. put it back on me ↔'; $('#bl-go').textContent = 'Swipe it on for me'; return; }
+            const path = [...Array(23)].map((_, k) => [44 + k * 10, 68 + Math.sin(k / 3) * 3]).concat([...Array(23)].map((_, k) => [256 - k * 10, 104 + Math.sin(k / 3) * 4]), [...Array(10)].map((_, k) => [100 + k * 11, 120]));
+            path.forEach(([x, y], k) => setTimeout(() => { dab(x, y); if (k === path.length - 1) $('#bl-go').textContent = 'Wipe it off'; }, reduce ? 0 : k * 22));
+        };
+    },
     todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
     cards: () => {
         const C = [
@@ -1327,14 +1419,18 @@ const AFTER = {
     perfume: () => {
         let n = 0;
         const bottle = $('#pf-bottle'), act = bottle.querySelector('.pact'), btn = $('#spritz'), hint = $('#pf-hint');
-        const capOff = () => { bottle.classList.add('capoff'); btn.textContent = 'Spritz'; hint.textContent = 'now press the nozzle ✨'; };
+        const capOff = () => { bottle.classList.add('capoff'); btn.textContent = 'Spritz'; hint.textContent = 'now press the nozzle. each spritz is a layer of me ✨'; };
         const spritz = () => {
             if (!bottle.classList.contains('capoff')) return capOff();
             act.style.transition = 'transform .12s'; act.style.transform = 'translateY(3px)';
             setTimeout(() => { act.style.transform = ''; }, 170);
             const r = bottle.getBoundingClientRect();
             fairyDust(r.left + r.width * .44, r.top + r.height * .17);
-            n++; toast(n === 1 ? 'ballet rose ♡ and a little fairy dust' : n < 4 ? 'one more. for good luck ✨' : 'okay that’s enough, it’s a small elevator');
+            n++;
+            // each spritz goes one layer deeper: first impression, then who i am, then what stays
+            const layers = sheetBody.querySelectorAll('.pf-me [data-layer]'), L = layers[Math.min(n, 3) - 1];
+            if (n <= 3) { L.classList.add('on'); hint.textContent = n < 3 ? 'spritz again, go a little deeper ✨' : 'that’s me. all of it ♡'; }
+            toast(n === 1 ? 'first impression: sweet ✨' : n === 2 ? 'the heart of it ♡' : n === 3 ? 'and this part lingers' : 'okay that’s enough, it’s a small elevator');
         };
         btn.onclick = spritz;
         bottle.onclick = e => { if (e.target.closest('.pcap') && bottle.classList.contains('capoff')) { bottle.classList.remove('capoff'); btn.textContent = 'Take the cap off'; hint.textContent = 'cap’s back on ♡'; return; } spritz(); };
@@ -1575,10 +1671,6 @@ const AFTER = {
         });
     },
     ipad: () => {
-        const wrap = $('#mk-wrap'), btn = $('#mk-toggle');
-        const setOpen = o => { wrap.classList.toggle('open', o); btn.textContent = o ? 'Close it' : 'Open it'; };
-        btn.onclick = () => { const o = !wrap.classList.contains('open'); setOpen(o); toast(o ? 'click. it floats ♡' : 'closed, pencil still clinging on'); };
-        setTimeout(() => setOpen(true), reduce ? 0 : 450);
         const view = $('#ipad-view'), home = $('#ipad-home');
         const back = '<button type="button" class="back mono" id="ip-back">‹ home</button>';
         sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {
@@ -1589,13 +1681,6 @@ const AFTER = {
             } else if (k === 'procreate') {
                 view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="canvases">${ART.map(([t, , f], i) => `<button type="button" class="canvas" data-page="${i}"><img src="assets/art/${f}.jpg" alt=""><span>${t}</span></button>`).join('')}</div>`;
                 view.classList.add('procreate');
-            } else {
-                view.innerHTML = back + `<p class="ip-title">made by me</p><div class="apps">${[
-                    ['Listening History', 'LH', '#F4A7B9', 'https://listening-history.onrender.com/'],
-                    ['Saturday in Austin', 'SA', '#8FD19E', 'https://suhxnitiwari.github.io/saturday-in-austin/'],
-                    ['suhanitiwari.com', 'ST', '#F7D54A', 'https://suhanitiwari.com'],
-                    ['What’s in my bag?', '👜', '#B9A3E8', 'https://github.com/suhxnitiwari/whats-in-my-bag']
-                ].map(([n, t, c, h]) => `<a class="app" href="${h}" target="_blank" rel="noopener"><span class="icon" style="background:${c}">${t}</span><span>${n}</span></a>`).join('')}</div>`;
             }
             if (k !== 'procreate') view.classList.remove('procreate');
             home.hidden = true; view.hidden = false;
@@ -1761,7 +1846,7 @@ const AFTER = {
             card.addEventListener('pointerup', e => {
                 if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
                 if (!moved) return;
-                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))`;
+                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))${card.classList.contains('vert') ? ' rotate(90deg)' : ''}`;
                 card.dataset.skip = '1';   // ignore the click the browser fires right after a drag
             });
         });
@@ -1776,11 +1861,19 @@ const AFTER = {
             // the whole card comes out of its slot and floats above the wallet
             requestAnimationFrame(() => {
                 const cr = card.getBoundingClientRect(), wr = vw.getBoundingClientRect();
-                const lift = cr.bottom - wr.top + 12;   // clear the top of the wallet completely
-                card.style.transform = `translateY(calc(-36% - ${lift}px))`;
-                card.dataset.lift = lift;
+                const vert = card.classList.contains('vert');
+                // vertical cards (all the bank cards) turn upright once they're out of the slot
+                const extra = vert ? (card.offsetWidth - card.offsetHeight) / 2 : 0;
+                const lift = cr.bottom - wr.top + 12 + extra;   // clear the top of the wallet completely
+                card.style.transition = 'none';
+                card.style.transform = `translateY(calc(-36% - ${lift}px))${vert ? ' rotate(90deg)' : ''}`;
+                const over = card.getBoundingClientRect().bottom - (vw.getBoundingClientRect().top - 12);
+                const fixed = over > 0 ? lift + over : lift;
+                card.style.transform = 'translateY(-36%)'; void card.offsetWidth; card.style.transition = '';
+                card.style.transform = `translateY(calc(-36% - ${fixed}px))${vert ? ' rotate(90deg)' : ''}`;
+                card.dataset.lift = fixed;
             });
-            vw.style.marginTop = `${Math.round(card.offsetHeight * 1.15)}px`;
+            vw.style.marginTop = `${Math.round((card.classList.contains('vert') ? card.offsetWidth : card.offsetHeight) * 1.15)}px`;
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });
@@ -1792,7 +1885,7 @@ const AFTER = {
     },
 
     mildliners: () => pensAfter(PENS),
-    gelpens: () => pensAfter(GELPENS),
+    gelpens: () => pensAfter(GELPENS_AND_PENCILS),
 
     sunglasses: () => {
         const rz = $('#rz'), rig = $('#rz-rig');
@@ -1864,9 +1957,33 @@ const AFTER = {
         };
     },
 
+    giftcards: () => {
+        const flipped = new Set();
+        sheetBody.querySelectorAll('.gc').forEach(c => c.onclick = e => {
+            const s = e.target.closest('[data-scratch]');
+            if (s && c.classList.contains('flip')) { s.classList.add('done'); toast(GIFTCARDS[+c.dataset.gc].bal + ' ✨'); return; }
+            const on = c.classList.toggle('flip');
+            sheetBody.querySelectorAll('.gc').forEach(o => o !== c && o.classList.remove('up'));
+            c.classList.toggle('up', on);
+            if (on) flipped.add(c.dataset.gc);
+            $('#gc-tally').textContent = flipped.size === 3 ? 'all three. all from returns i forgot about. no regrets ♡' : `3 cards. 0 returns made on time.`;
+        });
+    },
     sweater: () => {
         const sw = $('#sw');
-        $('#sw-fold').onclick = () => { const f = sw.classList.toggle('folded'); $('#sw-fold').textContent = f ? 'Unfold it' : 'Fold it'; };
+        // three taps to fold (left sleeve, right sleeve, bottom up), three taps to unfold
+        const HINT = ['flat. tap it to fold the left sleeve in', 'tap again: right sleeve', 'one more: fold the bottom up', 'folded. tap it three times to unfold ↓'];
+        let dir = -1;
+        const step = () => {
+            let f = +sw.dataset.f;
+            if (f === 3) dir = -1; else if (f === 0) dir = 1;
+            f += dir; sw.dataset.f = f;
+            $('#sw-hint').textContent = f === 0 ? 'unfolded. tap three times to fold it back up' : f === 3 ? 'folded ♡ (marie kondo would be proud)' : dir > 0 ? HINT[f] : `${f} more to go…`;
+            $('#sw-fold').textContent = dir > 0 && f < 3 || f === 0 ? 'Fold it' : 'Unfold it';
+        };
+        sw.onclick = step;
+        sw.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); } };
+        $('#sw-fold').onclick = step;
         $('#wear').onclick = () => {
             const on = document.body.classList.toggle('cozy');
             $('#wear').textContent = on ? 'Take it off' : 'Put it on';
@@ -1901,7 +2018,8 @@ const AFTER = {
             else {
                 pickUp({ id: go, name: 'from my laptop', open: go });
                 // a way back to the desktop
-                sheetBody.insertAdjacentHTML('afterbegin', '<button type="button" class="back-desk mono" id="back-desk">‹ back to my desktop</button>');
+                sheetBody.insertAdjacentHTML('afterbegin', `<div class="finder-bar"><button type="button" class="tl" id="back-desk" aria-label="Close folder, back to my desktop"><i></i><i></i><i></i></button><button type="button" class="finder-back" id="back-desk-2">‹ Desktop</button><span>${f.querySelector('span').textContent}</span></div>`);
+                $('#back-desk-2').onclick = () => $('#back-desk').click();
                 $('#back-desk').onclick = () => { pickUp(ITEMS.find(i => i.id === 'laptop')); $('#lap-closed').hidden = true; $('#mbp').hidden = false; $('#mbp').classList.add('open'); $('#lap-close').hidden = false; $('#lap-note').textContent = 'my desktop. every folder is a project.'; };
             }
         });
@@ -1990,42 +2108,100 @@ function setupPad() {
     cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
     $('#pad-clear').onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); hint.hidden = false; };
 }
-// the BIC pencils: draw in graphite, erase with the pink end
-function setupPencil() {
-    const cv = $('#pencil-canvas'); if (!cv) return;
-    const ctx = cv.getContext('2d'), hint = $('#pencil-hint');
-    const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
-    cv.width = r.width * d; cv.height = r.height * d; ctx.scale(d, d); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    let tool = 'pencil', drawing = false, last = null;
-    const pt = e => { const b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
-    cv.addEventListener('pointerdown', e => { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (_) {} drawing = true; last = pt(e); hint.hidden = true; });
-    cv.addEventListener('pointermove', e => {
-        if (!drawing) return;
-        const p = pt(e);
-        ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
-        ctx.strokeStyle = 'rgba(70, 70, 72, .82)'; ctx.lineWidth = tool === 'eraser' ? 16 : 1.8;
-        ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
-    });
-    const stop = () => { drawing = false; };
-    cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
-    sheetBody.querySelector('.sketch-tools').onclick = e => {
-        const b = e.target.closest('[data-tool]'); if (!b) return;
-        if (b.dataset.tool === 'clear') { ctx.clearRect(0, 0, cv.width, cv.height); hint.hidden = false; return; }
-        tool = b.dataset.tool;
-        sheetBody.querySelectorAll('.sketch-tools [data-tool]').forEach(x => x.classList.toggle('on', x === b));
-        cv.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+/* the pouch: 20 gel pens + 5 BIC mechanical pencils, a zipper you can drag, and a notebook page */
+const GELPENS_AND_PENCILS = [...GELPENS, ...[['Pencil · Blue', '#5DA9E9'], ['Pencil · Pink', '#F28DB2'], ['Pencil · Purple', '#A98BE0'], ['Pencil · Green', '#6CCB8C'], ['Pencil · Orange', '#F5A25D']].map(([name, c]) => ({ name, c, pencil: true }))];
+const PENCIL_SVG = c => `<svg viewBox="0 0 34 190"><rect x="8" y="20" width="18" height="138" rx="3" fill="${c}" opacity=".85" stroke="#3A2626" stroke-width="3"/><rect x="11" y="26" width="4" height="124" rx="2" fill="#fff" opacity=".45"/><rect x="9" y="4" width="16" height="18" rx="3" fill="#F7F3EE" stroke="#3A2626" stroke-width="2.5"/><rect x="23" y="22" width="4" height="50" rx="2" fill="#fff" stroke="#3A2626" stroke-width="2"/><path d="M8 158 L17 182 L26 158Z" fill="#E4E4E2" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 178 h2 v8 h-2z" fill="#555"/></svg>`;
+// Tombow MONO: white body, the blue / white / black sleeve
+const MONO_SVG = `<svg viewBox="0 0 120 52" aria-hidden="true"><rect x="4" y="8" width="112" height="36" rx="5" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.4"/><rect x="30" y="8" width="70" height="36" fill="#1D4E9E"/><rect x="30" y="20" width="70" height="12" fill="#fff"/><rect x="30" y="32" width="70" height="12" fill="#151517"/><rect x="30" y="8" width="70" height="36" fill="none" stroke="#3A2626" stroke-width="2"/><text x="65" y="29.6" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="800" font-size="9" letter-spacing="1.5" fill="#151517">MONO</text></svg>`;
+const WHITEOUT_SVG = `<svg viewBox="0 0 120 52" aria-hidden="true"><path d="M6 26 L22 18 V34Z" fill="#C9CCD2" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="12" width="78" height="28" rx="10" fill="#FBFBF9" stroke="#3A2626" stroke-width="2.4"/><rect x="96" y="14" width="20" height="24" rx="6" fill="#2F6FD6" stroke="#3A2626" stroke-width="2.2"/><text x="60" y="30" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="800" font-size="8.5" letter-spacing=".8" fill="#2F6FD6">WHITEOUT</text></svg>`;
+function zipperPouch(pf, pens, btn, note) {
+    const pull = pf.querySelector('.cc-pull'), svg = pf.querySelector('svg'), list = [...pens.querySelectorAll('.pen')], N = list.length;
+    const TRACK = 176, CLOSED_X = 201;   // the pull travels from x=201 (zipped) to x=25 (open) in the pouch art
+    let p = 0, anim = 0;
+    pens.classList.add('zipdrive');
+    const set = v => {
+        p = Math.max(0, Math.min(1, v));
+        pull.style.transform = `translateX(${-TRACK * p}px)`;
+        pf.classList.toggle('unzipped', p > .02);
+        // pens come out one at a time, from the end the zipper opens first
+        list.forEach((el, i) => el.classList.toggle('out', p * (N + 1) > N - i));
+        btn.textContent = p > .5 ? 'Zip it' : 'Unzip it';
+        note.textContent = p === 0 ? 'zipped. 20 pens and 5 pencils in there' : p < 1 ? `${list.filter(el => el.classList.contains('out')).length} out…` : pens.dataset.pick;
     };
+    const tween = (to, ms) => {
+        cancelAnimationFrame(anim); const from = p, t0 = performance.now();
+        const step = t => { const k = Math.min(1, (t - t0) / ms), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2; set(from + (to - from) * e); if (k < 1) anim = requestAnimationFrame(step); };
+        anim = requestAnimationFrame(step);
+    };
+    // the button: a slow unzip so you see the fan, a quick zip shut
+    btn.onclick = () => p > .5 ? tween(0, reduce ? 0 : 450) : tween(1, reduce ? 0 : 2200);
+    // or grab the pull and drag it yourself, as slowly as you like
+    let drag = null;
+    pf.style.cursor = 'grab'; pf.style.touchAction = 'none';
+    pf.addEventListener('pointerdown', e => { cancelAnimationFrame(anim); drag = { x: e.clientX, p0: p, moved: false }; pf.style.cursor = 'grabbing'; try { pf.setPointerCapture(e.pointerId); } catch {} });
+    pf.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const scale = svg.getBoundingClientRect().width / 240, dx = e.clientX - drag.x;
+        if (Math.abs(dx) > 4) drag.moved = true;
+        if (drag.moved) set(drag.p0 - dx / scale / TRACK);
+    });
+    const up = () => { if (!drag) return; const { moved } = drag; drag = null; pf.style.cursor = 'grab'; if (!moved) btn.click(); };
+    pf.addEventListener('pointerup', up); pf.addEventListener('pointercancel', up);
+    set(0);
 }
+// the notebook page: ink and whiteout live on one layer, graphite on another, so the MONO only ever erases pencil
+function setupDesk() {
+    const ink = $('#ink-canvas'), gr = $('#graphite-canvas'), hint = $('#desk-hint'), now = $('#desk-now'), erase = $('#desk-erase');
+    const ix = ink.getContext('2d'), gx = gr.getContext('2d');
+    const size = () => { const r = gr.getBoundingClientRect(), d = devicePixelRatio || 1; [[ink, ix], [gr, gx]].forEach(([c, x]) => { c.width = r.width * d; c.height = r.height * d; x.setTransform(d, 0, 0, d, 0, 0); x.lineCap = 'round'; x.lineJoin = 'round'; }); };
+    size();
+    let tool = null, last = null, warned = false;
+    const dot = (c, r) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='${r * 2 + 4}' height='${r * 2 + 4}'><circle cx='${r + 2}' cy='${r + 2}' r='${r}' fill='${c}' stroke='%233A2626' stroke-width='1'/></svg>`).replace(/%253A/g, '%3A')}") ${r + 2} ${r + 2}, crosshair`;
+    const label = t => t.kind === 'eraser' ? 'my tombow mono eraser' : t.kind === 'whiteout' ? 'whiteout' : t.name.toLowerCase() + (t.kind === 'pen' ? ' gel pen' : '');
+    const setTool = t => {
+        tool = t;
+        gr.style.cursor = t.kind === 'eraser' ? dot('#FBFBF9', 8) : t.kind === 'whiteout' ? dot('#FFFFFF', 6) : dot(t.c, 2.5);
+        sheetBody.querySelectorAll('.dtool').forEach(b => b.classList.toggle('on', b.dataset.tool === t.kind));
+        sheetBody.querySelectorAll('.pen').forEach(b => b.classList.toggle('held', (t.kind === 'pen' || t.kind === 'pencil') && GELPENS_AND_PENCILS[+b.dataset.pen].name === t.name));
+        erase.hidden = t.kind !== 'pencil';
+        now.textContent = `holding: ${label(t)}`;
+    };
+    $('#pens').desk = { hold: p => setTool({ kind: p.pencil ? 'pencil' : 'pen', c: p.c, name: p.name }) };
+    sheetBody.querySelectorAll('.dtool').forEach(b => b.onclick = () => setTool({ kind: b.dataset.tool }));
+    erase.onclick = () => setTool({ kind: 'eraser' });
+    $('#desk-clear').onclick = () => { ix.clearRect(0, 0, ink.width, ink.height); gx.clearRect(0, 0, gr.width, gr.height); hint.hidden = false; toast('fresh page ♡'); };
+    const pt = e => { const b = gr.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; };
+    const stroke = (a, b) => {
+        const k = tool.kind;
+        if (k === 'pen') { ix.globalCompositeOperation = 'source-over'; ix.strokeStyle = tool.c; ix.lineWidth = 2.4; ix.beginPath(); ix.moveTo(a.x, a.y); ix.lineTo(b.x, b.y); ix.stroke(); }
+        if (k === 'pencil') { gx.globalCompositeOperation = 'source-over'; gx.strokeStyle = tool.c; gx.globalAlpha = .75; gx.lineWidth = 1.6; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalAlpha = 1; }
+        if (k === 'eraser') { gx.globalCompositeOperation = 'destination-out'; gx.lineWidth = 16; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalCompositeOperation = 'source-over'; }
+        if (k === 'whiteout') {
+            // whiteout paints over the ink (you can write on top of it again) and covers pencil too
+            ix.globalCompositeOperation = 'source-over'; ix.strokeStyle = '#FFFFFF'; ix.lineWidth = 12; ix.beginPath(); ix.moveTo(a.x, a.y); ix.lineTo(b.x, b.y); ix.stroke();
+            gx.globalCompositeOperation = 'destination-out'; gx.lineWidth = 12; gx.beginPath(); gx.moveTo(a.x, a.y); gx.lineTo(b.x, b.y); gx.stroke(); gx.globalCompositeOperation = 'source-over';
+        }
+    };
+    gr.addEventListener('pointerdown', e => {
+        if (!tool) { toast('pick up a pen or a pencil first ↑'); return; }
+        e.preventDefault(); try { gr.setPointerCapture(e.pointerId); } catch {}
+        last = pt(e); hint.hidden = true; stroke(last, { x: last.x + .1, y: last.y + .1 });
+        if (tool.kind === 'eraser' && !warned && ix.getImageData(0, 0, ink.width, ink.height).data.some((v, i) => i % 4 === 3 && v)) { warned = true; toast('erasers don’t do pen. that’s a whiteout job.'); }
+    });
+    gr.addEventListener('pointermove', e => { if (!last) return; const p = pt(e); stroke(last, p); last = p; });
+    const stop = () => { last = null; };
+    gr.addEventListener('pointerup', stop); gr.addEventListener('pointercancel', stop);
+}
+
 function pensAfter(list) {
     const pens = $('#pens'), note = $('#pen-note');
-    setupPencil();
     const tele = $('#tele-btn'), pf = $('#pouch-front');
     const setTele = up => { pf.classList.toggle('down', up); pens.classList.toggle('open', up); if (tele) tele.textContent = up ? 'Pull it back up' : 'Push it down'; note.textContent = up ? pens.dataset.pick : 'zipped and standing tall'; };
     if (tele) { tele.onclick = () => setTele(!pens.classList.contains('open')); pf.onclick = () => setTele(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
     const cc = $('#cc-btn');
-    const setZip = o => { pf.classList.toggle('unzipped', o); pens.classList.toggle('open', o); cc.textContent = o ? 'Zip it' : 'Unzip it'; note.textContent = o ? pens.dataset.pick : 'zipped. three compartments of pens in there'; };
-    if (cc) { cc.onclick = () => setZip(!pens.classList.contains('open')); pf.onclick = () => setZip(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
-    setTimeout(() => { if (tele) setTele(true); else if (cc) setZip(true); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);
+    if (cc) zipperPouch(pf, pens, cc, note);
+    setTimeout(() => { if (tele) setTele(true); else if (cc) cc.click(); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);
+    if (cc) setupDesk(list);
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
         const p = list[+b.dataset.pen];
@@ -2035,11 +2211,8 @@ function pensAfter(list) {
             : p.note
             ? `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`
             : `writing in <span style="color:${p.c}; font-size:1.7rem">${p.name.toLowerCase()}</span>`;
-        if (!p.note && !p.full) {
-            ink = p.c;
-            const t = $('#pad-text');
-            if (t) { t.focus(); document.execCommand('styleWithCSS', false, true); document.execCommand('foreColor', false, p.c); t.style.caretColor = p.c; }
-        }
+        if (p.pencil) note.innerHTML = `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · pencil. it erases.`;
+        if (!p.note && !p.full && pens.desk) pens.desk.hold(p);
     };
 }
 

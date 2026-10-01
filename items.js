@@ -337,7 +337,7 @@ window.ITEMS = [
         open: 'padfolio'
     },
     {
-        id: 'boarding', name: 'my boarding pass', zip: 'attached', l: 50.8, t: 28.7, w: 18.8, r: 4,
+        id: 'boarding', name: 'my boarding pass', zip: 'devices', l: 50.8, t: 28.7, w: 18.8, r: 4,
         art: `<svg viewBox="0 0 200 80"><path d="M6 4 H194 V30 a6 6 0 0 0 0 12 V76 H6 V42 a6 6 0 0 0 0 -12Z" fill="#FFFDF8" ${S} stroke-width="2.5"/>
             <rect x="6" y="4" width="188" height="16" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/><text x="14" y="15.5" font-family="Instrument Sans" font-weight="600" font-size="8" fill="#3A2626" letter-spacing="1.5">BOARDING PASS</text>
             <path d="M146 20 V76" stroke="#3A2626" stroke-width="1.5" stroke-dasharray="3 3"/>
@@ -412,13 +412,14 @@ window.ITEMS = [
     },
     {
         id: 'giftcards', name: 'some gift cards', zip: 'shades', l: 0, t: 0, w: 10.3, r: 3,
-        art: `<svg viewBox="0 0 130 100"><g transform="rotate(-10 40 50)"><rect x="6" y="22" width="80" height="50" rx="5" fill="#ECE6DC" ${S} stroke-width="2"/><text x="46" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="2.4" fill="#2A2426">ARITZIA</text></g>
-    <g transform="rotate(4 70 50)"><rect x="32" y="18" width="80" height="50" rx="5" fill="#111013" ${S} stroke-width="2"/><text x="72" y="47" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="11" letter-spacing="3.2" fill="#F4F2EE">CHANEL</text></g>
-    <g transform="rotate(14 82 64)"><rect x="42" y="38" width="80" height="50" rx="5" fill="#fff" ${S} stroke-width="2"/><g clip-path="none">${[0,1,2,3,4,5,6,7,8,9].map(k => `<rect x="${44 + k * 8}" y="40" width="4" height="12" fill="#111013"/>`).join('')}</g><text x="82" y="72" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="2.4" fill="#111013">SEPHORA</text></g></svg>`,
+        art: `<svg viewBox="0 0 130 100"><defs><pattern id="gc-st" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="4" height="8" fill="#0B0B0C"/><rect x="4" width="4" height="8" fill="#FAFAFA"/></pattern></defs>
+    <g transform="rotate(-10 40 50)"><rect x="6" y="24" width="76" height="48" rx="5" fill="#E8E0D3" stroke="#3A2626" stroke-width="1.6"/><text x="44" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="9" letter-spacing="2.6" fill="#2A2426">ARITZIA</text></g>
+    <g transform="rotate(4 70 50)"><rect x="30" y="18" width="76" height="48" rx="5" fill="#0D0D0F" stroke="#3A2626" stroke-width="1.6"/><text x="68" y="44" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="700" font-size="9" letter-spacing="3" fill="#F4F2EE">CHANEL</text><text x="68" y="53" text-anchor="middle" font-family="Helvetica Neue, Arial" font-size="3.6" letter-spacing="2.4" fill="#BDB8B0">BEAUTY</text></g>
+    <g transform="rotate(14 82 64)"><rect x="44" y="40" width="76" height="48" rx="5" fill="url(#gc-st)" stroke="#3A2626" stroke-width="1.6"/><rect x="58" y="58" width="48" height="12" fill="#FAFAFA" stroke="#0B0B0C" stroke-width="1"/><text x="82" y="67" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="700" font-size="6.4" letter-spacing="2.2" fill="#0B0B0C">SEPHORA</text></g></svg>`,
         open: 'giftcards'
     },
     {
-        id: 'pads', name: 'pads', zip: 'front', l: 0, t: 0, w: 6.6, r: 0,
+        id: 'pads', name: 'pads', zip: 'front', l: 0, t: 0, w: 10, r: 0,
         art: `<svg viewBox="-4 0 112 100"><g transform="rotate(-8 45 45)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#F4B6CA" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#E995AF" stroke-width="2" stroke-dasharray="2 2"/><circle cx="45" cy="45" r="9" fill="#FBE3EA"/><path d="M41 45 q4 -6 8 0 q-4 6 -8 0z" fill="#E995AF"/></g>
     <g transform="rotate(10 50 56) translate(10 14)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#C9B6E8" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#A996D6" stroke-width="2" stroke-dasharray="2 2"/></g></svg>`,
         open: 'pads'
@@ -464,7 +465,7 @@ window.ITEMS = [
         open: 'phone'
     },
     {
-        id: 'passport', name: 'my passport (and a boarding pass)', zip: 'devices', l: 91.2, t: 36.2, w: 12.4, r: 7,
+        id: 'passport', name: 'my passport', zip: 'devices', l: 91.2, t: 36.2, w: 9, r: 7,
         cover: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
             <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
                 <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>
@@ -488,11 +489,7 @@ window.ITEMS = [
             </g>
             <rect x="47" y="128" width="16" height="9" rx="1.5" fill="none" stroke="#D9B45A" stroke-width="1.4"/><path d="M50 132.5 h10 M55 128 v9" stroke="#D9B45A" stroke-width="1"/>
         </svg>`,
-        get art() {
-            const bp = window.ITEMS.find(x => x.id === 'boarding').art.replace('<svg viewBox="0 0 200 80">', '<svg x="0" y="0" width="150" height="60" viewBox="0 0 200 80">');
-            const pp = this.cover.replace('<svg viewBox="0 0 110 150">', '<svg x="0" y="0" width="110" height="150" viewBox="0 0 110 150">');
-            return `<svg viewBox="0 0 150 196"><g transform="translate(108 6) rotate(76)">${bp}</g><g transform="translate(8 42) rotate(-4 55 75)">${pp}</g></svg>`;
-        },
+        get art() { return this.cover; },
         open: 'passport'
     },
     {

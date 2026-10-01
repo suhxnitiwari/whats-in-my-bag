@@ -1632,3 +1632,154 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .rz.on + .rz-caps .rom, .rz.peek + .rz-caps .rom { opacity: 1; }
 body.shades .tint { background: linear-gradient(180deg, rgba(244, 166, 190, .22), rgba(255, 200, 150, .14)); }
 @media (prefers-reduced-motion: reduce) { .rz .tw, .rz .fl { animation: none; } }
+
+/* iPad, flat and to scale: landscape ~1.43:1 screen, pencil docked on top, no 3D tilt to eat taps */
+.ipad-flat { position: relative; width: min(600px, 100%); margin: 26px auto 6px; }
+.ipad-flat .ipad-big { padding: 12px; border-radius: 22px; background: #1B1B1E; }
+.ipad-flat .ipad-screen { height: auto; aspect-ratio: 1.43; }
+.ipad-pencil { position: absolute; left: 24%; right: 28%; top: -11px; height: 11px; border-radius: 6px 3px 3px 6px; background: linear-gradient(#FFFFFF, #E9E9E6); border: 2px solid var(--ink); z-index: 1; }
+.ipad-pencil::before { content: ""; position: absolute; left: -12px; top: 1px; border: 3.5px solid transparent; border-right: 10px solid #F2F2EF; }
+.ipad-flat .ipad-view { padding-top: 0; }
+.ipad-flat .ipad-view .back { position: sticky; top: 0; z-index: 2; display: block; width: calc(100% + 28px); margin: 0 -14px 8px; padding: 10px 14px; text-align: left; font-size: .9rem; background: rgba(255,255,255,.92); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(0,0,0,.08); }
+.ipad-flat .ipad-view.procreate .back { background: rgba(27,27,31,.92); color: #8FB8F0; border-bottom-color: rgba(255,255,255,.1); }
+@media (max-width: 760px) { .ipad-home { gap: 20px; padding: 24px 20px; } .ipad-home .papp .ic { width: 54px; height: 54px; } }
+
+/* the Stanley has to sit above the bag artwork, or the bag swallows every tap and drag */
+.bottle { z-index: 3; }
+.bottle.free { z-index: 7; }
+
+/* MacBook Pro 14", to scale: 1.55:1 screen, thin black bezel with a notch, a wider silver deck under it */
+.mbp { width: min(640px, 100%); margin: 8px auto 0; }
+.mbp-screen { position: relative; border-width: 8px 8px 10px; border-radius: 16px 16px 4px 4px; }
+.mbp-screen::before { content: ""; position: absolute; left: 50%; top: -8px; width: 13%; height: 12px; transform: translateX(-50%); background: #1B1B1E; border-radius: 0 0 6px 6px; z-index: 2; }
+.mbp-screen .desktop { position: relative; display: flex; flex-direction: column; aspect-ratio: 1.55; padding-bottom: 0; border: 0; border-radius: 8px 8px 2px 2px; }
+.mbp-screen .menubar { padding: 4px 12px; font-size: .62rem; }
+.mbp-screen .dfolders { flex: 1; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: start; gap: 10px 6px; padding: 14px 12px 4px; }
+.mbp-screen .dfolder { padding: 4px; gap: 4px; }
+.mbp-screen .dfolder svg { width: 52px; }
+.mbp-screen .dfolder span { font-size: .66rem; }
+.mbp-screen .dock { margin: 0 auto 8px; padding: 4px 6px; gap: 4px; border-radius: 12px; }
+.mbp-screen .dock-app span { width: 26px; height: 26px; border-radius: 7px; }
+.mbp-base { height: 14px; margin: 0 -7%; border-radius: 2px 2px 18px 18px / 2px 2px 12px 12px; }
+.mbp-notch { top: 0; width: 18%; height: 5px; }
+@media (max-width: 760px) {
+    .mbp-screen .dfolders { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 8px 6px 2px; }
+    .mbp-screen .dfolder svg { width: 34px; }
+    .mbp-screen .dfolder span { font-size: .5rem; }
+    .mbp-screen .dock-app span { width: 18px; height: 18px; border-radius: 5px; }
+    .mbp-base { margin: 0 -4%; }
+}
+.mbp-screen .dfolder svg { width: 60px; }
+.mbp-screen .dfolder span { font-size: .72rem; }
+@media (max-width: 760px) { .mbp-screen .dfolder svg { width: 34px; } .mbp-screen .dfolder span { font-size: .5rem; } }
+
+/* inside a laptop folder: a sticky Finder title bar, so the way back is always right there */
+.finder-bar { position: sticky; top: -1px; z-index: 5; display: flex; align-items: center; gap: 12px; margin: -6px 0 16px; padding: 9px 12px; background: #ECE7E8; border: 2px solid var(--ink); border-radius: 12px; box-shadow: 0 6px 14px -10px rgba(0,0,0,.4); font: 600 .82rem -apple-system, system-ui, sans-serif; }
+.finder-bar .tl { display: flex; gap: 6px; padding: 2px; border: 0; background: none; cursor: pointer; }
+.finder-bar .tl i { width: 12px; height: 12px; border-radius: 50%; background: #FF5F57; border: 1px solid rgba(0,0,0,.18); }
+.finder-bar .tl i:nth-child(2) { background: #FEBC2E; } .finder-bar .tl i:nth-child(3) { background: #28C840; }
+.finder-bar .finder-back { border: 1.5px solid var(--ink); background: var(--paper); border-radius: 999px; padding: 4px 12px; cursor: pointer; font: inherit; }
+.finder-bar .finder-back:hover { background: var(--rose, #F4C6D2); }
+.finder-bar span { color: var(--muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Victorine: the cash lives in the bill compartment behind the right-hand card slots, peeking over the top of them */
+.vw-open > .vbills { left: 43%; width: 24%; top: -30%; height: 44%; z-index: 0; }
+.vw-open > .p2 { z-index: 1; }
+.vw.has-pick .vbills { visibility: hidden; }
+.vw { margin-top: 56px; }
+
+/* perfume: each spritz reveals a layer of me */
+.pf-me > div { transition: opacity .5s, transform .5s var(--ease), background .5s; opacity: .45; }
+.pf-me > div em { display: block; margin-top: 6px; font-style: normal; font-size: 1.2rem; line-height: 1.2; color: var(--plum); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .6s, opacity .6s; }
+.pf-me > div.on { opacity: 1; transform: translateY(-4px); }
+.pf-me > div.on em { max-height: 8em; opacity: 1; }
+
+/* hair salon: illustrated back-of-head, styles cross-fade, the scrunchie takes whatever color you pick */
+.salon { position: relative; width: min(320px, 86%); aspect-ratio: 300 / 380; margin: 4px auto 10px; overflow: hidden; border-radius: 18px; border: 2px solid var(--ink); background: linear-gradient(#FBEFF2, #F6E1E7); cursor: grab; }
+.salon-svg { display: block; width: 100%; height: 100%; }
+.salon .hs { opacity: 0; transition: opacity .45s; }
+.salon[data-style="down"] .hs[data-s="down"], .salon[data-style="pony"] .hs[data-s="pony"], .salon[data-style="braid"] .hs[data-s="braid"], .salon[data-style="half"] .hs[data-s="half"] { opacity: 1; }
+.salon .scr circle { fill: var(--scr); stroke: var(--scr-d); stroke-width: 1.2; transition: fill .3s, stroke .3s; }
+.salon.weave .bl { animation: weave .35s calc(var(--k) * .12s) both cubic-bezier(.3,1.4,.5,1); transform-box: fill-box; transform-origin: center; }
+@keyframes weave { from { opacity: 0; transform: scale(.4); } }
+.salon.shiny .hp-shine { animation: shine 1s ease-out; }
+.salon-ctrl { text-align: center; }
+.salon-ctrl .mono { margin: 10px 0 6px; font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+.scr-pick { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); cursor: pointer; font: inherit; }
+.scr-pick span { width: 22px; height: 22px; border-radius: 50%; background: var(--c); border: 2px solid rgba(0,0,0,.25); box-shadow: inset 0 0 0 4px rgba(255,255,255,.25); }
+.scr-pick[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--gold, #D9B45A); }
+.salon .hp-comb { left: auto; right: 4%; margin-left: 0; width: 30%; top: 3%; }
+
+/* sweater: one fold per tap. 1 = left sleeve in, 2 = right sleeve in, 3 = bottom folded up */
+.sw2 { cursor: pointer; outline: none; }
+.sw2 .sl, .sw2 .bot { transition-delay: 0s !important; }
+.sw2[data-f="1"] .sl-l, .sw2[data-f="2"] .sl-l, .sw2[data-f="3"] .sl-l { transform: rotate(-68deg) scale(.66); }
+.sw2[data-f="2"] .sl-r, .sw2[data-f="3"] .sl-r { transform: rotate(68deg) scale(.66); }
+.sw2[data-f="3"] .bot { transform: scaleY(-1); }
+.sw-hint { text-align: center; color: var(--plum); font-size: 1.2rem; margin: 0 0 8px; }
+
+/* gift cards: real card proportions (85.6 × 54 mm), fanned; tap to flip, scratch the back for the balance */
+.gcs { position: relative; display: flex; justify-content: center; gap: 0; padding: 26px 0 18px; perspective: 1200px; flex-wrap: wrap; }
+.gc { position: relative; width: min(240px, 72vw); aspect-ratio: 85.6 / 54; margin: 0 -40px; padding: 0; border: 0; background: none; cursor: pointer; transform-style: preserve-3d; transform: rotate(calc((var(--k) - 1) * 9deg)) translateY(calc(var(--k) * 10px - 10px)); transition: transform .6s cubic-bezier(.3,1.2,.4,1), z-index 0s .3s; z-index: calc(var(--k) + 1); }
+.gc:hover { transform: rotate(calc((var(--k) - 1) * 9deg)) translateY(-10px); }
+.gc.up { z-index: 10; transition: transform .6s cubic-bezier(.3,1.2,.4,1); }
+.gc.flip { transform: translateY(-18px) rotateY(180deg) scale(1.12); }
+.gc-face { position: absolute; inset: 0; border-radius: 11px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 10px 22px -10px rgba(0,0,0,.45), 0 2px 4px rgba(0,0,0,.18); display: grid; place-items: center; }
+.gc-front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.22) 46%, transparent 60%); pointer-events: none; }
+.gc-chip-txt { position: absolute; left: 7%; bottom: 8%; font: 600 .5rem var(--sans, system-ui); letter-spacing: .18em; opacity: .7; }
+.gc-word { position: relative; z-index: 1; }
+.gc-aritzia .gc-front { background: radial-gradient(120% 90% at 30% 20%, #F1EBE1, #DED4C5); color: #2A2426; }
+.gc-aritzia .gc-word { font: 400 1.35rem/1 Georgia, 'Times New Roman', serif; letter-spacing: .32em; margin-left: .32em; }
+.gc-chanel .gc-front { background: linear-gradient(160deg, #1A1A1D, #050506 70%); color: #F5F3EF; }
+.gc-chanel .gc-word { font: 700 1.45rem/1 'Helvetica Neue', Arial, sans-serif; letter-spacing: .34em; margin-left: .34em; }
+.gc-sub { position: absolute; top: 64%; font: 500 .52rem 'Helvetica Neue', Arial, sans-serif; letter-spacing: .5em; color: #CFCBC4; }
+.gc-sephora .gc-front { background: #0B0B0C; color: #0B0B0C; }
+.gc-stripes { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, #0B0B0C 0 9px, #FAFAFA 9px 18px); }
+.gc-sephora .gc-word { background: #FAFAFA; padding: 7px 14px 7px 18px; font: 700 1.05rem/1 'Helvetica Neue', Arial, sans-serif; letter-spacing: .4em; box-shadow: 0 0 0 2px #0B0B0C; }
+.gc-sephora .gc-chip-txt { color: #0B0B0C; background: #FAFAFA; padding: 2px 5px; opacity: 1; }
+.gc-back { transform: rotateY(180deg); background: #F7F5F1; color: #2A2426; align-items: start; justify-items: stretch; grid-template-rows: auto 1fr; }
+.gc-chanel .gc-back { background: #121214; color: #EEE; }
+.gc-stripe { display: block; height: 18%; margin-top: 7%; background: linear-gradient(#1B1B1B, #2E2E2E); }
+.gc-bk { display: flex; flex-direction: column; gap: 3px; padding: 6px 9px 8px; text-align: left; font: 500 .55rem var(--sans, system-ui); }
+.gc-bk b { font-size: .55rem; letter-spacing: .12em; }
+.gc-bk small { font-size: .55rem; opacity: .85; }
+.gc-scratch { position: relative; display: block; height: 20px; border-radius: 4px; overflow: hidden; background: #fff; color: #2A2426; border: 1px dashed rgba(0,0,0,.25); }
+.gc-bal { position: absolute; inset: 0; display: grid; place-items: center; font: 600 .62rem var(--sans, system-ui); }
+.gc-foil { position: absolute; inset: 0; display: grid; place-items: center; background: repeating-linear-gradient(135deg, #C9CCD2 0 4px, #B4B8BF 4px 8px); color: #4A4E55; font: 600 .55rem var(--sans, system-ui); letter-spacing: .06em; transition: opacity .5s, transform .5s; }
+.gc-scratch.done .gc-foil { opacity: 0; transform: translateX(30%); }
+.gc-bar { display: block; height: 14px; width: 70%; background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 3px, currentColor 3px 5px, transparent 5px 6px, currentColor 6px 7px, transparent 7px 10px); opacity: .85; }
+.gc-tally { text-align: center; color: var(--plum); font-size: 1.25rem; margin: 6px 0 0; }
+@media (max-width: 760px) { .gcs { flex-direction: column; align-items: center; } .gc { margin: -42px 0 0; } .gc:first-child { margin-top: 0; } }
+@media (prefers-reduced-motion: reduce) { .gc { transition: none; } }
+
+/* pen pouch: the zipper drives the fan, one pen at a time */
+.pens.zipdrive .pen { transition: transform .45s cubic-bezier(.3,1.3,.5,1), opacity .25s; transition-delay: 0s !important; }
+.pens.zipdrive .pen.out { opacity: 1; transform: rotate(calc((var(--i) - var(--mid)) * var(--step, 11deg))); }
+.pens.zipdrive .pen.out:hover, .pens.zipdrive .pen.out:focus-visible, .pens.zipdrive .pen.held { transform: rotate(calc((var(--i) - var(--mid)) * var(--step, 11deg))) translateY(-18px); z-index: 2; }
+.pens.zipdrive .pen.held svg { filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 4px var(--gold, #D9B45A)); }
+.cc-front .cc-pull { transition: none; }
+.cc-front.unzipped .cc-pull { transform: none; }
+
+/* the notebook page + my tools */
+.desk { margin-top: 16px; }
+.desk-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.dtool { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 8px; border: 2px solid transparent; border-radius: 12px; background: none; cursor: pointer; font: 500 .7rem var(--mono); color: var(--muted); transition: transform .2s; }
+.dtool svg { width: 92px; filter: drop-shadow(0 3px 3px rgba(0,0,0,.15)); }
+.dtool:hover { transform: translateY(-3px) rotate(-3deg); }
+.dtool.on { border-color: var(--ink); background: var(--paper); color: var(--ink); }
+.desk-clear { border: 0; background: none; text-decoration: underline; cursor: pointer; font: 500 .78rem var(--sans); color: var(--muted); }
+.desk-pad { position: relative; max-width: 600px; }
+.desk-pad canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.desk-pad { height: 220px; }
+#graphite-canvas { touch-action: none; }
+.desk-now { text-align: center; font-size: .72rem; color: var(--muted); margin: 8px 0 0; }
+.desk-erase[hidden] { display: none; }
+
+/* backup lipstick: my dry natural lips, and you put it on me */
+.lipwrap { position: relative; display: flex; align-items: center; justify-content: center; gap: 18px; margin: 10px auto 4px; max-width: 520px; }
+.lip-stick { width: 54px; flex: none; transform: rotate(-18deg); }
+.lipface { width: min(380px, 78%); border-radius: 18px; border: 2px solid var(--ink); cursor: crosshair; box-shadow: 4px 4px 0 var(--ink); }
+.lipface .lp-happy { opacity: 0; transition: opacity .6s; }
+.lipface.happy .lp-happy { opacity: 1; }
+.lipface.happy .lp-color, .lipface.happy .lp-natural { opacity: 0; transition: opacity .6s; }
+.lip-say { text-align: center; color: var(--plum); font-size: 1.35rem; margin: 10px 0 4px; }
