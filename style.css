@@ -1340,3 +1340,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .bc-b a { font: 500 5.6cqw/1.45 var(--mono); color: #3A2626; text-decoration: underline; text-decoration-color: rgba(163,32,79,.45); text-underline-offset: 2px; pointer-events: none; }
 .bc.flip .bc-b a { pointer-events: auto; }
 .bc-b a:hover { color: #A3204F; }
+
+/* items glide to their new spots when more pockets open */
+.item.out { transition: left .6s cubic-bezier(.2,.8,.2,1), top .6s cubic-bezier(.2,.8,.2,1); }
+.stage { transition: aspect-ratio .6s; }

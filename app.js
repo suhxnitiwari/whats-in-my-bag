@@ -199,6 +199,67 @@ bsvg.addEventListener('pointercancel', bdrop);
 bottle.addEventListener('click', e => { if (bskip) { bskip = false; e.stopPropagation(); return; } openBottle(e); });
 bottle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openBottle(e); });
 
+
+/* ---------- live layout: whatever is out of the bag gets spread evenly around it, at real size ----------
+   1 cm = 0.94% of the table width (the 32 cm backpack is 30%). Table is 106.4 cm wide; height grows if needed. */
+const CM = 0.94, TW = 100 / CM, BAG_CY = 73;
+const sizeOf = it => {
+    const w = it.w / CM, m = (it.art || '').match(/viewBox="([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)"/);
+    const h = m ? w * (+m[4] / +m[3]) : w;
+    const r = Math.abs(it.r || 0) * Math.PI / 180;   // rotated bounding box
+    return { it, w: w * Math.cos(r) + h * Math.sin(r), h: w * Math.sin(r) + h * Math.cos(r) };
+};
+function shelf(list, x0, x1, y0, gap = 2.2) {
+    // rows left to right, each row centered; returns placed items and the height used
+    const rows = []; let row = [], rw = 0;
+    for (const b of list) { if (row.length && rw + gap + b.w > x1 - x0) { rows.push(row); row = []; rw = 0; } rw += (row.length ? gap : 0) + b.w; row.push(b); }
+    if (row.length) rows.push(row);
+    let y = y0; const out = [];
+    for (const r of rows) {
+        const rh = Math.max(...r.map(b => b.h)), total = r.reduce((a, b) => a + b.w, 0) + gap * (r.length - 1);
+        let x = x0 + (x1 - x0 - total) / 2;
+        for (const b of r) { out.push({ ...b, cx: x + b.w / 2, cy: y + rh / 2 }); x += b.w + gap; }
+        y += rh + gap;
+    }
+    return { out, used: y - y0 };
+}
+function relayout() {
+    if (phone()) return;
+    const items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip)).map(sizeOf).sort((a, b) => b.w * b.h - a.w * a.h);
+    if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
+    const bands = {
+        top: { x0: 2, x1: TW - 2, y0: 2, y1: 45, list: [], cap: (TW - 4) * 43 },
+        left: { x0: 2, x1: 29, y0: 47, y1: 99, list: [], cap: 27 * 52 },
+        right: { x0: 77, x1: TW - 2, y0: 47, y1: 99, list: [], cap: 27.4 * 52 },
+        bottom: { x0: 2, x1: TW - 2, y0: 101, y1: 999, list: [], cap: (TW - 4) * 45 }
+    };
+    const used = k => bands[k].list.reduce((a, b) => a + b.w * b.h, 0) / bands[k].cap;
+    for (const b of items) {
+        const fits = Object.keys(bands).filter(k => b.w <= bands[k].x1 - bands[k].x0 && b.h <= bands[k].y1 - bands[k].y0);
+        fits.sort((a, c) => used(a) - used(c));
+        bands[fits[0] || 'bottom'].list.push(b);
+    }
+    // pack; anything that spills out of the top/left/right goes to the bottom
+    const placed = [];
+    for (const k of ['top', 'left', 'right']) {
+        const B = bands[k];
+        let res = shelf(B.list, B.x0, B.x1, B.y0);
+        while (res.used > B.y1 - B.y0 + 2 && B.list.length) { bands.bottom.list.push(B.list.pop()); res = shelf(B.list, B.x0, B.x1, B.y0); }
+        const dy = Math.max(0, (B.y1 - B.y0 - res.used) / 2);
+        placed.push(...res.out.map(b => ({ ...b, cy: b.cy + dy })));
+    }
+    const bot = shelf(bands.bottom.list.sort((a, b) => b.h - a.h), bands.bottom.x0, bands.bottom.x1, bands.bottom.y0);
+    placed.push(...bot.out);
+    const H = Math.max(110, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 101);
+    stage.style.aspectRatio = `${TW} / ${H}`;
+    bagBtn.style.top = `${BAG_CY / H * 100}%`;
+    for (const b of placed) {
+        const li = document.getElementById('item-' + b.it.id); if (!li) continue;
+        li.style.setProperty('--l', `${b.cx * CM}%`);
+        li.style.setProperty('--t', `${b.cy / H * 100}%`);
+    }
+}
+
 let busy = Promise.resolve();
 function unzip(pk, from = 0) {
     busy = busy.then(async () => {
@@ -210,6 +271,7 @@ function unzip(pk, from = 0) {
         pk.el.g.classList.add('open');
         $('#bag-hint').textContent = '';
         await slide(pk, from, 1);
+        relayout();
         const bagBox = bagBtn.getBoundingClientRect();
         for (const it of ITEMS.filter(i => i.zip === pk.id)) {
             const li = document.getElementById('item-' + it.id);
@@ -241,10 +303,11 @@ function zipUp(pk, from = 1) {
         });
         await slide(pk, from, 0);
         open.delete(pk.id);
+        relayout();
         pk.el.g.classList.remove('open');
         pk.el.pull.setAttribute('aria-pressed', 'false');
         pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
-        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; stage.classList.add('idle'); }
+        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; stage.classList.add('idle'); stage.style.aspectRatio = ''; bagBtn.style.top = ''; }
     });
     return busy;
 }
