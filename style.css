@@ -2282,7 +2282,6 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .bk-r h3 { margin: 2px 0 0; font: 400 clamp(1.05rem, 2.2vw, 1.4rem)/1.15 var(--serif); }
 .bk-a { margin: 2px 0 10px; font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
 .bk-s { margin: 0; font: 400 clamp(.82rem, 1.6vw, .95rem)/1.55 var(--serif); color: #3A2E2A; }
-.bk-num { position: absolute; right: 16px; bottom: 10px; font-size: .62rem; color: var(--muted); text-transform: none; }
 .bk-leaf { position: absolute; top: 6px; bottom: 6px; left: 50%; right: 6px; background: #FFFCF4; border-radius: 0 4px 4px 0; transform-origin: 0 50%; opacity: 0; pointer-events: none; box-shadow: inset 10px 0 14px -10px rgba(0,0,0,.3); }
 .bk-leaf.go.fwd { animation: bk-turn .55s ease-in-out; }
 .bk-leaf.go.back { animation: bk-turn-back .55s ease-in-out; }
@@ -2366,3 +2365,10 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 /* sweater: the folded bottom edge only shows once the hem is tucked up behind */
 .sw2 .sw-edge { opacity: 0; transition: opacity .3s; }
 .sw2[data-f="3"] .sw-edge { opacity: 1; transition-delay: .5s; }
+
+/* books: the synopsis fills the right page, and both pages are numbered */
+.bk-r { display: flex; flex-direction: column; padding-bottom: 30px; }
+.bk-l { padding-bottom: 30px; }
+.bk-s { flex: 1; line-height: 1.5; }
+.bk-pg { position: absolute; bottom: 9px; font-size: .68rem; color: var(--muted); letter-spacing: .04em; }
+.bk-pg.l { left: 18px; } .bk-pg.r { right: 18px; }

@@ -1022,8 +1022,8 @@ const bookHTML = (cover, say) => `
         <div class="bk" id="bk">
             <button type="button" class="bk-closed" id="bk-closed" aria-label="Open the book">${cover}</button>
             <div class="bk-open" aria-live="polite">
-                <div class="bk-page bk-l"><div class="bk-art"><img id="bk-img" alt=""></div></div>
-                <div class="bk-page bk-r"><p class="bk-ch" id="bk-ch"></p><h3 id="bk-t"></h3><p class="bk-a" id="bk-a"></p><p class="bk-s" id="bk-s"></p><span class="bk-num mono" id="bk-num"></span></div>
+                <div class="bk-page bk-l"><div class="bk-art"><img id="bk-img" alt=""></div><span class="bk-pg l mono" id="bk-pl"></span></div>
+                <div class="bk-page bk-r"><p class="bk-ch" id="bk-ch"></p><h3 id="bk-t"></h3><p class="bk-a" id="bk-a"></p><p class="bk-s" id="bk-s"></p><span class="bk-pg r mono" id="bk-pr"></span></div>
                 <div class="bk-leaf" id="bk-leaf"></div>
             </div>
         </div>
@@ -1031,6 +1031,15 @@ const bookHTML = (cover, say) => `
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="rcx-prev" hidden>‹ last chapter</button><button class="btn solid" type="button" id="rc-read">Open it</button></div>`;
 const WORDS = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
 // a book you open, where every chapter is another book: [cover file, title, author, synopsis]
+// the synopsis fills the whole right page: start big, shrink until it fits
+function fitSyn() {
+    const syn = $('#bk-s'); if (!syn) return;
+    const pg = syn.parentElement;
+    let size = phone() ? 17 : 30;
+    syn.style.fontSize = size + 'px';
+    while (size > 12 && pg.scrollHeight > pg.clientHeight + 1) { size -= .5; syn.style.fontSize = size + 'px'; }
+}
+addEventListener('resize', () => { if ($('#bk.open')) fitSyn(); });
 function chapterBook(list, bye) {
     const bk = $('#bk'), btn = $('#rc-read'), leaf = $('#bk-leaf');
     let ch = -1;
@@ -1038,7 +1047,9 @@ function chapterBook(list, bye) {
         const [f, t, au, syn] = list[ch];
         $('#bk-img').src = `assets/covers/${f}.jpg`; $('#bk-img').alt = `${t}, drawn`;
         $('#bk-ch').textContent = `Chapter ${WORDS[ch] || ch + 1}`; $('#bk-t').textContent = t; $('#bk-a').textContent = au; $('#bk-s').textContent = syn;
-        $('#bk-num').textContent = `${ch + 1} / ${list.length}`;
+        // real page numbers: even on the left, odd on the right
+        $('#bk-pl').textContent = 2 * (ch + 1); $('#bk-pr').textContent = 2 * (ch + 1) + 1;
+        requestAnimationFrame(fitSyn);
         $('#rcx-prev').hidden = ch === 0;
         btn.textContent = ch === list.length - 1 ? 'Close it' : 'next chapter ›';
     };
