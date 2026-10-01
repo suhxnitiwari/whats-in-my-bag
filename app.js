@@ -522,6 +522,95 @@ sheet.addEventListener('click', e => {
 });
 
 /* ---------- what each thing shows you ---------- */
+// the sunglasses view: the same moment, before and after the lenses.
+// .rom pieces only exist through the glasses; .meh pieces only exist without them
+const RZ_K = 'stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"';
+const RZ_SPARK = pts => pts.map(([x, y, s]) => `<path class="tw" style="animation-delay:${(x * 7 % 13) / 10}s" d="M${x} ${y - s} Q${x} ${y} ${x + s} ${y} Q${x} ${y} ${x} ${y + s} Q${x} ${y} ${x - s} ${y} Q${x} ${y} ${x} ${y - s}Z" fill="#FFF6D8"/>`).join('');
+const RZ_LIGHTS = (y, n) => `<path d="M-5 ${y} Q100 ${y + 26} 200 ${y + 4} T405 ${y + 6}" fill="none" stroke="#5A3A2E" stroke-width="1.5"/>` +
+    Array.from({ length: n }, (_, i) => { const x = 10 + i * (390 / n); const yy = y + 12 + Math.sin(i * 1.3) * 7; return `<circle class="tw" style="animation-delay:${i % 5 * .3}s" cx="${x}" cy="${yy}" r="4.5" fill="#FFE08A"/><circle cx="${x}" cy="${yy}" r="10" fill="#FFE08A" opacity=".25"/>`; }).join('');
+const RZ_HEARTS = pts => pts.map(([x, y, s]) => `<path class="fl" d="M${x} ${y + s} C${x - 2 * s} ${y - s * .2} ${x - s} ${y - 1.6 * s} ${x} ${y - .5 * s} C${x + s} ${y - 1.6 * s} ${x + 2 * s} ${y - s * .2} ${x} ${y + s}Z" fill="#F4A6BE"/>`).join('');
+
+const ROMANCE = [
+    {
+        plain: 'a walk to class. it’s already hot. i’m already late.',
+        rom: 'soft light on the forty acres. main character walks to her lecture.',
+        svg: `<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="rzS1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3A9C0"/><stop offset=".6" stop-color="#FFCFA0"/><stop offset="1" stop-color="#FFEBC8"/></linearGradient>
+            <radialGradient id="rzG"><stop offset="0" stop-color="#FFF4D6"/><stop offset="1" stop-color="#FFF4D6" stop-opacity="0"/></radialGradient></defs>
+            <rect width="400" height="240" fill="#C8CFD3"/>
+            <g class="rom"><rect width="400" height="240" fill="url(#rzS1)"/><circle cx="310" cy="120" r="110" fill="url(#rzG)"/><circle cx="310" cy="128" r="24" fill="#FFE6B0"/></g>
+            <g class="meh"><path d="M60 50 q20 -14 40 0 q16 -10 30 4 h-70z M250 38 q18 -12 34 0 q14 -8 26 4 h-60z" fill="#B5BCC0"/></g>
+            <rect x="40" y="128" width="120" height="64" fill="#D6CDC2" ${RZ_K}/><rect x="248" y="134" width="124" height="58" fill="#D6CDC2" ${RZ_K}/>
+            ${[60, 85, 110, 135].map(x => `<rect x="${x}" y="142" width="12" height="18" fill="#A9A29A"/>`).join('')}${[268, 293, 318, 343].map(x => `<rect x="${x}" y="146" width="12" height="18" fill="#A9A29A"/>`).join('')}
+            <g fill="#C9BFB4" ${RZ_K}><rect x="180" y="62" width="40" height="130"/><rect x="185" y="38" width="30" height="26"/><path d="M188 38 L200 18 L212 38Z"/></g>
+            <g class="rom"><rect x="185" y="38" width="30" height="26" fill="#FFAD4D" ${RZ_K}/><circle cx="200" cy="51" r="24" fill="#FFAD4D" opacity=".3"/>
+            ${[60, 85, 110, 135].map(x => `<rect x="${x}" y="142" width="12" height="18" fill="#FFD98A"/>`).join('')}${[268, 293, 318, 343].map(x => `<rect x="${x}" y="146" width="12" height="18" fill="#FFD98A"/>`).join('')}</g>
+            <g ${RZ_K}><circle cx="22" cy="150" r="30" fill="#8FA08A"/><circle cx="384" cy="152" r="28" fill="#8FA08A"/></g>
+            <g class="rom">${[[10, 128], [30, 140], [12, 162], [372, 136], [392, 150], [380, 168]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="#F8B4CB" stroke="#fff" stroke-width="1.5"/>`).join('')}</g>
+            <rect y="190" width="400" height="50" fill="#BBB4AC"/><path d="M150 240 L190 190 H210 L250 240Z" fill="#D9D2CA"/>
+            <g class="meh"><path d="M120 214 q4 -6 8 0 q4 6 8 0 M268 222 q4 -6 8 0 q4 6 8 0" fill="none" stroke="#9A938C" stroke-width="2"/><text x="350" y="40" font-family="JetBrains Mono" font-size="16" fill="#7A7470">98°</text></g>
+            <g class="rom"><path d="M70 70 q6 -6 12 0 q6 -6 12 0 M110 54 q5 -5 10 0 q5 -5 10 0 M250 76 q5 -5 10 0 q5 -5 10 0" fill="none" stroke="#5A3A2E" stroke-width="2"/>${RZ_SPARK([[150, 100, 6], [240, 60, 5], [350, 90, 7], [60, 110, 5], [280, 200, 6], [110, 205, 5]])}</g>
+        </svg>`
+    },
+    {
+        plain: 'hour four in the library. my coffee is cold.',
+        rom: 'dark academia era. warm lamp, fresh coffee, big plans.',
+        svg: `<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="240" fill="#CFCBC6"/>
+            <g class="rom"><rect width="400" height="240" fill="#5B3A36"/><circle cx="96" cy="120" r="130" fill="#FFB86B" opacity=".35"/></g>
+            <rect x="250" y="26" width="110" height="96" fill="#B9C3CA" ${RZ_K}/><path d="M305 26 V122 M250 74 H360" ${RZ_K}/>
+            <g class="rom"><rect x="250" y="26" width="110" height="96" fill="#2C2A4A" ${RZ_K}/><path d="M305 26 V122 M250 74 H360" ${RZ_K}/><path d="M330 40 a12 12 0 1 0 10 18 a9 9 0 1 1 -10 -18z" fill="#FFF1C2"/>${RZ_SPARK([[268, 44, 3], [286, 96, 3], [344, 100, 3], [318, 60, 2.5]])}</g>
+            <g class="rom">${RZ_LIGHTS(4, 12)}</g>
+            <rect y="170" width="400" height="70" fill="#A88F7A" ${RZ_K}/>
+            <g ${RZ_K}><path d="M70 170 L96 82 M96 82 L130 100" fill="none"/><path d="M118 92 L148 110 L132 128 L104 110Z" fill="#9E9893"/><rect x="56" y="164" width="40" height="8" rx="2" fill="#9E9893"/></g>
+            <g class="rom"><path d="M126 120 L80 170 H200 Z" fill="#FFD98A" opacity=".45"/><path d="M118 92 L148 110 L132 128 L104 110Z" fill="#C9A15A" ${RZ_K}/></g>
+            <g ${RZ_K}><path d="M170 168 L186 120 H286 L270 168Z" fill="#B8B4B0"/><rect x="160" y="166" width="140" height="8" rx="3" fill="#9E9893"/></g>
+            <g class="rom"><path d="M190 124 H280 L266 162 H176Z" fill="#F6C7D4"/></g>
+            <g ${RZ_K}><path d="M318 140 h34 l-4 30 h-26z" fill="#E9E4DE"/><path d="M352 146 q12 2 0 14" fill="none"/></g>
+            <g class="meh"><path d="M324 148 h26" stroke="#7A6458" stroke-width="3"/></g>
+            <g class="rom"><path d="M326 132 q-6 -10 2 -18 q6 -8 0 -16 M340 132 q-6 -10 2 -18 q6 -8 0 -16" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".85"/></g>
+            <g ${RZ_K}><rect x="20" y="150" width="34" height="20" fill="#B7AFA8"/><rect x="24" y="132" width="30" height="18" fill="#A39C95"/></g>
+            <g class="rom"><rect x="20" y="150" width="34" height="20" fill="#8E3B4F" ${RZ_K}/><rect x="24" y="132" width="30" height="18" fill="#2F4A3A" ${RZ_K}/><path d="M370 170 v-24 M370 146 q-10 -6 -6 -16 q10 4 6 16 M370 154 q10 -6 14 -2 q-6 8 -14 2" fill="#F4A6BE" stroke="#3A2626" stroke-width="2"/></g>
+        </svg>`
+    },
+    {
+        plain: 'traffic. again.',
+        rom: 'a sunset drive. windows down, playlist up, tail lights like fairy lights.',
+        svg: `<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="rzS3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7E5A9B"/><stop offset=".45" stop-color="#F28CA6"/><stop offset=".8" stop-color="#FFC08A"/></linearGradient></defs>
+            <rect width="400" height="240" fill="#C4C8CB"/>
+            <g class="rom"><rect width="400" height="240" fill="url(#rzS3)"/><circle cx="200" cy="128" r="34" fill="#FFD9A0"/><circle cx="200" cy="128" r="60" fill="#FFD9A0" opacity=".25"/></g>
+            <path d="M0 128 L60 110 L120 122 L190 104 L260 120 L330 108 L400 124 V140 H0Z" fill="#9EA3A6"/>
+            <g class="rom"><path d="M0 128 L60 110 L120 122 L190 104 L260 120 L330 108 L400 124 V140 H0Z" fill="#6B4A6E"/></g>
+            <path d="M0 140 H400 V240 H0Z" fill="#8E8E8E"/><path d="M196 140 L180 240 M204 140 L220 240" stroke="#D8D8D8" stroke-width="3" stroke-dasharray="14 12"/>
+            ${[[90, 160, 1], [230, 150, .8], [300, 172, 1.1]].map(([x, y, s]) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-30" y="-10" width="60" height="28" rx="6" fill="#A7A9AB" ${RZ_K}/><rect x="-24" y="-24" width="48" height="16" rx="5" fill="#B9BBBD" ${RZ_K}/><rect x="-26" y="0" width="10" height="6" rx="2" fill="#B5554E"/><rect x="16" y="0" width="10" height="6" rx="2" fill="#B5554E"/></g>`).join('')}
+            <g class="rom">${[[90, 160, 1], [230, 150, .8], [300, 172, 1.1]].map(([x, y, s]) => `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="-21" cy="3" r="12" fill="#FF6B7A" opacity=".35"/><circle cx="21" cy="3" r="12" fill="#FF6B7A" opacity=".35"/><circle cx="-21" cy="3" r="4" fill="#FFE2E6"/><circle cx="21" cy="3" r="4" fill="#FFE2E6"/></g>`).join('')}
+            <path class="fl" d="M330 60 v-22 l16 -4 v22 M330 60 a5 4 0 1 1 -1 -1 M346 56 a5 4 0 1 1 -1 -1 M60 70 v-18 l12 -3 v18 M60 70 a4 3 0 1 1 -1 -1 M72 67 a4 3 0 1 1 -1 -1" fill="none" stroke="#fff" stroke-width="2.5"/>${RZ_SPARK([[120, 40, 4], [280, 30, 5], [370, 90, 4], [30, 30, 4]])}</g>
+            <path d="M-10 250 Q200 196 410 250Z" fill="#3A2E2E"/><path d="M120 240 a80 60 0 0 1 160 0" fill="none" stroke="#2A2222" stroke-width="16"/>
+            <g class="meh"><text x="16" y="34" font-family="JetBrains Mono" font-size="13" fill="#5E6164">ETA +27 min</text></g>
+        </svg>`
+    },
+    {
+        plain: 'it’s raining and i’m in white shoes.',
+        rom: 'rain on campus. this is the last scene of a rom-com.',
+        svg: `<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="rzS4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C7B6DE"/><stop offset="1" stop-color="#F7C9D6"/></linearGradient></defs>
+            <rect width="400" height="240" fill="#A9AEB2"/>
+            <g class="rom"><rect width="400" height="240" fill="url(#rzS4)"/></g>
+            <g ${RZ_K}><rect x="20" y="96" width="110" height="100" fill="#B3ACA5"/><rect x="290" y="88" width="100" height="108" fill="#B3ACA5"/></g>
+            <g class="rom">${[[36, 112], [70, 112], [104, 112], [36, 150], [70, 150], [104, 150], [306, 104], [342, 104], [306, 142], [342, 142]].map(([x, y]) => `<rect x="${x}" y="${y}" width="16" height="20" fill="#FFE3A3"/>`).join('')}</g>
+            <rect y="196" width="400" height="44" fill="#8F969A"/>
+            <g class="rom"><ellipse cx="200" cy="222" rx="90" ry="10" fill="#E8B9CF" opacity=".7"/><path d="M200 230 l-26 -4 h52z" fill="#F4A6BE" opacity=".5"/></g>
+            <g ${RZ_K}><path d="M150 128 a50 34 0 0 1 100 0 q-12 -8 -25 0 q-12 -8 -25 0 q-12 -8 -25 0 q-12 -8 -25 0z" fill="#7C8287"/><path d="M200 128 v58 q0 10 -9 8" fill="none"/></g>
+            <g class="rom"><path d="M150 128 a50 34 0 0 1 100 0 q-12 -8 -25 0 q-12 -8 -25 0 q-12 -8 -25 0 q-12 -8 -25 0z" fill="#F08FAE" ${RZ_K}/>${RZ_HEARTS([[170, 104, 4], [222, 100, 4], [196, 92, 3]])}</g>
+            <g ${RZ_K}><rect x="186" y="186" width="28" height="12" rx="5" fill="#F4F2EE"/></g>
+            <g class="meh"><path d="M188 194 q6 -4 10 0 q4 4 10 -1" fill="none" stroke="#6E5A48" stroke-width="2"/></g>
+            ${Array.from({ length: 34 }, (_, i) => { const x = (i * 53) % 400, y = (i * 37) % 200; return `<path d="M${x} ${y} l-6 14" stroke="#E8ECEF" stroke-width="2" stroke-linecap="round" class="meh"/>`; }).join('')}
+            <g class="rom">${RZ_SPARK(Array.from({ length: 16 }, (_, i) => [(i * 53) % 400, (i * 37) % 190 + 6, 3.5]))}</g>
+        </svg>`
+    }
+];
+
 const VIEWS = {
     backuplip: () => `
         <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
@@ -778,11 +867,21 @@ const VIEWS = {
 
     sunglasses: () => `
         <h2>How I <em>see</em> things</h2>
-        <p class="note">chanel square sunglasses. black and beige, brown gradient lenses, gold CC on the arms. put them on.</p>
-        <div class="sg-big">${ITEMS.find(i => i.id === 'sunglasses').art}</div>
-        <p>Everything I look at, I look at the same way: why would someone choose this? That’s the lens behind my psychology classes, my MIS projects and every marketing deck I’ve made.</p>
-        <div class="row"><button class="btn solid" type="button" id="shades">${document.body.classList.contains('shades') ? 'Take them off' : 'Put them on'}</button></div>
-        <p class="shades-note" id="shades-note">${document.body.classList.contains('shades') ? 'ooh, very mysterious.' : ''}</p>`,
+        <p class="note">chanel square sunglasses. black and beige, brown gradient lenses. they don't block the sun, they fix the plot.</p>
+        <div class="rz" id="rz">
+            <div class="rz-scene rz-base">${ROMANCE[0].svg}</div>
+            <div class="rz-rig" id="rz-rig" aria-hidden="true">
+                <div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div><span class="rz-bridge"></span><div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div>
+            </div>
+            <span class="rz-hint hand" id="rz-hint">drag my sunglasses around ↔</span>
+        </div>
+        <div class="rz-caps">
+            <p class="rz-cap plain" id="rz-plain">${ROMANCE[0].plain}</p>
+            <p class="rz-cap rom hand" id="rz-rom">${ROMANCE[0].rom}</p>
+        </div>
+        <p>I romanticize everything. A cold coffee, a traffic jam, a rainy walk to class in the wrong shoes. Nothing about the day actually changes. I just pick the version worth looking at.</p>
+        <div class="row"><button class="btn solid" type="button" id="shades">Put them on</button> <button class="btn" type="button" id="rz-next">another moment →</button></div>
+        <p class="shades-note" id="shades-note"></p>`,
 
     keys: () => `
         <div class="fob" id="fob">${BMW_FOB}</div>
@@ -1696,10 +1795,48 @@ const AFTER = {
     gelpens: () => pensAfter(GELPENS),
 
     sunglasses: () => {
+        const rz = $('#rz'), rig = $('#rz-rig');
+        let k = 0, x = .5, y = .45;
+        // each lens holds a full copy of the scene, shifted so it lines up with the one behind it
+        const place = () => {
+            const W = rz.clientWidth, H = rz.clientHeight;
+            const rw = rig.offsetWidth, rh = rig.offsetHeight;
+            const lx = Math.max(0, Math.min(W - rw, x * W - rw / 2)), ly = Math.max(0, Math.min(H - rh, y * H - rh / 2));
+            rig.style.transform = `translate(${lx}px, ${ly}px)`;
+            rig.querySelectorAll('.rz-lens').forEach(l => {
+                const sc = l.firstElementChild;
+                sc.style.width = W + 'px'; sc.style.height = H + 'px';
+                sc.style.left = -(lx + l.offsetLeft + l.clientLeft) + 'px';
+                sc.style.top = -(ly + l.offsetTop + l.clientTop) + 'px';
+            });
+        };
+        const show = () => {
+            const m = ROMANCE[k];
+            rz.querySelectorAll('.rz-scene').forEach(sc => sc.innerHTML = m.svg);
+            $('#rz-plain').textContent = m.plain; $('#rz-rom').textContent = m.rom;
+        };
+        rz.addEventListener('pointerdown', e => {
+            if (rz.classList.contains('on')) return;
+            rz.setPointerCapture(e.pointerId); rz.classList.add('peek');
+            $('#rz-hint').hidden = true;
+            const move = ev => { const r = rz.getBoundingClientRect(); x = (ev.clientX - r.left) / r.width; y = (ev.clientY - r.top) / r.height; place(); };
+            move(e);
+            rz.onpointermove = move;
+            rz.onpointerup = rz.onpointercancel = () => { rz.onpointermove = null; };
+        });
+        new ResizeObserver(place).observe(rz);
+        place();
         $('#shades').onclick = () => {
-            const on = document.body.classList.toggle('shades');
+            const on = rz.classList.toggle('on');
+            document.body.classList.toggle('shades', on);
             $('#shades').textContent = on ? 'Take them off' : 'Put them on';
-            $('#shades-note').textContent = on ? 'ooh, very mysterious.' : 'and we’re back.';
+            $('#shades-note').textContent = on ? 'see? it was always this pretty.' : 'ew. reality.';
+            if (on) { const r = rz.getBoundingClientRect(); fairyDust(r.left + r.width / 2, r.top + r.height / 3); }
+        };
+        $('#rz-next').onclick = () => {
+            k = (k + 1) % ROMANCE.length;
+            rz.classList.add('swap');
+            setTimeout(() => { show(); place(); rz.classList.remove('swap'); }, 220);
         };
     },
 
