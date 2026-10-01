@@ -976,22 +976,19 @@ const VIEWS = {
         <p class="hand chg-note" id="chg-note">drag a plug out. the one on top comes free first.</p>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="chg-reset">Throw them back in the bag</button></div>`,
     backuplip: () => {
-        const U = (c, up) => `M${up ? '34 70' : '40 80'} C70 ${up ? 58 : 66} 100 50 128 56 C138 58 144 62 150 62 C156 62 162 58 172 56 C200 50 230 ${up ? 58 : 66} ${up ? '266 70' : '260 80'} C220 ${up ? 78 : 82} 190 80 150 82 C110 80 80 ${up ? 78 : 82} ${up ? '34 70' : '40 80'}Z`;
-        const L = up => `M${up ? '34 70' : '40 80'} C80 ${up ? 86 : 84} 110 84 150 84 C190 84 220 ${up ? 86 : 84} ${up ? '266 70' : '260 80'} C230 ${up ? 116 : 112} 190 ${up ? 130 : 128} 150 ${up ? 130 : 128} C110 ${up ? 130 : 128} 70 ${up ? 116 : 112} ${up ? '34 70' : '40 80'}Z`;
-        const lips = (up, fill) => `<path d="${U(0, up)}" fill="${fill}"/><path d="${L(up)}" fill="${fill}"/><path d="M${up ? '34 70' : '40 80'} C90 84 120 82 150 83 C180 82 210 84 ${up ? '266 70' : '260 80'}" fill="none" stroke="#5A2622" stroke-width="2" opacity=".55"/>`;
         return `
         <h2>the <em>backup</em> lipstick: westman atelier, glögg</h2>
         <p class="note">dry lips, always. so there’s always an extra one in here. lipstick is my favorite makeup product, full stop.</p>
         <div class="lipwrap">
             <div class="lip-slot"><button type="button" class="lip-stick" id="lip-stick" aria-label="My Westman Glögg lipstick: pick it up and drag it across my lips">${ITEMS.find(i => i.id === 'backup-lip').art}</button></div>
             <svg class="lipface" id="lipface" viewBox="0 0 300 160" role="img" aria-label="My lips. Drag across them to put the lipstick on me">
-                <defs><mask id="lip-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="160"><g id="lip-paint"></g></mask></defs>
+                <defs><mask id="lip-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="160"><filter id="lip-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2.5"/></filter><g id="lip-paint" filter="url(#lip-soft)"></g></mask></defs>
                 <rect width="300" height="160" rx="18" fill="#E9B998"/>
                 <path d="M0 150 Q150 172 300 150 V160 H0Z" fill="#DCA98A"/>
-                <g class="lp-natural">${lips(false, '#C99486')}
-                    <g stroke="#EBC6B8" stroke-width="1.4" stroke-linecap="round" opacity=".9">${[70, 92, 112, 132, 150, 168, 188, 208, 228].map((x, k) => `<path d="M${x} ${92 + (k % 2) * 4} l${k % 2 ? 2 : -2} ${10 + (k % 3) * 4}"/>`).join('')}<path d="M100 62 l-3 8 M196 62 l3 8 M150 68 v6"/></g></g>
-                <g class="lp-color" mask="url(#lip-mask)">${lips(false, '#8E2A24')}<path d="M118 100 q32 10 64 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/></g>
-                <g class="lp-happy">${lips(false, '#8E2A24')}<path d="M118 100 q32 10 64 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".35"/></g>
+                <defs><filter id="glogg" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".6 0 0 0 0  0 .36 0 0 0  0 0 .36 0 0  0 0 0 1 0"/></filter></defs>
+                <g class="lp-natural"><image href="assets/img/lips.png" x="30" y="25" width="240" height="110"/></g>
+                <g class="lp-color" mask="url(#lip-mask)"><image href="assets/img/lips.png" x="30" y="25" width="240" height="110" filter="url(#glogg)"/></g>
+                <g class="lp-happy"><image href="assets/img/lips.png" x="30" y="25" width="240" height="110" filter="url(#glogg)"/></g>
             </svg>
         </div>
         <p class="hand lip-say" id="lip-say">pick up the lipstick and put it on me ↔</p>
@@ -1735,8 +1732,14 @@ const AFTER = {
     backuplip: () => {
         const face = $('#lipface'), paint = $('#lip-paint'), say = $('#lip-say'), NS = 'http://www.w3.org/2000/svg';
         // sample points inside my lips so we know how much is covered
-        const shapes = [...face.querySelectorAll('.lp-natural > path[fill]')], pts = [];
-        for (let x = 40; x <= 260; x += 8) for (let y = 50; y <= 130; y += 6) { const P = face.createSVGPoint(); P.x = x; P.y = y; if (shapes.some(sh => sh.isPointInFill(P))) pts.push([x, y, false]); }
+        // sample points on my lips (wherever the lip image isn't transparent) so we know how much is covered
+        const pts = [];
+        const img = new Image(); img.src = 'assets/img/lips.png';
+        img.onload = () => {
+            const c = document.createElement('canvas'); c.width = 240; c.height = 110; const x = c.getContext('2d'); x.drawImage(img, 0, 0, 240, 110);
+            const d = x.getImageData(0, 0, 240, 110).data;
+            for (let X = 4; X < 240; X += 8) for (let Y = 3; Y < 110; Y += 6) if (d[(Y * 240 + X) * 4 + 3] > 140) pts.push([X + 30, Y + 25, false]);
+        };
         let done = false;
         const dab = (x, y) => {
             const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 15); c.setAttribute('fill', '#fff'); paint.appendChild(c);
@@ -1776,7 +1779,7 @@ const AFTER = {
         // or let the button do it: two swipes, upper lip then lower
         $('#bl-go').onclick = () => {
             if (done) { paint.innerHTML = ''; pts.forEach(p => p[2] = false); done = false; face.classList.remove('happy'); say.textContent = 'wiped off. dry again. put it back on me ↔'; $('#bl-go').textContent = 'Swipe it on for me'; return; }
-            const path = [...Array(23)].map((_, k) => [44 + k * 10, 68 + Math.sin(k / 3) * 3]).concat([...Array(23)].map((_, k) => [256 - k * 10, 104 + Math.sin(k / 3) * 4]), [...Array(10)].map((_, k) => [100 + k * 11, 120]));
+            const path = [...Array(23)].map((_, k) => [40 + k * 10, 62 + Math.sin(k / 3) * 3]).concat([...Array(23)].map((_, k) => [260 - k * 10, 96 + Math.sin(k / 3) * 4]), [...Array(14)].map((_, k) => [80 + k * 11, 116]), [...Array(10)].map((_, k) => [90 + k * 13, 50]));
             path.forEach(([x, y], k) => setTimeout(() => { dab(x, y); if (k === path.length - 1) $('#bl-go').textContent = 'Wipe it off'; }, reduce ? 0 : k * 22));
         };
     },
