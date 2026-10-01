@@ -288,7 +288,7 @@ function hairView(state) {
                 <path d="M106 112 C98 150 100 190 104 228 M114 112 C118 150 118 186 112 230" fill="none" stroke="#4A3127" stroke-width="2"/>
                 <g class="scr-on">${window.SCRUNCHIE(110, 102, 13, ...window.SCR_PINK)}</g></g>
 
-            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 210 80">', '<svg x="40" y="0" width="150" height="57" viewBox="0 0 210 80">')}</g></g>
+            <g class="h-comb"><g class="combmove">${ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 222 96">', '<svg x="40" y="0" width="150" height="65" viewBox="0 0 222 96">')}</g></g>
             <g class="h-spark" fill="#F6DB94" stroke="#3A2626" stroke-width="1"><path d="M28 120 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M192 170 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/></g>
         </svg></div>
         <div class="row hair-btns">
