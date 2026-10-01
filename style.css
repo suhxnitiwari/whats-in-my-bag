@@ -1382,3 +1382,25 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .mk-wrap.open .mk-lid { transform: rotateX(12deg); }
 .mk-back .mk-pencil-b { position: absolute; left: 24%; right: 22%; bottom: -12px; height: 11px; border-radius: 3px 6px 6px 3px; background: linear-gradient(#FFFFFF, #E9E9E6); border: 2px solid var(--ink); }
 .mk-wrap:not(.open) .mk-front .mk-pencil { visibility: hidden; }
+
+/* the lid is my real photo; stickers are tap targets on top of it */
+.lid-big .stk .stk-in { transition: fill-opacity .2s, stroke-opacity .2s; stroke: var(--plum); stroke-width: 2; stroke-opacity: 0; stroke-dasharray: 4 3; }
+.lid-big .stk:hover .stk-in, .lid-big .stk:focus-visible .stk-in { fill-opacity: .12; stroke-opacity: .9; transform: none; filter: none; }
+
+/* the journal: tap the bottom-right corner, the cover swings open, both pages show */
+.jb { position: relative; width: 200px; aspect-ratio: 125 / 176; margin: 12px auto 0; perspective: 1500px; transition: transform .8s cubic-bezier(.45,.05,.25,1); }
+.jb.open { transform: translateX(50%); }
+.jb::after { content: ""; position: absolute; left: -4px; top: 2%; bottom: 2%; width: 8px; border-radius: 4px; background: linear-gradient(90deg, rgba(0,0,0,.18), rgba(0,0,0,0)); opacity: 0; transition: opacity .4s .5s; pointer-events: none; }
+.jb.open::after { opacity: 1; }
+.jb-page { position: absolute; inset: 0; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 2px 8px 8px 2px; overflow: hidden; }
+.jb-lines { position: absolute; inset: 0; padding: 24px 12px 10px 14px; outline: none; overflow: hidden; overflow-wrap: anywhere; font: 600 1.05rem/22px var(--hand); color: #1F2D5A;
+    background-image: repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.35) 21px 22px); background-position: 0 2px; }
+.jb-lines:empty::before { content: "an idea…"; color: #B9B2C6; }
+.jb-cover { position: absolute; inset: 0; transform-origin: 0 50%; transform-style: preserve-3d; transition: transform 1s cubic-bezier(.45,.05,.25,1); z-index: 2; }
+.jb.open .jb-cover { transform: rotateY(-180deg); }
+.jb-front, .jb-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.jb-front { cursor: pointer; }
+.jb-front svg { width: 100%; height: 100%; display: block; }
+.jb-back { transform: rotateY(180deg); border-radius: 8px 2px 2px 8px; }
+.jb-corner { position: absolute; right: 6px; bottom: 6px; font: 600 .8rem var(--hand); color: #FFF6F2; background: rgba(0,0,0,.15); padding: 1px 6px; border-radius: 999px; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translate(2px, 2px); } }
