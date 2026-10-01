@@ -158,9 +158,10 @@ dialog.sheet[open] { animation: pop .42s var(--ease); }
 .lists .skip { background: var(--cream); }
 .lists h3 { margin: 0 0 6px; font-family: var(--hand); font-size: 1.6rem; }
 .lists ul { margin: 0; padding-left: 18px; }
-.lipstick-big { width: 90px; margin: 0 auto 8px; }
-.lipstick-big .cap { transition: transform .8s var(--ease); }
-.lipstick-big.off .cap { transform: translate(34px, -30px) rotate(30deg); }
+.lipstick-big { width: 120px; margin: 0 auto 8px; }
+.lipstick-big .cap { transition: transform .9s var(--ease); }
+/* the cap lifts straight up, then sets down beside the tube, upright */
+.lipstick-big.off .cap { transform: translate(72px, 90px); }
 
 /* ---------- the wallet: flap opens, cards pop out like folders ---------- */
 .wallet-scene { display: grid; place-items: center; padding: clamp(190px, 40vw, 260px) 0 8px; perspective: 900px; }
@@ -360,3 +361,12 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .stamp.real text { fill: var(--c); stroke: none; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 1.5px; }
 .stamp.real text.small { font-size: 7px; letter-spacing: 2px; }
 .stamp.real:hover svg { opacity: 1; }
+.stamp.real text.small.yr { font-size: 10px; letter-spacing: 3px; font-weight: 500; }
+
+/* the mascara wand pulls out of the tube */
+.mascara-big { width: 120px; margin: 0 auto 4px; }
+.mascara-big .wand { transition: transform .9s var(--ease); transform-box: fill-box; transform-origin: 50% 100%; }
+.mascara-big.out .wand { transform: translate(-46px, -30px) rotate(-28deg); }
+.mascara-big .tube { transform: translate(18px, 0); }
+/* thin things (mascara, lipstick) get a wider invisible tap area */
+.item button::before { content: ""; position: absolute; inset: -6px -14px; }

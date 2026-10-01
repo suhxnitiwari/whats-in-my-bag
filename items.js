@@ -73,14 +73,14 @@ window.ITEMS = [
         open: 'sketchbook'
     },
     {
-        id: 'lipstick', name: 'westman atelier, glögg', zip: 'main', l: 63, t: 86, w: 3.6, r: 18,
+        id: 'lipstick', name: 'westman atelier, glögg', zip: 'main', l: 62.5, t: 86, w: 3.8, r: 16,
         art: `<svg viewBox="0 0 70 200"><rect x="14" y="80" width="42" height="110" rx="10" fill="#E8EFF6" ${S}/><rect x="18" y="60" width="34" height="26" rx="4" fill="#DCE6F0" ${S}/><path d="M22 60 V24 C22 10 48 4 48 18 V60Z" fill="#7A1E2E" ${S}/><path d="M28 30 q6 -8 14 -12" fill="none" stroke="#B4475A" stroke-width="3" stroke-linecap="round"/><text x="35" y="160" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#9AA8B8" transform="rotate(-90 35 140)" letter-spacing="1.5">WESTMAN ATELIER</text></svg>`,
         open: 'makeup'
     },
     {
-        id: 'mascara', name: 'lancôme lash idôle', zip: 'main', l: 67, t: 86, w: 2.8, r: -22,
+        id: 'mascara', name: 'lancôme lash idôle', zip: 'main', l: 68, t: 85, w: 3.4, r: -14,
         art: `<svg viewBox="0 0 50 230"><rect x="8" y="10" width="34" height="210" rx="6" fill="#E8C3B4" ${S}/><rect x="14" y="18" width="22" height="84" rx="3" fill="#1E1414"/><rect x="14" y="120" width="22" height="92" rx="3" fill="#1E1414"/><path d="M8 110 H42" ${S}/><text x="25" y="165" text-anchor="middle" font-family="Bodoni Moda" font-size="11" fill="#E8C3B4" transform="rotate(-90 25 165)" letter-spacing="1">IDÔLE</text><text x="25" y="60" text-anchor="middle" font-family="Bodoni Moda" font-size="7" fill="#E8C3B4" transform="rotate(-90 25 60)" letter-spacing="1">LANCÔME</text></svg>`,
-        open: 'makeup'
+        open: 'mascara'
     },
     {
         id: 'wallet', name: 'my wallet', zip: 'front', l: 77, t: 57, w: 11, r: -8,
