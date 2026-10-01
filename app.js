@@ -895,6 +895,8 @@ const SKIN_INFO = {
     lash: ['Grande Cosmetics GrandeLASH-MD Lash Enhancing Serum', 'one swipe along my lash line.', 'grandelash'],
     laneige: ['Laneige Lip Sleeping Mask', 'lip moisturizer. glossy and a little browny pink.', 'laneige']
 };
+// my night routine, in order
+const ROUTINE = ['pinkpump', 'goldpump', 'dropper', 'lamer', 'sisley', 'lash', 'laneige', 'patches'];
 // what each one does when it lands on me
 const SKIN_FX = {
     dropper: [null, 'eye activator on. a drop under each eye, patted in.'], pinkpump: [null, 'skin activator serum on. patted in.'], goldpump: [null, 'suprême c on. vitamin c, patted in.'],
@@ -997,26 +999,7 @@ const VIEWS = {
         </div>`,
     skinbag: () => `
         <h2>My <em>skincare</em> pouch</h2>
-        <p class="note">another victoria’s secret pouch, just for skincare. unzip it, then put it all on me. drag a product onto my face.</p>
-        <div class="face" id="face">
-            <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-patched" src="assets/img/me-skin-patches.jpg" alt="" aria-hidden="true"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true">
-            <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
-                <filter id="fx-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
-                <filter id="fx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
-                <linearGradient id="lidL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9786A"/><stop offset="1" stop-color="#B98676"/></linearGradient>
-                <linearGradient id="lidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6957F"/><stop offset="1" stop-color="#D2A390"/></linearGradient>
-                <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D873"/><stop offset=".45" stop-color="#D8A82A"/><stop offset=".7" stop-color="#F3D06A"/><stop offset="1" stop-color="#C9961E"/></linearGradient>
-            </defs>
-                <g class="fx" data-fx="lashes"><image href="assets/img/me-lash-l.png" x="248" y="278" width="100" height="70"/><image href="assets/img/me-lash-r.png" x="372" y="272" width="120" height="76"/></g>
-                <g class="fx" data-fx="lips"><image href="assets/img/me-lips-laneige.png" x="296" y="436" width="128" height="92"/></g>
-                                <g class="fx" data-fx="patches" transform="translate(0 10)">
-                    <path d="M272 340 C290 336 310 336 324 338 C326 360 318 380 298 381 C282 382 272 366 272 340Z" fill="#FFE4DE" fill-opacity=".38" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
-                    <path d="M383 346 C420 340 470 325 500 318 C516 318 518 345 510 362 C500 384 470 396 440 397 C405 398 382 380 383 346Z" fill="#FFE4DE" fill-opacity=".38" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
-                    <path d="M492 330 q8 6 6 18 M418 384 q14 4 26 2 M282 350 q2 14 10 22" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>
-            </svg>
-            <span class="face-hint hand" id="face-hint">drop products here ↓</span>
-            <button type="button" class="lm-spoon" id="lm-spoon" hidden aria-label="La Mer's little applicator: drag it under my eyes"><svg viewBox="0 0 20 96" aria-hidden="true"><defs><linearGradient id="lmsp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4C40"/><stop offset=".4" stop-color="#E9D5CA"/><stop offset="1" stop-color="#3A231C"/></linearGradient></defs><path d="M10 18 L10 92" stroke="#3A2626" stroke-width="6" stroke-linecap="round"/><path d="M10 18 L10 92" stroke="#5E7E2C" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="10" cy="10" rx="7" ry="9" fill="url(#lmsp)" stroke="#3A2626" stroke-width="1.6"/></svg></button>
-        </div>
+        <p class="note">another victoria’s secret pouch, just for skincare. here’s everything in it ↓</p>
         <div class="mbag skin" id="mbag">
             <div class="mbag-inside" aria-live="polite">
                 ${[['patches', 120, -147, -35, 0, -34], ['pinkpump', 190, -105, -25, 60, -6], ['dropper', 172, -63, -15, 120, 0], ['lash', 176, -21, -5, 180, 0], ['goldpump', 190, 21, 5, 240, 0], ['laneige', 64, 63, 15, 300, -40], ['lamer', 84, 108, 25, 360, -40], ['sisley', 86, 155, 35, 420, -14]].map(([k, h, x, a, d, rise]) => `<button type="button" class="mk" data-sk="${k}" style="--h:${h}px; --x:${x}px; --a:${a}deg; --d:${d}ms; --rise:${rise}px" aria-label="${SKIN_INFO[k][0]}: drag it onto me, or tap">${SKIN[k]}<span>${SKIN_INFO[k][2]}</span></button>`).join('')}
@@ -1033,7 +1016,31 @@ const VIEWS = {
         </div>
         <div class="swatch" id="swatch" aria-live="polite"><svg viewBox="0 0 260 60" aria-hidden="true"><path id="swipe" d="M18 34 C60 14 110 46 150 28 S220 18 242 30" fill="none" stroke="#D2A27E" stroke-width="16" stroke-linecap="round"/></svg><span class="hand" id="swatch-label"></span></div>
         <p class="swatch-more"><button type="button" class="link" id="swatch-more" hidden></button></p>
-        <p class="pen-note" id="mk-note">pull the zipper</p>`,
+        <p class="pen-note" id="mk-note">pull the zipper</p>
+        <h3 class="routine-h">my night routine</h3>
+        <p class="routine-sub hand" id="routine-next">step 1: skin activator serum. tap it in the pouch ↑</p>
+        <div class="routine-wrap">
+            <ol class="routine" id="routine">${ROUTINE.map(k => `<li data-step="${k}">${SKIN_INFO[k][0]}</li>`).join('')}</ol>
+            <div class="face" id="face">
+                <img src="assets/img/me-skin.jpg" alt="Me, no makeup, ready for my skincare"><img class="face-patched" src="assets/img/me-skin-patches.jpg" alt="" aria-hidden="true"><img class="face-closed" src="assets/img/me-skin-closed.jpg" alt="" aria-hidden="true">
+                <svg viewBox="0 0 900 719" aria-hidden="true"><defs>
+                        <filter id="fx-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+                        <filter id="fx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>
+                        <linearGradient id="lidL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9786A"/><stop offset="1" stop-color="#B98676"/></linearGradient>
+                        <linearGradient id="lidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6957F"/><stop offset="1" stop-color="#D2A390"/></linearGradient>
+                        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D873"/><stop offset=".45" stop-color="#D8A82A"/><stop offset=".7" stop-color="#F3D06A"/><stop offset="1" stop-color="#C9961E"/></linearGradient>
+                </defs>
+                        <g class="fx" data-fx="lashes"><image href="assets/img/me-lash-l.png" x="248" y="278" width="100" height="70"/><image href="assets/img/me-lash-r.png" x="372" y="272" width="120" height="76"/></g>
+                        <g class="fx" data-fx="lips"><image href="assets/img/me-lips-laneige.png" x="296" y="436" width="128" height="92"/></g>
+                                                <g class="fx" data-fx="patches" transform="translate(0 10)">
+                            <path d="M272 340 C290 336 310 336 324 338 C326 360 318 380 298 381 C282 382 272 366 272 340Z" fill="#FFE4DE" fill-opacity=".38" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
+                            <path d="M383 346 C420 340 470 325 500 318 C516 318 518 345 510 362 C500 384 470 396 440 397 C405 398 382 380 383 346Z" fill="#FFE4DE" fill-opacity=".38" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
+                            <path d="M492 330 q8 6 6 18 M418 384 q14 4 26 2 M282 350 q2 14 10 22" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>
+                </svg>
+                <span class="face-hint hand" id="face-hint">drop products here ↓</span>
+                <button type="button" class="lm-spoon" id="lm-spoon" hidden aria-label="La Mer's little applicator: drag it under my eyes"><svg viewBox="0 0 20 96" aria-hidden="true"><defs><linearGradient id="lmsp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4C40"/><stop offset=".4" stop-color="#E9D5CA"/><stop offset="1" stop-color="#3A231C"/></linearGradient></defs><path d="M10 18 L10 92" stroke="#3A2626" stroke-width="6" stroke-linecap="round"/><path d="M10 18 L10 92" stroke="#5E7E2C" stroke-width="3.6" stroke-linecap="round"/><ellipse cx="10" cy="10" rx="7" ry="9" fill="url(#lmsp)" stroke="#3A2626" stroke-width="1.6"/></svg></button>
+            </div>
+        </div>`,
     chargers: () => `
         <h2>My <em>chargers</em></h2>
         <p class="note">macbook, iphone, headphones. always at the very bottom of my bag. always one knot.</p>
@@ -1810,10 +1817,18 @@ const AFTER = {
     },
     skinbag: () => {
         AFTER.makeupbag();
+        setTimeout(() => { const bag = $('#mbag'); if (bag && !bag.classList.contains('open')) $('#mpull').click(); }, reduce ? 0 : 350);
+        setTimeout(() => sheetBody.querySelector('#routine li') && sheetBody.querySelector('#routine li').classList.add('now'), 0);
         $('#mpull').setAttribute('aria-label', 'Unzip the skincare pouch');
         const face = $('#face'), applied = new Set();
         const apply = k => {
             const [fx, line] = SKIN_FX[k];
+            // in order, please
+            const next = ROUTINE.find(r => !applied.has(r));
+            if (k !== 'patches' || !applied.has('patches')) {
+                if (applied.has(k)) return toast('already on ♡');
+                if (k !== next) return toast(`not yet, babe. step ${ROUTINE.indexOf(next) + 1} is ${SKIN_INFO[next][2]}.`);
+            }
             if (k === 'patches' && applied.has('patches')) {
                 applied.delete('patches'); face.querySelector('[data-fx="patches"]').classList.remove('on'); clearTimeout(face.zzz); clearTimeout(face.wake); face.classList.remove('asleep', 'patched');
                 return toast('patches off. i’m up. glowing.');
@@ -1824,7 +1839,10 @@ const AFTER = {
             else { const r = face.getBoundingClientRect(); fairyDust(r.left + r.width * .42, r.top + r.height * .52); }
             if (k === 'patches') { face.classList.add('patched'); clearTimeout(face.zzz); face.zzz = setTimeout(() => { if (applied.has('patches')) { face.classList.add('asleep'); toast('and… i’m out. sleepy. bye bye 💤'); } }, reduce ? 0 : 1800); clearTimeout(face.wake); face.wake = setTimeout(() => { if (applied.has('patches')) pg.dispatchEvent(new Event('click')); }, 9000); }
             face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop');
-            const N = Object.keys(SKIN_FX).length; $('#face-hint').textContent = applied.size >= N ? 'fully skincared ♡' : `${applied.size} of ${N} on`;
+            const N = ROUTINE.length; $('#face-hint').textContent = applied.size >= N ? 'routine done ♡' : `${applied.size} of ${N} done`;
+            sheetBody.querySelectorAll('#routine li').forEach(li => { li.classList.toggle('done', applied.has(li.dataset.step)); li.classList.toggle('now', li.dataset.step === ROUTINE.find(r => !applied.has(r))); });
+            const nx = ROUTINE.find(r => !applied.has(r));
+            $('#routine-next').textContent = nx ? `step ${ROUTINE.indexOf(nx) + 1}: ${SKIN_INFO[nx][2]}. tap it in the pouch ↑` : 'night routine done. goodnight ♡';
             toast(line + (k === 'patches' ? '' : ''));
         };
         // la mer goes on with its little spoon, under my eyes only

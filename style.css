@@ -2225,3 +2225,16 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .pb-tucked:hover svg { transform: rotate(-4deg) translate(6px, -6px); }
 .pb-tucked .hand { font-size: 1.3rem; color: var(--plum); text-align: left; }
 .bp-where { text-align: center; color: var(--plum); font-size: 1.25rem; margin: 16px 0 0; }
+
+/* skincare: the products first, then my night routine in order */
+.mbag.skin { padding-top: 240px; margin-top: -10px; }
+.routine-h { margin: 22px 0 0; font: 400 1.6rem var(--serif); text-align: center; }
+.routine-sub { text-align: center; color: var(--plum); font-size: 1.3rem; margin: 2px 0 10px; }
+.routine-wrap { display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; }
+.routine-wrap .face { margin: 0; width: 100%; }
+.routine { margin: 0; padding-left: 22px; font-size: .82rem; line-height: 1.35; color: var(--muted); }
+.routine li { padding: 5px 4px; border-radius: 6px; }
+.routine li.now { color: var(--ink); font-weight: 600; background: #FBE3EB; }
+.routine li.done { color: var(--plum); text-decoration: line-through; text-decoration-color: rgba(118,52,78,.5); }
+.routine li.done::after { content: " ✓"; text-decoration: none; }
+@media (max-width: 760px) { .routine-wrap { grid-template-columns: 1fr; } }
