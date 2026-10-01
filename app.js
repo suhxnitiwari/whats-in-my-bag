@@ -2435,7 +2435,7 @@ const AFTER = {
                 const STACKS = [
                     { name: 'Paintings', items: ART.map(([t, d, f]) => [`assets/art/${f}.jpg`, t, d]) },
                     { name: 'AP 2-D Art & Design', sub: 'my AP portfolio. sustained investigation: growing up between two worlds.', items: AP_ART.map(([t, d], n) => [`assets/ap/ap-${String(n + 1).padStart(2, '0')}.jpg`, t, d]) },
-                    { name: 'Girls Can Be Engineers, Too!', sub: 'i wrote it, illustrated it and published it. here’s a sneak peek. the rest is on amazon.', link: 'https://a.co/d/9PAHLVL', items: [['assets/book/pg-01.jpg', 'the cover', ''], ['assets/book/pg-02.jpg', 'table of contents', ''], ['assets/book/pg-04.jpg', 'meet amaira, the sky explorer', 'want the other six engineers? the whole book is on amazon.']] }
+                    { name: 'Girls Can Be Engineers, Too!', sub: 'i wrote it, illustrated it and published it. here’s a sneak peek. the rest is on amazon.', link: 'https://a.co/d/9PAHLVL', items: [['assets/book/pg-01.jpg', 'the cover', ''], ['assets/book/pg-02.jpg', 'table of contents', ''], ['assets/book/pg-06.jpg', 'meet amaira, the sky explorer', 'want the other six engineers? the whole book is on amazon.']] }
                 ];
                 const gallery = () => {
                     view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="stacks">${STACKS.map((st, n) => `<button type="button" class="stack" data-stack="${n}"><span class="stack-pile">${st.items.slice(0, 3).map(([src]) => `<img src="${src}" alt="">`).join('')}</span><b>${st.name}</b><small>${n === 2 ? 'sneak peek' : st.items.length + ' artworks'}</small></button>`).join('')}</div>`;
