@@ -1248,14 +1248,13 @@ const VIEWS = {
         <h2><em>her greatest power is believing in herself</em></h2>
         <p class="note">my pink journal. small, always on me, for the ideas that show up at the worst times.</p>
         <div class="jb" id="jb">
-            <div class="jb-spiral" aria-hidden="true">${'<i></i>'.repeat(7)}</div>
-            <div class="jb-page"><span class="jb-date" aria-hidden="true">DATE&nbsp;&nbsp;/&nbsp;&nbsp;/</span><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Write a to-do or an idea"></div></div>
+            <div class="jb-page"><span class="jb-date" aria-hidden="true">DATE&nbsp;&nbsp;/&nbsp;&nbsp;/</span><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Write an idea"></div></div>
             <div class="jb-cover" id="jb-cover">
-                <div class="jb-front" role="button" tabindex="0" aria-label="Flip the cover up">${ITEMS.find(i => i.id === 'journal').art}<span class="jb-corner" aria-hidden="true">flip it up ↑</span></div>
-                <div class="jb-back" aria-label="Flip the cover back down"></div>
+                <div class="jb-front" role="button" tabindex="0" aria-label="Open the journal">${ITEMS.find(i => i.id === 'journal').art}<span class="jb-corner" aria-hidden="true">open it ←</span></div>
+                <div class="jb-back" aria-label="Close the journal"></div>
             </div>
         </div>
-        <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the cover to flip it up</p>`,
+        <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the cover to open it</p>`,
     perfume: () => `
         <h2>My <em>personality</em>, in a bottle</h2>
         <p class="note">philosophy amazing grace ballet rose. it says “grace lets you move to your own rhythm” right on the label. that’s just me.</p>
@@ -1333,9 +1332,11 @@ const VIEWS = {
             <img src="assets/img/me-hair-before.jpg" alt="My hair before combing: frizzy">
             <img class="hair-after" id="hair-after" src="assets/img/me-hair-after.jpg" alt="My hair after combing: smooth waves">
             <button type="button" class="hair-comb" id="hair-comb" aria-label="Comb my hair: drag down, or press to comb it all the way">${ITEMS.find(i => i.id === 'comb').art}</button>
+            <img class="hair-braid" src="assets/img/me-hair-braid.jpg" alt="My hair in one long braid" aria-hidden="true">
             <span class="hair-tag mono" id="hair-tag">before</span>
         </div>
-        <p class="pen-note" id="hair-note">before → after, one comb.</p>`,
+        <p class="pen-note" id="hair-note">before → after, one comb.</p>
+        <div class="row" style="justify-content:center"><button type="button" class="btn solid" id="hair-braid" hidden>now braid it</button></div>`,
 
     bag: () => `
         <h2>My <em>backpack</em></h2>
@@ -1925,16 +1926,24 @@ const AFTER = {
             f = Math.max(0, Math.min(1, f));
             hair.style.setProperty('--comb', f);
             $('#hair-tag').textContent = f > .97 ? 'after' : f < .03 ? 'before' : 'combing…';
-            if (f > .97 && !done) { done = true; $('#hair-note').textContent = 'see? smooth. the comb stays in the bag.'; }
+            if (f > .97 && !done) { done = true; $('#hair-note').textContent = 'see? smooth. the comb stays in the bag.'; $('#hair-braid').hidden = false; }
         };
         const at = e => { const r = hair.getBoundingClientRect(); return (e.clientY - r.top) / r.height; };
         hair.style.touchAction = 'none';
-        hair.addEventListener('pointerdown', e => { drag = true; hair.classList.add('dragging'); try { hair.setPointerCapture(e.pointerId); } catch {} set(at(e)); });
+        hair.addEventListener('pointerdown', e => { if (hair.classList.contains('braided')) return; drag = true; hair.classList.add('dragging'); try { hair.setPointerCapture(e.pointerId); } catch {} set(at(e)); });
         hair.addEventListener('pointermove', e => { if (drag) set(at(e)); });
         const end = () => { drag = false; hair.classList.remove('dragging'); };
         hair.addEventListener('pointerup', end); hair.addEventListener('pointercancel', end);
         comb.onkeydown = e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); set((+hair.style.getPropertyValue('--comb') || 0) + (e.key === 'ArrowDown' ? .1 : -.1)); } };
         comb.onclick = e => { if (e.detail) return; set((+hair.style.getPropertyValue('--comb') || 0) > .5 ? 0 : 1); };
+        // combed out, then one long braid for bed. while it's braided the comb stays put.
+        $('#hair-braid').onclick = () => {
+            const on = hair.classList.toggle('braided');
+            $('#hair-tag').textContent = on ? 'braided' : 'after';
+            $('#hair-braid').textContent = on ? 'take it down' : 'now braid it';
+            $('#hair-note').textContent = on ? 'one long braid for bed.' : 'see? smooth. the comb stays in the bag.';
+            hair.querySelector('.hair-braid').setAttribute('aria-hidden', !on);
+        };
         set(0);
     },
     headphones: () => {
@@ -2279,10 +2288,10 @@ const AFTER = {
     nb1: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     nb2: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
     journal: () => {
-        // top spiral: the cover flips up and over the rings, like the real one
+        // a small bound journal (the notepad is the one in my mccombs padfolio): the cover opens like a book
         const jb = $('#jb'), front = jb.querySelector('.jb-front'), hint = $('#jb-hint');
-        const open = () => { jb.classList.add('open'); hint.textContent = 'write anything. tap the cover to flip it back down (nothing is saved).'; };
-        const close = () => { jb.classList.remove('open'); hint.textContent = 'tap the cover to flip it up'; };
+        const open = () => { jb.classList.add('open'); hint.textContent = 'write anything. tap the inside cover to close it (nothing is saved).'; };
+        const close = () => { jb.classList.remove('open'); hint.textContent = 'tap the cover to open it'; };
         front.onclick = open;
         front.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
         jb.querySelector('.jb-back').onclick = close;

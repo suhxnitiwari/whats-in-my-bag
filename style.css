@@ -1388,21 +1388,18 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .lid-big .stk:hover .stk-in, .lid-big .stk:focus-visible .stk-in { fill-opacity: .12; stroke-opacity: .9; transform: none; filter: none; }
 
 /* the journal: spiral on top, the cover flips up and over the rings; the page has a date box, checkboxes and lines */
-.jb { position: relative; width: 200px; aspect-ratio: 125 / 176; margin: 14px auto 0; perspective: 1400px; transition: margin-top .9s cubic-bezier(.45,.05,.25,1); }
-.jb.open { margin-top: calc(200px * 176 / 125 + 26px); }
-.jb-spiral { position: absolute; left: 12%; right: 12%; top: -10px; height: 20px; display: flex; justify-content: space-between; z-index: 5; pointer-events: none; }
-.jb-spiral i { width: 9px; height: 20px; box-sizing: border-box; border: 2.2px solid #77736F; border-radius: 5px; background: linear-gradient(90deg, #E2DFDB, #A29E9A); }
-.jb-page { position: absolute; inset: 0; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 3px 3px 8px 8px; overflow: hidden; }
-.jb-page::before { content: ""; position: absolute; left: 10px; top: 34px; bottom: 8px; width: 12px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='22'%3E%3Crect x='1.5' y='6.5' width='9' height='9' fill='none' stroke='%23AEB9CF'/%3E%3C/svg%3E") repeat-y; pointer-events: none; }
-.jb-date { position: absolute; left: 30px; top: 13px; padding: 1px 6px; border: 1px solid #C3CCDD; border-radius: 2px; font: 600 .58rem/1.3 "JetBrains Mono", monospace; letter-spacing: 1px; color: #8A93A8; pointer-events: none; }
-.jb-lines { position: absolute; inset: 0; padding: 34px 10px 8px 28px; outline: none; overflow: hidden; overflow-wrap: anywhere; font: 600 1.05rem/22px var(--hand); color: #1F2D5A;
+.jb { --jw: min(200px, 40vw); position: relative; width: var(--jw); aspect-ratio: 125 / 176; margin: 14px auto 0; perspective: 1600px; transition: transform .9s cubic-bezier(.45,.05,.25,1); }
+.jb.open { transform: translateX(50%); }
+.jb-page { position: absolute; inset: 0; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 2px 8px 8px 2px; overflow: hidden; box-shadow: inset 10px 0 12px -10px rgba(58,38,38,.35); }
+.jb-date { position: absolute; right: 12px; top: 13px; padding: 1px 6px; border: 1px solid #C3CCDD; border-radius: 2px; font: 600 .58rem/1.3 "JetBrains Mono", monospace; letter-spacing: 1px; color: #8A93A8; pointer-events: none; }
+.jb-lines { position: absolute; inset: 0; padding: 34px 12px 8px 16px; outline: none; overflow: hidden; overflow-wrap: anywhere; font: 600 1.05rem/22px var(--hand); color: #1F2D5A;
     background-image: repeating-linear-gradient(transparent 0 21px, rgba(110,150,210,.35) 21px 22px); background-position: 0 12px; }
-.jb-lines:empty::before { content: "a to-do, an idea…"; color: #B9B2C6; }
-.jb-cover { position: absolute; inset: 0; transform-origin: 50% 0; transform-style: preserve-3d; transition: transform 1s cubic-bezier(.45,.05,.25,1); z-index: 3; }
-.jb.open .jb-cover { transform: rotateX(-180deg); }
+.jb-lines:empty::before { content: "an idea…"; color: #B9B2C6; }
+.jb-cover { position: absolute; inset: 0; transform-origin: 0 50%; transform-style: preserve-3d; transition: transform 1s cubic-bezier(.45,.05,.25,1); z-index: 3; }
+.jb.open .jb-cover { transform: rotateY(-180deg); }
 .jb-front, .jb-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer; }
 .jb-front svg { width: 100%; height: 100%; display: block; }
-.jb-back { transform: rotateX(180deg); box-sizing: border-box; border: 2px solid var(--ink); border-radius: 3px 3px 8px 8px; background: repeating-linear-gradient(125deg, #F3D3DD 0 14px, #F8E3EA 14px 22px); }
+.jb-back { transform: rotateY(180deg); box-sizing: border-box; border: 2px solid var(--ink); border-radius: 8px 2px 2px 8px; background: repeating-linear-gradient(125deg, #F3D3DD 0 14px, #F8E3EA 14px 22px); box-shadow: inset -10px 0 12px -10px rgba(58,38,38,.35); }
 .jb-corner { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font: 600 .8rem var(--hand); color: #FFF6F2; background: rgba(0,0,0,.15); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
 @keyframes nudge { 50% { transform: translate(2px, 2px); } }
 
@@ -2413,11 +2410,16 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 @media (prefers-reduced-motion: reduce) { .bbb.poof .bbb-dust i, .bbb.poof .bbb-photo img { animation: none; } }
 
 /* the comb: drag it down through my hair, frizz above turns to smooth waves */
-.hair { --comb: 0; position: relative; width: min(340px, 86%); aspect-ratio: 730 / 1040; margin: 6px auto 8px; border: 3px solid var(--ink); border-radius: 18px; overflow: hidden; box-shadow: 6px 6px 0 var(--rose); cursor: grab; user-select: none; }
+.hair { --comb: 0; position: relative; width: min(300px, 80%); aspect-ratio: 570 / 1040; margin: 6px auto 8px; border: 3px solid var(--ink); border-radius: 18px; overflow: hidden; box-shadow: 6px 6px 0 var(--rose); cursor: grab; user-select: none; }
 .hair.dragging { cursor: grabbing; }
 .hair img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
 .hair-after { clip-path: inset(0 0 calc((1 - var(--comb)) * 100%) 0); transition: clip-path .5s var(--ease); }
 .hair.dragging .hair-after, .hair.dragging .hair-comb { transition: none; }
 .hair-comb { position: absolute; left: 50%; top: calc(7% + var(--comb) * 88%); width: 46%; padding: 0; border: 0; background: none; cursor: inherit; transform: translate(-50%, -50%) rotate(-45deg); transition: top .5s var(--ease); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
 .hair-comb svg { display: block; width: 100%; height: auto; }
+.hair .hair-braid { opacity: 0; transition: opacity .7s ease; }
+.hair.braided .hair-braid { opacity: 1; }
+.hair.braided { cursor: default; }
+.hair.braided .hair-comb { opacity: 0; pointer-events: none; }
+.hair-comb { transition: top .5s var(--ease), opacity .4s; }
 .hair-tag { position: absolute; left: 10px; top: 10px; padding: 3px 9px; border-radius: 99px; background: rgba(255, 251, 248, .88); color: var(--plum); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
