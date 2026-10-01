@@ -1147,9 +1147,11 @@ const VIEWS = {
         ].map(([k, when, n, me]) => `<div data-layer="${k}"><b>${k} · ${when}</b><span>${n}</span><em class="hand">${me}</em></div>`).join('')}</div>`,
     boarding: () => `
         <h2>My <em>boarding pass</em></h2>
-        <p class="note">front pocket, next to my passport. destination: wherever’s next.</p>
+        <p class="note">tucked inside my passport. destination: wherever’s next.</p>
         <div class="bp-gate" id="bp-gate"><div class="bp-big">${ITEMS.find(i => i.id === 'boarding').art}</div><span class="bp-laser" aria-hidden="true"></span><span class="bp-stamp" aria-hidden="true">BOARDED ✓</span></div>
-        <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button> <span class="bp-light" id="bp-light" aria-hidden="true"></span></div>`,
+        <div class="row"><button class="btn solid" type="button" id="bp-scan">Scan it</button> <span class="bp-light" id="bp-light" aria-hidden="true"></span></div>
+        <p class="hand bp-where">where it’s taken me so far:</p>
+        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`,
     padfolio: () => `
         <h2>My <em>McCombs</em> padfolio</h2>
         <p class="note">my résumé on the left, my notes on the right, a baby pink pen in the middle. ready for anything.</p>
@@ -1634,7 +1636,7 @@ const VIEWS = {
             <div class="pb-leaf" style="--i:${i}" data-leaf="${i}"><div class="pb-face pb-front">${f}</div><div class="pb-face pb-backface">${bk}</div></div>`).join('')}
         </div></div>
         <div class="row pb-ctrl"><button class="btn" type="button" id="pb-prev" aria-label="Previous page">‹ back</button><span class="hand" id="pb-where">tap the cover</span><button class="btn solid" type="button" id="pb-next" aria-label="Next page">open ›</button></div>
-        <div class="row"><a class="btn" href="https://suhanitiwari.com/home/make#traveling" target="_blank" rel="noopener">My itineraries (Chicago, New York) ↗</a></div>`;
+        <button type="button" class="pb-tucked" id="pb-tucked" aria-label="The boarding pass tucked inside my passport: pull it out">${ITEMS.find(i => i.id === 'boarding').art}<span class="hand">tucked inside: a boarding pass. pull it out ↗</span></button>`;
     },
 
     sitara: () => `
@@ -2132,6 +2134,7 @@ const AFTER = {
         $('#cap-on').onclick = flip; $('#capfit-cap').onclick = flip;
     },
     passport: () => {
+        $('#pb-tucked').onclick = () => goTo(ITEMS.find(i => i.id === 'boarding'));
         const pb = $('#pb'), leaves = [...pb.querySelectorAll('.pb-leaf')], n = leaves.length;
         let at = 0;   // how many leaves have been turned
         const where = ['tap the cover', 'signature + my info', 'pages 2–3', 'pages 4–5', 'pages 6–7', 'the back cover'];
