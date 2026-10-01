@@ -1344,3 +1344,16 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 /* items glide to their new spots when more pockets open */
 .item.out { transition: left .6s cubic-bezier(.2,.8,.2,1), top .6s cubic-bezier(.2,.8,.2,1); }
 .stage { transition: aspect-ratio .6s; }
+
+/* ideas & thoughts journal */
+.jr { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; max-width: 520px; margin: 10px auto; }
+.jr-page { aspect-ratio: 125 / 176; max-height: 320px; background: #FFFBF6; border: 2px solid var(--ink); border-radius: 4px 10px 10px 4px; padding: 26px 14px 10px 34px; overflow: hidden; overflow-wrap: anywhere; outline: none; font: 600 1.15rem/24px var(--hand); color: #1F2D5A;
+    background-image: linear-gradient(90deg, transparent 26px, rgba(226,106,141,.5) 26px 27.5px, transparent 27.5px), repeating-linear-gradient(transparent 0 23px, rgba(110,150,210,.35) 23px 24px); background-position: 0 2px; }
+.jr-page:empty::before { content: "an idea…"; color: #B9B2C6; }
+@media (max-width: 760px) { .jr { grid-template-columns: 110px 1fr; } }
+
+/* the telescopic Mildliner pouch: the white sleeve slides down over the corduroy and the pens pop up */
+.tele-front { width: 190px; margin-top: -120px; }
+.tele .tele-sleeve { transition: transform .7s cubic-bezier(.3,1.2,.5,1); }
+.tele-front.down .tele-sleeve { transform: translateY(66px); }
+.pens.open .pen { transition-delay: calc(.25s + var(--i) * 12ms); }

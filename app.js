@@ -514,6 +514,12 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    journal: () => `
+        <h2>My <em>ideas &amp; thoughts</em> journal</h2>
+        <p class="note">pink, small, always on me. for the ideas that show up at the worst times.</p>
+        <div class="jr"><div class="jr-cover">${ITEMS.find(i => i.id === 'journal').art}</div>
+            <div class="jr-page" id="jr-page" contenteditable="true" spellcheck="false" aria-label="A page of the journal: leave an idea"></div></div>
+        <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 0">leave an idea on the page. it stays between us (it isn’t saved).</p>`,
     perfume: () => `
         <h2>My <em>perfume</em></h2>
         <p class="note">philosophy amazing grace ballet rose, eau de parfum. front pocket, always.</p>
@@ -708,8 +714,8 @@ const VIEWS = {
 
     mildliners: () => penView({
         title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. every color is a class i took at ut austin.',
-        list: PENS, front: ITEMS.find(i => i.id === 'pouch').art, pick: 'pick a highlighter, see the class',
-        pen: c => `<svg viewBox="0 0 34 190"><rect x="5" y="30" width="24" height="132" rx="5" fill="#FFFDF9" stroke="#3A2626" stroke-width="3"/><rect x="5" y="4" width="24" height="32" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="5" y="158" width="24" height="28" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><path d="M11 50 h12 M11 142 h12" stroke="${c}" stroke-width="3"/></svg>`
+        list: PENS, front: ITEMS.find(i => i.id === 'pouch').front, pick: 'pick a highlighter, see the class',
+        pen: c => `<svg viewBox="0 0 34 190"><rect x="6" y="30" width="22" height="130" rx="4" fill="#FFFDF9" stroke="#3A2626" stroke-width="2.5"/><rect x="5" y="4" width="24" height="34" rx="6" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M24 8 h4 v24 l-2 3 h-2z" fill="${c}" stroke="#3A2626" stroke-width="1.4"/><rect x="5" y="154" width="24" height="30" rx="6" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M6 44 h22 M6 146 h22" stroke="${c}" stroke-width="3"/><text x="17" y="60" font-family="Instrument Sans" font-size="7" font-weight="600" letter-spacing="1.2" fill="#3A2626" opacity=".55" transform="rotate(90 17 60)">MILDLINER</text></svg>`
     }),
 
     gelpens: () => penView({
@@ -987,8 +993,9 @@ function penView({ title, note, list, front, pen, pick }) {
                 <button class="pen" type="button" style="--i:${i}; --mid:${(list.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
                     ${pen(p.c)}<span class="lbl">${p.name}</span>
                 </button>`).join('')}</div>
-            <div class="pouch-front">${front}</div>
+            <div class="pouch-front${list === PENS ? ' tele-front' : ''}" id="pouch-front">${front}</div>
         </div>
+        ${list === PENS ? '<div class="row" style="justify-content:center; margin-top:4px"><button class="btn" type="button" id="tele-btn">Push it down</button></div>' : ''}
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
         ${list === GELPENS ? `<div class="pad"><div id="pad-text" class="pad-text" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Notepad: type in the pen color you picked" data-placeholder="pick a pen, then type anything…"></div></div>` : ''}
         ${list === GELPENS ? `<div class="in-pencil">
@@ -1693,7 +1700,10 @@ function setupPencil() {
 function pensAfter(list) {
     const pens = $('#pens'), note = $('#pen-note');
     setupPencil();
-    setTimeout(() => { pens.classList.add('open'); note.textContent = pens.dataset.pick; }, reduce ? 0 : 400);
+    const tele = $('#tele-btn'), pf = $('#pouch-front');
+    const setTele = up => { pf.classList.toggle('down', up); pens.classList.toggle('open', up); if (tele) tele.textContent = up ? 'Pull it back up' : 'Push it down'; note.textContent = up ? pens.dataset.pick : 'zipped and standing tall'; };
+    if (tele) { tele.onclick = () => setTele(!pens.classList.contains('open')); pf.onclick = () => setTele(!pens.classList.contains('open')); pf.style.cursor = 'pointer'; }
+    setTimeout(() => { if (tele) setTele(true); else { pens.classList.add('open'); note.textContent = pens.dataset.pick; } }, reduce ? 0 : 500);
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
         const p = list[+b.dataset.pen];
