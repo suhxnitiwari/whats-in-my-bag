@@ -369,7 +369,7 @@ window.ITEMS = [
         open: 'journal'
     },
     {
-        id: 'bear', name: 'my teddy bear', zip: 'main', l: 0, t: 0, w: 13.5, r: -6,
+        id: 'bear', name: 'T.D., my teddy bear', zip: 'main', l: 0, t: 0, w: 13.5, r: -6,
         art: `<svg viewBox="0 0 120 160"><g stroke="#3A2626" stroke-width="2.2" stroke-linejoin="round">
     <circle cx="30" cy="28" r="14" fill="#E2A65E"/><circle cx="90" cy="28" r="14" fill="#E2A65E"/><circle cx="30" cy="28" r="7" fill="#F2D2A4" stroke="none"/><circle cx="90" cy="28" r="7" fill="#F2D2A4" stroke="none"/>
     <ellipse cx="60" cy="112" rx="38" ry="40" fill="#E2A65E"/>
@@ -404,9 +404,9 @@ window.ITEMS = [
     },
     {
         id: 'giftcards', name: 'some gift cards', zip: 'front', l: 0, t: 0, w: 10.3, r: 3,
-        art: `<svg viewBox="0 0 120 96"><g transform="rotate(-10 40 50)"><rect x="6" y="22" width="80" height="50" rx="5" fill="#9ED3C2" ${S} stroke-width="2"/><text x="14" y="38" font-family="Instrument Sans" font-weight="700" font-size="7" fill="#2E5E50">GIFT CARD</text><path d="M60 22 v50 M6 47 h80" stroke="#E25A7A" stroke-width="3"/></g>
-    <g transform="rotate(4 70 50)"><rect x="30" y="20" width="80" height="50" rx="5" fill="#F7C6D3" ${S} stroke-width="2"/><text x="38" y="36" font-family="Instrument Sans" font-weight="700" font-size="7" fill="#8A2A4A">GIFT CARD</text><text x="38" y="62" font-family="Caveat, cursive" font-size="9" fill="#8A2A4A">balance: unclear</text></g>
-    <g transform="rotate(14 80 60)"><rect x="40" y="34" width="72" height="46" rx="5" fill="#F6DB94" ${S} stroke-width="2"/><text x="48" y="50" font-family="Instrument Sans" font-weight="700" font-size="7" fill="#7A5A12">GIFT CARD</text><path d="M96 34 l-8 10 m8 -10 l8 10" stroke="#C0392B" stroke-width="2"/></g></svg>`,
+        art: `<svg viewBox="0 0 130 100"><g transform="rotate(-10 40 50)"><rect x="6" y="22" width="80" height="50" rx="5" fill="#ECE6DC" ${S} stroke-width="2"/><text x="46" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="2.4" fill="#2A2426">ARITZIA</text></g>
+    <g transform="rotate(4 70 50)"><rect x="32" y="18" width="80" height="50" rx="5" fill="#111013" ${S} stroke-width="2"/><text x="72" y="47" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="11" letter-spacing="3.2" fill="#F4F2EE">CHANEL</text></g>
+    <g transform="rotate(14 82 64)"><rect x="42" y="38" width="80" height="50" rx="5" fill="#fff" ${S} stroke-width="2"/><g clip-path="none">${[0,1,2,3,4,5,6,7,8,9].map(k => `<rect x="${44 + k * 8}" y="40" width="4" height="12" fill="#111013"/>`).join('')}</g><text x="82" y="72" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="2.4" fill="#111013">SEPHORA</text></g></svg>`,
         open: 'giftcards'
     },
     {
@@ -414,6 +414,13 @@ window.ITEMS = [
         art: `<svg viewBox="0 0 90 90"><g transform="rotate(-8 45 45)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#F4B6CA" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#E995AF" stroke-width="2" stroke-dasharray="2 2"/><circle cx="45" cy="45" r="9" fill="#FBE3EA"/><path d="M41 45 q4 -6 8 0 q-4 6 -8 0z" fill="#E995AF"/></g>
     <g transform="rotate(10 50 56) translate(10 14)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#C9B6E8" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#A996D6" stroke-width="2" stroke-dasharray="2 2"/></g></svg>`,
         open: 'pads'
+    },
+    {
+        id: 'cards', name: 'amaira’s cards', zip: 'front', l: 0, t: 0, w: 9.8, r: -4,
+        art: `<svg viewBox="0 0 120 100"><g transform="rotate(-12 50 55)"><rect x="10" y="20" width="70" height="60" fill="#F6C6D3" ${S} stroke-width="2"/><path d="M30 50 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 9z" fill="#E0457E"/></g>
+    <g transform="rotate(6 70 55)"><rect x="34" y="16" width="72" height="62" fill="#FFFDF8" ${S} stroke-width="2"/><g font-family="Caveat, cursive" font-size="10" fill="#B13A6A"><text x="42" y="34">Happy</text><text x="42" y="46">Bithday</text><text x="42" y="58" fill="#3A5A9A">Didi!</text></g><path d="M86 40 l2 4 4 1 -3 3 1 4 -4 -2 -4 2 1 -4 -3 -3 4 -1z" fill="#F2C14E"/><path d="M84 62 c-4 -6 3 -10 6 -4 c3 -6 10 -2 6 4 l-6 7z" fill="#E0457E"/></g>
+    <g transform="rotate(-3 60 70)"><rect x="18" y="52" width="66" height="40" fill="#FBF6EA" ${S} stroke-width="2"/><text x="24" y="66" font-family="Caveat, cursive" font-size="8" fill="#6A4FB0">xoxo,</text><text x="24" y="78" font-family="Caveat, cursive" font-size="9" fill="#6A4FB0">Amaira</text><path d="M64 60 q4 -6 8 0 q4 -6 8 0 q-8 10 -8 10 q-8 -10 -8 -10z" fill="#5BA7C4"/></g></svg>`,
+        open: 'cards'
     },
     {
         id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,

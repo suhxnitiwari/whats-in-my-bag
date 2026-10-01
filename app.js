@@ -543,6 +543,7 @@ const COMBOS = [
     [['ticket', 'keys'], 'a speeding ticket and the car keys. we don’t talk about it.'],
     [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
     [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
+    [['bear', 'cards'], 'T.D. and a stack of her little sister’s cards. okay, now you know her soft spot.'],
     [['laptop', 'padfolio', 'notebooks'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
     [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
@@ -575,10 +576,16 @@ sheet.addEventListener('click', e => {
 
 /* ---------- what each thing shows you ---------- */
 const VIEWS = {
+    cards: () => `
+        <h2><em>amaira’s</em> cards</h2>
+        <p class="note">my little sister makes me cards. i keep them. all of them. they live in my backpack.</p>
+        <div class="kc" id="kc"></div>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="kc-prev">‹</button><span class="hand" id="kc-n" style="align-self:center; color:var(--plum); min-width:4em; text-align:center"></span><button class="btn solid" type="button" id="kc-next">next card ›</button></div>
+        <p class="note" id="kc-note" style="text-align:center"></p>`,
     bear: () => `
-        <h2>yes, there’s a <em>teddy bear</em> in my backpack.</h2>
+        <h2>this is <em>T.D.</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'bear').art}</div>
-        <p class="note">he goes everywhere. he’s seen things. he has not judged once.</p>
+        <p class="note">like teddy duncan from good luck charlie. he was the first gift i ever bought my little sister, amaira. now he rides around austin in my backpack.</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>`,
     todo: () => `
         <h2>an <em>overdue</em> to-do list</h2>
@@ -591,7 +598,7 @@ const VIEWS = {
     giftcards: () => `
         <h2>some <em>gift cards</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'giftcards').art}</div>
-        <p class="note">balances: a mystery. saving them for a special occasion that never comes.</p>`,
+        <p class="note">aritzia, chanel, sephora. balances: a mystery. saving them for a special occasion that never comes.</p>`,
     pads: () => `
         <h2><em>pads</em></h2>
         <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
@@ -1215,6 +1222,19 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    cards: () => {
+        const C = [['Happy Bithday Didi!','#F6C6D3','a birthday card. spelling: hers. didi means big sister.'],['I love you! you\'re the sweetest sister ever! I\'ll miss you!','#FFFDF8','she wrote “i’ll miss you.” enough said.'],['Two Starbucks Girls','#FBF6EA','us. at starbucks. she drew the cups very accurately.'],['Two Little Girls Walking on the Street','#EAF4EC','a house, two girls, a walk. peak art.'],['Merry Christmas and Happy New Year!','#FCE8E5','a christmas card with a gingerbread friend.'],['Girl boss','#EEF0FB','she thinks i run the world. i\'m not correcting her.']];
+        let i = 0;
+        const draw = () => {
+            const [t, bg, n] = C[i];
+            $('#kc').innerHTML = `<div class="kc-card" style="background:${bg}"><p class="kc-t">${t}</p><svg viewBox="0 0 160 70" aria-hidden="true"><path d="M30 60 c-14 -16 8 -30 16 -14 c8 -16 30 -2 16 14 l-16 14z" fill="#E0457E" opacity=".85"/><g fill="none" stroke="#7A4E2E" stroke-width="2.4" stroke-linecap="round"><circle cx="104" cy="22" r="8" fill="#F2D2B8"/><path d="M104 30 v20 M104 36 l-10 8 M104 36 l10 8 M104 50 l-7 14 M104 50 l7 14"/><circle cx="134" cy="28" r="6" fill="#F2D2B8"/><path d="M134 34 v16 M134 40 l-8 6 M134 40 l8 6 M134 50 l-6 12 M134 50 l6 12"/></g><path d="M96 16 q8 -10 16 0 M128 23 q6 -8 12 0" stroke="#5A3A26" stroke-width="3" fill="none"/></svg><p class="kc-from">— amaira</p></div>`;
+            $('#kc-n').textContent = `${i + 1} / ${C.length}`; $('#kc-note').textContent = n;
+            $('#kc').firstChild.classList.add('in');
+        };
+        $('#kc-next').onclick = () => { i = (i + 1) % C.length; draw(); };
+        $('#kc-prev').onclick = () => { i = (i + C.length - 1) % C.length; draw(); };
+        draw();
+    },
     bear: () => { const b = sheetBody.querySelector('.big-obj'); $('#hug').onclick = () => { b.classList.remove('hugged'); void b.offsetWidth; b.classList.add('hugged'); toast('he says thank you ♡'); }; },
     brushes: () => {
         const D = [['M241','Angled Powder Bronzer','bronzer, swept on the cheekbones'],['M242','Slanted Cream & Liquid Bronzer','cream bronzer, buffed in'],['M132','Angled Concealer','concealer, under the eyes'],['Eye','Tapered Blender','blending the crease'],['Eye','Pointed Crease','cutting the crease'],['Eye','Dome Shader','packing on shadow'],['Eye','Pencil','smudging along the lash line'],['Eye','Flat Shader','lid color'],['Eye','Small Detail','inner corners'],['Eye','Angled Liner + Spoolie','brows and liner']], note = $('#mbr-note');
