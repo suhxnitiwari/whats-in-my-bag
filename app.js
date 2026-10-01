@@ -888,7 +888,7 @@ const fileIcon = (n, ic) => ic.startsWith('img:')
 const SKIN = window.SKIN;
 const SKIN_INFO = {
     dropper: ['Westman Atelier Eye Activator Serum', 'one drop under each eye. the dropper comes up pink.', 'eye activator'],
-    pinkpump: ['Westman Atelier, the pink pump', 'one pump.', 'pink pump'],
+    pinkpump: ['Westman Atelier Skin Activator Serum', 'one pump. twelve actives, all over my face.', 'skin activator'],
     goldpump: ['Westman Atelier, the gold pump', 'one pump.', 'gold pump'],
     patches: ['24K gold under-eye patches', 'gold under my eyes. instant “i slept” energy.', 'eye patches'],
     lamer: ['La Mer The Eye Concentrate', 'lid off, a tap with the little wand.', 'la mer'],
@@ -897,7 +897,7 @@ const SKIN_INFO = {
 };
 // what each one does when it lands on me
 const SKIN_FX = {
-    dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'one pump. glowing.'], goldpump: ['glow2', 'another pump. glowing more.'],
+    dropper: ['eyeserum', 'eye activator on. a drop under each eye, patted in.'], pinkpump: ['glow', 'skin activator serum on. hydrated, plump, glowing.'], goldpump: ['glow2', 'another pump. glowing more.'],
     lamer: ['bright', 'la mer under my eyes. awake-looking, at least.'], sisley: ['smooth', 'sisley on. smooth like i slept eight hours.'],
     laneige: ['lips', 'laneige on. glossy, browny pink lips ♡'], patches: ['patches', 'gold patches on. eyes closed. do not disturb.']
 };
