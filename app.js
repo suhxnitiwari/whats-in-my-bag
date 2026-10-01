@@ -225,7 +225,14 @@ function shelf(list, x0, x1, y0, gap = 2.2) {
 }
 function relayout() {
     if (phone()) return;
-    const items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip)).map(sizeOf).sort((a, b) => b.w * b.h - a.w * a.h);
+    let items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip)).map(sizeOf);
+    // the binder and the Erin Condrens travel together: the notebooks sit stacked on the binder, like in my bag
+    const bi = items.find(b => b.it.id === 'binder'), nb = items.find(b => b.it.id === 'notebooks');
+    if (bi && nb) {
+        items = items.filter(b => b !== bi && b !== nb);
+        items.push({ it: { id: '__stack' }, w: bi.w * .62 + nb.w, h: Math.max(bi.h, nb.h) + 2, parts: [[bi, bi.w / 2, 0], [nb, bi.w * .62 + nb.w / 2, 2]] });
+    }
+    items.sort((a, b) => b.w * b.h - a.w * a.h);
     if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
     const bands = {
         top: { x0: 2, x1: TW - 2, y0: 2, y1: 45, list: [], cap: (TW - 4) * 43 },
@@ -253,6 +260,7 @@ function relayout() {
     const H = Math.max(114, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 105);
     stage.style.aspectRatio = `${TW} / ${H}`;
     bagBtn.style.top = `${BAG_CY / H * 100}%`;
+    for (const b of [...placed]) if (b.parts) for (const [p, dx, dy] of b.parts) placed.push({ ...p, cx: b.cx - b.w / 2 + dx, cy: b.cy + dy / 2 });
     for (const b of placed) {
         const li = document.getElementById('item-' + b.it.id); if (!li) continue;
         li.style.setProperty('--l', `${b.cx * CM}%`);

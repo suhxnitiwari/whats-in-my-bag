@@ -280,7 +280,7 @@ window.ITEMS = [
         open: 'hairpony'
     },
     {
-        id: 'comb', name: 'my wide-tooth comb', zip: 'front', l: 54.5, t: 20.5, w: 13.5, r: 0,
+        id: 'comb', name: 'my wide-tooth comb', zip: 'front', l: 54.5, t: 20.5, w: 15.5, r: 0,
         art: `<svg viewBox="0 0 150 150"><defs><linearGradient id="cw2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8E5A2A"/><stop offset=".5" stop-color="#76461F"/><stop offset="1" stop-color="#5E3617"/></linearGradient></defs>
             <g fill="none"><path d="M34.5 27.5 L14.5 47.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M41 34 L21 54" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M47.5 39.5 L27.5 59.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M53.5 45.5 L33.5 65.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M59.5 52 L39.5 72" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M65.5 58 L45.5 78" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M71.5 64.5 L51.5 84.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M77.5 70.5 L57.5 90.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M82 84 L66 98" stroke="#2E1B0E" stroke-width="8" stroke-linecap="round"/><path d="M34.5 27.5 L14.5 47.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M30.5 30.5 L17.5 43.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M41 34 L21 54" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M37 37 L24 50" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M47.5 39.5 L27.5 59.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M43.5 42.5 L30.5 55.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M53.5 45.5 L33.5 65.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M49.5 48.5 L36.5 61.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M59.5 52 L39.5 72" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M55.5 55 L42.5 68" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M65.5 58 L45.5 78" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M61.5 61 L48.5 74" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M71.5 64.5 L51.5 84.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M67.5 67.5 L54.5 80.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M77.5 70.5 L57.5 90.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M73.5 73.5 L60.5 86.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M82 84 L66 98" stroke="url(#cw2)" stroke-width="6" stroke-linecap="round"/></g>
             <path d="M6 45 C4 38 10 28 21 17 L31 25 C23 31 15 38 10 46 C9 48 7 48 6 45Z" fill="url(#cw2)" stroke="#2E1B0E" stroke-width="1.6" stroke-linejoin="round"/>
@@ -365,7 +365,7 @@ window.ITEMS = [
         open: 'pencil'
     },
     {
-        id: 'phone', name: 'my iphone', zip: 'shades', l: 82.2, t: 15.7, w: 7.7, r: -8,
+        id: 'phone', name: 'my iphone', zip: 'shades', l: 82.2, t: 15.7, w: 7.0, r: -3,
         art: `<svg viewBox="0 0 94 190"><defs><linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F5F6"/><stop offset=".55" stop-color="#E2E4E7"/><stop offset="1" stop-color="#CED1D5"/></linearGradient></defs>
             <rect x="3" y="3" width="88" height="184" rx="16" fill="#F2C6C8" ${S}/><rect x="5" y="6" width="84" height="54" rx="13" fill="#E9AFB4" stroke="#3A2626" stroke-width="1.2"/>
             <rect x="8" y="9" width="78" height="48" rx="10" fill="url(#silver)" stroke="#3A2626" stroke-width="1.6"/>
@@ -462,7 +462,7 @@ window.STICKERS = [
 
 window.LID = (big) => `<svg viewBox="0 0 300 214" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
     <defs><clipPath id="lidclip${big ? 'b' : ''}"><rect x="2" y="2" width="296" height="210" rx="12"/></clipPath></defs>
-    <image href="assets/img/laptop-lid.jpg" x="2" y="2" width="296" height="210" preserveAspectRatio="xMidYMid slice" clip-path="url(#lidclip${big ? 'b' : ''})"/>
+    <image href="assets/img/laptop-lid.jpg?v=1790826509" x="2" y="2" width="296" height="210" preserveAspectRatio="xMidYMid slice" clip-path="url(#lidclip${big ? 'b' : ''})"/>
     <rect x="2" y="2" width="296" height="210" rx="12" fill="none" ${S}/>
     ${big ? window.STICKERS.map(k => `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}"><circle class="stk-in" cx="${k.x}" cy="${k.y}" r="${k.r}" fill="#fff" fill-opacity="0"/></g>`).join('') : ''}
 </svg>`;
