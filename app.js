@@ -285,19 +285,27 @@ const VIEWS = {
         </div>
         <div class="row" style="justify-content:space-between"><button class="btn" type="button" id="art-prev">← previous page</button><button class="btn solid" type="button" id="art-next">next page →</button></div>`,
 
-    wallet: () => `
+    wallet: () => {
+        // left panel and center panel, three slots each, like the real Victorine
+        const order = ['id', 'dl', 'bofadebit', 'bofa', 'amexgold', 'amexblue'];
+        const idx = k => CARDS.findIndex(c => c.kind === k);
+        const slot = (k, n) => { const i = idx(k); return i < 0 ? '' : `<div class="vslot" style="--n:${n}">${cardHTML(CARDS[i], i)}<span class="pocket"></span></div>`; };
+        return `
         <h2>My <em>wallet</em></h2>
-        <p class="note">tap the gold snap. everything important is in here.</p>
-        <div class="wallet-scene">
-            <div class="wallet" id="wallet">
-                <div class="body"><span class="inside-name">SUHANI</span></div>
-                <div class="cards">${CARDS.map((c, i) => cardHTML(c, i)).join('')}</div>
-                <div class="flap"></div>
-                <span class="name">SUHANI</span>
-                <button class="snap" type="button" id="snap" aria-label="Open the wallet"></button>
+        <p class="note">louis vuitton victorine. tap a card, or the zip pocket for cash.</p>
+        <div class="vread" id="vread" aria-live="polite"></div>
+        <div class="vw" id="vw">
+            <button type="button" class="vw-closed" id="snap" aria-label="Open the wallet">${ITEMS.find(i => i.id === 'wallet').art}</button>
+            <div class="vw-open" aria-hidden="true">
+                <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: cash"><span class="cash" aria-hidden="true"><span class="note-bill" style="--i:0; --bg:#B9B4A8; --ink:#5E5A50"><b>₹500</b><i>भारत</i><em>₹500</em></span><span class="note-bill" style="--i:1; --bg:#EBC76A; --ink:#7A5A12"><b>₹200</b><i>भारत</i><em>₹200</em></span><span class="note-bill" style="--i:2; --bg:#B9A9DC; --ink:#4E3E80"><b>₹100</b><i>भारत</i><em>₹100</em></span><span class="note-bill" style="--i:3; --bg:#B7CFAE; --ink:#2F4A2A"><b>$20</b><i>USA</i><em>$20</em></span><span class="note-bill" style="--i:4; --bg:#CFDCC6; --ink:#3E5638"><b>$1</b><i>USA</i><em>$1</em></span></span></button>
+                <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
+                <div class="vgusset"></div>
+                <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>AUSTIN</small></span></div>
+                <div class="vflap"><span class="vsnap"></span></div>
             </div>
         </div>
-        <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`,
+        <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`;
+    },
 
     mildliners: () => penView({
         title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. every color is a class i took at ut austin.',
@@ -763,14 +771,16 @@ const AFTER = {
     },
 
     wallet: () => {
-        const w = $('#wallet'), detail = $('#card-detail');
-        const open = () => { w.classList.add('open'); $('#snap').setAttribute('aria-label', 'Wallet is open'); };
+        const vw = $('#vw'), detail = $('#card-detail'), read = $('#vread');
+        const open = () => { vw.classList.add('open'); vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1; };
         $('#snap').onclick = open;
-        w.querySelector('.flap').onclick = open;
-        w.querySelectorAll('.card').forEach(card => card.onclick = () => {
-            if (!w.classList.contains('open')) return open();
+        $('#vzip').onclick = () => { const on = vw.classList.toggle('cash-out'); if (on) toast('rupees for home, dollars for here ♡'); };
+        vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {
             const c = CARDS[+card.dataset.card];
-            w.querySelectorAll('.card').forEach(x => x.classList.toggle('picked', x === card));
+            vw.querySelectorAll('.vslot .card').forEach(x => x.classList.toggle('picked', x === card));
+            // the card slides up out of its slot, and a big copy shows above so you can read it
+            read.innerHTML = cardHTML(c, 0).replace('class="card', 'class="card big');
+            read.classList.remove('show'); void read.offsetWidth; read.classList.add('show');
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
         });
