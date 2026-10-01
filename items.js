@@ -127,7 +127,13 @@ window.ITEMS = [
     },
     {
         id: 'wallet', name: 'my wallet', zip: 'front', l: 80, t: 47, w: 10, r: -8,
-        art: `<svg viewBox="0 0 200 140"><rect x="6" y="10" width="188" height="124" rx="12" fill="#5A3A26" ${S}/><path d="M6 20 C6 14 10 10 16 10 H184 C190 10 194 14 194 20 V74 L100 118 L6 74Z" fill="#6B4730" ${S}/><g fill="#C99A5B"><path d="M40 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M160 34 l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/><path d="M100 26 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M40 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/><path d="M160 104 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/></g><text x="100" y="66" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="15" letter-spacing="4" fill="#E8C36A">SUHANI</text><circle cx="100" cy="104" r="9" fill="#E8C36A" ${S} stroke-width="2.5"/><path d="M4 30 h4 M4 60 h4 M4 90 h4" stroke="#B3263E" stroke-width="4"/></svg>`,
+        art: `<svg viewBox="0 0 100 160"><defs><pattern id="mono" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="#4E3424"/><g fill="#B98A4E"><path d="M6 3 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z"/><path d="M19 16 l1.4 2.6 2.6 1.4 -2.6 1.4 -1.4 2.6 -1.4 -2.6 -2.6 -1.4 2.6 -1.4z"/><circle cx="19" cy="6" r="2.6" fill="none" stroke="#B98A4E" stroke-width="1.1"/><circle cx="6" cy="19" r="1.2"/></g></pattern></defs>
+            <path d="M84 150 q2 6 -1 10" stroke="#B3263E" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <rect x="4" y="4" width="92" height="146" rx="5" fill="url(#mono)" ${S}/>
+            <path d="M5 8 v138" stroke="#2E1E14" stroke-width="2" opacity=".5"/>
+            <path d="M96 5 H54 L32 76 L56 149 H96 Z" fill="url(#mono)" ${S}/>
+            <path d="M93 9 H56 L35 76 L58 145 H93" fill="none" stroke="#3A2626" stroke-width="1" opacity=".35" stroke-dasharray="2 2"/>
+            <circle cx="41" cy="76" r="6" fill="#E3B754" ${S} stroke-width="2"/><circle cx="39.5" cy="74.5" r="1.8" fill="#FFF3C8"/></svg>`,
         open: 'wallet'
     },
     {

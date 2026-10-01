@@ -377,7 +377,7 @@ const VIEWS = {
 
     wallet: () => {
         // left panel and center panel, three slots each, like the real Victorine
-        const order = ['id', 'dl', 'bofadebit', 'bofa', 'amexgold', 'amexblue'];
+        const order = ['dl', 'amexgold', 'id', 'bofa', 'amexblue', 'bofadebit'];   // as they really sit: license + Delta gold on the left, BofA silver up top in the middle
         const idx = k => CARDS.findIndex(c => c.kind === k);
         const slot = (k, n) => { const i = idx(k); return i < 0 ? '' : `<div class="vslot" style="--n:${n}">${cardHTML(CARDS[i], i)}<span class="pocket"></span></div>`; };
         return `
@@ -390,7 +390,7 @@ const VIEWS = {
                 <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip for cash" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span><span class="cash" aria-hidden="true"><span class="note-bill" style="--i:0; --bg:#B9B4A8; --ink:#5E5A50"><b>₹500</b><i>भारत</i><em>₹500</em></span><span class="note-bill" style="--i:1; --bg:#EBC76A; --ink:#7A5A12"><b>₹200</b><i>भारत</i><em>₹200</em></span><span class="note-bill" style="--i:2; --bg:#B9A9DC; --ink:#4E3E80"><b>₹100</b><i>भारत</i><em>₹100</em></span><span class="note-bill" style="--i:3; --bg:#B7CFAE; --ink:#2F4A2A"><b>$20</b><i>USA</i><em>$20</em></span><span class="note-bill" style="--i:4; --bg:#CFDCC6; --ink:#3E5638"><b>$1</b><i>USA</i><em>$1</em></span></span></button>
                 <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
                 <div class="vgusset"></div>
-                <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>AUSTIN</small></span></div>
+                <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>made in italy</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
             </div>
             <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
@@ -609,6 +609,37 @@ const VIEWS = {
     passport: () => `
         <h2>My <em>passport</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">United States of America</span></h2>
         <p class="note">six countries so far. the domestic trips live in my itineraries.</p>
+        <div class="pp-wrap"><div class="pp" id="pp">
+            <div class="pp-page pp-data">
+                <span class="pp-guil" aria-hidden="true"></span>
+                <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
+                <span class="pp-usa" aria-hidden="true">USA</span>
+                <span class="pp-photo"><img src="assets/img/me.jpg" alt=""></span>
+                <span class="pp-fields">
+                    <span><i>Type</i> <b>carry-on only</b></span>
+                    <span><i>Passport No.</i> <b>NO PEEKING ♡</b></span>
+                    <span><i>Surname</i> <b>TIWARI</b></span>
+                    <span><i>Given names</i> <b>SUHANI M</b></span>
+                    <span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span>
+                    <span><i>Date of birth</i> <b>a lady never tells</b></span>
+                    <span><i>Countries</i> <b>6 and counting</b></span>
+                    <span><i>Expires</i> <b>never stop going</b></span>
+                    <span><i>Authority</i> <b>my wanderlust</b></span>
+                </span>
+                <span class="pp-trail" aria-hidden="true">✈ · · · · · · · · · · · · · · · next stop: ?</span>
+            </div>
+            <button type="button" class="pp-flip" id="pp-flip" aria-label="Open my passport" aria-pressed="false">
+                <span class="pp-front">${ITEMS.find(i => i.id === 'passport').art}</span>
+                <span class="pp-back pp-page">
+                    <span class="pp-guil" aria-hidden="true"></span>
+                    <span class="pp-endorse">Endorsements</span>
+                    <span class="pp-ghost"><img src="assets/img/me.jpg" alt=""></span>
+                    <span class="pp-sig">Suhani Tiwari</span>
+                    <span class="pp-sigline">SIGNATURE OF BEARER</span>
+                </span>
+            </button>
+        </div></div>
+        <p class="pp-hint hand" id="pp-hint">tap the cover to open it</p>
         <div class="stamps">${[
             ['Thailand', '2010', '#C2185B', 'circle', '<path d="M0 -14 L-10 8 h20 Z M-4 -4 h8 M-6 2 h12" fill="none"/><path d="M0 -20 v6"/>'],
             ['Malaysia', '2010', '#1F6FD1', 'rect', '<path d="M-8 12 V-8 l2 -6 2 6 V12 M4 12 V-8 l2 -6 2 6 V12 M-4 -2 h8"/>'],
@@ -741,6 +772,15 @@ function cardHTML(c, i) {
 
 /* ---------- what happens right after something opens ---------- */
 const AFTER = {
+    passport: () => {
+        const pp = $('#pp'), b = $('#pp-flip');
+        b.onclick = () => {
+            const open = pp.classList.toggle('open');
+            b.setAttribute('aria-pressed', open); b.setAttribute('aria-label', open ? 'Close my passport' : 'Open my passport');
+            $('#pp-hint').textContent = open ? 'tap the top page to close it' : 'tap the cover to open it';
+            toast(open ? 'don’t look at the photo. okay fine, look.' : 'safe and sound ✈');
+        };
+    },
     romcom: () => {
         let days = 21;
         $('#rc-read').onclick = () => {
@@ -920,10 +960,22 @@ const AFTER = {
 
     wallet: () => {
         const vw = $('#vw'), detail = $('#card-detail'), read = $('#vread');
-        const open = () => { if ($('#vclose')) $('#vclose').textContent = 'Close the wallet'; vw.classList.add('open'); vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1; };
         // closing, like the real trifold: left side folds in, then the flap folds over, then it snaps
         const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
-        let closing = false;
+        let closing = false, opening = false;
+        // opening is the same thing backwards: unsnap, the flap swings out to the right, then the front panel swings open to the left
+        const open = async () => {
+            if (opening || closing || vw.classList.contains('open')) return;
+            opening = true;
+            if ($('#vclose')) $('#vclose').textContent = 'Close the wallet';
+            vw.classList.add('no-anim', 'open', 'fold-left', 'fold-right', 'p1-back', 'flap-back');
+            void vw.offsetWidth; vw.classList.remove('no-anim');
+            vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1;
+            await wait(120);
+            vw.classList.remove('fold-right'); setTimeout(() => vw.classList.remove('flap-back'), reduce ? 0 : 300); await wait(700);
+            vw.classList.remove('fold-left'); setTimeout(() => vw.classList.remove('p1-back'), reduce ? 0 : 300); await wait(650);
+            opening = false;
+        };
         const close = async () => {
             if (closing || !vw.classList.contains('open')) return;
             closing = true;
