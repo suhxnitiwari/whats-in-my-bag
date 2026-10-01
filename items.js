@@ -10,10 +10,10 @@ window.BAG = {
     /* my real backpack: black Samsonite, red accents. Four zippers, back to front:
        devices (laptop + iPad), main (notebooks, pens, makeup), the sunglasses pocket up top, the front pocket */
     pockets: [
-        { id: 'devices', label: 'devices', d: 'M52 104 C52 40 248 40 248 104' },
+        { id: 'devices', label: 'laptop, ipad, headphones, wallet & passport', d: 'M52 104 C52 40 248 40 248 104' },
         { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
         { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'wallet, passport, makeup & hair', d: 'M80 196 C84 176 216 176 220 196' }
+        { id: 'front', label: 'makeup, hair & the little things', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
@@ -154,7 +154,7 @@ window.ITEMS = [
         open: 'mascara'
     },
     {
-        id: 'wallet', name: 'my wallet', zip: 'front', l: 79.0, t: 36.2, w: 9.7, r: -6,
+        id: 'wallet', name: 'my wallet', zip: 'devices', l: 79.0, t: 36.2, w: 9.7, r: -6,
         art: `<svg viewBox="0 0 100 160"><defs><pattern id="mono" width="44" height="44" patternTransform="scale(.5)" patternUnits="userSpaceOnUse"><rect width="44" height="44" fill="#4E3424"/><g fill="#C29A5B"><text x="3" y="17" font-family="Georgia, serif" font-size="13" font-style="italic">L</text><text x="7.5" y="17" font-family="Georgia, serif" font-size="13">V</text><path d="M33 4 l2.2 4.4 4.4 2.2 -4.4 2.2 -2.2 4.4 -2.2 -4.4 -4.4 -2.2 4.4 -2.2z"/><circle cx="11" cy="33" r="6" fill="none" stroke="#C29A5B" stroke-width="1.2"/><path d="M11 29 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4z M7 33 a2 2 0 0 1 4 0 a2 2 0 0 1 -4 0z M11 37 a2 2 0 0 1 0 -4 a2 2 0 0 1 0 4z M15 33 a2 2 0 0 1 -4 0 a2 2 0 0 1 4 0z"/><path d="M33 26 c3 0 5 2 5 7 c-5 0 -5 0 -5 0 c0 0 0 0 0 -7z M33 26 c-3 0 -5 2 -5 7 c5 0 5 0 5 0z M33 40 c3 0 5 -2 5 -7 c-5 0 -5 0 -5 0z M33 40 c-3 0 -5 -2 -5 -7 c5 0 5 0 5 0z"/><circle cx="33" cy="33" r="1.2" fill="#4E3424"/></g></pattern></defs>
             <path d="M84 150 q2 6 -1 10" stroke="#B3263E" stroke-width="4" fill="none" stroke-linecap="round"/>
             <rect x="4" y="4" width="92" height="146" rx="5" fill="url(#mono)" ${S}/>
@@ -456,7 +456,7 @@ window.ITEMS = [
         open: 'phone'
     },
     {
-        id: 'passport', name: 'my passport', zip: 'front', l: 91.2, t: 36.2, w: 9.3, r: 7,
+        id: 'passport', name: 'my passport', zip: 'devices', l: 91.2, t: 36.2, w: 9.3, r: 7,
         art: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
             <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
                 <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>

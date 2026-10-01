@@ -523,7 +523,7 @@ function fairyDust(x, y) {
 
 /* ---------- snooping: progress, pocket personalities, objects that say something together ---------- */
 const POCKET_SAY = {
-    devices: 'the actually important pocket.',
+    devices: 'the if-i-lost-it-i’d-cry pocket.',
     main: 'the “i might need this” pocket. (i always do.)',
     shades: 'the pocket for things i grab all day, and things i don’t want to deal with.',
     front: 'the girl pocket.'
