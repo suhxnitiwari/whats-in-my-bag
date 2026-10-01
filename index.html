@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,600&family=Caveat:wght@500;700&family=Kalam:wght@400;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1790827219">
+<link rel="stylesheet" href="style.css?v=1790827308">
 </head>
 <body>
 
@@ -20,8 +20,8 @@
 <main>
     <section class="intro">
         <h1><span class="q">what’s in</span> <em>my bag?</em></h1>
-        <p class="lede">I carry my whole life in this backpack. Every zipper is a different pocket. Pull one and see what falls out, then tap anything to pick it up.</p>
-        <p class="all"><button type="button" class="btn" id="unzip-all">Unzip everything</button></p>
+        <p class="lede">I carry my whole life in this backpack.</p>
+        <p class="all"><button type="button" class="btn" id="unzip-all" hidden>fine. dump the whole thing →</button></p>
     </section>
 
     <section class="stage" id="stage" aria-label="My backpack and everything in it">
@@ -30,17 +30,22 @@
 
         <div class="bag" id="bag" role="group" aria-label="My backpack: pull a zipper to open a pocket">
             <span class="bag-art" id="bag-art"></span>
-            <span class="bag-hint hand" id="bag-hint">pull a zipper ↓</span>
+            <span class="bag-hint hand" id="bag-hint">pull me ↓</span>
         </div>
 
         <ul class="items" id="items" aria-label="Things in my bag"></ul>
     </section>
 
+    <p class="snoop mono" id="snoop" hidden aria-live="polite"></p>
+    <div class="ending" id="ending" hidden>
+        <p class="end-big">well. now you know too much.</p>
+        <p class="hand end-line">thanks for going through my bag. that’s kind of personal, but i’ll allow it.</p>
+        <button type="button" class="btn solid" id="put-back">put my life back together →</button>
+    </div>
     <p class="after mono" id="after" hidden>✦ Tap anything. <button type="button" id="repack" class="link">Zip it all back up</button></p>
 </main>
 
 <footer class="foot">
-    <p class="hand">thanks for going through my bag. that’s kind of personal, but i’ll allow it.</p>
     <p class="mono">© 2026 Suhani Tiwari · <a href="https://suhanitiwari.com">suhanitiwari.com</a></p>
 </footer>
 
@@ -53,7 +58,7 @@
 <div class="tint" id="tint" aria-hidden="true"></div>
 <div class="toast hand" id="toast" role="status" aria-live="polite"></div>
 
-<script src="items.js?v=1790827219"></script>
-<script src="app.js?v=1790827219"></script>
+<script src="items.js?v=1790827308"></script>
+<script src="app.js?v=1790827308"></script>
 </body>
 </html>

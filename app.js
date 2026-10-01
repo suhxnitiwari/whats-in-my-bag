@@ -280,6 +280,7 @@ function unzip(pk, from = 0) {
         $('#bag-hint').textContent = '';
         await slide(pk, from, 1);
         relayout();
+        if (!dumping()) toast(POCKET_SAY[pk.id] || '');
         const bagBox = bagBtn.getBoundingClientRect();
         for (const it of ITEMS.filter(i => i.zip === pk.id)) {
             const li = document.getElementById('item-' + it.id);
@@ -299,6 +300,7 @@ function unzip(pk, from = 0) {
             }
         }
         $('#after').hidden = false;
+        if (BAG.pockets.every(p => open.has(p.id))) bagBtn.classList.remove('tip');
         syncAllBtn();
     });
     return busy;
@@ -317,16 +319,25 @@ function zipUp(pk, from = 1) {
         pk.el.pull.setAttribute('aria-pressed', 'false');
         pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
         syncAllBtn();
-        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull a zipper ↓'; stage.classList.add('idle'); stage.style.aspectRatio = ''; bagBtn.style.top = ''; }
+        if (!open.size) { $('#after').hidden = true; $('#bag-hint').textContent = 'pull me ↓'; stage.classList.add('idle'); stage.style.aspectRatio = ''; bagBtn.style.top = ''; }
     });
     return busy;
 }
 // one button at the top: unzips everything, or once it's all out, packs it all back up
 const allBtn = $('#unzip-all');
-const syncAllBtn = () => { const all = BAG.pockets.every(pk => open.has(pk.id)); allBtn.textContent = all ? 'Pack it all back up' : 'Unzip everything'; allBtn.dataset.mode = all ? 'pack' : 'unzip'; };
+const syncAllBtn = () => {
+    const all = BAG.pockets.every(pk => open.has(pk.id));
+    allBtn.hidden = !open.size && !all;
+    allBtn.textContent = all ? 'put my life back together →' : 'fine. dump the whole thing →';
+    allBtn.dataset.mode = all ? 'pack' : 'dump';
+};
 allBtn.addEventListener('click', () => {
     if (allBtn.dataset.mode === 'pack') { $('#repack').click(); return; }
-    $('#stage').scrollIntoView({ block: 'center', behavior: 'auto' }); BAG.pockets.forEach(pk => unzip(pk));
+    $('#stage').scrollIntoView({ block: 'center', behavior: 'auto' });
+    // the whole bag tips over and everything spills out
+    bagBtn.classList.remove('tip'); void bagBtn.offsetWidth; bagBtn.classList.add('tip');
+    toast('okay. everything. you asked for this.');
+    setTimeout(() => { BAG.pockets.forEach(pk => unzip(pk)); }, reduce ? 0 : 650);
 });
 $('#repack').addEventListener('click', () => {
     BAG.pockets.forEach(pk => zipUp(pk));
@@ -516,8 +527,39 @@ function fairyDust(x, y) {
     requestAnimationFrame(step);
 }
 
+
+/* ---------- snooping: progress, pocket personalities, objects that say something together ---------- */
+const POCKET_SAY = {
+    devices: 'the actually important pocket.',
+    main: 'the “i might need this” pocket. (i always do.)',
+    shades: 'the grab-it-fast pocket.',
+    front: 'the girl pocket.'
+};
+const dumping = () => bagBtn.classList.contains('tip');
+const SNOOPABLE = ITEMS.filter(i => i.zip !== 'makeup' && i.zip !== 'attached').map(i => i.id);
+const snooped = new Set();
+const COMBOS = [
+    [['laptop', 'headphones'], 'laptop + airpods max: do not disturb.'],
+    [['laptop', 'padfolio', 'notebooks'], 'laptop, padfolio, notebooks. she will work anywhere.'],
+    [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
+    [['wallet', 'laptop'], 'a medici card and a laptop. apparently cafés are offices now.'],
+    [['passport', 'boarding'], 'passport and a boarding pass to “???”. she’s always halfway somewhere.'],
+    [['romcom', 'journal'], 'one book she’s not reading, one journal she always writes in.'],
+    [['keys', 'stanley'], 'car keys and a full stanley. she is not coming back for hours.']
+];
+const saidCombo = new Set();
+function snoop(id) {
+    if (!SNOOPABLE.includes(id) || snooped.has(id)) return;
+    snooped.add(id);
+    const el = $('#snoop'); el.hidden = false;
+    el.textContent = `${snooped.size} / ${SNOOPABLE.length} things snooped`;
+    for (const [ids, line] of COMBOS) if (!saidCombo.has(line) && ids.every(x => snooped.has(x))) { saidCombo.add(line); setTimeout(() => toast(line), 1400); break; }
+    if (snooped.size === SNOOPABLE.length) { el.textContent = '100% snooped'; $('#ending').hidden = false; }
+}
+
 /* ---------- picking something up ---------- */
 function pickUp(it) {
+    snoop(it.id);
     sheetLabel.textContent = it.name;
     sheetBody.innerHTML = typeof it.open === 'function' ? it.open() : (VIEWS[it.open] || (() => ''))();
     if (!sheet.open) sheet.showModal();
@@ -1805,3 +1847,5 @@ function toast(msg) {
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2400);
 }
 })();
+
+$('#put-back').addEventListener('click', () => { $('#ending').hidden = true; $('#repack').click(); toast('everything back where it belongs. mostly.'); });
