@@ -525,7 +525,7 @@ function fairyDust(x, y) {
 const POCKET_SAY = {
     devices: 'the actually important pocket.',
     main: 'the “i might need this” pocket. (i always do.)',
-    shades: 'the grab-it-fast pocket.',
+    shades: 'the grab-it-fast pocket. also where the junk lives.',
     front: 'the girl pocket.'
 };
 const dumping = () => bagBtn.classList.contains('tip');

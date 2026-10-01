@@ -385,7 +385,7 @@ window.ITEMS = [
         open: 'bear'
     },
     {
-        id: 'todo', name: 'an overdue to-do list', zip: 'main', l: 0, t: 0, w: 9.4, r: 8,
+        id: 'todo', name: 'an overdue to-do list', zip: 'shades', l: 0, t: 0, w: 9.4, r: 8,
         art: `<svg viewBox="0 0 110 120"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
     <g stroke="#C9D6EE" stroke-width="1">${[24,34,44,54,64,74,84,94,104].map(y => `<path d="M12 ${y} L100 ${y - 2}"/>`).join('')}</g><path d="M24 8 L22 114" stroke="#F0A7B6" stroke-width="1.2"/>
     <path d="M30 20 L70 30 M60 4 L52 40 M80 60 L104 62 M20 70 L44 96" stroke="#E8E2D6" stroke-width="1.2"/>
