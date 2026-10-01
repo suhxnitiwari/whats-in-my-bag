@@ -61,14 +61,14 @@ button { font: inherit; color: inherit; }
 .stage {
     position: relative; z-index: 2;
     width: min(1180px, calc(100% - 32px));
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 11;   /* everything on the table is drawn to one real-world scale: the backpack (~32 cm) is 22% wide */
     margin: clamp(16px, 3vw, 32px) auto 0;
 }
 .doodles { position: absolute; inset: 0; pointer-events: none; }
 .doodles svg { position: absolute; opacity: .7; }
 
 .bag {
-    position: absolute; left: 50%; top: 50%; width: 28%;
+    position: absolute; left: 50%; top: 50%; width: 22%;
     transform: translate(-50%, -50%);
     background: none; border: 0; padding: 0; cursor: pointer; z-index: 3;
     transition: width .7s var(--ease), top .7s var(--ease);
@@ -522,7 +522,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 /* the makeup pouch: unzip it and the lipstick, mascara and brushes pop up out of it */
 .mbag { position: relative; width: min(340px, 90%); margin: 0 auto; padding-top: 170px; }
-.mbag-inside { position: absolute; left: 0; right: 0; bottom: 60px; height: 230px; display: flex; justify-content: center; align-items: flex-end; gap: 22px; pointer-events: none; }
+.mbag-inside { position: absolute; left: -20px; right: -20px; bottom: 60px; height: 230px; display: flex; justify-content: center; align-items: flex-end; gap: 14px; pointer-events: none; }
 .mk { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: 0; padding: 0; cursor: pointer; transform: translateY(150px); opacity: 0; transition: transform .7s var(--ease) var(--d), opacity .3s var(--d); }
 .mk svg { height: 150px; width: auto; }
 .mk.brushes svg { height: 165px; }
@@ -538,3 +538,48 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .mpull span { display: block; width: 100%; height: 100%; border-radius: 6px; background: #D9A441; border: 2.5px solid var(--ink); }
 .mbag.open .mpull { left: calc(90% - 22px); }
 .mpull:focus-visible span { outline: 3px dashed var(--plum); outline-offset: 3px; }
+
+/* the keyring: tap the BMW fob, the apartment fob, or my सुहानी keychain */
+.keyring .kpart { cursor: pointer; transition: transform .25s; transform-box: fill-box; transform-origin: 50% 0; }
+.keyring .kpart:hover { transform: rotate(-4deg); }
+
+/* the iPad: Pinterest, Procreate, and a folder of things I built */
+.ipad-big { padding: 14px; border-radius: 26px; background: #2A2629; border: 3px solid var(--ink); }
+.ipad-screen { position: relative; height: 380px; border-radius: 12px; overflow: hidden; background: linear-gradient(160deg, #F7E9EC, #E9DDF3); }
+.ipad-home { display: flex; gap: 28px; padding: 40px 34px; }
+.ipad-home .papp .ic { width: 64px; height: 64px; border-radius: 16px; }
+.ipad-home .papp { font-size: .78rem; }
+.folder-ic { background: rgba(255,255,255,.6) !important; display: grid !important; grid-template-columns: 1fr 1fr; gap: 4px; padding: 8px; }
+.folder-ic i { border-radius: 4px; border: 1px solid var(--ink); }
+.ipad-view { position: absolute; inset: 0; overflow: auto; padding: 12px 14px; background: #fff; }
+.ipad-view.procreate { background: #1B1B1F; }
+.ipad-view .back { background: none; border: 0; padding: 0; cursor: pointer; color: #2E6FB7; text-transform: none; font-size: .8rem; }
+.ip-title { margin: 6px 0 10px; font-family: -apple-system, system-ui, sans-serif; font-weight: 700; font-size: 1rem; color: #111; }
+.ip-title.dark { color: #fff; }
+.pins { columns: 3; column-gap: 8px; }
+.pins img { width: 100%; margin-bottom: 8px; border-radius: 12px; break-inside: avoid; }
+.canvases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.canvas { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+.canvas img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.4); }
+.canvas span { display: block; margin-top: 4px; font-family: -apple-system, system-ui, sans-serif; font-size: .66rem; color: #ddd; }
+@media (max-width: 760px) { .pins { columns: 2; } .canvases { grid-template-columns: repeat(2, 1fr); } }
+
+/* the notepad is for writing by hand now (finger, stylus or mouse) */
+.pad { position: relative; }
+.pad canvas { display: block; width: 100%; height: 170px; touch-action: none; cursor: crosshair; }
+.pad-hint { position: absolute; left: 16px; top: 6px; font-family: var(--hand); font-size: 1.7rem; color: rgba(58,38,38,.32); pointer-events: none; }
+.pad-clear { position: absolute; right: 10px; bottom: 8px; background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; padding: 2px 10px; cursor: pointer; font-size: .62rem; }
+
+/* the highlighter reveal: the class name gets highlighted across a notebook line */
+.hl-line { display: block; padding: 4px 0 6px; border-bottom: 1.5px solid rgba(46,134,222,.25); max-width: 520px; margin: 0 auto; }
+.hl { font-family: var(--hand); font-size: 2rem; color: var(--ink); padding: 0 6px; background: linear-gradient(var(--hl), var(--hl)) no-repeat 0 60% / 0% 72%; animation: swipe .55s cubic-bezier(.3,.7,.3,1) forwards; border-radius: 3px; }
+@keyframes swipe { to { background-size: 100% 72%; } }
+.hl-sub { display: block; margin-top: 6px; color: var(--muted); font-size: .66rem; }
+@media (prefers-reduced-motion: reduce) { .hl { animation: none; background-size: 100% 72%; } }
+
+.mk svg { height: 130px; }
+.mk.brushes svg { height: 150px; }
+/* things pop fully out of the makeup pouch, labels on top */
+.mbag { padding-top: 230px; }
+.mbag-inside { bottom: 150px; }
+.mk { flex-direction: column-reverse; }

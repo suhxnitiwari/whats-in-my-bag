@@ -155,6 +155,11 @@ $('#repack').addEventListener('click', () => {
 });
 
 list.addEventListener('click', e => {
+    const part = e.target.closest('[data-part]');
+    if (part) {
+        if (part.dataset.part === 'tag') return toast('सुहानी: that’s Suhani, in Hindi ♡');
+        return pickUp(part.dataset.part === 'bmw' ? ITEMS.find(i => i.id === 'keys') : { id: 'apartment', name: 'my apartment fob', open: 'apartment' });
+    }
     const b = e.target.closest('[data-item]');
     if (b) pickUp(ITEMS.find(i => i.id === b.dataset.item));
 });
@@ -199,6 +204,7 @@ const VIEWS = {
         <div class="lists">
             <div class="love"><h3>always in my bag</h3><ul>
                 <li><b>Westman Atelier HydroBalm Tinted Lipstick, Glögg.</b> Sheer black cherry. My favorite lipstick, period.</li>
+                <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
                 <li><b>Lancôme Lash Idôle mascara.</b> My favorite mascara. Lifts without the clumps.</li>
                 <li><b>Morphe brushes.</b> My favorite brushes, full stop.</li>
                 <li><span class="todo">add another love</span></li>
@@ -238,7 +244,8 @@ const VIEWS = {
             <div class="mbag-inside" aria-live="polite">
                 <button type="button" class="mk" data-mk="lipstick" style="--d:0ms" aria-label="Westman Atelier lipstick, Glögg">${ITEMS.find(i => i.id === 'lipstick').art}<span>westman, glögg</span></button>
                 <button type="button" class="mk" data-mk="mascara" style="--d:120ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>lash idôle</span></button>
-                <button type="button" class="mk brushes" data-mk="brushes" style="--d:240ms" aria-label="Morphe brushes"><svg viewBox="0 0 90 200"><g stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round">${[[-12, '#1E1414'], [0, '#3A2D2D'], [12, '#1E1414']].map(([r, c], i) => `<g transform="rotate(${r} 45 190)"><rect x="39" y="70" width="12" height="120" rx="5" fill="${c}"/><rect x="38" y="52" width="14" height="22" rx="2" fill="#D9D9D9"/><path d="M38 52 C34 30 40 8 45 6 C50 8 56 30 52 52Z" fill="${i === 1 ? '#C9A27E' : '#E9D7C3'}"/></g>`).join('')}</g></svg><span>morphe brushes</span></button>
+                <button type="button" class="mk" data-mk="blush" style="--d:180ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>baby cheeks, mimi</span></button>
+                <button type="button" class="mk brushes" data-mk="brushes" style="--d:300ms" aria-label="Morphe brushes"><svg viewBox="0 0 90 200"><g stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round">${[[-12, '#1E1414'], [0, '#3A2D2D'], [12, '#1E1414']].map(([r, c], i) => `<g transform="rotate(${r} 45 190)"><rect x="39" y="70" width="12" height="120" rx="5" fill="${c}"/><rect x="38" y="52" width="14" height="22" rx="2" fill="#D9D9D9"/><path d="M38 52 C34 30 40 8 45 6 C50 8 56 30 52 52Z" fill="${i === 1 ? '#C9A27E' : '#E9D7C3'}"/></g>`).join('')}</g></svg><span>morphe brushes</span></button>
             </div>
             <div class="mbag-front">
                 <svg viewBox="0 0 300 170" aria-hidden="true"><defs><pattern id="vs2" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#F7C9D6"/><rect width="11" height="22" fill="#F29BB6"/></pattern></defs>
@@ -251,6 +258,13 @@ const VIEWS = {
         </div>
         <p class="pen-note" id="mk-note">pull the zipper</p>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="see-makeup2">My makeup loves &amp; skips</button></div>`,
+
+    apartment: () => `
+        <div class="fob" style="width:110px">${APT_FOB}</div>
+        <h2>My <em>apartment</em> fob</h2>
+        <p class="note">this one i can handle.</p>
+        <p>Address: wouldn’t you wanna knowwww.</p>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="beep">Tap it on the reader</button></div>`,
 
     sketchbook: () => `
         <div class="spread" id="spread">
@@ -274,13 +288,13 @@ const VIEWS = {
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`,
 
     mildliners: () => penView({
-        title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. one highlighter for every tool on my résumé.',
-        list: PENS, front: ITEMS.find(i => i.id === 'pouch').art, pick: 'pick a highlighter',
+        title: 'My <em>Mildliner</em> pouch', note: 'the full 25-pack. every color is a class i took at ut austin.',
+        list: PENS, front: ITEMS.find(i => i.id === 'pouch').art, pick: 'pick a highlighter, see the class',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="5" y="30" width="24" height="132" rx="5" fill="#FFFDF9" stroke="#3A2626" stroke-width="3"/><rect x="5" y="4" width="24" height="32" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="5" y="158" width="24" height="28" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><path d="M11 50 h12 M11 142 h12" stroke="${c}" stroke-width="3"/></svg>`
     }),
 
     gelpens: () => penView({
-        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color, then write anything.',
+        title: 'My <em>Paper Mate</em> pouch', note: 'paper mate inkjoy gel. pick a color, then write on the notepad.',
         list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
         pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
     }),
@@ -293,8 +307,8 @@ const VIEWS = {
         <p class="shades-note" id="shades-note">${document.body.classList.contains('shades') ? 'ooh, very mysterious.' : ''}</p>`,
 
     keys: () => `
-        <div class="fob" id="fob">${ITEMS.find(i => i.id === 'keys').art}</div>
-        <h2>My BMW keys <span class="mono" style="font-size:.7rem; color:var(--muted)">+ apartment fob</span></h2>
+        <div class="fob" id="fob">${BMW_FOB}</div>
+        <h2>My BMW keys</h2>
         <p class="note" style="font-size:1.8rem">whoops, i’m just a girl 🎀</p>
         <p class="note" style="margin-top:-12px">(it’s the curb’s fault. it came out of nowhere.)</p>
         <div class="fob-btns">
@@ -302,7 +316,6 @@ const VIEWS = {
             <button class="btn" type="button" data-fob="unlock">🔓 Unlock</button>
             <button class="btn" type="button" data-fob="trunk">Trunk</button>
             <button class="btn solid" type="button" data-fob="panic">Panic</button>
-            <button class="btn" type="button" data-fob="home">🏠 Apartment</button>
         </div>
         <div class="record"><p class="mono" style="margin:0 0 6px; color:var(--plum)">My driving record, honestly</p><ul>
             <li>Parallel parking: working on it</li>
@@ -450,13 +463,15 @@ const VIEWS = {
 
     ipad: () => `
         <h2>My <em>iPad</em></h2>
-        <p class="note">every app on my home screen is something i built</p>
-        <div class="apps">${[
-            ['Listening History', 'LH', '#F4A7B9', 'https://listening-history.onrender.com/'],
-            ['Saturday in Austin', 'SA', '#8FD19E', 'https://suhxnitiwari.github.io/saturday-in-austin/'],
-            ['suhanitiwari.com', 'ST', '#F7D54A', 'https://suhanitiwari.com'],
-            ['What’s in my bag?', '👜', '#B9A3E8', 'https://github.com/suhxnitiwari/whats-in-my-bag']
-        ].map(([n, t, c, h]) => `<a class="app" href="${h}" target="_blank" rel="noopener"><span class="icon" style="background:${c}">${t}</span><span>${n}</span></a>`).join('')}</div>`,
+        <p class="note">mostly pinterest and procreate, honestly</p>
+        <div class="ipad-big"><div class="ipad-screen">
+            <div class="ipad-home" id="ipad-home">
+                <button type="button" class="papp" data-ip="pinterest"><span class="ic" style="background:#E60023"><svg viewBox="0 0 40 40"><path d="M20 9 c-8 0 -11 6 -9 10 c1 2 2 2 2 1 c-1 -3 1 -7 7 -7 c5 0 6 3 5 6 c-1 4 -3 5 -5 5 c-2 0 -2 -2 -1 -3 l1 -4 m0 0 l-3 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></span>Pinterest</button>
+                <button type="button" class="papp" data-ip="procreate"><span class="ic" style="background:#1B1B1F"><svg viewBox="0 0 40 40"><path d="M10 30 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="11" cy="30" r="3" fill="#B9A3E8"/></svg></span>Procreate</button>
+                <button type="button" class="papp" data-ip="made"><span class="ic folder-ic">${['#F4A7B9', '#8FD19E', '#F7D54A', '#B9A3E8'].map(c => `<i style="background:${c}"></i>`).join('')}</span>Made by me</button>
+            </div>
+            <div class="ipad-view" id="ipad-view" hidden></div>
+        </div></div>`,
 
     phone: () => `
         <h2>My <em>phone</em></h2>
@@ -519,7 +534,7 @@ function penView({ title, note, list, front, pen, pick }) {
             <div class="pouch-front">${front}</div>
         </div>
         <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>
-        ${list === GELPENS ? `<div class="pad"><label class="sr" for="pad-text">Write something</label><textarea id="pad-text" maxlength="200" placeholder="write anything…"></textarea></div>` : ''}
+        ${list === GELPENS ? `<div class="pad"><canvas id="pad-canvas" aria-label="Notepad: write or draw with the pen you picked"></canvas><span class="pad-hint" id="pad-hint">write anything…</span><button type="button" class="pad-clear mono" id="pad-clear">clear</button></div>` : ''}
         ${list === GELPENS ? `<div class="in-pencil"><span class="pencils" aria-hidden="true">${['#7FC6E8', '#F4A7B9', '#B9A3E8', '#8FD19E'].map(c => `<i style="background:${c}"></i>`).join('')}</span>
             <div><p class="mono" style="margin:0 0 4px; color:var(--plum)">Plus my BIC Xtra-Smooth mechanical pencils</p>
             <p style="margin:0">For anything still in draft. <b>In pencil right now:</b> <span class="todo">what are you working on?</span></p></div></div>` : ''}`;
@@ -656,6 +671,32 @@ const AFTER = {
         });
         $('#see-makeup2').onclick = () => pickUp({ id: 'makeup', name: 'my makeup', open: 'makeup' });
     },
+    ipad: () => {
+        const view = $('#ipad-view'), home = $('#ipad-home');
+        const back = '<button type="button" class="back mono" id="ip-back">‹ home</button>';
+        sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {
+            const k = b.dataset.ip;
+            if (k === 'pinterest') {
+                const pins = ['art/embracing-cultural-identity', 'img/cake-solar-system', 'img/cafe', 'art/braid', 'posters/gossip-girl', 'img/nyc', 'img/cupcakes', 'art/coexistence-of-both-my-worlds', 'img/chicago', 'art/packing-home', 'img/cake-lego', 'art/vanity'];
+                view.innerHTML = back + `<p class="ip-title">my board</p><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
+            } else if (k === 'procreate') {
+                view.innerHTML = back + `<p class="ip-title dark">Gallery</p><div class="canvases">${ART.map(([t, , f], i) => `<button type="button" class="canvas" data-page="${i}"><img src="assets/art/${f}.jpg" alt=""><span>${t}</span></button>`).join('')}</div>`;
+                view.classList.add('procreate');
+            } else {
+                view.innerHTML = back + `<p class="ip-title">made by me</p><div class="apps">${[
+                    ['Listening History', 'LH', '#F4A7B9', 'https://listening-history.onrender.com/'],
+                    ['Saturday in Austin', 'SA', '#8FD19E', 'https://suhxnitiwari.github.io/saturday-in-austin/'],
+                    ['suhanitiwari.com', 'ST', '#F7D54A', 'https://suhanitiwari.com'],
+                    ['What’s in my bag?', '👜', '#B9A3E8', 'https://github.com/suhxnitiwari/whats-in-my-bag']
+                ].map(([n, t, c, h]) => `<a class="app" href="${h}" target="_blank" rel="noopener"><span class="icon" style="background:${c}">${t}</span><span>${n}</span></a>`).join('')}</div>`;
+            }
+            if (k !== 'procreate') view.classList.remove('procreate');
+            home.hidden = true; view.hidden = false;
+            $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
+            view.querySelectorAll('.canvas').forEach(c => c.onclick = () => pickUp(ITEMS.find(i => i.id === 'sketchbook')));
+        });
+    },
+    apartment: () => { $('#beep').onclick = () => toast('beep. door’s open. welcome home ♡'); },
     mascara: () => {
         setTimeout(() => $('#masc') && $('#masc').classList.add('out'), reduce ? 0 : 350);
         $('#see-makeup').onclick = () => pickUp({ id: 'makeup', name: 'my makeup pouch', open: 'makeup' });
@@ -713,8 +754,7 @@ const AFTER = {
             lock: 'locked. probably. let me press it again.',
             unlock: 'unlocked… now which car was it?',
             trunk: 'the trunk is open. i did not mean to do that.',
-            panic: 'beep beep beep. sorry, Austin.',
-            home: 'beep. door’s open. this one i can handle.'
+            panic: 'beep beep beep. sorry, Austin.'
         };
         sheetBody.querySelector('.fob-btns').onclick = e => {
             const b = e.target.closest('[data-fob]'); if (!b) return;
@@ -798,18 +838,50 @@ const AFTER = {
 };
 
 /* ---------- little helpers ---------- */
+let ink = '#E63F7A';
+function setupPad() {
+    const cv = $('#pad-canvas'); if (!cv) return;
+    const ctx = cv.getContext('2d'), hint = $('#pad-hint');
+    const size = () => {
+        const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
+        const saved = cv.width ? ctx.getImageData(0, 0, cv.width, cv.height) : null;
+        cv.width = r.width * d; cv.height = r.height * d;
+        ctx.scale(d, d); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        if (saved) ctx.putImageData(saved, 0, 0);
+    };
+    size();
+    let drawing = false, last = null;
+    const pt = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    cv.addEventListener('pointerdown', e => {
+        e.preventDefault(); cv.setPointerCapture(e.pointerId);
+        drawing = true; last = pt(e); hint.hidden = true;
+        ctx.strokeStyle = ink; ctx.lineWidth = 2.6;
+        ctx.beginPath(); ctx.arc(last.x, last.y, 1.3, 0, Math.PI * 2); ctx.fillStyle = ink; ctx.fill();
+    });
+    cv.addEventListener('pointermove', e => {
+        if (!drawing) return;
+        const p = pt(e), mid = { x: (last.x + p.x) / 2, y: (last.y + p.y) / 2 };
+        ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.quadraticCurveTo(last.x, last.y, mid.x, mid.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+        last = p;
+    });
+    const stop = () => { drawing = false; };
+    cv.addEventListener('pointerup', stop); cv.addEventListener('pointercancel', stop);
+    $('#pad-clear').onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); hint.hidden = false; };
+}
 function pensAfter(list) {
     const pens = $('#pens'), note = $('#pen-note');
+    setupPad();
     setTimeout(() => { pens.classList.add('open'); note.textContent = pens.dataset.pick; }, reduce ? 0 : 400);
     pens.onclick = e => {
         const b = e.target.closest('[data-pen]'); if (!b) return;
         const p = list[+b.dataset.pen];
         // highlighters tell you which tool they are; gel pens just write in their color
-        note.innerHTML = p.note
+        note.innerHTML = p.full
+            ? `<span class="hl-line"><span class="hl" style="--hl:${p.c}">${p.full}</span></span><span class="hl-sub mono">${p.subject}${p.name.startsWith('MIS') ? ' · ' + p.name : ''} · UT Austin</span>`
+            : p.note
             ? `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`
             : `writing in <span style="color:${p.c}; font-size:1.7rem">${p.name.toLowerCase()}</span>`;
-        const pad = $('#pad-text');
-        if (pad && !p.note) { pad.style.color = p.c; pad.style.caretColor = p.c; pad.focus(); }
+        if (!p.note && !p.full) ink = p.c;
     };
 }
 
