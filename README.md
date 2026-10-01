@@ -10,15 +10,17 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Sketchbook | A flip-through of my digital art |
 | Westman Atelier lipstick (Glögg), Lancôme Lash Idôle, Victoria's Secret makeup pouch | Makeup loves and skips (Morphe brushes included) |
 | Wallet | Pops open to my cards: my UT Austin student ID, Oracle, Acacia Advisors, Outlier, Girls Who Code |
-| Pencil pouch | Unzips into every tool I use: Python, SQL, C#, JavaScript, Snowflake, Tableau, Power BI, Excel |
+| Mildliner pouch | Highlighters that fan out: every tool I use (Python, SQL, C#, JavaScript, Snowflake, Tableau, Power BI, Excel) |
+| Paper Mate pouch | Gel pens: my top five CliftonStrengths |
+| Pink binder | My case studies: Owala, Starbucks, FuelFlow, Acacia Advisors |
 | Sunglasses | How I see things (and they tint the whole page) |
 | Car keys | The truth about my driving |
 | Chanel mirror | The real me |
-| Laptop | My projects, as file folders |
-| Notebooks | My classes |
+| Laptop | My real sticker layout; every sticker opens a project |
+| Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Cable knit sweater | Because I get cold easily |
-| Sitara, the bag charm | My AI guide |
+| Hot cocoa bag charm | Sitara, my AI guide, lives in it |
 
 ## Built with
 

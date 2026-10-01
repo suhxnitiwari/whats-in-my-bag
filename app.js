@@ -6,16 +6,16 @@ const stage = $('#stage'), bagBtn = $('#bag'), bagArt = $('#bag-art'), list = $(
 const sheet = $('#sheet'), sheetBody = $('#sheet-body'), sheetLabel = $('#sheet-label');
 const phone = () => matchMedia('(max-width: 760px)').matches;
 
-/* ---------- the bag, with Sitara hanging off it as a charm ---------- */
+/* ---------- the bag, with my hot cocoa charm clipped on (Sitara lives in it) ---------- */
 bagArt.innerHTML = BAG.closed;
 const charm = document.createElement('span');
 charm.className = 'charm';
 charm.setAttribute('role', 'button');
 charm.setAttribute('tabindex', '0');
-charm.setAttribute('aria-label', 'Sitara, my bag charm: ask her anything');
-charm.innerHTML = '<img src="assets/img/sitara.jpg" alt="">';
+charm.setAttribute('aria-label', 'My hot cocoa bag charm: Sitara lives in it. Ask her anything');
+charm.innerHTML = BAG.charm;
 bagBtn.appendChild(charm);
-const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sitara', name: 'sitara, my bag charm', open: 'sitara' }); };
+const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'sitara', name: 'my hot cocoa charm', open: 'sitara' }); };
 charm.addEventListener('click', openCharm);
 charm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCharm(e); });
 
@@ -152,18 +152,17 @@ const VIEWS = {
         </div>
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`,
 
-    pouch: () => `
-        <h2>My <em>pencil pouch</em></h2>
-        <p class="note">a whole lotta stationery. every pen is a tool i actually use.</p>
-        <div class="pouch-scene">
-            <div class="pens" id="pens">${PENS.map((p, i) => `
-                <button class="pen" type="button" style="--i:${i}; --mid:${(PENS.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
-                    <svg viewBox="0 0 34 190"><rect x="3" y="20" width="28" height="150" rx="6" fill="${p.c}" stroke="#3A2626" stroke-width="3"/><rect x="3" y="4" width="28" height="22" rx="6" fill="#3A2626"/><path d="M8 170 L17 188 L26 170Z" fill="#F7E3C8" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/></svg>
-                    <span class="lbl">${p.name}</span>
-                </button>`).join('')}</div>
-            <div class="pouch-front">${ITEMS.find(i => i.id === 'pouch').art}</div>
-        </div>
-        <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>`,
+    mildliners: () => penView({
+        title: 'My <em>Mildliner</em> pouch', note: 'a whole pouch just for highlighters. each one is a tool i actually use.',
+        list: PENS, front: ITEMS.find(i => i.id === 'pouch').art, pick: 'pick a highlighter',
+        pen: c => `<svg viewBox="0 0 34 190"><rect x="5" y="30" width="24" height="132" rx="5" fill="#FFFDF9" stroke="#3A2626" stroke-width="3"/><rect x="5" y="4" width="24" height="32" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="5" y="158" width="24" height="28" rx="6" fill="${c}" stroke="#3A2626" stroke-width="3"/><path d="M11 50 h12 M11 142 h12" stroke="${c}" stroke-width="3"/></svg>`
+    }),
+
+    gelpens: () => penView({
+        title: 'My <em>Paper Mate</em> pouch', note: 'my gel pens. each one is one of my top five CliftonStrengths.',
+        list: GELPENS, front: ITEMS.find(i => i.id === 'penpouch').art, pick: 'pick a pen',
+        pen: c => `<svg viewBox="0 0 34 190"><rect x="7" y="16" width="20" height="150" rx="9" fill="${c}" stroke="#3A2626" stroke-width="3"/><rect x="9" y="22" width="5" height="120" rx="2.5" fill="#fff" opacity=".35"/><rect x="21" y="10" width="6" height="56" rx="3" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><rect x="11" y="2" width="12" height="16" rx="4" fill="${c}" stroke="#3A2626" stroke-width="2.5"/><path d="M11 166 L17 186 L23 166Z" fill="#E8E2DC" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/></svg>`
+    }),
 
     sunglasses: () => `
         <h2>How I <em>see</em> things</h2>
@@ -191,7 +190,9 @@ const VIEWS = {
 
     laptop: () => `
         <h2>My <em>laptop</em></h2>
-        <p class="note">the stickers are load-bearing. here’s what’s on it.</p>
+        <p class="note">the stickers are load-bearing. tap one.</p>
+        <div class="lid-wrap">${LID(true)}<p class="stk-label hand" id="stk-label" aria-live="polite">every sticker opens something</p></div>
+        <p class="mono" style="color:var(--plum); margin:22px 0 10px">Or open a folder</p>
         <div class="folders">${PROJECTS.map(p => `
             <a class="folder" href="${p.href}" target="_blank" rel="noopener" style="--c:${p.c}">
                 <span class="f"><img src="${p.img}" alt=""></span>
@@ -229,14 +230,78 @@ const VIEWS = {
         <div class="row"><button class="btn solid" type="button" id="wear">Put it on</button></div>`,
 
     notebooks: () => `
-        <h2>My <em>notebooks</em></h2>
-        <p class="note">one for every class. yes, i still take notes by hand.</p>
-        <div class="folders">${[
-            ['Web App Development', '#F2C6C8'], ['Full-Stack Web Apps', '#CFE3F3'], ['Database Management', '#CDE6D0'],
-            ['Problem Solving & Programming', '#F8E7A9'], ['Strategic IT Management', '#D9C8F0'], ['Intro to Data Science', '#F4A7B9'],
-            ['Decision Science', '#DDE2CF'], ['Statistics for Business', '#F2C6C8']
-        ].map(([n, c]) => `<span class="folder" style="--c:${c}; cursor:default"><span class="f" style="display:grid; place-items:center"><span class="hand" style="font-size:1.3rem; text-align:center; padding:8px; line-height:1.05">${n}</span></span></span>`).join('')}</div>
+        <h2>My <em>Erin Condren</em> notebooks</h2>
+        <p class="note">two custom ones. yes, i still take notes by hand.</p>
+        <div class="ec-pair">
+            <div class="ec-one">
+                ${window.EC(['#5E7486', '#F3EDE3', '#C2407A', '#F4C6D2'])}
+                <div class="ec-page"><p class="hand ec-h">my classes</p><ul class="hand">
+                    <li>Web App Development</li><li>Full-Stack Web App Development</li><li>Database Management</li>
+                    <li>Problem Solving &amp; Programming</li><li>Strategic IT Management</li><li>Intro to IT Management</li>
+                    <li>Intro to Data Science</li><li>Intro to Decision Science</li><li>Statistics for Business</li>
+                </ul></div>
+            </div>
+            <div class="ec-one">
+                ${window.EC(['#C2407A', '#F4C6D2', '#8A9AA6', '#F3EDE3'])}
+                <div class="ec-page"><p class="hand ec-h">notebook no. 2</p><p><span class="todo">what’s in this one?</span></p></div>
+            </div>
+        </div>
         <div class="row"><a class="btn" href="https://suhanitiwari.com/home/study#coursework" target="_blank" rel="noopener">All my coursework ↗</a></div>`,
+
+    binder: () => `
+        <h2>My <em>pink binder</em></h2>
+        <p class="note">case readings in the front, my own case studies in the back</p>
+        <div class="binder-open">
+            <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="bpages">${[
+                ['owala', 'Owala Marathon Series', 'Brand strategy', 'assets/img/owala.jpg'],
+                ['starbucks', 'Starbucks app strategy', 'Product strategy', 'assets/img/starbucks.jpg'],
+                ['fuelflow', 'FuelFlow', 'Service concept', 'assets/img/fuelflow.jpg'],
+                ['acacia', 'Acacia Advisors', 'Go-to-market', '']
+            ].map(([k, n, t, img], i) => `<button type="button" class="bpage" data-case="${k}" style="--i:${i}">
+                    <span class="holes" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="mono" style="color:var(--plum)">Case ${i + 1} · ${t}</span>
+                    <b>${n}</b>${img ? `<img src="${img}" alt="">` : '<span class="bignum">+20%</span>'}
+                </button>`).join('')}</div>
+        </div>`,
+
+    fuelflow: () => `
+        <h2><em>FuelFlow</em></h2>
+        <p class="note">feeding a campus between classes, without the line</p>
+        <div class="stats"><div><b>60 sec</b><span>checkout</span></div><div><b>10g+</b><span>protein meals</span></div><div><b>≤ $12.50</b><span>every meal</span></div></div>
+        <div class="shot"><img src="assets/img/fuelflow.jpg" alt="FuelFlow station concept inside McCombs"></div>
+        <p>Smart nutrition stations in 6 to 8 academic buildings. My concept render puts one inside McCombs.</p>`,
+
+    acacia: () => `
+        <h2><em>Acacia Advisors</em></h2>
+        <p class="note">making AI and cloud services make sense to the people buying them</p>
+        <div class="stats"><div><b>+20%</b><span>website traffic</span></div><div><b>+27%</b><span>LinkedIn visits</span></div><div><b>$1M</b><span>Azure AI go-to-market</span></div></div>
+        <p>Market research and competitive analysis across client engagements, then the messaging and pricing story for a manufacturing AI product.</p>`,
+
+    book: () => `
+        <h2>Girls Can Be Engineers, <em>Too!</em></h2>
+        <p class="note">i wrote it and illustrated it. seven real women engineers.</p>
+        <div class="stats"><div><b>#1</b><span>New Release in STEM Education</span></div><div><b>1,000</b><span>copies in month one</span></div><div><b>$4,194</b><span>donated to DFW libraries</span></div></div>
+        <div class="shot"><img src="assets/img/book.jpg" alt="A young reader holding my book"></div>`,
+
+    owala: () => `
+        <h2>The Owala <em>Marathon Series</em></h2>
+        <p class="note">runners don’t keep water bottles. they keep proof.</p>
+        <div class="shot"><img src="assets/img/owala.jpg" alt="Austin Marathon Owala bottles"></div>
+        <p>A collectible race-edition bottle for 8 cities, each with the city, the date and your finish time.</p>`,
+
+    starbucks: () => `
+        <h2>The Starbucks app, <em>reimagined</em></h2>
+        <p class="note">recommending your drink before you know you want it</p>
+        <div class="shot" style="background:var(--mint); padding:20px"><img src="assets/img/starbucks.jpg" alt="My Starbucks app prototype" style="max-width:380px; margin:0 auto; border-radius:14px"></div>
+        <p>“Set the vibe” AI recommendations, with a roadmap ranked by RICE scoring.</p>`,
+
+    saturday: () => `
+        <h2>Saturday <em>in Austin</em></h2>
+        <p class="note">can an algorithm plan a saturday you’d actually want?</p>
+        <div class="stats"><div><b>208</b><span>Austin places</span></div><div><b>14</b><span>neighborhoods</span></div><div><b>10</b><span>Saturday moods</span></div></div>
+        <div class="shot"><img src="assets/img/saturday.jpg" alt="Saturday in Austin"></div>
+        <div class="row"><a class="btn solid" href="https://suhxnitiwari.github.io/saturday-in-austin/" target="_blank" rel="noopener">Plan my Saturday ↗</a></div>`,
 
     sitara: () => `
         <h2>Hi, I’m <em>Sitara</em></h2>
@@ -248,6 +313,20 @@ const VIEWS = {
             <button class="btn" type="button" data-q="2">Is she a good driver?</button>
         </div>`
 };
+
+function penView({ title, note, list, front, pen, pick }) {
+    return `
+        <h2>${title}</h2>
+        <p class="note">${note}</p>
+        <div class="pouch-scene">
+            <div class="pens" id="pens" data-pick="${pick}">${list.map((p, i) => `
+                <button class="pen" type="button" style="--i:${i}; --mid:${(list.length - 1) / 2}" data-pen="${i}" aria-label="${p.name}">
+                    ${pen(p.c)}<span class="lbl">${p.name}</span>
+                </button>`).join('')}</div>
+            <div class="pouch-front">${front}</div>
+        </div>
+        <p class="pen-note" id="pen-note" aria-live="polite">unzipping…</p>`;
+}
 
 function cardHTML(c, i) {
     if (c.kind === 'id') return `
@@ -299,15 +378,12 @@ const AFTER = {
         if (!reduce) setTimeout(open, 700); else open();
     },
 
-    pouch: () => {
-        const pens = $('#pens'), note = $('#pen-note');
-        setTimeout(() => { pens.classList.add('open'); note.textContent = 'pick a pen'; }, reduce ? 0 : 400);
-        pens.onclick = e => {
-            const b = e.target.closest('[data-pen]'); if (!b) return;
-            const p = PENS[+b.dataset.pen];
-            note.innerHTML = `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`;
-        };
+    binder: () => {
+        sheetBody.querySelectorAll('.bpage').forEach(b => b.onclick = () => pickUp({ id: b.dataset.case, name: 'from my binder', open: b.dataset.case }));
     },
+
+    mildliners: () => pensAfter(PENS),
+    gelpens: () => pensAfter(GELPENS),
 
     sunglasses: () => {
         $('#shades').onclick = () => {
@@ -349,6 +425,22 @@ const AFTER = {
         };
     },
 
+    laptop: () => {
+        const label = $('#stk-label');
+        sheetBody.querySelectorAll('.stk').forEach(g => {
+            const k = STICKERS.find(x => x.id === g.dataset.sticker);
+            const go = () => {
+                if (k.href) return window.open(k.href, '_blank', 'noopener');
+                const it = ITEMS.find(i => i.id === k.go);
+                pickUp(it || { id: k.go, name: k.label.split(' → ')[1], open: k.go });
+            };
+            g.addEventListener('mouseenter', () => label.textContent = k.label);
+            g.addEventListener('focus', () => label.textContent = k.label);
+            g.addEventListener('click', go);
+            g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+        });
+    },
+
     mirror: () => setTimeout(() => { const lid = $('#lid'); if (lid) lid.style.transform = 'rotateX(170deg)'; }, reduce ? 0 : 450),
 
     sitara: () => {
@@ -367,7 +459,7 @@ const AFTER = {
             if (me || reduce) { b.textContent = text; return Promise.resolve(); }
             return type(b, text);
         };
-        say('Hi! I’m Sitara ✦ I live on Suhani’s bag. Ask me anything about her.');
+        say('Hi! I’m Sitara ✦ I live in Suhani’s hot cocoa charm. Ask me anything about her.');
         $('#chips').onclick = async e => {
             const b = e.target.closest('[data-q]'); if (!b) return;
             await say(b.textContent, true);
@@ -378,6 +470,15 @@ const AFTER = {
 };
 
 /* ---------- little helpers ---------- */
+function pensAfter(list) {
+    const pens = $('#pens'), note = $('#pen-note');
+    setTimeout(() => { pens.classList.add('open'); note.textContent = pens.dataset.pick; }, reduce ? 0 : 400);
+    pens.onclick = e => {
+        const b = e.target.closest('[data-pen]'); if (!b) return;
+        const p = list[+b.dataset.pen];
+        note.innerHTML = `<b style="font-family:var(--mono); font-size:.8rem; letter-spacing:.08em">${p.name.toUpperCase()}</b> · ${p.note}`;
+    };
+}
 function type(el, text, speed = 24) {
     return new Promise(res => {
         el.classList.add('caret');
