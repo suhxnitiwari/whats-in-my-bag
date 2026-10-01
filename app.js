@@ -305,7 +305,7 @@ const VIEWS = {
         <div class="vw" id="vw">
             <button type="button" class="vw-closed" id="snap" aria-label="Open the wallet">${ITEMS.find(i => i.id === 'wallet').art}</button>
             <div class="vw-open" aria-hidden="true">
-                <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: cash"><span class="cash" aria-hidden="true"><span class="note-bill" style="--i:0; --bg:#B9B4A8; --ink:#5E5A50"><b>₹500</b><i>भारत</i><em>₹500</em></span><span class="note-bill" style="--i:1; --bg:#EBC76A; --ink:#7A5A12"><b>₹200</b><i>भारत</i><em>₹200</em></span><span class="note-bill" style="--i:2; --bg:#B9A9DC; --ink:#4E3E80"><b>₹100</b><i>भारत</i><em>₹100</em></span><span class="note-bill" style="--i:3; --bg:#B7CFAE; --ink:#2F4A2A"><b>$20</b><i>USA</i><em>$20</em></span><span class="note-bill" style="--i:4; --bg:#CFDCC6; --ink:#3E5638"><b>$1</b><i>USA</i><em>$1</em></span></span></button>
+                <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip for cash" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span><span class="cash" aria-hidden="true"><span class="note-bill" style="--i:0; --bg:#B9B4A8; --ink:#5E5A50"><b>₹500</b><i>भारत</i><em>₹500</em></span><span class="note-bill" style="--i:1; --bg:#EBC76A; --ink:#7A5A12"><b>₹200</b><i>भारत</i><em>₹200</em></span><span class="note-bill" style="--i:2; --bg:#B9A9DC; --ink:#4E3E80"><b>₹100</b><i>भारत</i><em>₹100</em></span><span class="note-bill" style="--i:3; --bg:#B7CFAE; --ink:#2F4A2A"><b>$20</b><i>USA</i><em>$20</em></span><span class="note-bill" style="--i:4; --bg:#CFDCC6; --ink:#3E5638"><b>$1</b><i>USA</i><em>$1</em></span></span></button>
                 <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
                 <div class="vgusset"></div>
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>AUSTIN</small></span></div>
@@ -816,10 +816,11 @@ const AFTER = {
             vw.classList.remove('cash-out');
             vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
             vw.classList.remove('has-pick');
-            vw.classList.add('fold-left'); await wait(650);
-            vw.classList.add('fold-right'); await wait(650);
+            vw.classList.remove('zip-open');
+            vw.classList.add('fold-left'); setTimeout(() => vw.classList.add('p1-back'), reduce ? 0 : 300); await wait(650);
+            vw.classList.add('fold-right'); setTimeout(() => vw.classList.add('flap-back'), reduce ? 0 : 300); await wait(650);
             vw.classList.add('no-anim');
-            vw.classList.remove('open', 'fold-left', 'fold-right');
+            vw.classList.remove('open', 'fold-left', 'fold-right', 'p1-back', 'flap-back');
             vw.querySelector('.vw-open').setAttribute('aria-hidden', 'true');
             $('#snap').tabIndex = 0;
             void vw.offsetWidth; vw.classList.remove('no-anim');
@@ -830,7 +831,22 @@ const AFTER = {
         $('#vclose').onclick = () => vw.classList.contains('open') ? close() : open();
         vw.querySelector('.vsnap').onclick = close;
         $('#snap').onclick = open;
-        $('#vzip').onclick = () => { const on = vw.classList.toggle('cash-out'); if (on) toast('rupees for home, dollars for here ♡'); };
+        // the zipper: the pull slides down, the teeth open, then the cash comes out (and the reverse)
+        let zipping = false;
+        $('#vzip').onclick = async () => {
+            if (zipping) return; zipping = true;
+            const z = $('#vzip');
+            if (!vw.classList.contains('zip-open')) {
+                vw.classList.add('zip-open'); z.setAttribute('aria-pressed', 'true'); z.setAttribute('aria-label', 'Zip pocket: zip it back up');
+                await new Promise(r => setTimeout(r, reduce ? 0 : 480));
+                vw.classList.add('cash-out'); toast('rupees for home, dollars for here ♡');
+            } else {
+                vw.classList.remove('cash-out');
+                await new Promise(r => setTimeout(r, reduce ? 0 : 420));
+                vw.classList.remove('zip-open'); z.setAttribute('aria-pressed', 'false'); z.setAttribute('aria-label', 'Zip pocket: unzip for cash');
+            }
+            zipping = false;
+        };
         // tap a card: that card slides straight up out of its slot and rises above the wallet. Tap again to tuck it back.
         const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
         vw.querySelectorAll('.vslot .card').forEach(card => card.onclick = () => {

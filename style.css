@@ -823,3 +823,17 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vslot .card { transform-origin: 50% 100%; transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
 .vslot .card.picked { box-shadow: 0 0 0 3px var(--gold), 0 18px 30px -12px rgba(0,0,0,.35); }
 .vread { display: none; }
+
+/* closing: as each side turns over you see the outside, the monogram canvas */
+.vw.p1-back .p1 > * { visibility: hidden; }
+.vw.p1-back .p1 { background-color: #5A3A26; background-image: radial-gradient(circle at 50% 50%, #C99A5B 0 2px, transparent 2.5px), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Cg fill='%23B98A4E' opacity='.9'%3E%3Cpath d='M23 9c2 5 2 5 7 7-5 2-5 2-7 7-2-5-2-5-7-7 5-2 5-2 7-7z'/%3E%3Ccircle cx='23' cy='16' r='1.6' fill='%235A3A26'/%3E%3C/g%3E%3C/svg%3E"); background-size: 12px 12px, 46px 46px; }
+.vw.flap-back .vflap { background-color: #5A3A26; background-image: radial-gradient(circle at 50% 50%, #C99A5B 0 2px, transparent 2.5px), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46' viewBox='0 0 46 46'%3E%3Cg fill='%23B98A4E' opacity='.9'%3E%3Cpath d='M23 9c2 5 2 5 7 7-5 2-5 2-7 7-2-5-2-5-7-7 5-2 5-2 7-7z'/%3E%3Ccircle cx='23' cy='16' r='1.6' fill='%235A3A26'/%3E%3C/g%3E%3C/svg%3E"); background-size: 12px 12px, 46px 46px; }
+.vw.flap-back .vflap .vsnap { visibility: hidden; }
+/* the zipper: gold pull slides down, teeth open into a gap */
+.vzip::after { transition: opacity .3s; }
+.zgap { position: absolute; left: 22%; width: 56%; top: 8%; height: 0; background: #1A0A10; border-radius: 3px; transition: height .45s cubic-bezier(.4,0,.2,1); z-index: 1; }
+.zpull { position: absolute; left: 50%; top: 6%; width: 150%; height: 26px; transform: translateX(-50%); z-index: 2; border-radius: 4px; background: radial-gradient(circle at 35% 30%, #F6DB94, #B8862F); border: 1.5px solid #3A2626; transition: top .45s cubic-bezier(.4,0,.2,1); }
+.zpull::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 4px; height: 16px; transform: translateX(-50%); background: #A0244E; border-radius: 2px; }
+.vw.zip-open .zgap { height: 82%; }
+.vw.zip-open .zpull { top: 84%; }
+.cash { z-index: 3; }
