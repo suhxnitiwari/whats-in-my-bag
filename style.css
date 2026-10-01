@@ -112,7 +112,7 @@ button { font: inherit; color: inherit; }
 .after { text-align: center; color: var(--muted); margin: 18px 0 0; position: relative; z-index: 2; }
 
 /* the bag charm (Sitara) hangs off the bag */
-.charm { position: absolute; left: -12%; top: 44%; width: 17%; z-index: 4; transform-origin: 50% 0; animation: swing 3s ease-in-out infinite; cursor: pointer; }
+.charm { position: absolute; left: -4%; top: 44%; width: 19%; z-index: 4; transform-origin: 50% 0; animation: swing 3s ease-in-out infinite; cursor: pointer; }
 .charm svg { filter: drop-shadow(0 6px 6px rgba(59, 21, 36, .25)); }
 .charm:focus-visible { outline: 3px dashed var(--plum); outline-offset: 4px; border-radius: 12px; }
 @keyframes swing { 50% { transform: rotate(8deg); } }
@@ -331,3 +331,6 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pencils { display: flex; gap: 5px; }
 .pencils i { width: 10px; height: 64px; border: 2px solid var(--ink); border-radius: 3px; opacity: .75; position: relative; }
 .pencils i::before { content: ""; position: absolute; left: -2px; right: -2px; top: -12px; height: 10px; background: #FFFDF9; border: 2px solid var(--ink); border-radius: 2px; }
+
+/* the McCombs keychain hangs on the right side */
+.charm.mccombs { left: auto; right: -2%; top: 40%; width: 14%; animation-delay: -1.2s; }

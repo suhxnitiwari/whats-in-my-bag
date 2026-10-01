@@ -19,6 +19,18 @@ const openCharm = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: '
 charm.addEventListener('click', openCharm);
 charm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCharm(e); });
 
+// my McCombs keychain, on the other side of the bag
+const keychain = document.createElement('span');
+keychain.className = 'charm mccombs';
+keychain.setAttribute('role', 'button');
+keychain.setAttribute('tabindex', '0');
+keychain.setAttribute('aria-label', 'My McCombs keychain: why McCombs');
+keychain.innerHTML = BAG.mccombs;
+bagBtn.appendChild(keychain);
+const openKeychain = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'mccombs', name: 'my mccombs keychain', open: 'mccombs' }); };
+keychain.addEventListener('click', openKeychain);
+keychain.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openKeychain(e); });
+
 /* ---------- little stickers on the page ---------- */
 const doodles = [
     ['<path d="M20 34 C4 22 4 8 14 6 C18 5 20 9 20 11 C20 9 22 5 26 6 C36 8 36 22 20 34Z" fill="#F4A7B9" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>', 4, 6, 40],
@@ -302,6 +314,13 @@ const VIEWS = {
         <div class="stats"><div><b>208</b><span>Austin places</span></div><div><b>14</b><span>neighborhoods</span></div><div><b>10</b><span>Saturday moods</span></div></div>
         <div class="shot"><img src="assets/img/saturday.jpg" alt="Saturday in Austin"></div>
         <div class="row"><a class="btn solid" href="https://suhxnitiwari.github.io/saturday-in-austin/" target="_blank" rel="noopener">Plan my Saturday ↗</a></div>`,
+
+    mccombs: () => `
+        <h2>Why <em>McCombs</em></h2>
+        <p class="note">it’s on my backpack, so it goes everywhere i go</p>
+        <div class="stats"><div><b>MIS</b><span>BBA, Management Information Systems</span></div><div><b>+ Psych</b><span>BA in Psychology, alongside it</span></div><div><b>’27</b><span>Class of 2027</span></div></div>
+        <p>Minors in Marketing and Educational Psychology. Scott Hemsell Memorial Scholarship and the Gerald and Linda Ridgely Endowed Presidential Scholarship (2026 to 2027), and University Honors.</p>
+        <div class="row"><a class="btn solid" href="https://suhanitiwari.com/home/study#mccombs" target="_blank" rel="noopener">Why McCombs ↗</a></div>`,
 
     sitara: () => `
         <h2>Hi, I’m <em>Sitara</em></h2>

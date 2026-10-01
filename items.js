@@ -33,6 +33,16 @@ window.BAG = {
         <rect x="140" y="170" width="20" height="132" rx="8" fill="#3A373E" ${S} stroke-width="2.5"/>
         <path d="M140 208 h20 M140 284 h20" stroke="#D23B3B" stroke-width="4"/>
     </svg>`,
+    /* my McCombs keychain (a stand-in drawing until I swap in a photo of the real one) */
+    mccombs: `<svg viewBox="0 0 80 120" aria-hidden="true">
+        <circle cx="40" cy="9" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
+        <path d="M40 16 v10" stroke="#B9BCC2" stroke-width="4"/>
+        <rect x="8" y="26" width="64" height="88" rx="12" fill="#BF5700" ${S} stroke-width="2.5"/>
+        <rect x="14" y="32" width="52" height="76" rx="8" fill="none" stroke="#F3D3B8" stroke-width="1.5"/>
+        <text x="40" y="66" text-anchor="middle" font-family="Bodoni Moda" font-weight="600" font-size="13" fill="#fff" letter-spacing=".5">McCOMBS</text>
+        <text x="40" y="82" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#F3D3B8" letter-spacing="1">UT AUSTIN</text>
+        <path d="M30 92 h20" stroke="#F3D3B8" stroke-width="1.5"/>
+    </svg>`,
     /* my bag charm: a Bath & Body Works caramel frappuccino PocketBac holder (whipped cream, smiles back),
        with a White Barn Cozy Vanilla Almond hand sanitizer inside, gold cap poking out the bottom */
     charm: `<svg viewBox="0 0 90 120" aria-hidden="true">

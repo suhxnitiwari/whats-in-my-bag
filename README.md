@@ -20,6 +20,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Erin Condren notebooks | My classes |
 | Pink Stanley | A water tracker, because I don't drink enough water |
 | Cable knit sweater | Because I get cold easily |
+| McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
 
 ## Built with
