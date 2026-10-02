@@ -2,6 +2,8 @@
 
 **Everything I carry around, and what each thing says about me.**
 
+**[Go through my bag →](https://suhxnitiwari.github.io/whats-in-my-bag/)**
+
 Tap the backpack and everything falls out, stop-motion style. Tap anything that falls out and it opens:
 
 | In my bag | What it opens |
