@@ -519,12 +519,12 @@ window.ITEMS = [
         open: 'hairpony'
     },
     {
-        id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 7, r: -6,
+        id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 15, r: -6,
         get art() { return window.AIRSTRAIT(0, false, 'i'); },
         open: 'airstrait'
     },
     {
-        id: 'airwrap', name: 'my dyson airwrap (ceramic pink)', zip: 'front', l: 0, t: 0, w: 4.6, r: 5,
+        id: 'airwrap', name: 'my dyson airwrap (ceramic pink)', zip: 'front', l: 0, t: 0, w: 7.2, r: 5,
         get art() { return window.AIRWRAP('curl', false, 'i'); },
         open: 'airwrap'
     },
