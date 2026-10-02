@@ -1036,7 +1036,7 @@ const MORE_APPS = {
             <p class="cam-modes mono"><span>VIDEO</span><b>PHOTO</b><span>PORTRAIT</span></p>
             <div class="cam-bar"><img class="cam-thumb" id="cam-thumb" src="assets/img/me.jpg" alt=""><button type="button" class="cam-shutter" id="cam-shutter" aria-label="Take a photo"></button><span></span></div></div>`,
         after: () => {
-            const shots = ['cafe', 'chicago', 'book', 'nyc', 'owala', 'saturday', 'gwc', 'listening'];
+            const shots = ['cafe', 'dinner', 'book', 'grad', 'saree', 'lilies', 'gwc', 'me'];
             let i = 0;
             $('#cam-shutter').onclick = () => {
                 const f = $('#cam-flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
@@ -1166,7 +1166,7 @@ const openMoreApp = (k, view, home, back, backSel) => {
 };
 
 // my laptop desktop, folder by folder. files open on top of the laptop, so "back" lands in the same window
-const PHOTOS = ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'];
+const PHOTOS = ['cafe', 'me', 'book', 'gwc', 'dinner', 'grad', 'saree', 'lilies'];
 const FOLDERS = [
     ['Job Applications', [
         ['Résumé.pdf', 'view', 'padfolio', '#E8453C'],
@@ -2980,7 +2980,7 @@ const AFTER = {
             if (openMoreApp(b.dataset.app, view, home, back, '#back')) return;
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
-                    ['dinner', 'grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+                    ['dinner', 'grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
             } else if (b.dataset.app === 'spotify') {
                 view.innerHTML = back + `
                     <div class="sp">
@@ -3123,7 +3123,7 @@ const AFTER = {
                         <p class="ig-handle">hifromhani</p>
                         <div class="ig-top"><img src="assets/img/me.jpg" alt=""><span class="ig-name">hi from hani</span></div>
                         <a class="ig-btn" href="https://www.instagram.com/hifromhani/" target="_blank" rel="noopener">Open in Instagram</a>
-                        <div class="ig-grid">${['cafe', 'chicago', 'book', 'nyc', 'gwc', 'me'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
+                        <div class="ig-grid">${['cafe', 'grad', 'book', 'saree', 'gwc', 'me'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
                     </div>`;
             }
             addQ(view, b.dataset.app);
