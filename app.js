@@ -1139,7 +1139,8 @@ const APP_Q = {
     maps: 'where does she go?', messages: 'who matters to her?', gmail: 'what’s waiting on her?', camera: 'what catches her eye?',
     clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', settings: 'how is she wired?',
     pinterest: 'what does she want her world to look like?', procreate: 'what does she make?', safari: 'what is she curious about?',
-    chatgpt: 'what rabbit hole is she in right now?', canvas: 'what is she studying?'
+    chatgpt: 'what rabbit hole is she in right now?', canvas: 'what is she studying?',
+    deck: 'how does she think about strategy?'
 };
 const addQ = (view, k) => {
     if (!APP_Q[k] || view.querySelector('.appq')) return;
@@ -1150,7 +1151,81 @@ const GH = 'https://suhxnitiwari.github.io/';
 const POCKET_NAME = { devices: 'pocket one (the work)', main: 'pocket two (the mind)', shades: 'pocket three (the heart)', front: 'pocket four (the look)', side: 'the side pocket', makeup: 'the makeup bag', attached: 'tucked into something else' };
 const grab = id => { const it = ITEMS.find(i => i.id === id); if (it) goTo(it); };
 
+// the strategy deck on my ipad: the whole case for this bag, one slide at a time
+const DECK = [
+    { k: 'a strategy deck', h: 'What’s in <em>my bag?</em>', sub: 'Why a résumé you can unzip beats a résumé you skim.', foot: 'Suhani Tiwari · MIS + Psychology · UT Austin', cls: 'cover' },
+    { k: '01 · the problem', h: 'A résumé says what I’ve done. It can’t show <em>how I think.</em>', list: ['Recruiters skim. Every bio starts to sound the same.', 'Taste, curiosity and craft don’t fit in a bullet point.', 'So the most interesting parts of a person never make it onto the page.'] },
+    { k: '02 · the idea', h: 'So I turned my backpack into <em>the pitch.</em>', list: ['Everything in it is something I actually carry.', 'Every thing opens into a piece of me: a project, a class, a story.', 'Curiosity does the work. You open things because you want to, not because you’re told to.'] },
+    { k: '03 · the structure', h: 'Four zippers, <em>four questions.</em>', sub: 'It works like a nav bar: each pocket answers one question you’d have about me, in the order you’d ask it.',
+        grid: [['①', 'the work', 'can she do the job?', 'laptop, ipad, padfolio, binder, headphones, chargers', '#F4A7B9'], ['②', 'the mind', 'how does she think?', 'notebooks, mildliners, pens, sketchbook, journal, books', '#D9C8F0'], ['③', 'the heart', 'who is she, really?', 'passport, wallet, phone, keys, my sister’s cards, T.D.', '#F8E7A9'], ['④', 'the look', 'how does she show up?', 'makeup, skincare, hair, jewelry, perfume, sunglasses', '#CDE6D0']] },
+    { k: '04 · the confessions', h: 'Polish earns attention. <em>Honesty earns trust.</em>', sub: 'Every pocket keeps one confession, and the honest stuff gets its own pouch on the outside.',
+        list: ['The work: four chargers, every single one packed. Still always one knot.', 'The mind: three weeks in, still on chapter one of the rom-com.', 'The heart: the car keys, and the truth about my driving.', 'The look: a backup lipstick, because dry lips, always.', 'The catch-all pouch: pads (and Cadence, the period app I built), ideas for soon, receipts, one speeding ticket.'] },
+    { k: '05 · the psychology', h: 'Designed with psychology, <em>not just pixels.</em>',
+        grid: [['?', 'curiosity gap', 'a closed bag begs to be opened. nobody needs to be told to pull a zipper.', '', '#F4A7B9'], ['↓', 'progressive disclosure', 'one zipper at a time, so it’s never fifty things at once.', '', '#D9C8F0'], ['✓', 'goal gradient', 'a “things snooped” counter pulls you toward the end.', '', '#F8E7A9'], ['♡', 'voice', 'every line sounds like me, so you remember me.', '', '#CDE6D0']] },
+    { k: '06 · the build', h: 'Built like a product, <em>not a template.</em>', list: ['Plain HTML, CSS and JavaScript. No framework, no build step.', 'Data-driven: every thing in the bag is one entry in a single file. Adding something new is one object.', 'Accessible by default: native dialogs, keyboard focus everywhere, a reduced-motion fallback for every animation, AA contrast.', 'Live data: Austin weather and a real clock on my phone. Every sound is synthesized in the browser, no audio files.'] },
+    { k: '07 · the trade-offs', h: 'What I chose, <em>and what it cost.</em>',
+        table: [['Hand-drawn SVG', 'stock photos or 3D', 'it’s mine, it scales, it’s on brand', 'hours per item'], ['One sheet that changes', 'separate pages', '“back” lands right where you were', 'one big script'], ['Depth', 'more items, each one shallower', 'every item has its own interaction, so people stay and explore', '~900 KB of code; next, load each item on demand']] },
+    { k: '08 · what’s next', h: 'Shipped in three days. <em>Measured next.</em>', stats: [['221', 'commits'], ['3', 'days'], ['51', 'things'], ['4', 'zippers']],
+        list: ['North star: résumé opens + “let’s connect” taps per visit.', 'First test: does opening the work pocket first lead to more résumé opens than opening the heart pocket first?', 'Privacy-friendly analytics, so I measure the bag without tracking the people in it.'] },
+    { k: 'thank you', h: 'Thanks for going through <em>my bag.</em>', sub: 'that’s kind of personal, but i’ll allow it.', cls: 'cover',
+        links: [['My résumé', 'https://suhanitiwari.com/resume'], ['suhanitiwari.com', 'https://suhanitiwari.com'], ['LinkedIn', 'https://www.linkedin.com/in/suhxnitiwari'], ['Say hi ✉', 'mailto:suhanitiwari@utexas.edu']] }
+];
+const slideHTML = (d, n) => `<section class="sl${d.cls ? ' sl-' + d.cls : ''}" data-n="${n}" aria-roledescription="slide" aria-label="${n + 1} of ${DECK.length}">
+    <p class="sl-k">${d.k}</p><h3 class="sl-h">${d.h}</h3>${d.sub ? `<p class="sl-sub">${d.sub}</p>` : ''}
+    ${d.stats ? `<div class="sl-stats">${d.stats.map(([v, l]) => `<span><b>${v}</b>${l}</span>`).join('')}</div>` : ''}
+    ${d.grid ? `<div class="sl-grid">${d.grid.map(([i, t, q, x, c]) => `<div style="--c:${c}"><b>${i}</b><strong>${t}</strong><span>${q}</span>${x ? `<small>${x}</small>` : ''}</div>`).join('')}</div>` : ''}
+    ${d.list ? `<ul class="sl-list">${d.list.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
+    ${d.table ? `<table class="sl-table"><thead><tr><th>chose</th><th>instead of</th><th>why</th><th>the cost</th></tr></thead><tbody>${d.table.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>` : ''}
+    ${d.links ? `<div class="sl-links">${d.links.map(([t, h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join('')}</div>` : ''}
+    ${d.foot ? `<p class="sl-foot">${d.foot}</p>` : ''}
+</section>`;
+
 const MORE_APPS = {
+    deck: {
+        html: () => `<div class="deck" id="deck" tabindex="0" aria-label="My strategy deck. Use the arrow keys or the buttons to move between slides">
+            <div class="deck-bar mono"><span>what’s in my bag.key</span><span id="deck-n">1 / ${DECK.length}</span><button type="button" class="deck-play" id="deck-play">▶ present</button></div>
+            <div class="deck-stage" id="deck-stage">${DECK.map(slideHTML).join('')}</div>
+            <div class="deck-nav"><button type="button" class="deck-btn" id="deck-prev" aria-label="Previous slide">‹</button>
+                <span class="deck-dots">${DECK.map((_, n) => `<button type="button" class="deck-dot" data-go="${n}" aria-label="Slide ${n + 1}"></button>`).join('')}</span>
+                <button type="button" class="deck-btn" id="deck-next" aria-label="Next slide">›</button></div>
+        </div>`,
+        after: view => {
+            view.classList.add('deckv');
+            const deck = view.querySelector('#deck'), slides = [...deck.querySelectorAll('.sl')];
+            let at = 0;
+            const show = n => {
+                at = Math.max(0, Math.min(slides.length - 1, n));
+                slides.forEach((s, i) => { s.classList.toggle('on', i === at); s.classList.toggle('past', i < at); s.setAttribute('aria-hidden', i !== at); s.querySelectorAll('a').forEach(a => a.tabIndex = i === at ? 0 : -1); });
+                deck.querySelectorAll('.deck-dot').forEach((d, i) => d.setAttribute('aria-current', i === at));
+                view.querySelector('#deck-n').textContent = `${at + 1} / ${slides.length}`;
+                view.querySelector('#deck-prev').disabled = at === 0; view.querySelector('#deck-next').disabled = at === slides.length - 1;
+            };
+            view.querySelector('#deck-prev').onclick = () => { SFX.tap(); show(at - 1); };
+            view.querySelector('#deck-next').onclick = () => { SFX.tap(); show(at + 1); if (at === slides.length - 1) toast('the end. thank you for reading all of it ♡'); };
+            deck.querySelectorAll('[data-go]').forEach(d => d.onclick = () => show(+d.dataset.go));
+            deck.onkeydown = e => { if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); } };
+            // swipe, like a real ipad
+            let sx = null;
+            deck.addEventListener('pointerdown', e => { if (e.target.closest('a, button')) return; sx = e.clientX; });
+            deck.addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1)); });
+            // a tap on the slide itself moves forward, like presenting
+            view.querySelector('#deck-stage').addEventListener('click', e => { if (e.target.closest('a, button')) return; show(at + 1); });
+            // present: the deck goes full screen, big enough to actually read. esc or the button brings it back to the ipad
+            const play = view.querySelector('#deck-play');
+            const setPlay = on => { deck.classList.toggle('presenting', on); play.textContent = on ? '✕ exit' : '▶ present'; deck.focus({ preventScroll: true }); };
+            play.onclick = e => {
+                e.stopPropagation();
+                const on = !deck.classList.contains('presenting');
+                // switch first; real fullscreen is a bonus where the browser allows it (the overlay works either way)
+                setPlay(on);
+                if (on && deck.requestFullscreen) deck.requestFullscreen().catch(() => {});
+                else if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+            };
+            deck.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) setPlay(false); });
+            deck.addEventListener('keydown', e => { if (e.key === 'Escape' && deck.classList.contains('presenting') && !document.fullscreenElement) { e.preventDefault(); e.stopPropagation(); setPlay(false); } });
+            show(0); deck.focus({ preventScroll: true });
+        }
+    },
     maps: {
         html: () => {
             const pins = [
@@ -1335,11 +1410,11 @@ const MORE_APPS = {
 };
 const openMoreApp = (k, view, home, back, backSel) => {
     const app = MORE_APPS[k]; if (!app) return false;
-    view.classList.remove('procreate');
+    view.classList.remove('procreate', 'deckv');
     view.innerHTML = back + app.html();
     addQ(view, k);
     home.hidden = true; view.hidden = false;
-    $(backSel).onclick = () => { view.hidden = true; home.hidden = false; };
+    $(backSel).onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('deckv'); };
     app.after && app.after(view);
     return true;
 };
@@ -2323,6 +2398,7 @@ const VIEWS = {
             <span class="ipad-pencil" aria-hidden="true"></span>
         <div class="ipad-big"><div class="ipad-screen">
             <div class="ipad-home" id="ipad-home">
+                <button type="button" class="papp" data-ip="deck"><span class="ic" style="background:#76344E"><svg viewBox="0 0 40 40"><rect x="7" y="9" width="26" height="17" rx="2" fill="#FFFBF8"/><path d="M12 22 v-5 M17 22 v-8 M22 22 v-4 M27 22 v-10" stroke="#F4A7B9" stroke-width="2.6" stroke-linecap="round"/><path d="M20 26 v4 M15 32 h10" stroke="#FFFBF8" stroke-width="2.2" stroke-linecap="round"/></svg></span>Strategy</button>
                 <button type="button" class="papp" data-ip="pinterest"><span class="ic" style="background:#E60023"><svg viewBox="0 0 40 40"><path d="M20 9 c-8 0 -11 6 -9 10 c1 2 2 2 2 1 c-1 -3 1 -7 7 -7 c5 0 6 3 5 6 c-1 4 -3 5 -5 5 c-2 0 -2 -2 -1 -3 l1 -4 m0 0 l-3 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></span>Pinterest</button>
                 <button type="button" class="papp" data-ip="procreate"><span class="ic" style="background:#1B1B1F"><svg viewBox="0 0 40 40"><path d="M10 30 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="11" cy="30" r="3" fill="#B9A3E8"/></svg></span>Procreate</button>
                 <button type="button" class="papp" data-ip="safari"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="#2F8CF0"/><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width=".8" stroke-dasharray="1 2.1"/><path d="M27 13 L22 22 L13 27 L18 18Z" fill="#fff"/><path d="M27 13 L22 22 L18 18Z" fill="#E8453C"/></svg></span>Safari</button>
@@ -3589,7 +3665,7 @@ const AFTER = {
         // the home bar: from any app, any depth, one tap goes straight back to the home screen
         const bar = $('#ipad-homebar');
         new MutationObserver(() => { bar.hidden = view.hidden; }).observe(view, { attributes: true, attributeFilter: ['hidden'] });
-        bar.onclick = () => { SFX.tap(); view.hidden = true; home.hidden = false; view.classList.remove('procreate', 'tv', 'nf', 'pv'); view.innerHTML = ''; };
+        bar.onclick = () => { SFX.tap(); view.hidden = true; home.hidden = false; view.classList.remove('procreate', 'tv', 'nf', 'pv', 'deckv'); view.innerHTML = ''; };
         sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {
             const k = b.dataset.ip;
             if (openMoreApp(k, view, home, back, '#ip-back')) return;

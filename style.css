@@ -3057,3 +3057,77 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 
 /* "pull to unzip" sits on its own little pill so it never gets lost against the cash peeking out */
 .vzip-hint { top: -40px; padding: 2px 12px 3px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); z-index: 8; }
+
+/* the strategy deck on my ipad: keynote, but make it mine */
+.ipad-view.deckv { background: #2A2629; padding: 0 0 28px; display: flex; flex-direction: column; }
+.ipad-view.deckv .back { color: #F4C6D2; background: rgba(42,38,41,.92) !important; border-bottom-color: rgba(255,255,255,.08) !important; }
+.ipad-view.deckv .appq { color: #F4C6D2; margin: 6px 14px 0; font-size: 1rem; }
+.ipad-view.deckv ~ .ipad-homebar span { background: rgba(255,255,255,.6); }
+.deck { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 6px 14px 0; outline: none; container-type: inline-size; }
+.deck-bar { display: flex; justify-content: space-between; font-size: .66rem; color: rgba(255,255,255,.55); letter-spacing: .06em; }
+.deck-stage { --u: 1cqw; position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; overflow: hidden; background: var(--paper); box-shadow: 0 10px 24px -10px rgba(0,0,0,.6); cursor: pointer; container-type: inline-size; }
+.sl { position: absolute; inset: 0; padding: calc(var(--u) * 5.5) calc(var(--u) * 6.5); display: flex; flex-direction: column; gap: calc(var(--u) * 1.6); color: var(--ink); opacity: 0; transform: translateX(4%); transition: opacity .45s var(--ease), transform .45s var(--ease); pointer-events: none; overflow: hidden; }
+.sl.past { transform: translateX(-4%); }
+.sl.on { opacity: 1; transform: none; pointer-events: auto; }
+.sl-k { margin: 0; font: 500 calc(var(--u) * 1.7)/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--plum); }
+.sl-h { margin: 0; font: 400 calc(var(--u) * 4.6)/1.08 var(--serif); letter-spacing: -.01em; }
+.sl-h em { color: var(--plum); }
+.sl-sub { margin: 0; font: 600 calc(var(--u) * 2.5)/1.25 var(--hand); color: var(--plum); }
+.sl-list { margin: .6cqw 0 0; padding-left: calc(var(--u) * 2.6); display: flex; flex-direction: column; gap: calc(var(--u) * 1.1); font: 400 calc(var(--u) * 2.05)/1.35 var(--sans); }
+.sl-list li::marker { color: #E0568F; }
+.sl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: calc(var(--u) * 1.6); margin-top: .6cqw; }
+.sl-grid div { position: relative; padding: calc(var(--u) * 1.6) calc(var(--u) * 2) calc(var(--u) * 1.6) calc(var(--u) * 6.4); border: .3cqw solid var(--ink); border-radius: calc(var(--u) * 1.6); background: color-mix(in srgb, var(--c) 45%, #fff); display: flex; flex-direction: column; gap: .3cqw; }
+.sl-grid b { position: absolute; left: calc(var(--u) * 1.8); top: calc(var(--u) * 1.4); font: 600 calc(var(--u) * 3.2)/1 var(--serif); color: var(--plum); }
+.sl-grid strong { font: 600 calc(var(--u) * 2.3)/1.1 var(--serif); }
+.sl-grid span { font: 600 calc(var(--u) * 2.2)/1.15 var(--hand); color: var(--plum); }
+.sl-grid small { font: 400 calc(var(--u) * 1.45)/1.3 var(--sans); color: var(--ink-2); }
+.sl-table { width: 100%; border-collapse: collapse; font: 400 calc(var(--u) * 1.75)/1.3 var(--sans); margin-top: .6cqw; }
+.sl-table th { text-align: left; font: 500 calc(var(--u) * 1.4) var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--plum); padding: 0 calc(var(--u) * 1) calc(var(--u) * 1) 0; border-bottom: .25cqw solid var(--ink); }
+.sl-table td { padding: calc(var(--u) * 1.3) calc(var(--u) * 1.2) calc(var(--u) * 1.3) 0; border-bottom: .15cqw dashed var(--line); vertical-align: top; }
+.sl-table td:first-child { font: 600 calc(var(--u) * 2)/1.2 var(--serif); }
+.sl-stats { display: flex; gap: calc(var(--u) * 2); }
+.sl-stats span { flex: 1; display: flex; flex-direction: column; padding: calc(var(--u) * 1.2) calc(var(--u) * 1.6); border: .3cqw solid var(--ink); border-radius: calc(var(--u) * 1.4); background: #FBE3EA; font: 500 calc(var(--u) * 1.4) var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--plum); }
+.sl-stats b { font: 600 calc(var(--u) * 4.4)/1 var(--serif); color: var(--ink); letter-spacing: 0; text-transform: none; }
+.sl-cover { justify-content: center; background: radial-gradient(circle at 85% 18%, #FBE3EA 0 16%, transparent 16.5%), radial-gradient(circle at 92% 90%, #D9C8F0 0 10%, transparent 10.5%), var(--paper); }
+.sl-cover .sl-h { font-size: calc(var(--u) * 7.4); }
+.sl-cover .sl-sub { font-size: calc(var(--u) * 3.2); }
+.sl-foot { margin: auto 0 0; font: 500 calc(var(--u) * 1.6) var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.sl-links { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 1.4); margin-top: calc(var(--u) * 1.4); }
+.sl-links a { padding: calc(var(--u) * 1) calc(var(--u) * 2.2); border: .3cqw solid var(--ink); border-radius: 99px; background: #FBE3EA; box-shadow: .5cqw .5cqw 0 var(--ink); font: 500 calc(var(--u) * 2) var(--sans); color: var(--ink); text-decoration: none; }
+.sl-links a:hover { background: #F7CFDC; }
+.deck-nav { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.deck-btn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.4); background: none; color: #fff; font-size: 1.1rem; line-height: 1; cursor: pointer; }
+.deck-btn:disabled { opacity: .3; cursor: default; }
+.deck-btn:focus-visible, .deck-dot:focus-visible { outline: 2px solid #F4A7B9; outline-offset: 2px; }
+.deck-dots { display: flex; gap: 6px; }
+.deck-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.3); cursor: pointer; }
+.deck-dot[aria-current="true"] { background: #F4A7B9; transform: scale(1.3); }
+@media (prefers-reduced-motion: reduce) { .sl { transition: none; transform: none; } }
+/* fit the whole slide + controls inside the ipad screen, whatever its size */
+.ipad-view.deckv { container-type: size; overflow: hidden; }
+.ipad-view.deckv .appq { display: none; }
+.ipad-view.deckv .deck-stage { width: min(100%, calc((100cqh - 128px) * 1.6)); align-self: center; }
+.ipad-view.deckv .deck-bar { width: min(100%, calc((100cqh - 128px) * 1.6)); align-self: center; }
+.sl-cover .sl-foot { position: absolute; left: calc(var(--u) * 6.5); bottom: calc(var(--u) * 5); margin: 0; }
+.deck-bar { align-items: center; gap: 10px; } .deck-bar span:first-child { margin-right: auto; }
+.deck-play { padding: 3px 10px; border: 1.5px solid #F4A7B9; border-radius: 99px; background: #F4A7B9; color: #2A2629; font: 600 .66rem var(--mono); letter-spacing: .06em; cursor: pointer; }
+.deck-play:hover { background: #F7CFDC; }
+/* presenting: full screen (or a full-window overlay where fullscreen isn't allowed) */
+.deck.presenting { position: fixed; inset: 0; z-index: 1000; padding: 16px max(16px, 3vw) 20px; background: #1E1B1E; justify-content: center; gap: 14px; }
+.deck.presenting .deck-stage, .deck.presenting .deck-bar { width: min(100%, calc((100vh - 120px) * 1.6)) !important; align-self: center; }
+.deck.presenting .deck-bar { font-size: .78rem; }
+.deck:fullscreen { background: #1E1B1E; }
+
+/* presenting on a phone: the slide turns portrait and the type roughly doubles, so it's readable in your hand */
+@media (max-width: 640px) {
+    .deck.presenting .deck-stage { --u: 1.6cqw; aspect-ratio: 10 / 17; }
+    .deck.presenting .sl { padding: calc(var(--u) * 7) calc(var(--u) * 6); }
+    .deck.presenting .deck-stage, .deck.presenting .deck-bar { width: min(100%, calc((100vh - 120px) * .625)) !important; }
+    .deck.presenting .sl-grid { grid-template-columns: 1fr; }
+    .deck.presenting .sl-stats { flex-wrap: wrap; } .deck.presenting .sl-stats span { flex: 1 1 40%; }
+}
+
+/* nothing on the table (a tilted dyson, a name tag) should ever make the page wider than the phone */
+html, body { overflow-x: clip; }
+/* a size container traps position: fixed, so let go of it while presenting */
+.ipad-view.deckv:has(.deck.presenting) { container-type: normal; overflow: visible; }
