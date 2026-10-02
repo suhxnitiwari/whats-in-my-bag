@@ -706,6 +706,15 @@ list.addEventListener('click', e => {
 
 
 /* gift cards = store credit from every online order i didn't return in time */
+/* my pink notebook: notes from the self-help books that actually changed how i live */
+const SELFHELP = [
+    { t: 'Atomic Habits', a: 'James Clear', c: '#F9E07F', notes: ['you don’t rise to your goals, you fall to your systems', 'make it obvious, easy, attractive, satisfying', '1% better every day = 37x better in a year'], me: '→ why i trust systems now (and color-code my calendar)' },
+    { t: 'The Let Them Theory', a: 'Mel Robbins', c: '#A8E6A1', notes: ['let them. then: let me.', 'you can’t control other people, only how you respond', 'stop chasing people who aren’t choosing you'], me: '→ officially ended my overthinking era' },
+    { t: 'How to Win Friends &amp; Influence People', a: 'Dale Carnegie', c: '#F6C27A', notes: ['a person’s name is the sweetest sound to them', 'be genuinely interested, not interesting', 'listen more. let them do the talking'], me: '→ why i remember your coffee order ☕' },
+    { t: 'Ikigai', a: 'Héctor García &amp; Francesc Miralles', c: '#A9D6F2', notes: ['find the overlap: what you love, what you’re good at, what the world needs, what you can be paid for', 'stay active, don’t fully retire', 'flow: lose yourself in the thing'], me: '→ the reason i want work where tech meets people' },
+    { t: 'The 48 Laws of Power', a: 'Robert Greene', c: '#F4A7B9', notes: ['never outshine the master', 'say less than necessary', 'reputation is everything, guard it'], me: '→ read it for strategy. still choosing kindness.' }
+];
+
 const GIFTCARDS = [
     { id: 'aritzia', name: 'Aritzia', why: 'an online order. return window: missed.', bal: 'enough for one (1) sweater', last: '0731',
       front: `<span class="g2-word">ARITZIA</span><span class="g2-tag">everyday luxury</span>
@@ -1986,10 +1995,10 @@ const VIEWS = {
         <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>`,
     nb2: () => `
         <h2>My <em>Erin Condren</em> notebook</h2>
-        <p class="note">the pink one.</p>
-        <div class="ecb-row"><div class="ecb" data-ecb>
-                <div class="ecb-page ec-page"><p class="hand ec-h">notebook no. 2</p><p><span class="todo">what’s in this one?</span></p></div>
-                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']])}</div><div class="ecb-back"></div></div>
+        <p class="note">the pink one. notes from the self-help books that actually changed how i live.</p>
+        <div class="ecb-row"><div class="ecb ecb-notes" data-ecb>
+                <div class="ecb-page ec-page sh-page" id="sh-page"></div>
+                <div class="ecb-cover"><div class="ecb-front">${window.EC([['#E0568F', '#F7D5E2'], ['#FBE6EC', '#8DA0C2'], ['#8EA2C4', '#EEF1F8'], ['#FBE6EC', '#E0568F']])}</div><div class="ecb-back sh-toc"><p class="hand ec-h">how i want to live ♡</p><ol class="hand">${SELFHELP.map((b, i) => `<li><button type="button" data-sh="${i}">${b.t}</button></li>`).join('')}</ol><p class="hand sh-sig">books → notes → actually doing it</p></div></div>
             </div>
         </div>
         <p class="hand" style="text-align:center; color:var(--plum); margin:6px 0 10px">tap it to open. tap again to close.</p>`,
@@ -2861,7 +2870,20 @@ const AFTER = {
         });
     },
     nb1: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
-    nb2: () => { sheetBody.querySelectorAll('[data-ecb]').forEach(b => b.onclick = () => b.classList.toggle('open')); },
+    nb2: () => {
+        const nb = sheetBody.querySelector('[data-ecb]'), page = $('#sh-page');
+        let k = 0;
+        const show = n => {
+            k = (n + SELFHELP.length) % SELFHELP.length; const b = SELFHELP[k];
+            page.innerHTML = `<p class="sh-n mono">${k + 1} / ${SELFHELP.length}</p><p class="hand sh-t" style="--hl:${b.c}"><span>${b.t}</span></p><p class="sh-a">${b.a}</p>
+                <ul class="hand">${b.notes.map(x => `<li>${x}</li>`).join('')}</ul><p class="hand sh-me">${b.me}</p>
+                <span class="sh-nav"><button type="button" data-d="-1" aria-label="Previous book">‹</button><button type="button" data-d="1" aria-label="Next book">›</button></span>`;
+            page.querySelectorAll('[data-d]').forEach(d => d.onclick = e => { e.stopPropagation(); SFX.page(); show(k + +d.dataset.d); });
+        };
+        show(0);
+        nb.onclick = () => nb.classList.toggle('open');
+        sheetBody.querySelectorAll('[data-sh]').forEach(t => t.onclick = e => { e.stopPropagation(); SFX.page(); show(+t.dataset.sh); });
+    },
     journal: () => {
         // a small bound journal (the notepad is the one in my mccombs padfolio): the cover opens like a book
         const jb = $('#jb'), front = jb.querySelector('.jb-front'), hint = $('#jb-hint');
