@@ -1498,7 +1498,8 @@ const VIEWS = {
         <h2>this is <em>T.D.</em></h2>
         <div class="big-obj">${ITEMS.find(i => i.id === 'bear').art}</div>
         <p class="note">like teddy duncan from good luck charlie. he was the first gift i ever bought my little sister, amaira. now he rides around austin in my backpack.</p>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>`,
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>
+        <figure class="td-pola"><img src="assets/img/td-amaira.jpg" alt="Amaira as a little girl, smiling and holding T.D. the teddy bear" loading="lazy"><figcaption class="hand">amaira &amp; T.D. ♡</figcaption></figure>`,
     todo: () => `
         <h2>an <em>overdue</em> to-do list</h2>
         <div class="crumple" id="crumple"><div class="cr-ball">${ITEMS.find(i => i.id === 'todo').art}</div><div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}</div></div>
@@ -2193,17 +2194,17 @@ const VCARD = {
         <path d="M40 3 h4 v4.5 l3 1 l2.5 -.5 l2 1 v4 l-.5 2 l-2 1 l-2 2.5 l-1 3 l-2 -.5 l-1.5 -2.5 l-1 -2 l-1.5 -1 l-1 1 l-2 -1 l-1 -2 l.5 -1 h2z" fill="none" stroke="#D9B45A" stroke-width=".5"/><circle cx="44" cy="11" r="2.4" fill="#E3C46E"/><text x="44" y="12.2" text-anchor="middle" font-size="3" fill="#fff">★</text>
         <text x="20" y="15.5" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.8" fill="#2A2426">DRIVER LICENSE</text>
         <text x="3" y="19" font-family="Instrument Sans" font-size="1.5" fill="#3A3A3A">Director:</text><path d="M10 18.6 q2 -1.4 4 0 t4 0" fill="none" stroke="#555" stroke-width=".25"/>
-        <rect x="3" y="20.5" width="19" height="24" fill="#D8D8D8"/><image href="assets/img/me.jpg" x="3" y="20.5" width="19" height="24" preserveAspectRatio="xMidYMid slice" filter="url(#vdlg)"/><rect x="3" y="20.5" width="19" height="24" fill="none" stroke="#7A7A7A" stroke-width=".25"/>
-        <rect x="24" y="20" width="28" height="6" fill="#2A2426"/><text x="38" y="24.2" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="3.1" fill="#fff">UNDER 21</text>
-        <g font-family="Instrument Sans" fill="#2A2426"><g font-size="1.6" fill="#4A4A55"><text x="24" y="30.5">4d. DL:</text><text x="24" y="34.3">9. Class:</text><text x="24" y="38.1">3. DOB:</text><text x="24" y="41.9">4b. Exp:</text><text x="24" y="45.7">4a. Iss:</text><text x="24" y="49.5">9a. End:</text></g>
-            <g font-size="2.3" font-weight="700"><text x="31" y="30.7">OOPS-143</text><text x="31.5" y="34.5">C <tspan font-weight="400" font-size="1.7">(for cute)</tspan></text><text x="30.5" y="38.3" font-size="1.9">a lady never tells</text><text x="31" y="42.1" font-size="1.9">my patience</text><text x="30.5" y="45.9" font-size="1.7">a forgiving DMV</text><text x="31" y="49.7">NONE, YET</text></g></g>
-        <text x="4" y="50" font-family="Caveat, cursive" font-size="4.4" fill="#2A2426">Suhani</text>
+        <rect x="3" y="20.5" width="19" height="24" fill="#D8D8D8"/><image href="assets/img/dl-photo.jpg" x="3" y="20.5" width="19" height="24" preserveAspectRatio="xMidYMid slice"/><rect x="3" y="20.5" width="19" height="24" fill="none" stroke="#7A7A7A" stroke-width=".25"/>
+        <rect x="24" y="19.6" width="28" height="7" fill="#2A2426"/><text x="38" y="22.6" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.5" fill="#fff">UNDER 21 UNTIL</text><text x="38" y="25.6" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.2" fill="#fff">IT’S MY PARTY</text>
+        <g font-family="Instrument Sans" fill="#2A2426"><g font-size="1.6" fill="#4A4A55"><text x="24" y="30.4">4d. DL:</text><text x="24" y="33.9">9. Class:</text><text x="24" y="37.4">3. DOB:</text><text x="24" y="40.9">4b. Exp:</text><text x="24" y="44.4">4a. Iss:</text><text x="24" y="47.9">12. Rest:</text><text x="24" y="51.4">9a. End:</text></g>
+            <g font-size="2.3" font-weight="700"><text x="31" y="30.6">CURB-1 ME-0</text><text x="31.5" y="34.1">C <tspan font-weight="400" font-size="1.7">(for cute)</tspan></text><text x="30.5" y="37.6" font-size="1.9">pisces szn. next.</text><text x="31" y="41.1" font-size="1.9">never. timeless.</text><text x="30.5" y="44.6" font-size="1.8">on try #3 (jk…?)</text><text x="31.5" y="48.1" font-size="1.6">no parallel parking</text><text x="31" y="51.6" font-size="1.9">main character</text></g></g>
+        <text x="4" y="50.5" font-family="Caveat, cursive" font-size="4.4" fill="#2A2426">Suhani</text>
         <g font-family="Instrument Sans" fill="#2A2426"><text x="3" y="56" font-size="1.6" fill="#4A4A55">1.</text><text x="5.2" y="56" font-size="3" font-weight="700">TIWARI</text>
             <text x="3" y="60" font-size="1.6" fill="#4A4A55">2.</text><text x="5.2" y="60" font-size="3" font-weight="700">SUHANI M</text>
             <text x="3" y="64" font-size="1.6" fill="#4A4A55">8.</text><text x="5.2" y="64" font-size="2.2">wouldn’t you wanna knowwww</text>
             <g font-size="1.6" fill="#4A4A55"><text x="17" y="71">16. Hgt:</text><text x="17" y="75">15. Sex:</text><text x="33" y="75">18. Eyes:</text><text x="3" y="82.5">5. DD:</text></g>
-            <g font-size="2.4" font-weight="700"><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="2">dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">none of your business</text></g></g>
-        <circle cx="8.5" cy="72.5" r="5" fill="#fff" opacity=".45"/><circle cx="8.5" cy="72.5" r="5" fill="none" stroke="#B9C6EA" stroke-width=".3"/></svg>`,
+            <g font-size="2.4" font-weight="700"><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="1.9">BRN, dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">don’t even think about it</text></g></g>
+        <image href="assets/img/dl-photo.jpg" x="4" y="66.5" width="9" height="12" preserveAspectRatio="xMidYMid slice" filter="url(#vdlg)" opacity=".4"/></svg>`,
     // my blue cash everyday, drawn from the real one: the big centurion medallion, name down the side, member since 25. no card number.
     amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E3E9E"/><stop offset=".45" stop-color="#1665D0"/><stop offset="1" stop-color="#0B3C9A"/></linearGradient><radialGradient id="vabm" cx=".55" cy=".45" r=".6"><stop offset="0" stop-color="#3C8EF0"/><stop offset=".8" stop-color="#1D6FD8"/><stop offset="1" stop-color="#1557BF"/></radialGradient></defs>
         <rect width="54" height="86" fill="url(#vab)"/>
@@ -2222,14 +2223,14 @@ const VCARD = {
         <text transform="translate(12 57.5) rotate(90)" font-family="Instrument Sans" font-size="3" fill="#DCEBFF">25</text>
         <text transform="translate(46.5 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">AMERICAN</text>
         <text transform="translate(41.3 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">EXPRESS</text>
-        <g transform="translate(29 72) rotate(90)" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M0 0 q2 2.5 0 5"/><path d="M2 -1 q3 3.5 0 7"/><path d="M4 -2 q4 4.5 0 9"/></g></svg>`,
+        <g transform="translate(29 63) rotate(90)" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M0 0 q2 2.5 0 5"/><path d="M2 -1 q3 3.5 0 7"/><path d="M4 -2 q4 4.5 0 9"/></g><text transform="translate(28.6 72.5) rotate(90)" font-family="Instrument Sans" font-size="3" letter-spacing=".3" fill="#DCEBFF">0306</text></svg>`,
     amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
         ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
         <text transform="translate(47 30) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#2A200C" letter-spacing=".3">AMERICAN EXPRESS</text>
         <path d="M41 30 l3 -4.5 3 4.5z" fill="#C0272D" transform="translate(-2 0)"/><text transform="translate(41 33) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="3.2" fill="#2A200C">DELTA</text>
         <text transform="translate(41 47) rotate(90)" font-family="Instrument Sans" font-size="5" fill="#2A200C" letter-spacing=".8">SKYMILES</text>
-        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}</svg>`,
+        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}<text x="34" y="80" font-family="Instrument Sans" font-size="3" letter-spacing=".3" fill="#3A2C10">SHOP</text></svg>`,
     bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A6AAB1"/><stop offset=".5" stop-color="#E4E6EA"/><stop offset="1" stop-color="#9A9EA6"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 34 L54 14 V26 L0 46Z" fill="#fff" opacity=".22"/><path d="M54 30 L20 86 H40 L54 62Z" fill="#7E838B" opacity=".28"/><path d="M0 60 L28 86 H12 L0 74Z" fill="#fff" opacity=".18"/>
         ${VC_CHIP(32, 12)}<circle cx="11" cy="9" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/><path d="M9.6 9 h2.8 M11 7.6 v2.8" stroke="#5E646C" stroke-width=".5"/>
@@ -3223,22 +3224,31 @@ const AFTER = {
             const k = b.dataset.ip;
             if (openMoreApp(k, view, home, back, '#ip-back')) return;
             if (k === 'pinterest') {
-                // [file, shape, caption]: shapes vary so the board reads like a real masonry feed
-                const pins = [
-                    ['pins/glitter-wave', 'tall', 'the beach, but make it glitter'], ['art/embracing-cultural-identity'], ['pins/pearl-hand', 'portrait'],
-                    ['pins/pink-shell', 'square'], ['img/cake-solar-system', null, 'birthday cake, but make it space'], ['pins/candle-table', 'xtall', 'dinner party goals'],
-                    ['pins/nacre', 'portrait'], ['img/cafe'], ['pins/mermaid-tail', 'tall', 'mermaid off duty'],
-                    ['pins/pink-collage', 'xtall'], ['art/braid'], ['pins/sparkle-sunset', 'square', 'golden hour, pink edition'],
-                    ['posters/gossip-girl'], ['pins/shells-pearls', 'tall'], ['img/nyc'],
-                    ['pins/underwater-shells', 'square'], ['pins/teal-collage', 'xtall', 'love you to the moon and back'], ['img/cupcakes'],
-                    ['pins/glitter-conch', 'portrait'], ['art/coexistence-of-both-my-worlds'], ['pins/wave-curl', 'tall'],
-                    ['img/chicago'], ['pins/pearl-collage', 'xtall', 'pearls on everything'], ['art/packing-home'],
-                    ['pins/sparkle-hands', 'portrait', 'main character water'], ['img/cake-lego'], ['art/vanity']
+                // two boards. each pin is [file, shape, caption]: shapes vary so it reads like a real masonry feed
+                const BOARDS = [
+                    { name: 'pisces ♓︎', sub: 'shells, pearls, glitter and the ocean. it’s a water sign thing.', pins: [
+                        ['glitter-wave', 'tall', 'the beach, but make it glitter'], ['pearl-hand', 'portrait'], ['pink-shell', 'square'],
+                        ['candle-table', 'xtall', 'dinner party goals'], ['nacre', 'portrait'], ['mermaid-tail', 'tall', 'mermaid off duty'],
+                        ['pink-collage', 'xtall'], ['sparkle-sunset', 'square', 'golden hour, pink edition'], ['shells-pearls', 'tall'],
+                        ['underwater-shells', 'square'], ['teal-collage', 'xtall', 'love you to the moon and back'], ['glitter-conch', 'portrait'],
+                        ['wave-curl', 'tall'], ['pearl-collage', 'xtall', 'pearls on everything'], ['sparkle-hands', 'portrait', 'main character water']] },
+                    { name: 'shaadi ♡', sub: 'red, gold, mehendi and a lot of bangles. someday.', pins: [
+                        ['shaadi-01', 'tall', 'he does the necklace'], ['shaadi-09', 'portrait'], ['shaadi-07', 'xtall', 'the lehenga. the whole lehenga.'],
+                        ['shaadi-03', 'square'], ['shaadi-11', 'tall', 'giggling through the pheras'], ['shaadi-04', 'portrait'],
+                        ['shaadi-06', 'tall', 'veil moment'], ['shaadi-10', 'square', 'sindoor'], ['shaadi-08', 'xtall'],
+                        ['shaadi-02', 'portrait'], ['shaadi-05', 'tall', 'haath phool, please'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
                 ];
-                const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
+                const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/pins/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
-                    <div class="pin-board"><b>pretty little things</b><small>${pins.length} pins · shells, pearls, glitter, cake and everything i love</small></div>
-                    <div class="pins">${pins.map(pinHtml).join('')}</div>`;
+                    <div class="pin-tabs" role="tablist">${BOARDS.map((b, n) => `<button type="button" role="tab" data-board="${n}" aria-selected="${n === 0}">${b.name}</button>`).join('')}</div>
+                    <div id="pin-board"></div>`;
+                const showBoard = n => {
+                    const b = BOARDS[n];
+                    $('#pin-board').innerHTML = `<div class="pin-board"><b>${b.name}</b><small>${b.pins.length} pins · ${b.sub}</small></div><div class="pins">${b.pins.map(pinHtml).join('')}</div>`;
+                    view.querySelectorAll('[data-board]').forEach(t => t.setAttribute('aria-selected', t.dataset.board == n));
+                };
+                view.querySelector('.pin-tabs').onclick = e => { const t = e.target.closest('[data-board]'); if (t) { SFX.tap(); showBoard(+t.dataset.board); } };
+                showBoard(0);
             } else if (k === 'procreate') {
                 const STACKS = [
                     { name: 'Paintings', items: ART.map(([t, d, f]) => [`assets/art/${f}.jpg`, t, d]) },
