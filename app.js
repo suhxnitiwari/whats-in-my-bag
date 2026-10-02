@@ -1909,10 +1909,10 @@ const VIEWS = {
         </ul></div>
         <div class="bbb kshop" id="kshop">
             <div class="bbb-photo kshop-photo" data-step="0">
-                <img data-s="0" src="assets/img/keys-before.jpg" alt="Me as a toddler, pouting in an empty shopping cart">
-                <img data-s="1" src="assets/img/keys-after.jpg" alt="Me as a toddler, beaming in a cart full of shopping bags" loading="lazy">
-                <img data-s="2" src="assets/img/keys-trunk.jpg" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
-                <img data-s="3" src="assets/img/keys-home.jpg" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
+                <img data-s="0" src="assets/img/keys-before.jpg?v=2" alt="Me as a toddler, pouting in an empty shopping cart">
+                <img data-s="1" src="assets/img/keys-after.jpg?v=2" alt="Me as a toddler, beaming in a cart full of shopping bags" loading="lazy">
+                <img data-s="2" src="assets/img/keys-trunk.jpg?v=2" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
+                <img data-s="3" src="assets/img/keys-home.jpg?v=2" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
                 <span class="bbb-tag mono" id="kshop-tag">before the mall</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
