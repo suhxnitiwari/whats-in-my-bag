@@ -1564,8 +1564,7 @@ const VIEWS = {
         <div class="pd" id="pd">
             <button type="button" class="pd-pad" id="pd-pad" aria-label="A wrapped pad. Open it">
                 <span class="pd-inside" aria-hidden="true"><svg viewBox="0 0 120 200"><path d="M42 8 h36 q14 0 14 22 v32 q22 4 22 18 q0 14 -22 18 v62 q0 32 -32 32 q-32 0 -32 -32 v-62 q-22 -4 -22 -18 q0 -14 22 -18 v-32 q0 -22 14 -22z" fill="#FFFDF8" stroke="#3A2626" stroke-width="2.5"/><path d="M60 26 q24 0 24 40 v74 q0 34 -24 34 q-24 0 -24 -34 v-74 q0 -40 24 -40z" fill="#E9DDF7"/><path d="M60 34 q18 0 18 34 v70 q0 28 -18 28 q-18 0 -18 -28 v-70 q0 -34 18 -34z" fill="none" stroke="#B9A6E3" stroke-width="1.6" stroke-dasharray="3 3"/></svg></span>
-                <span class="pd-back" aria-hidden="true"></span>
-                <span class="pd-flap" aria-hidden="true"><span class="pd-tab">peel</span></span>
+                <span class="pd-tri" aria-hidden="true"><span class="pd-f pd-f1"></span><span class="pd-f pd-f2"><span class="pd-tab">peel</span></span><span class="pd-f pd-f3"></span></span>
             </button>
             <button type="button" class="pd-note" id="pd-note" aria-expanded="false" aria-label="A little folded note taped to the pad. Unfold it">
                 <span class="pd-folded" aria-hidden="true"><span class="pd-tape"></span>♡</span>
@@ -1577,7 +1576,7 @@ const VIEWS = {
                 </span>
             </button>
         </div>
-        <p class="hand pd-say" id="pd-say">there’s a little note taped to it. unfold it first.</p>
+        <p class="hand pd-say" id="pd-say">read my note first ♡ then tap it to fold it up.</p>
         <p class="pad-more" id="pd-more" hidden>i care about this so much i’m working on an app for it: <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener">Cadence ↗</a>, a free, private period app for your first one and every one after.</p>`,
 
     brushes: () => `
@@ -1671,7 +1670,7 @@ const VIEWS = {
         <h2>My <em>wide-tooth</em> comb</h2>
         <p class="note">wide teeth, for long hair. drag it down through my hair. (it never works on the first try.)</p>
         <div class="hair" id="hair">
-            <canvas id="hair-cv" role="img" aria-label="The back of my head: long dark hair, tangled"></canvas>
+            <canvas id="hair-cv" role="img" aria-label="The back of my head: my long dark wavy hair, tangled"></canvas>
             <button type="button" class="hair-comb" id="hair-comb" aria-label="Comb my hair: drag it down through my hair, or press Enter for one stroke">${ITEMS.find(i => i.id === 'comb').art}</button>
             <span class="hair-tag mono" id="hair-tag">tangled</span>
             <span class="hair-meter" aria-hidden="true"><i id="hair-bar"></i></span>
@@ -2378,76 +2377,26 @@ const AFTER = {
         let W = 0, H = 0, done = false, braided = false, braidP = 0, strokes = 0;
         const tAt = (x, y) => { const c = Math.max(0, Math.min(COLS - 1, Math.floor(x / W * COLS))), r = Math.max(0, Math.min(ROWS - 1, Math.floor(y / H * ROWS))); return T[c][r]; };
         const size = () => { const dpr = devicePixelRatio || 1; W = hair.clientWidth; H = hair.clientHeight; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); draw(); };
-        const scene = () => {
-            const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#F2D7BC'); bg.addColorStop(1, '#E2B99C'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
-            const glow = g.createRadialGradient(W * .15, H * .32, 0, W * .15, H * .32, W * .6); glow.addColorStop(0, 'rgba(255,226,170,.75)'); glow.addColorStop(1, 'rgba(255,226,170,0)'); g.fillStyle = glow; g.fillRect(0, 0, W, H);
-            // shoulders in my pink top
-            g.fillStyle = '#E9A9B8'; g.strokeStyle = '#3A2626'; g.lineWidth = 2;
-            g.beginPath(); g.moveTo(-10, H); g.lineTo(-10, H * .44); g.quadraticCurveTo(W * .08, H * .33, W * .36, H * .31); g.lineTo(W * .64, H * .31); g.quadraticCurveTo(W * .92, H * .33, W + 10, H * .44); g.lineTo(W + 10, H); g.closePath(); g.fill(); g.stroke();
-            // the back of my head
-            g.fillStyle = '#2A1812'; g.beginPath(); g.ellipse(W * .5, H * .17, W * .23, H * .135, 0, 0, Math.PI * 2); g.fill();
+        // my real hair: the tangled photo on top, the smooth photo underneath. every grid cell's tangle level is how much
+        // of the tangled photo still shows there, blurred so the edges are soft. the braid photo fades in at the end.
+        const PIC = ['before', 'after', 'braid'].map(k => { const im = new Image(); im.src = `assets/img/me-hair-${k}.jpg`; im.onload = () => draw(); return im; });
+        const mk = document.createElement('canvas'), mg = mk.getContext('2d'), off = document.createElement('canvas'), og = off.getContext('2d');
+        mk.width = COLS; mk.height = ROWS;
+        const cover = (ctx, im, w, h) => { if (!im.complete || !im.naturalWidth) return; const r = Math.max(w / im.naturalWidth, h / im.naturalHeight), iw = im.naturalWidth * r, ih = im.naturalHeight * r; ctx.drawImage(im, (w - iw) / 2, (h - ih) / 2, iw, ih); };
+        const draw = () => {
+            if (!W) return;
+            g.clearRect(0, 0, W, H); cover(g, PIC[1], W, H);
+            if (braidP > 0) { g.globalAlpha = Math.min(1, braidP); cover(g, PIC[2], W, H); g.globalAlpha = 1; return; }
+            if (done) return;
+            // the tangle mask, one pixel per cell, stretched smooth
+            const md = mg.createImageData(COLS, ROWS);
+            for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) md.data[(r * COLS + c) * 4 + 3] = Math.round(Math.min(1, T[c][r] * 1.15) * 255);
+            mg.putImageData(md, 0, 0);
+            off.width = cv.width; off.height = cv.height; og.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+            cover(og, PIC[0], W, H);
+            og.globalCompositeOperation = 'destination-in'; og.imageSmoothingEnabled = true; og.drawImage(mk, 0, 0, W, H); og.globalCompositeOperation = 'source-over';
+            g.drawImage(off, 0, 0, W, H);
         };
-        const loose = () => {
-            // the hair mass first, so there are no gaps between strands, then every strand on top with its own frizz
-            g.fillStyle = '#2A1812'; g.beginPath();
-            for (let v = 0; v <= 1.0001; v += .05) { const y = H * (.16 + v * .74), x = W * (.5 - .23 - .17 * v); const f = tAt(x + 8, y); g.lineTo(x - f * 14 * Math.sin(v * 37), y); }
-            for (let v = 1; v >= -.0001; v -= .05) { const y = H * (.16 + v * .74), x = W * (.5 + .23 + .17 * v); const f = tAt(x - 8, y); g.lineTo(x + f * 14 * Math.sin(v * 41), y); }
-            g.closePath(); g.fill();
-            for (const st of STR) {
-                const top = H * (.08 + .07 * ((st.x - .5) / .23) ** 2), bot = H * st.len;
-                g.beginPath(); g.strokeStyle = st.c; g.lineWidth = st.w; g.globalAlpha = .85;
-                for (let k = 0; k <= 36; k++) {
-                    const v = k / 36, y = top + v * (bot - top);
-                    let x = W * (.5 + (st.x - .5) * (1 + .75 * v)) + Math.sin(v * 5 + st.ph) * W * .012;
-                    const f = tAt(x, y), fr = f * f * Math.sqrt(v);
-                    x += fr * (Math.sin(v * 46 + st.s) * W * .035 + Math.sin(v * 97 + st.s * 2) * W * .02 * st.a);
-                    k ? g.lineTo(x, y + fr * Math.sin(v * 63 + st.s) * 6) : g.moveTo(x, y);
-                }
-                g.stroke();
-            }
-            // flyaways and knots wherever it's still bad
-            g.globalAlpha = 1; g.strokeStyle = '#1C100B'; g.lineWidth = 1.2;
-            for (const [kx, ky, kr] of KNOTS) {
-                const f = tAt(kx * W, ky * H); if (f < .55) continue;
-                g.globalAlpha = Math.min(1, (f - .55) * 3); g.beginPath();
-                for (let a = 0; a < 16; a += .4) g.lineTo(kx * W + Math.cos(a) * kr * (1 + .3 * Math.sin(a * 3)), ky * H + Math.sin(a) * kr * .8 + a * .4);
-                g.stroke();
-            }
-            g.globalAlpha = 1;
-            // the shine comes back where it's smooth
-            for (const st of STR) {
-                if ((st.s | 0) % 3) continue;
-                const top = H * (.08 + .07 * ((st.x - .5) / .23) ** 2);
-                g.beginPath(); g.lineWidth = 1.3;
-                for (let k = 4; k <= 16; k++) {
-                    const v = k / 36, y = top + v * (H * st.len - top), x = W * (.5 + (st.x - .5) * (1 + .75 * v)) + Math.sin(v * 5 + st.ph) * W * .012;
-                    const sm = 1 - tAt(x, y); g.strokeStyle = `rgba(160,104,70,${(sm * sm * .55).toFixed(3)})`;
-                    k > 4 ? g.lineTo(x, y) : g.moveTo(x, y);
-                }
-                g.stroke();
-            }
-        };
-        const braid = p => {
-            // smooth, pulled back to the nape, then one long braid that grows as it's woven
-            g.fillStyle = '#2A1812'; g.beginPath(); g.ellipse(W * .5, H * .17, W * .235, H * .14, 0, 0, Math.PI * 2); g.fill();
-            g.lineWidth = 1.1;
-            for (let k = 0; k < 40; k++) { const sx = W * (.29 + .42 * k / 39); g.strokeStyle = k % 3 ? '#3A2318' : 'rgba(160,104,70,.6)'; g.beginPath(); g.moveTo(sx, H * (.07 + .06 * ((sx / W - .5) / .21) ** 2)); g.quadraticCurveTo(sx, H * .27, W * .5 + (sx - W * .5) * .15, H * .32); g.stroke(); }
-            const n = 15, y0 = H * .31, y1 = H * .86, step = (y1 - y0) / n, m = Math.max(1, Math.round(n * p));
-            for (let i = 0; i < m; i++) {
-                const y = y0 + step * (i + .5), wd = W * (.115 - .045 * i / n), side = i % 2 ? 1 : -1;
-                g.save(); g.translate(W * .5 + side * wd * .32, y); g.rotate(side * -.5);
-                g.fillStyle = i % 2 ? '#33201A' : '#2A1812'; g.strokeStyle = '#140B07'; g.lineWidth = 1.4;
-                g.beginPath(); g.ellipse(0, 0, wd * .78, step * .78, 0, 0, Math.PI * 2); g.fill(); g.stroke();
-                g.strokeStyle = 'rgba(170,112,76,.55)'; g.beginPath(); g.ellipse(-wd * .15, -step * .1, wd * .4, step * .45, 0, Math.PI * 1.1, Math.PI * 1.7); g.stroke();
-                g.restore();
-            }
-            if (p >= 1) {
-                g.fillStyle = '#F28DB2'; g.strokeStyle = '#3A2626'; g.lineWidth = 2; g.beginPath(); g.ellipse(W * .5, y1 + 4, W * .055, H * .016, 0, 0, Math.PI * 2); g.fill(); g.stroke();
-                g.strokeStyle = '#2E1B13'; g.lineWidth = 1.3;
-                for (let k = -4; k <= 4; k++) { g.beginPath(); g.moveTo(W * .5 + k * 2, y1 + 10); g.quadraticCurveTo(W * .5 + k * 5, y1 + 30, W * .5 + k * 7, y1 + 42); g.stroke(); }
-            }
-        };
-        const draw = () => { if (!W) return; scene(); braided || braidP > 0 ? braid(braidP) : loose(); };
         const progress = () => {
             let sum = 0, max = 0; T.forEach(col => col.forEach(t => { sum += t; max = Math.max(max, t); }));
             const pct = 1 - sum / (COLS * ROWS); bar.style.width = (pct * 100).toFixed(0) + '%';
@@ -2455,7 +2404,7 @@ const AFTER = {
                 done = true; T.forEach(col => col.fill(0)); draw(); SFX.sparkle();
                 const r = hair.getBoundingClientRect(); fairyDust(r.left + r.width / 2, r.top + r.height * .45);
                 tag.textContent = 'smooth'; say.textContent = `see? smooth. only took ${strokes} strokes. the comb stays in the bag.`;
-                cv.setAttribute('aria-label', 'The back of my head: long dark hair, smooth and shiny');
+                cv.setAttribute('aria-label', 'The back of my head: my long dark wavy hair, smooth and shiny');
                 $('#hair-braid').hidden = false;
             } else if (!done) tag.textContent = pct < .25 ? 'tangled' : pct < .7 ? 'getting there' : 'almost';
         };
@@ -3727,7 +3676,8 @@ const AFTER = {
     pads: () => {
         // first the note: unfold it, read it, fold it back up and it tucks itself aside. then the pad opens.
         const pd = $('#pd'), note = $('#pd-note'), pad = $('#pd-pad'), say = $('#pd-say');
-        let read = false;
+        let read = true;
+        pd.classList.add('reading'); note.setAttribute('aria-expanded', 'true');
         note.onclick = () => {
             if (pd.classList.contains('opened')) return;
             const open = pd.classList.toggle('reading');
@@ -3735,7 +3685,7 @@ const AFTER = {
             note.setAttribute('aria-label', open ? 'The note, unfolded. Tap to fold it back up' : 'The little note. Unfold it again');
             SFX.page();
             if (open) { read = true; say.textContent = 'tap the note to fold it back up.'; }
-            else { pd.classList.add('read'); say.textContent = 'okay. now open the pad ↑'; }
+            else { pd.classList.add('read'); say.textContent = 'okay. now unfold the pad ↑'; }
         };
         pad.onclick = () => {
             if (pd.classList.contains('reading')) return;
@@ -3743,7 +3693,7 @@ const AFTER = {
             const open = pd.classList.toggle('opened');
             pad.setAttribute('aria-label', open ? 'The pad, unwrapped. Tap to wrap it back up' : 'A wrapped pad. Open it');
             SFX.zip(open, .35);
-            say.textContent = open ? 'there you go. take two if you need them.' : 'wrapped back up. it’s yours whenever.';
+            say.textContent = open ? 'unfolded. there you go. take two if you need them.' : 'folded back up in thirds. it’s yours whenever.';
             $('#pd-more').hidden = !open;
         };
     },
