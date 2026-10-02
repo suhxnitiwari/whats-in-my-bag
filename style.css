@@ -2873,3 +2873,15 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .aw-head.on { border-color: var(--plum); box-shadow: 0 0 0 2px #F4C9D6; }
 
 .sunnies-pic { transform: rotate(-2deg); width: min(260px, 74%); }
+
+/* my actual chanels: chunky black square frames with clipped corners, a cream rim all the way around, cream CC on the temples */
+.rz-fr { position: relative; flex: 1; padding: 3px; background: #EFE3CF; clip-path: polygon(9% 0, 91% 0, 100% 14%, 100% 86%, 91% 100%, 9% 100%, 0 86%, 0 14%); }
+.rz-fr::before { content: ""; position: absolute; inset: 3px; background: linear-gradient(160deg, #2A2222, #0C0A0A 55%, #1C1616); clip-path: polygon(9% 0, 91% 0, 100% 14%, 100% 86%, 91% 100%, 9% 100%, 0 86%, 0 14%); }
+.rz-fr .rz-lens { position: relative; margin: 11%; flex: none; border: 0; outline: 0; box-shadow: none; border-radius: 4px; clip-path: polygon(6% 0, 94% 0, 100% 10%, 100% 90%, 94% 100%, 6% 100%, 0 90%, 0 10%); }
+.rz-fr .rz-lens::after { background: linear-gradient(180deg, rgba(62, 30, 18, .55), rgba(150, 92, 58, .22) 70%, rgba(205, 150, 105, .12)); }
+.rz-fr::after { content: ""; position: absolute; left: 14%; top: 7%; width: 30%; height: 3px; border-radius: 3px; background: rgba(255,255,255,.18); }
+.rz-bridge { width: 7%; height: 12px; margin-top: -24%; background: #0E0B0B; border-top: 2.5px solid #EFE3CF; border-radius: 8px 8px 3px 3px; flex: none; }
+.rz-temple { width: 9%; height: 16px; margin-top: -24%; background: #0E0B0B; border-top: 2px solid #EFE3CF; border-bottom: 2px solid #EFE3CF; display: grid; place-items: center; flex: none; }
+.rz-tl { border-radius: 6px 0 0 6px; border-left: 2px solid #EFE3CF; } .rz-tr { border-radius: 0 6px 6px 0; border-right: 2px solid #EFE3CF; }
+.rz-cc { width: 90%; height: auto; }
+.rz-rig { width: 54%; }

@@ -1890,7 +1890,7 @@ const VIEWS = {
         <div class="rz" id="rz">
             <div class="rz-scene rz-base">${ROMANCE[0].svg}</div>
             <div class="rz-rig" id="rz-rig" aria-hidden="true">
-                <div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div><span class="rz-bridge"></span><div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div>
+                <span class="rz-temple rz-tl"><svg class="rz-cc" viewBox="0 0 40 24" aria-hidden="true"><path d="M11.5 6.6 A7 7 0 1 1 11.5 17.4" fill="none" stroke="#EFE3CF" stroke-width="2.6" stroke-linecap="round"/><path d="M28.5 6.6 A7 7 0 1 0 28.5 17.4" fill="none" stroke="#EFE3CF" stroke-width="2.6" stroke-linecap="round"/></svg></span><div class="rz-fr"><div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div></div><span class="rz-bridge"></span><div class="rz-fr"><div class="rz-lens"><div class="rz-scene">${ROMANCE[0].svg}</div></div></div><span class="rz-temple rz-tr"><svg class="rz-cc" viewBox="0 0 40 24" aria-hidden="true"><path d="M11.5 6.6 A7 7 0 1 1 11.5 17.4" fill="none" stroke="#EFE3CF" stroke-width="2.6" stroke-linecap="round"/><path d="M28.5 6.6 A7 7 0 1 0 28.5 17.4" fill="none" stroke="#EFE3CF" stroke-width="2.6" stroke-linecap="round"/></svg></span>
             </div>
             <span class="rz-hint hand" id="rz-hint">drag my sunglasses around ↔</span>
         </div>
@@ -3671,11 +3671,13 @@ const AFTER = {
             const rw = rig.offsetWidth, rh = rig.offsetHeight;
             const lx = Math.max(0, Math.min(W - rw, x * W - rw / 2)), ly = Math.max(0, Math.min(H - rh, y * H - rh / 2));
             rig.style.transform = `translate(${lx}px, ${ly}px)`;
+            // line each lens's copy up with the scene behind it, measured on screen so the frames can nest however they like
+            const rr = rz.getBoundingClientRect(), k2 = rr.width / (rz.offsetWidth || 1);
             rig.querySelectorAll('.rz-lens').forEach(l => {
-                const sc = l.firstElementChild;
+                const sc = l.firstElementChild, lr = l.getBoundingClientRect();
                 sc.style.width = W + 'px'; sc.style.height = H + 'px';
-                sc.style.left = -(lx + l.offsetLeft + l.clientLeft) + 'px';
-                sc.style.top = -(ly + l.offsetTop + l.clientTop) + 'px';
+                sc.style.left = -((lr.left - rr.left) / k2 - rz.clientLeft + l.clientLeft) + 'px';
+                sc.style.top = -((lr.top - rr.top) / k2 - rz.clientTop + l.clientTop) + 'px';
             });
         };
         const show = () => {
