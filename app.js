@@ -208,8 +208,9 @@ const SFX = (() => {
                 // press it again to make it stop
                 if (alarm) { this.hush(); return false; }
                 const out = c.createGain(); out.connect(c.destination); alarm = out;
-                for (let k = 0; k < 14; k++) horn(t + k * .55, .32, .17, out);
-                setTimeout(() => { if (alarm === out) alarm = null; }, 14 * 550);
+                // five seconds of honking, then it gives up
+                for (let k = 0; k < 9; k++) horn(t + k * .55, .32, .17, out);
+                setTimeout(() => { if (alarm === out) alarm = null; }, 5000);
                 return true;
             }
             return false;
@@ -3717,7 +3718,7 @@ const AFTER = {
             lock: 'locked. probably. let me press it again.',
             unlock: 'unlocked… now which car was it?',
             trunk: 'the trunk is open. i did not mean to do that.',
-            panic: 'beep beep beep. sorry, Austin.'
+            panic: 'OMGGG WHERE THE F%CK DID I PARK THIS CAR 😭'
         };
         sheetBody.querySelector('.fob-btns').onclick = e => {
             const b = e.target.closest('[data-fob]'); if (!b) return;
