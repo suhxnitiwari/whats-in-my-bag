@@ -2868,3 +2868,5 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .aw-head svg { width: 100%; height: 100%; display: block; }
 .aw-head:hover { transform: translateY(-2px); }
 .aw-head.on { border-color: var(--plum); box-shadow: 0 0 0 2px #F4C9D6; }
+
+.sunnies-pic { transform: rotate(-2deg); width: min(260px, 74%); }

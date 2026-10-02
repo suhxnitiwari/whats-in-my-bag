@@ -1900,7 +1900,8 @@ const VIEWS = {
         </div>
         <p>I romanticize everything. A cold coffee, a traffic jam, a rainy walk to class in the wrong shoes. Nothing about the day actually changes. I just pick the version worth looking at.</p>
         <div class="row"><button class="btn solid" type="button" id="shades">Put them on</button> <button class="btn" type="button" id="rz-next">another moment →</button></div>
-        <p class="shades-note" id="shades-note"></p>`,
+        <p class="shades-note" id="shades-note"></p>
+        <figure class="tk-pic sunnies-pic"><img src="assets/img/me-sunnies.jpg" alt="Me in the car wearing my black and beige Chanel square sunglasses" loading="lazy"><figcaption class="hand">exhibit B: the sunnies, in their natural habitat (my car) 🕶️</figcaption></figure>`,
 
     keys: () => `
         <div class="fob" id="fob">${BMW_FOB}</div>
