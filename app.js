@@ -1923,9 +1923,9 @@ const VIEWS = {
             <div class="bbb-photo kshop-photo" data-step="0">
                 <img data-s="0" src="assets/img/keys-before.jpg?v=2" alt="Me as a toddler, pouting in an empty shopping cart">
                 <img data-s="1" src="assets/img/keys-after.jpg?v=2" alt="Me as a toddler, beaming in a cart full of shopping bags" loading="lazy">
-                <img data-s="2" src="assets/img/keys-trunk.jpg?v=2" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
+                <img data-s="2" src="assets/img/keys-trunk.jpg?v=3" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
                 <img data-s="3" src="assets/img/keys-home.jpg?v=2" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
-                <img class="kshop-anim" src="assets/trunk/f00.jpg" alt="" aria-hidden="true">
+                <img class="kshop-anim-base" src="assets/img/keys-home.jpg?v=2" alt="" aria-hidden="true"><img class="kshop-anim" src="assets/img/keys-home.jpg?v=2" alt="" aria-hidden="true">
                 <span class="bbb-tag mono" id="kshop-tag">before the mall</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
@@ -3746,8 +3746,8 @@ const AFTER = {
                 const opening = !trunkOpen;
                 if (playing) return;
                 // start the flipbook from whatever the photo shows now, so it never jumps
-                if (opening) { SFX.fob('trunk'); playTrunk([0, 1, 2, 3, 4, 5, 6, 7], () => { setStep(2); toast('trunk’s open. the bags are safe ♡'); }); }
-                else { SFX.fob('lock'); playTrunk([10, 11, 12, 13, 14, 15], () => { setStep(3); toast('trunk closed. bags secured. no one will ever know.'); }); }
+                if (opening) { SFX.fob('trunk'); playTrunk(true, () => { setStep(2); toast('trunk’s open. the bags are safe ♡'); }); }
+                else { SFX.fob('lock'); playTrunk(false, () => { setStep(3); toast('trunk closed. bags secured. no one will ever know.'); }); }
                 $('#kshop').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
                 return;
             }
@@ -3763,9 +3763,9 @@ const AFTER = {
             [null, 'before the mall', 'cmon barbie, let’s go shopping 🛍️', 'can we puh-weaseee go shopping? 🥺'],
             ['unlock', 'after the mall!', 'load up the car 🚙', 'nordstrom, intimissimi, reformation, louis vuitton. it’s called retail therapy.'],
             ['trunk', 'okay, stuff’s in the car', 'okay, time to go home 🏠', 'the trunk is full. the trunk is never full.'],
-            ['lock', 'okay, time to go home', 'one more lap 🛍️', 'DIVAAA, headed home. (via one more store.)']
+            ['lock', 'okay, time to go home', 'okay but can we stop for coffee on the way ☕', 'DIVAAA, headed home.']
         ];
-        const laps2 = ['one more lap, obviously.', 'retail therapy is still therapy.', 'okay NOW we’re going home. (we are not.)'];
+        const laps2 = ['medici. vanilla latte. obviously ☕', 'one stamp closer to a free one.', 'okay NOW we’re going home ♡'];
         let step = 0, laps = 0;
         const photo = shop.querySelector('.kshop-photo');
         const showStep = () => {
@@ -3777,21 +3777,20 @@ const AFTER = {
         let trunkOpen = false;
         const setStep = n => { step = n; trunkOpen = n === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; showStep(); if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); } };
         const b2 = sheetBody.querySelector('[data-fob="trunk"]');
-        // the trunk flipbook: 20 frames. 0–5 the tailgate lifts and there are the bags, 10–14 it swings shut.
+        // the trunk: the incoming photo wipes in along the tailgate. opening sweeps up from the bumper, closing sweeps down from the roof.
         const anim = shop.querySelector('.kshop-anim');
-        const FR = Array.from({ length: 20 }, (_, i) => `assets/trunk/f${String(i).padStart(2, '0')}.jpg`);
-        FR.forEach(src => { const im = new Image(); im.src = src; });
         let playing = false;
-        const playTrunk = (frames, done) => {
+        const playTrunk = (opening, done) => {
             if (reduce) { done(); return; }
-            playing = true; photo.classList.add('animating');
-            let i = 0;
-            const tick = () => {
-                anim.src = FR[frames[i]];
-                if (++i < frames.length) setTimeout(tick, 95);
-                else { done(); setTimeout(() => { photo.classList.remove('animating'); playing = false; }, 800); }
-            };
-            tick();
+            playing = true;
+            shop.querySelector('.kshop-anim-base').src = opening ? 'assets/img/keys-home.jpg?v=2' : 'assets/img/keys-trunk.jpg?v=3';
+            anim.src = opening ? 'assets/img/keys-trunk.jpg?v=3' : 'assets/img/keys-home.jpg?v=2';
+            anim.style.transition = 'none';
+            anim.style.clipPath = opening ? 'inset(78% 0 0 0)' : 'inset(0 0 100% 0)';
+            photo.classList.add('animating'); void anim.offsetWidth;
+            anim.style.transition = 'clip-path 1.1s cubic-bezier(.45,.05,.25,1)';
+            anim.style.clipPath = 'inset(0 0 0 0)';
+            setTimeout(() => { done(); setTimeout(() => { photo.classList.remove('animating'); anim.style.clipPath = ''; playing = false; }, 800); }, 1150);
         };
         $('#kshop-go').onclick = () => {
             if (step < STEPS.length - 1) { step++; trunkOpen = step === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }

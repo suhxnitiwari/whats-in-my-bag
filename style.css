@@ -2819,8 +2819,10 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .apt.near .apt-reader i { border-color: #F28DB4; box-shadow: 0 0 10px 3px rgba(242,141,180,.7); }
 
 /* trunk flipbook sits on top of the photo while it plays */
-.kshop-anim { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none !important; pointer-events: none; }
-.kshop-photo.animating .kshop-anim { opacity: 1 !important; }
+.kshop-anim, .kshop-anim-base { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0 !important; pointer-events: none; background: #fff; }
+.kshop-photo.animating .kshop-anim, .kshop-photo.animating .kshop-anim-base { opacity: 1 !important; }
+.kshop-anim { z-index: 2; } .kshop-anim-base { z-index: 1; }
+.kshop-photo .bbb-tag { z-index: 3; }
 
 /* pads: the note is big and centered, front and center. folded, it slides off to the side. */
 .pd.reading .pd-note { left: 6%; right: 6%; top: 4%; width: auto; transform: rotate(-1.2deg); }
