@@ -1911,10 +1911,10 @@ const VIEWS = {
             <div class="bbb-photo">
                 <img src="assets/img/keys-before.jpg" alt="Me as a toddler, pouting in an empty shopping cart">
                 <img class="bbb-after" src="assets/img/keys-after.jpg" alt="Me as a toddler, beaming in a cart full of shopping bags" aria-hidden="true">
-                <span class="bbb-tag mono" id="kshop-tag">before the car keys</span>
+                <span class="bbb-tag mono" id="kshop-tag">before shopping</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
-            <p class="bbb-cap hand" id="kshop-cap" aria-live="polite">no keys. no ride. no bags.</p>
+            <p class="bbb-cap hand" id="kshop-cap" aria-live="polite">can we puh-weaseee go shopping? 🥺</p>
         </div>`,
 
     laptop: () => `
@@ -3735,7 +3735,7 @@ const AFTER = {
         $('#kshop-go').onclick = () => {
             if (!shop.classList.contains('after')) {
                 shop.classList.add('after'); SFX.fob('unlock');
-                $('#kshop-tag').textContent = 'after the car keys';
+                $('#kshop-tag').textContent = 'after shopping';
                 $('#kshop-go').textContent = 'one more lap 🛍️';
                 $('#kshop-cap').textContent = 'nordstrom, intimissimi, reformation, louis vuitton. it’s called retail therapy.';
                 shop.querySelector('.bbb-after').setAttribute('aria-hidden', 'false');
