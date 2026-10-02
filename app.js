@@ -3298,24 +3298,33 @@ const AFTER = {
             if (k === 'netflix' || k === 'prime') {
                 // both streaming apps open to the same thing i’m always mid-way through
                 const nf = k === 'netflix';
-                const play = () => {
-                    view.innerHTML = back + `<div class="tv-play"><img src="assets/img/couch-potato.jpg" alt="Me as a toddler, fast asleep on the couch holding two remotes"><span class="tv-bar"><i></i></span></div>
-                        <p class="tv-t">couch potato hani</p><p class="tv-s">S1 E1 · fell asleep holding both remotes. never finished the episode.</p>`;
-                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                const exit = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                // [poster file, title, year, the line that shows when you hit play]
+                const ROWS = nf ? [
+                    ['Continue Watching for hani', [['gossip-girl', 'Gossip Girl', '2007–2012', 'xoxo. i’m a blair, unfortunately.'], ['bridgerton', 'Bridgerton', '2020–', 'the hand stretch. that’s it. that’s the review.'], ['jane-the-virgin', 'Jane the Virgin', '2014–2019', 'the narrator is my favorite character.'], ['ginny-and-georgia', 'Ginny & Georgia', '2021–', 'georgia is a menace and i love her.']]],
+                    ['Rewatching on repeat', [['friends', 'Friends', '1994–2004', 'pivot. PIVOT.'], ['modern-family', 'Modern Family', '2009–2020', 'i am a claire.'], ['desperate-housewives', 'Desperate Housewives', '2004–2012', 'bree van de kamp, my role model.'], ['gilmore-girls', 'Gilmore Girls', '2000–2007', 'coffee, coffee, coffee.']]],
+                    ['New &amp; obsessed', [['off-campus', 'Off Campus', '2026–', 'hockey boys. say less.'], ['voicemails-for-isabelle', 'Voicemails for Isabelle', '2026', 'yes, i cried.'], ['masaba-masaba', 'Masaba Masaba', '2020–2022', 'the fits. the fits!'], ['mismatched', 'Mismatched', '2020–', 'rishi + dimple forever.']]]
+                ] : [
+                    ['Hindi movies i know by heart', [['yeh-jawaani-hai-deewani', 'Yeh Jawaani Hai Deewani', '2013', 'naina’s glasses-off moment changed me.'], ['jab-we-met', 'Jab We Met', '2007', 'main apni favourite hoon.'], ['rocky-aur-rani-kii-prem-kahaani', 'Rocky Aur Rani Kii Prem Kahaani', '2023', 'the sarees. the songs. the drama.'], ['tu-jhoothi-main-makkaar', 'Tu Jhoothi Main Makkaar', '2023', 'a romcom with a spreadsheet of lies.'], ['student-of-the-year', 'Student of the Year', '2012', 'the most unrealistic school ever. i want in.']]],
+                    ['Prime originals', [['call-me-bae', 'Call Me Bae', '2024', 'bae is all of us.'], ['mind-the-malhotras', 'Mind the Malhotras', '2019', 'my family, but on tv.']]]
+                ];
+                const play = (src, t, yr, line) => {
+                    view.innerHTML = back.replace('‹ home', '‹ back') + `<div class="tv-play"><img src="${src}" alt=""><span class="tv-bar"><i></i></span></div><p class="tv-t">${t} <span class="tv-yr">${yr}</span></p><p class="tv-s">${line}</p>`;
+                    $('#ip-back').onclick = row;
                 };
+                const pip = () => `<div class="tv-pip" id="tv-pip"><button type="button" class="tv-pip-go" id="tv-pip-go" aria-label="Play couch potato hani"><img src="assets/img/couch-potato.jpg" alt=""><span class="tv-prog"><i></i></span></button><button type="button" class="tv-pip-x" id="tv-pip-x" aria-label="Close the mini player">×</button><b>couch potato hani · S1 E1</b></div>`;
                 const row = () => {
-                    view.innerHTML = back + `<p class="tv-head">${nf ? 'Continue Watching for hani' : 'Continue watching'}</p>
-                        <button type="button" class="tv-card" id="tv-card"><img src="assets/img/couch-potato.jpg" alt=""><span class="tv-prog"><i></i></span><b>couch potato hani</b></button>
-                        <p class="tv-head">${nf ? 'Because you watched couch potato hani' : 'Recommended for you'}</p>
-                        <p class="tv-s">more naps. more snacks. the remote stays with me.</p>`;
-                    $('#tv-card').onclick = play;
-                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                    view.innerHTML = back + ROWS.map(([h, items]) => `<p class="tv-head">${h}</p><div class="tv-row">${items.map(([f, t, yr, line]) => `<button type="button" class="tv-poster" data-tv="${f}" title="${t}"><img src="assets/posters/${f}.jpg" alt="${t}" loading="lazy"></button>`).join('')}</div>`).join('') + pip();
+                    view.querySelectorAll('[data-tv]').forEach(b => b.onclick = () => { const it = ROWS.flatMap(r => r[1]).find(x => x[0] === b.dataset.tv); play(`assets/posters/${it[0]}.jpg`, it[1], it[2], it[3]); });
+                    $('#tv-pip-go').onclick = () => play('assets/img/couch-potato.jpg', 'couch potato hani', 'S1 E1', 'fell asleep holding both remotes. never finished the episode.');
+                    $('#tv-pip-x').onclick = () => { $('#tv-pip').remove(); toast('the remote stays with me though.'); };
+                    $('#ip-back').onclick = exit;
                 };
                 view.classList.remove('procreate'); view.classList.add('tv', nf ? 'nf' : 'pv'); view.classList.remove(nf ? 'pv' : 'nf');
                 if (nf) {
                     view.innerHTML = back + `<p class="tv-who">Who’s watching?</p><button type="button" class="tv-prof" id="tv-prof"><span>h</span>hani</button>`;
                     $('#tv-prof').onclick = row;
-                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                    $('#ip-back').onclick = exit;
                 } else row();
                 home.hidden = true; view.hidden = false;
                 return;
