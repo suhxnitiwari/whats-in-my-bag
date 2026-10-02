@@ -979,12 +979,14 @@ const MORE_APPS = {
     maps: {
         html: () => {
             const pins = [
-                ['mccombs', 'McCombs', 30, 34, '#BF5700', 'where i study MIS and psychology. hook ’em 🤘'],
-                ['medici', 'Medici', 52, 46, '#7A4B2E', 'vanilla latte. every day. ten stamps, one free.'],
-                ['home', 'Home', 74, 30, '#2E6FB7', 'nice try. that one stays private 🏠'],
-                ['curb', 'the curb', 64, 68, '#D93025', 'it came out of nowhere. i will not be taking questions.'],
-                ['sat', 'Saturdays', 22, 70, '#1E8E3E', 'i built an app that plans the best day around austin.', GH + 'saturday-in-austin/'],
-                ['next', '???', 86, 78, '#8E24AA', 'wherever the boarding pass says. (it says “???”.)']
+                ['union', 'the Union', 20, 24, '#BF5700'],
+                ['mccombs', 'McCombs', 48, 18, '#BF5700'],
+                ['rowling', 'Rowling', 24, 46, '#BF5700'],
+                ['medici', 'Medici', 56, 40, '#7A4B2E'],
+                ['home', 'my apartment', 80, 22, '#2E6FB7'],
+                ['avery', 'avery ♡', 84, 46, '#E0567F'],
+                ['curb', 'the curb', 50, 76, '#D93025'],
+                ['next', '???', 84, 84, '#8E24AA']
             ];
             return `<div class="mp">
                 <div class="mp-search">🔍 <span>Search Maps</span></div>
@@ -995,7 +997,7 @@ const MORE_APPS = {
             </div>`;
         },
         after: v => {
-            const pins = { mccombs: ['McCombs School of Business', 'where i study MIS and psychology. hook ’em 🤘'], medici: ['Medici Roasting', 'vanilla latte. every day. ten stamps, one free.'], home: ['Home', 'nice try. that one stays private 🏠'], curb: ['the curb', 'it came out of nowhere. i will not be taking questions.'], sat: ['Saturdays', 'i built an app that plans the best day around austin.', GH + 'saturday-in-austin/'], next: ['???', 'wherever the boarding pass says. (it says “???”.)'] };
+            const pins = { union: ['Texas Union', 'my study spot. a table, a vanilla latte, six tabs open.'], mccombs: ['McCombs School of Business', 'where i study MIS and psychology. hook ’em 🤘'], rowling: ['Rowling Hall', 'the pretty McCombs building. i will walk across campus for these study rooms.'], medici: ['Medici Roasting', 'vanilla latte. every day. ten stamps, one free.'], home: ['my apartment', 'nice try. the address stays private 🏠'], avery: ['visiting avery ♡', 'the best kind of plans.'], curb: ['the curb', 'it came out of nowhere. i will not be taking questions.'], next: ['???', 'wherever the boarding pass says. (it says “???”.)'] };
             v.querySelectorAll('.mp-pin').forEach(p => p.onclick = () => {
                 const [t, d, href] = pins[p.dataset.pin];
                 v.querySelectorAll('.mp-pin').forEach(x => x.classList.toggle('on', x === p));
