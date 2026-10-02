@@ -8,7 +8,7 @@ const phone = () => matchMedia('(max-width: 760px)').matches;
 /* sounds, all made right here in the browser (no audio files): zipper teeth, things landing on the desk, a little sparkle, a spritz.
    the button in the corner mutes everything, and it remembers. */
 const SFX = (() => {
-    let ctx = null, on = true, noise = null;
+    let ctx = null, on = true, noise = null, bus = null;
     try { on = localStorage.getItem('bag-sound') !== 'off'; } catch {}
     const ac = () => {
         if (!on) return null;
@@ -17,6 +17,19 @@ const SFX = (() => {
             if (ctx.state === 'suspended') ctx.resume();
         } catch { return null; }
         if (!noise) { noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+        if (!bus) {
+            // the master: everything goes through one soft chain so the whole site sounds expensive, not like an arcade.
+            // a gentle lowpass takes the edge off hisses and clicks, a slow compressor keeps anything from jumping out,
+            // and a short, warm room (a little reverb) gives every sound somewhere nice to land
+            const lp = ctx.createBiquadFilter(), comp = ctx.createDynamicsCompressor(), out = ctx.createGain(), room = ctx.createConvolver(), wet = ctx.createGain();
+            lp.type = 'lowpass'; lp.frequency.value = 6800; lp.Q.value = .5;
+            comp.threshold.value = -22; comp.knee.value = 18; comp.ratio.value = 3; comp.attack.value = .006; comp.release.value = .25;
+            const len = Math.round(ctx.sampleRate * 1.3), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+            for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2) * (i < 40 ? i / 40 : 1); }
+            room.buffer = ir; wet.gain.value = .16; out.gain.value = .78;
+            bus = ctx.createGain();
+            bus.connect(lp); lp.connect(comp); lp.connect(room); room.connect(wet); wet.connect(comp); comp.connect(out); out.connect(ctx.destination);
+        }
         return ctx;
     };
     // a short filtered burst of noise: one zipper tooth, a tap, a spray
@@ -24,13 +37,13 @@ const SFX = (() => {
         const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
         src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
         g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .002); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
-        src.connect(f).connect(g).connect(c.destination); src.start(at, Math.random() * .9); src.stop(at + dur + .02);
+        src.connect(f).connect(g).connect(bus); src.start(at, Math.random() * .9); src.stop(at + dur + .02);
     };
     const tone = (c, at, dur, from, to, vol, type = 'sine') => {
         const o = c.createOscillator(), g = c.createGain();
         o.type = type; o.frequency.setValueAtTime(from, at); o.frequency.exponentialRampToValueAtTime(to, at + dur);
         g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .006); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
-        o.connect(g).connect(c.destination); o.start(at); o.stop(at + dur + .02);
+        o.connect(g).connect(bus); o.start(at); o.stop(at + dur + .02);
     };
     // a zipper run: warm filtered noise chopped at the rate the teeth pass, so it reads as "zzzip" and not as static
     const rasp = (c, at, dur, f0, f1, rate, vol, rate1 = rate) => {
@@ -40,7 +53,7 @@ const SFX = (() => {
         lfo.type = 'triangle'; lfo.frequency.setValueAtTime(rate, at); lfo.frequency.linearRampToValueAtTime(rate1, at + dur);
         am.gain.value = .55; depth.gain.value = .45; lfo.connect(depth).connect(am.gain);
         g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + Math.min(.03, dur * .3)); g.gain.setValueAtTime(vol, at + dur * .75); g.gain.linearRampToValueAtTime(0, at + dur);
-        src.connect(f).connect(am).connect(g).connect(c.destination);
+        src.connect(f).connect(am).connect(g).connect(bus);
         src.start(at, Math.random() * .9); lfo.start(at); src.stop(at + dur + .02); lfo.stop(at + dur + .02);
     };
     let alarm = null;
@@ -79,6 +92,95 @@ const SFX = (() => {
             const now = c.currentTime;
             burst(c, now, .3, 6500, .7, .12); burst(c, now + .02, .22, 9000, .9, .06);
         },
+        // a scanner's beep, but polite
+        beep() { const c = ac(); if (!c) return; const t = c.currentTime; tone(c, t, .22, 1318.5, 1318.5, .06); tone(c, t, .16, 2637, 2637, .012); },
+        // police: the "whoop whoop" when they pull you over, and the full wail
+        siren(kind = 'whoop') {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, o = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain();
+            o.type = 'sawtooth'; lp.type = 'lowpass'; lp.frequency.value = 1500; lp.Q.value = .6;
+            let end;
+            if (kind === 'whoop') {
+                // two quick rising yelps
+                [0, .42].forEach(d => { o.frequency.setValueAtTime(420, now + d); o.frequency.exponentialRampToValueAtTime(1350, now + d + .3); o.frequency.setValueAtTime(1350, now + d + .34); });
+                end = now + .8;
+                g.gain.setValueAtTime(0, now); [0, .42].forEach(d => { g.gain.linearRampToValueAtTime(.09, now + d + .03); g.gain.setValueAtTime(.09, now + d + .3); g.gain.linearRampToValueAtTime(0, now + d + .36); });
+            } else {
+                // the wail: slow sweeps up and down, fading as they drive off
+                const cyc = 1.1, n = 3;
+                o.frequency.setValueAtTime(650, now);
+                for (let k = 0; k < n; k++) { o.frequency.exponentialRampToValueAtTime(1450, now + k * cyc + cyc * .55); o.frequency.exponentialRampToValueAtTime(650, now + (k + 1) * cyc); }
+                end = now + n * cyc;
+                g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(.08, now + .2); g.gain.setValueAtTime(.08, now + cyc * 1.5); g.gain.linearRampToValueAtTime(0, end);
+            }
+            o.connect(lp); lp.connect(g).connect(bus);
+            o.start(now); o.stop(end + .05);
+        },
+        // paper: one swish of a card or envelope sliding (rising or falling filtered noise)
+        swish(at = 0, dur = .2, f0 = 1400, f1 = 3600, vol = .07) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime + at, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+            src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = 1.1;
+            f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+            g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + dur * .35); g.gain.exponentialRampToValueAtTime(.0008, t + dur);
+            src.connect(f).connect(g).connect(bus); src.start(t, Math.random() * .9); src.stop(t + dur + .02);
+        },
+        // the mailbox: the key scrapes in, clicks round, the little metal door swings open
+        mailKey() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            for (let k = 0; k < 6; k++) burst(c, now + k * .045, .03, 3800 + k * 250, 5, .05);
+            this.tink(2100, .03, .3, .3);
+        },
+        mailTurn() { const c = ac(); if (!c) return; const now = c.currentTime; burst(c, now, .02, 2600, 4, .12); tone(c, now, .08, 900, 600, .05, 'triangle'); },
+        mailDoor() { const c = ac(); if (!c) return; const now = c.currentTime; this.swish(0, .35, 600, 300, .05); tone(c, now + .3, .25, 260, 180, .12); this.tink(880, .04, .3, .5); },
+        // and then it floods: card after card sliding out and landing in a pile
+        flood() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            for (let k = 0; k < 14; k++) {
+                const at = k * .085 + Math.random() * .04;
+                this.swish(at, .16 + Math.random() * .12, 1200 + Math.random() * 600, 3200 + Math.random() * 1600, .06);
+                burst(c, now + at + .18, .04, 500 + Math.random() * 300, .9, .05);   // it lands on the pile
+            }
+        },
+        // opening a letter: the flap tears free, the paper unfolds with a crinkle
+        letter() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            for (let k = 0; k < 18; k++) burst(c, now + k * .016 + Math.random() * .01, .02, 2500 + Math.random() * 3500, 2, .06);
+            this.swish(.32, .3, 1800, 4200, .07); this.swish(.6, .25, 3600, 1500, .05);
+        },
+        // jewelry: the box's little latch, a fine chain sliding, and charms clinking like crystal
+        jewelbox() {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime;
+            burst(c, now, .03, 2600, 3, .09); burst(c, now + .05, .02, 3400, 4, .05); tone(c, now, .14, 190, 120, .05);
+        },
+        chain(dur = .45, vol = .03) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, n = Math.round(dur * 46);
+            for (let k = 0; k < n; k++) burst(c, now + Math.random() * dur, .012 + Math.random() * .01, 5200 + Math.random() * 4000, 6, vol * (.5 + Math.random() * .5));
+        },
+        // a struck bit of metal or crystal: a few inharmonic partials that ring and fade
+        tink(f = 2600, vol = .05, at = 0, dur = .8) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime + at;
+            [1, 2.76, 5.4, 8.9].forEach((m, i) => {
+                const o = c.createOscillator(), g = c.createGain();
+                o.type = 'sine'; o.frequency.value = f * m;
+                g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol / (1 + i * .8), t + .002); g.gain.exponentialRampToValueAtTime(.0004, t + dur / (1 + i * .7));
+                o.connect(g).connect(bus); o.start(t); o.stop(t + dur + .05);
+            });
+        },
+        // the swarovski one: seven charms knocking into each other on the chain
+        charms() {
+            this.chain(.75, .03);
+            [2200, 3100, 2650, 3900, 2450, 3500, 4300].forEach((f, k) => this.tink(f * (.97 + Math.random() * .06), .045, .06 + k * .07 + Math.random() * .05, .9));
+            [2900, 3700].forEach((f, k) => this.tink(f, .03, .62 + k * .1, .7));
+        },
+        // a single gold pendant swinging up off the velvet
+        pendant(f = 1500) { this.chain(.4, .028); this.tink(f, .055, .28, 1.1); },
         // an icon landing on the desktop
         pop(k = 0) {
             const c = ac(); if (!c) return;
@@ -92,11 +194,11 @@ const SFX = (() => {
             const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
             src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.frequency.value = 1100; f.Q.value = .5;
             g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(vol, now + up); g.gain.setValueAtTime(vol, end - down); g.gain.linearRampToValueAtTime(0, end);
-            src.connect(f).connect(g).connect(c.destination); src.start(now, Math.random() * .5); src.stop(end + .05);
+            src.connect(f).connect(g).connect(bus); src.start(now, Math.random() * .5); src.stop(end + .05);
             const o = c.createOscillator(), og = c.createGain();
             o.type = 'triangle'; o.frequency.setValueAtTime(320, now); o.frequency.linearRampToValueAtTime(880, now + up * 2);
             og.gain.setValueAtTime(0, now); og.gain.linearRampToValueAtTime(vol * .12, now + up); og.gain.setValueAtTime(vol * .12, end - down); og.gain.linearRampToValueAtTime(0, end);
-            o.connect(og).connect(c.destination); o.start(now); o.stop(end + .05);
+            o.connect(og).connect(bus); o.start(now); o.stop(end + .05);
         },
         // fabric: soft, uneven swishes of filtered noise, like nylon shifting
         rustle(dur = .6, vol = .09) {
@@ -108,7 +210,7 @@ const SFX = (() => {
                 src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = .8;
                 f.frequency.setValueAtTime(700 + Math.random() * 600, at); f.frequency.linearRampToValueAtTime(1300 + Math.random() * 1200, at + d);
                 g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol * (.5 + Math.random() * .5), at + d * .45); g.gain.exponentialRampToValueAtTime(.0008, at + d);
-                src.connect(f).connect(g).connect(c.destination); src.start(at, Math.random() * .9); src.stop(at + d + .02);
+                src.connect(f).connect(g).connect(bus); src.start(at, Math.random() * .9); src.stop(at + d + .02);
             }
         },
         // the whole bag tipping onto the desk
@@ -142,7 +244,7 @@ const SFX = (() => {
             src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = .9;
             f.frequency.setValueAtTime(cover ? 500 : 900, t); f.frequency.exponentialRampToValueAtTime(cover ? 1800 : 3600, t + d * .7); f.frequency.exponentialRampToValueAtTime(1400, t + d);
             g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.07, t + d * .25); g.gain.linearRampToValueAtTime(.13, t + d * .65); g.gain.exponentialRampToValueAtTime(.0008, t + d);
-            src.connect(f).connect(g).connect(c.destination); src.start(t, Math.random() * .9); src.stop(t + d + .02);
+            src.connect(f).connect(g).connect(bus); src.start(t, Math.random() * .9); src.stop(t + d + .02);
             burst(c, t + d * .62, .05, 5200 + Math.random() * 1500, 2.5, .05);
             burst(c, t + d, .07, cover ? 300 : 700, 1, cover ? .18 : .08);
         },
@@ -150,7 +252,7 @@ const SFX = (() => {
         reader() {
             const c = ac(); if (!c) return;
             const t = c.currentTime;
-            tone(c, t, .09, 2350, 2350, .09, 'square'); tone(c, t + .13, .12, 2350, 2350, .09, 'square');
+            tone(c, t, .14, 1760, 1760, .07); tone(c, t + .16, .2, 2349, 2349, .06);
             burst(c, t + .32, .03, 1200, 2, .16); tone(c, t + .32, .08, 160, 90, .16); burst(c, t + .4, .02, 3400, 5, .1);
         },
         // a sip through the straw: a wet, rising slurp with little bubbles, then a gulp
@@ -163,7 +265,7 @@ const SFX = (() => {
             g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.09, t + .05);
             for (let k = 1; k < 9; k++) g.gain.linearRampToValueAtTime(.05 + Math.random() * .07, t + k * d / 9);
             g.gain.linearRampToValueAtTime(0, t + d);
-            src.connect(f).connect(g).connect(c.destination); src.start(t, Math.random() * .9); src.stop(t + d + .02);
+            src.connect(f).connect(g).connect(bus); src.start(t, Math.random() * .9); src.stop(t + d + .02);
             for (let k = 0; k < 7; k++) { const at = t + .04 + Math.random() * (d - .1), f0 = 280 + Math.random() * 380; tone(c, at, .05, f0, f0 * 1.9, .05); }
             tone(c, t + d + .07, .16, 190, 85, .2); burst(c, t + d + .07, .06, 420, 1.5, .08);
         },
@@ -177,7 +279,7 @@ const SFX = (() => {
         snag() {
             const c = ac(); if (!c) return;
             const t = c.currentTime;
-            tone(c, t, .14, 260, 150, .12, 'sawtooth'); burst(c, t, .08, 900, 2.5, .12); burst(c, t + .05, .05, 2200, 4, .06);
+            tone(c, t, .14, 260, 150, .1, 'triangle'); burst(c, t, .08, 900, 2.5, .12); burst(c, t + .05, .05, 2200, 4, .06);
         },
         // a coin-ish scratch on foil: a short gritty hiss
         scratch() {
@@ -189,46 +291,63 @@ const SFX = (() => {
         glasses(on = true) {
             const c = ac(); if (!c) return;
             const t = c.currentTime, k = on ? 1 : .85;
-            burst(c, t, .014, 3800 * k, 6, .14); tone(c, t, .03, 1700 * k, 1000, .04, 'square');
-            burst(c, t + .13, .014, 4100 * k, 6, .12); tone(c, t + .13, .03, 1800 * k, 1000, .035, 'square');
+            burst(c, t, .014, 3800 * k, 6, .14); tone(c, t, .04, 1700 * k, 1000, .03, 'triangle');
+            burst(c, t + .13, .014, 4100 * k, 6, .12); tone(c, t + .13, .04, 1800 * k, 1000, .028, 'triangle');
             burst(c, t + .24, .2, on ? 1600 : 1300, .8, .035);
         },
         // my car, from the fob: the BMW door locks, the tailgate, and the horn (sorry, Austin)
         fob(kind) {
             const c = ac(); if (!c) return false;
             const t = c.currentTime;
-            // a door lock actuator: a low thunk with a plastic clack on top
-            const thunk = (at, f, vol) => { tone(c, at, .09, f, f * .55, vol); burst(c, at, .035, 1500, 1.8, vol * .55); burst(c, at + .01, .02, 3800, 5, vol * .3); };
-            // the horn: two buzzy notes a third apart through a lowpass, like the real dual-tone one
+            // a german car, not a toy: every sound is damped, low and smooth
+            // a lock: one deep, muffled thunk from all four doors at once (felt more than heard)
+            const thunk = (at, f, vol) => { tone(c, at, .2, f, f * .6, vol); burst(c, at, .06, 320, .7, vol * .45); burst(c, at + .004, .025, 1100, 1.2, vol * .12); };
+            // a soft electronic confirmation, like the chime inside the cabin
+            const chime = (at, f, vol) => { tone(c, at, .5, f, f, vol); tone(c, at, .35, f * 2, f * 2, vol * .25); };
+            // a quiet electric motor: mirrors folding, the tailgate gliding
+            const glide = (at, dur, f0, f1, vol) => {
+                const o = c.createOscillator(), o2 = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain();
+                o.type = 'sine'; o2.type = 'triangle';
+                o.frequency.setValueAtTime(f0, at); o.frequency.linearRampToValueAtTime(f1, at + dur);
+                o2.frequency.setValueAtTime(f0 * 2, at); o2.frequency.linearRampToValueAtTime(f1 * 2, at + dur);
+                lp.type = 'lowpass'; lp.frequency.value = 380; lp.Q.value = .5;
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + Math.min(.35, dur / 3)); g.gain.setValueAtTime(vol, at + dur - Math.min(.4, dur / 3)); g.gain.linearRampToValueAtTime(0, at + dur);
+                o.connect(lp); o2.connect(lp); lp.connect(g).connect(bus);
+                o.start(at); o2.start(at); o.stop(at + dur + .02); o2.stop(at + dur + .02);
+            };
+            // the horn, for panic: a rich dual tone, rounded off, not a buzzer
             const horn = (at, dur, vol, out) => {
                 const f = c.createBiquadFilter(), g = c.createGain();
-                f.type = 'lowpass'; f.frequency.value = 1800; f.Q.value = 1.4;
-                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .012); g.gain.setValueAtTime(vol, at + dur - .025); g.gain.linearRampToValueAtTime(0, at + dur);
-                [415, 523].forEach(fr => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = fr; o.connect(f); o.start(at); o.stop(at + dur + .02); });
-                f.connect(g).connect(out || c.destination);
+                f.type = 'lowpass'; f.frequency.value = 800; f.Q.value = .6;
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .04); g.gain.setValueAtTime(vol, at + dur - .06); g.gain.linearRampToValueAtTime(0, at + dur);
+                [349, 440].forEach(fr => ['sawtooth', 'sine'].forEach(ty => { const o = c.createOscillator(); o.type = ty; o.frequency.value = fr; o.connect(f); o.start(at); o.stop(at + dur + .02); }));
+                f.connect(g).connect(out || bus);
             };
             if (kind === 'lock') {
-                [0, .035, .06, .09].forEach((d, k) => thunk(t + d, 150 - k * 12, .26));
-                horn(t + .32, .06, .1);
+                thunk(t, 95, .3);
+                glide(t + .18, .7, 62, 70, .05);             // the mirrors fold in
+                chime(t + .12, 1318.5, .035);
             } else if (kind === 'unlock') {
-                [0, .03].forEach((d, k) => thunk(t + d, 200 + k * 25, .2));
-                [.36, .39].forEach((d, k) => thunk(t + d, 190 + k * 25, .16));
+                thunk(t, 110, .22); thunk(t + .09, 115, .14);
+                glide(t + .2, .7, 70, 62, .045);             // the mirrors fold out
+                chime(t + .1, 1046.5, .03); chime(t + .26, 1318.5, .03);
             } else if (kind === 'trunk') {
-                // the latch pops, then the power tailgate hums up on its motor
-                tone(c, t, .14, 95, 45, .32); burst(c, t, .06, 700, 1, .2); burst(c, t + .02, .03, 3000, 4, .12);
-                const o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain(), at = t + .25, dur = 2.2;
-                o.type = 'sawtooth'; o.frequency.setValueAtTime(110, at); o.frequency.linearRampToValueAtTime(150, at + .3); o.frequency.linearRampToValueAtTime(140, at + dur);
-                f.type = 'bandpass'; f.frequency.value = 520; f.Q.value = 2.2;
-                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.09, at + .25); g.gain.setValueAtTime(.09, at + dur - .3); g.gain.linearRampToValueAtTime(0, at + dur);
-                o.connect(f).connect(g).connect(c.destination); o.start(at); o.stop(at + dur + .02);
-                rasp(c, at, dur, 380, 420, 70, .025);
-                thunk(t + .25 + dur, 120, .12);
-            } else if (kind === 'panic') {
+                // the latch lets go softly, then the power tailgate glides up
+                thunk(t, 80, .22);
+                chime(t + .05, 1174.7, .03);
+                glide(t + .3, 2.4, 55, 66, .07);
+                thunk(t + 2.7, 70, .06);
+            } else if (kind === 'trunkclose') {
+                // two polite beeps, the tailgate glides down, then the soft-close pulls it shut
+                chime(t, 1568, .03); chime(t + .22, 1568, .03);
+                glide(t + .45, 2.2, 66, 55, .07);
+                thunk(t + 2.7, 85, .28);
+                        } else if (kind === 'panic') {
                 // press it again to make it stop
                 if (alarm) { this.hush(); return false; }
-                const out = c.createGain(); out.connect(c.destination); alarm = out;
+                const out = c.createGain(); out.connect(bus); alarm = out;
                 // five seconds of honking, then it gives up
-                for (let k = 0; k < 9; k++) horn(t + k * .55, .32, .17, out);
+                for (let k = 0; k < 8; k++) horn(t + k * .62, .38, .14, out);
                 setTimeout(() => { if (alarm === out) alarm = null; }, 5000);
                 return true;
             }
@@ -252,9 +371,9 @@ const SFX = (() => {
                 src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = q;
                 f.frequency.setValueAtTime(f0, at); f.frequency.exponentialRampToValueAtTime(f1, at + dur);
                 g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + dur * .3); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
-                src.connect(f).connect(g).connect(c.destination); src.start(at, r() * .9); src.stop(at + dur + .02);
+                src.connect(f).connect(g).connect(bus); src.start(at, r() * .9); src.stop(at + dur + .02);
             };
-            const click = (at, f = 4200, vol = .2) => { burst(c, at, .015, f, 6, vol); tone(c, at, .03, 1800, 900, vol * .4, 'square'); };
+            const click = (at, f = 4200, vol = .2) => { burst(c, at, .015, f, 6, vol); tone(c, at, .04, 1800, 900, vol * .3, 'triangle'); };
             const S = {
                 phone: () => { tone(c, t, .35, 1318.5, 1318.5, .08); tone(c, t + .12, .5, 1760, 1760, .07); },
                 ipad: () => { click(t, 2600, .12); for (let k = 0; k < 6; k++) sweep(t + .08 + k * .06, .05, 2500 + r() * 1500, 3500 + r() * 2000, .05, 4); },
@@ -998,7 +1117,7 @@ const APP_Q = {
     maps: 'where does she go?', messages: 'who matters to her?', gmail: 'what’s waiting on her?', camera: 'what catches her eye?',
     clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', settings: 'how is she wired?',
     pinterest: 'what does she want her world to look like?', procreate: 'what does she make?', safari: 'what is she curious about?',
-    chatgpt: 'what rabbit hole is she in right now?', github: 'what is she building?', canvas: 'what is she studying?'
+    chatgpt: 'what rabbit hole is she in right now?', canvas: 'what is she studying?'
 };
 const addQ = (view, k) => {
     if (!APP_Q[k] || view.querySelector('.appq')) return;
@@ -1184,16 +1303,6 @@ const MORE_APPS = {
             $('#gpt-in').onsubmit = e => { e.preventDefault(); const i = e.target.querySelector('input'); if (i.value.trim()) ask(i.value.trim()); i.value = ''; };
         }
     },
-    github: {
-        html: () => `<div class="gh"><div class="gh-me"><img src="assets/img/me.jpg" alt=""><span><b>suhxnitiwari</b><small>building things where technology meets people</small></span><a href="https://github.com/suhxnitiwari" target="_blank" rel="noopener">Profile ↗</a></div>
-            <div class="gh-list" id="gh-list"><p class="gh-wait mono">loading what i’m building…</p></div></div>`,
-        after: () => {
-            fetch('https://api.github.com/users/suhxnitiwari/repos?sort=pushed&per_page=12').then(r => r.ok ? r.json() : Promise.reject()).then(rs => {
-                const el = $('#gh-list'); if (!el) return;
-                el.innerHTML = rs.filter(r => !r.fork && r.description).map(r => `<a class="gh-repo" href="${r.homepage || r.html_url}" target="_blank" rel="noopener"><b>${r.name}</b><span>${r.description.replace(/</g, '&lt;')}</span><small>${r.language ? `● ${r.language} · ` : ''}updated ${new Date(r.pushed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</small></a>`).join('');
-            }).catch(() => { const el = $('#gh-list'); if (el) el.innerHTML = '<a class="gh-repo" href="https://github.com/suhxnitiwari" target="_blank" rel="noopener"><b>see everything on github ↗</b></a>'; });
-        }
-    },
     canvas: {
         html: () => `<div class="cv"><p class="cv-h">Dashboard</p>
             <div class="cv-cards"><div class="cv-card" style="--c:#BF5700"><span></span><b>MIS</b><small>McCombs School of Business</small></div><div class="cv-card" style="--c:#6E4BA8"><span></span><b>Psychology</b><small>why people choose what they choose</small></div></div>
@@ -1281,7 +1390,7 @@ const DESK = (() => {
 const deskIcon = (d, k) => {
     const real = d.f !== undefined;
     const ic = real || d.t === 'folder' ? FOLDER_SVG : d.t === 'img' ? `<img src="assets/img/${d.x}.jpg" alt="">` : fileIcon(d.n, d.x);
-    return `<button type="button" class="dfolder${real ? ' dreal' : ' dclut'}${!real && d.c >= 14 ? ' dmore' : ''}" ${real ? `data-f="${d.f}"` : 'data-clut'} style="left:${d.px.toFixed(1)}%; top:${d.py.toFixed(1)}%">${ic}<span>${d.n}</span></button>`;
+    return `<button type="button" class="dfolder${real ? ' dreal' : ' dclut'}${!real && d.c >= 14 ? ' dmore' : ''}" ${real ? `data-f="${d.f}"` : 'data-clut'} data-l="${d.px.toFixed(1)}" data-t="${d.py.toFixed(1)}" style="left:${d.px.toFixed(1)}%; top:${d.py.toFixed(1)}%">${ic}<span>${d.n}</span></button>`;
 };
 
 // my skincare: what each one is, what it does when you tap it, its short label
@@ -2004,7 +2113,7 @@ const VIEWS = {
             </div>
             <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
         </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
-        <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
+        <div class="row" style="justify-content:center; margin-top:14px"><button class="btn solid" type="button" id="lap-clean" hidden>help me clean it up 🧹</button><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
 
     mirror: () => `
         <div class="compact" id="compact" style="position:relative; width:200px; height:200px; margin:214px auto 14px; perspective:700px">
@@ -2145,7 +2254,6 @@ const VIEWS = {
                 <button type="button" class="papp" data-ip="procreate"><span class="ic" style="background:#1B1B1F"><svg viewBox="0 0 40 40"><path d="M10 30 c6 -2 10 -10 18 -20 c2 -3 6 0 4 3 c-8 10 -12 16 -20 19z" fill="#F4A7B9"/><circle cx="11" cy="30" r="3" fill="#B9A3E8"/></svg></span>Procreate</button>
                 <button type="button" class="papp" data-ip="safari"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="#2F8CF0"/><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width=".8" stroke-dasharray="1 2.1"/><path d="M27 13 L22 22 L13 27 L18 18Z" fill="#fff"/><path d="M27 13 L22 22 L18 18Z" fill="#E8453C"/></svg></span>Safari</button>
                 <button type="button" class="papp" data-ip="chatgpt"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><g fill="none" stroke="#111" stroke-width="2.2"><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(0 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(60 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(120 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(180 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(240 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(300 20 20)"/></g></svg></span>ChatGPT</button>
-                <button type="button" class="papp" data-ip="github"><span class="ic" style="background:#1B1F24"><svg viewBox="0 0 40 40"><path d="M20 8 a12 12 0 0 0 -3.8 23.4 c.6 .1 .8 -.3 .8 -.6 v-2.2 c-3.3 .7 -4 -1.4 -4 -1.4 -.6 -1.4 -1.3 -1.8 -1.3 -1.8 -1.1 -.7 .1 -.7 .1 -.7 1.2 .1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1 -.8 .4 -1.3 .8 -1.6 -2.7 -.3 -5.5 -1.3 -5.5 -5.9 0 -1.3 .5 -2.4 1.2 -3.2 -.1 -.3 -.5 -1.5 .1 -3.2 0 0 1 -.3 3.3 1.2 a11.5 11.5 0 0 1 6 0 c2.3 -1.5 3.3 -1.2 3.3 -1.2 .7 1.7 .2 2.9 .1 3.2 .8 .8 1.2 1.9 1.2 3.2 0 4.6 -2.8 5.6 -5.5 5.9 .4 .4 .8 1.1 .8 2.2 v3.3 c0 .3 .2 .7 .8 .6 A12 12 0 0 0 20 8z" fill="#fff"/></svg></span>GitHub</button>
                 <button type="button" class="papp" data-ip="canvas"><span class="ic" style="background:#E72429"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="6" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="31.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="27.8" r="1.8" fill="#fff"/><circle cx="20.0" cy="31.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="27.8" r="1.8" fill="#fff"/><circle cx="9.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="12.2" r="1.8" fill="#fff"/><circle cx="20.0" cy="9.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="12.2" r="1.8" fill="#fff"/></svg></span>Canvas</button>
                 <button type="button" class="papp" data-ip="netflix"><span class="ic" style="background:#000"><svg viewBox="0 0 40 40"><path d="M13 8 h5 l4 14 v-14 h5 v24 h-5 l-4 -14 v14 h-5z" fill="#E50914"/></svg></span>Netflix</button>
                 <button type="button" class="papp" data-ip="prime"><span class="ic" style="background:#1A98FF"><svg viewBox="0 0 40 40"><text x="20" y="21" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-weight="700" font-size="10" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M27 23.4 l2.6 1.4 -1.4 2.4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Prime Video</button>
@@ -2689,9 +2797,12 @@ const AFTER = {
     jewelry: () => {
         const jw = $('#jw'), say = $('#jw-say');
         jw.addEventListener('click', e => {
-            if (!jw.classList.contains('open')) { jw.classList.add('open'); say.textContent = 'pick one up'; return; }
+            if (!jw.classList.contains('open')) { jw.classList.add('open'); SFX.jewelbox(); setTimeout(() => SFX.chain(.3, .018), 260); say.textContent = 'pick one up'; return; }
             const slot = e.target.closest('[data-j]'); if (!slot) return;
             const up = !slot.classList.contains('up');
+            if (!up) { SFX.chain(.3, .025); SFX.tink(1200, .025, .2, .5); }
+            else if (slot.dataset.j === 'evil') SFX.charms();
+            else SFX.pendant(slot.dataset.j === 'tx' ? 1750 : 1380);
             jw.querySelectorAll('.jw-slot').forEach(x => x.classList.remove('up'));
             if (up) slot.classList.add('up');
             say.textContent = up ? `${slot.dataset.n}. ${slot.dataset.d}` : 'pick one up';
@@ -2702,21 +2813,23 @@ const AFTER = {
         btn.onclick = () => {
             if (!mbx.classList.contains('open')) {
                 // the gold key slides into the lock, turns, then the door swings open
-                mbx.classList.add('insert');
-                setTimeout(() => mbx.classList.add('turn'), reduce ? 0 : 650);
-                setTimeout(() => { mbx.classList.add('open'); btn.textContent = 'Open the letter'; toast('click. no packages. just… a flood of cards from amaira ♡'); }, reduce ? 0 : 1250);
-                setTimeout(() => $('#mf').classList.add('out'), reduce ? 0 : 1550);
+                mbx.classList.add('insert'); SFX.mailKey();
+                setTimeout(() => { mbx.classList.add('turn'); SFX.mailTurn(); }, reduce ? 0 : 650);
+                setTimeout(() => { mbx.classList.add('open'); SFX.mailDoor(); btn.textContent = 'Open the letter'; toast('click. no packages. just… a flood of cards from amaira ♡'); }, reduce ? 0 : 1250);
+                setTimeout(() => { $('#mf').classList.add('out'); SFX.flood(); }, reduce ? 0 : 1550);
             } else if ($('#lc').hidden) {
+                SFX.letter();
                 $('#lc').hidden = false; mbx.classList.add('taken'); btn.textContent = 'Put it back';
                 $('#lc').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
             } else {
+                SFX.swish(0, .3, 3600, 1400, .06); SFX.mailTurn();
                 $('#lc').hidden = true; mbx.classList.remove('taken', 'open', 'turn', 'insert'); $('#mf').classList.remove('out'); $('#mf-view').hidden = true; btn.textContent = 'Turn the key';
             }
         };
         mbx.onclick = () => btn.click();
         // tap a card in the pile to read it
         let at = 0;
-        const show = k => { at = (k + MAIL_CARDS.length) % MAIL_CARDS.length; $('#mf-img').src = MAIL_CARDS[at][0]; $('#mf-cap').textContent = MAIL_CARDS[at][1]; $('#mf-n').textContent = `${at + 1} / ${MAIL_CARDS.length}`; $('#mf-view').hidden = false; };
+        const show = k => { SFX.swish(0, .22, 1500, 3800, .06); at = (k + MAIL_CARDS.length) % MAIL_CARDS.length; $('#mf-img').src = MAIL_CARDS[at][0]; $('#mf-cap').textContent = MAIL_CARDS[at][1]; $('#mf-n').textContent = `${at + 1} / ${MAIL_CARDS.length}`; $('#mf-view').hidden = false; };
         sheetBody.querySelectorAll('[data-mf]').forEach(c => c.onclick = () => { show(+c.dataset.mf); $('#mf-view').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); });
         $('#mf-next').onclick = () => show(at + 1); $('#mf-prev').onclick = () => show(at - 1);
         $('#mf-x').onclick = () => { $('#mf-view').hidden = true; };
@@ -3042,7 +3155,7 @@ const AFTER = {
     boarding: () => {
         const gate = $('#bp-gate'), dest = [...gate.querySelectorAll('text')].filter(t => t.textContent.trim() === '???');
         let busy = false;
-        const beep = () => { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1320; g.gain.value = .06; o.connect(g).connect(a.destination); o.start(); o.stop(a.currentTime + .14); } catch {} };
+        const beep = () => SFX.beep();
         $('#bp-scan').onclick = () => {
             if (busy) return; busy = true;
             gate.classList.remove('scanned'); $('#bp-light').className = 'bp-light';
@@ -3483,21 +3596,23 @@ const AFTER = {
                 const ROWS = nf ? [
                     ['Continue Watching for hani', [['gossip-girl', 'Gossip Girl', '2007–2012', 'xoxo. i’m a blair, unfortunately.'], ['bridgerton', 'Bridgerton', '2020–', 'the hand stretch. that’s it. that’s the review.'], ['jane-the-virgin', 'Jane the Virgin', '2014–2019', 'the narrator is my favorite character.'], ['ginny-and-georgia', 'Ginny & Georgia', '2021–', 'georgia is a menace and i love her.']]],
                     ['Rewatching on repeat', [['friends', 'Friends', '1994–2004', 'pivot. PIVOT.'], ['modern-family', 'Modern Family', '2009–2020', 'i am a claire.'], ['desperate-housewives', 'Desperate Housewives', '2004–2012', 'bree van de kamp, my role model.'], ['gilmore-girls', 'Gilmore Girls', '2000–2007', 'coffee, coffee, coffee.']]],
-                    ['New &amp; obsessed', [['off-campus', 'Off Campus', '2026–', 'hockey boys. say less.'], ['voicemails-for-isabelle', 'Voicemails for Isabelle', '2026', 'yes, i cried.'], ['masaba-masaba', 'Masaba Masaba', '2020–2022', 'the fits. the fits!'], ['mismatched', 'Mismatched', '2020–', 'rishi + dimple forever.']]]
+                    ['New &amp; obsessed', [['voicemails-for-isabelle', 'Voicemails for Isabelle', '2026', 'yes, i cried.']]],
+                    ['Hindi shows', [['mismatched', 'Mismatched', '2020–', 'rishi + dimple forever.'], ['class', 'Class', '2023', 'elite, but make it delhi.'], ['heeramandi', 'Heeramandi', '2024', 'the jewelry. the lehengas. bhansali, you genius.'], ['fabulous-lives-of-bollywood-wives', 'Fabulous Lives of Bollywood Wives', '2020–', 'pure chaos. i’m seated.'], ['the-royals', 'The Royals', '2025', 'palaces, polo and royal drama. sold.'], ['masaba-masaba', 'Masaba Masaba', '2020–2022', 'the fits. the fits!']]]
                 ] : [
-                    ['Hindi movies i know by heart', [['yeh-jawaani-hai-deewani', 'Yeh Jawaani Hai Deewani', '2013', 'naina’s glasses-off moment changed me.'], ['jab-we-met', 'Jab We Met', '2007', 'main apni favourite hoon.'], ['rocky-aur-rani-kii-prem-kahaani', 'Rocky Aur Rani Kii Prem Kahaani', '2023', 'the sarees. the songs. the drama.'], ['tu-jhoothi-main-makkaar', 'Tu Jhoothi Main Makkaar', '2023', 'a romcom with a spreadsheet of lies.'], ['student-of-the-year', 'Student of the Year', '2012', 'the most unrealistic school ever. i want in.']]],
-                    ['Prime originals', [['call-me-bae', 'Call Me Bae', '2024', 'bae is all of us.'], ['mind-the-malhotras', 'Mind the Malhotras', '2019', 'my family, but on tv.'], ['dil-dosti-dilemma', 'Dil Dosti Dilemma', '2024', 'grounded for the summer, but make it iconic.'], ['dont-be-shy', 'Don’t Be Shy', '2026', 'a desi romcom. i was never going to skip it.']]]
+                    ['Hindi movies i know by heart', [['yeh-jawaani-hai-deewani', 'Yeh Jawaani Hai Deewani', '2013', 'naina’s glasses-off moment changed me.'], ['jab-we-met', 'Jab We Met', '2007', 'main apni favourite hoon.'], ['rocky-aur-rani-kii-prem-kahaani', 'Rocky Aur Rani Kii Prem Kahaani', '2023', 'the sarees. the songs. the drama.'], ['tu-jhoothi-main-makkaar', 'Tu Jhoothi Main Makkaar', '2023', 'a romcom with a spreadsheet of lies.'], ['student-of-the-year', 'Student of the Year', '2012', 'the most unrealistic school ever. i want in.'], ['2-states', '2 States', '2014', 'two families, one wedding, zero chill.'], ['humpty-sharma-ki-dulhania', 'Humpty Sharma Ki Dulhania', '2014', 'kavya and her designer lehenga. a whole mood.']]],
+                    ['Prime originals', [['call-me-bae', 'Call Me Bae', '2024', 'bae is all of us.'], ['mind-the-malhotras', 'Mind the Malhotras', '2019', 'my family, but on tv.'], ['dil-dosti-dilemma', 'Dil Dosti Dilemma', '2024', 'grounded for the summer, but make it iconic.'], ['dont-be-shy', 'Don’t Be Shy', '2026', 'a desi romcom. i was never going to skip it.'], ['off-campus', 'Off Campus', '2026–', 'hockey boys. say less.']]]
                 ];
                 const play = (src, t, yr, line) => {
                     view.innerHTML = back.replace('‹ home', '‹ back') + `<div class="tv-play"><img src="${src}" alt=""><span class="tv-bar"><i></i></span></div><p class="tv-t">${t} <span class="tv-yr">${yr}</span></p><p class="tv-s">${line}</p>`;
                     $('#ip-back').onclick = row;
                 };
-                const pip = () => `<div class="tv-pip" id="tv-pip"><button type="button" class="tv-pip-go" id="tv-pip-go" aria-label="Play couch potato hani"><img src="assets/img/couch-potato.jpg" alt=""><span class="tv-prog"><i></i></span></button><button type="button" class="tv-pip-x" id="tv-pip-x" aria-label="Close the mini player">×</button><b>couch potato hani · S1 E1</b></div>`;
+                const pip = () => `<div class="tv-pip-wrap"><div class="tv-pip" id="tv-pip"><button type="button" class="tv-pip-go" id="tv-pip-go" aria-label="Play couch potato hani"><img src="assets/img/couch-potato.jpg" alt=""><b>couch potato hani · S1 E1</b><span class="tv-prog"><i></i></span></button><button type="button" class="tv-pip-x" id="tv-pip-x" aria-label="Close the mini player">×</button></div></div>`;
+
                 const row = () => {
                     view.innerHTML = back + ROWS.map(([h, items]) => `<p class="tv-head">${h}</p><div class="tv-row">${items.map(([f, t, yr, line]) => `<button type="button" class="tv-poster" data-tv="${f}" title="${t}"><img src="assets/posters/${f}.jpg" alt="${t}" loading="lazy"></button>`).join('')}</div>`).join('') + pip();
                     view.querySelectorAll('[data-tv]').forEach(b => b.onclick = () => { const it = ROWS.flatMap(r => r[1]).find(x => x[0] === b.dataset.tv); play(`assets/posters/${it[0]}.jpg`, it[1], it[2], it[3]); });
                     $('#tv-pip-go').onclick = () => play('assets/img/couch-potato.jpg', 'couch potato hani', 'S1 E1', 'fell asleep holding both remotes. never finished the episode.');
-                    $('#tv-pip-x').onclick = () => { $('#tv-pip').remove(); toast('the remote stays with me though.'); };
+                    $('#tv-pip-x').onclick = () => { $('#tv-pip').parentElement.remove(); toast('the remote stays with me though.'); };
                     $('#ip-back').onclick = exit;
                 };
                 view.classList.remove('procreate'); view.classList.add('tv', nf ? 'nf' : 'pv'); view.classList.remove(nf ? 'pv' : 'nf');
@@ -3876,7 +3991,7 @@ const AFTER = {
                 if (playing) return;
                 // start the flipbook from whatever the photo shows now, so it never jumps
                 if (opening) { SFX.fob('trunk'); playTrunk(true, () => { setStep(2); toast('trunk’s open. the bags are safe ♡'); }); }
-                else { SFX.fob('lock'); playTrunk(false, () => { setStep(3); toast('trunk closed. bags secured. no one will ever know.'); }); }
+                else { SFX.fob('trunkclose'); playTrunk(false, () => { setStep(3); toast('trunk closed. bags secured. no one will ever know.'); }); }
                 $('#kshop').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
                 return;
             }
@@ -3951,7 +4066,8 @@ const AFTER = {
 
     ticket: () => {
         const tk = $('#tk');
-        tk.onclick = () => { const f = tk.classList.toggle('flip'); $('#tk-say').textContent = f ? '$350. three hundred and fifty dollars. for going “a little too excited.”' : 'tap it to flip it over'; if (f) toast('$350. i could’ve bought a lot of lipstick.'); };
+        setTimeout(() => SFX.siren('whoop'), reduce ? 0 : 250);   // pulled over, again
+        tk.onclick = () => { const f = tk.classList.toggle('flip'); if (f) SFX.siren('wail'); $('#tk-say').textContent = f ? '$350. three hundred and fifty dollars. for going “a little too excited.”' : 'tap it to flip it over'; if (f) toast('$350. i could’ve bought a lot of lipstick.'); };
     },
     giftcards: () => {
         const card = $('#g2-card'), tally = $('#gc-tally'), scratched = new Set();
@@ -4049,11 +4165,36 @@ const AFTER = {
         const mbp = $('#mbp'), wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
         let busyLap = false;
         // the desktop explodes into mess when the lid opens: every icon pops in, one after another, with a little pop
-        let popping = [];
+        let popping = [], tidy = false;
+        const clean = $('#lap-clean');
+        // you can help: the clutter flies into the trash, one by one, and my real folders line up neatly
+        clean.onclick = () => {
+            if (tidy) { popDesk(); toast('and… it’s back. that was fast.'); return; }
+            tidy = true; clean.disabled = true;
+            popping.forEach(clearTimeout); popping = [];
+            const trash = sheetBody.querySelector('.dock-app[aria-label="Trash"]').getBoundingClientRect();
+            const junk = [...sheetBody.querySelectorAll('#dmess .dclut')].filter(e => e.offsetParent && !e.classList.contains('gone'));
+            junk.forEach((e, k) => popping.push(setTimeout(() => {
+                const r = e.getBoundingClientRect(), dx = trash.left + trash.width / 2 - (r.left + r.width / 2), dy = trash.top + trash.height / 2 - (r.top + r.height / 2);
+                SFX.swish(0, .16, 2600, 900, .05);
+                const done = () => e.classList.add('gone');
+                if (reduce || !e.animate) return done();
+                e.animate([{ translate: e.style.translate || '0px 0px', scale: 1, opacity: 1 }, { translate: `${dx}px ${dy}px`, scale: .2, opacity: .2 }], { duration: 380, easing: 'cubic-bezier(.5,0,.8,.6)' }).onfinish = () => { e.style.translate = ''; done(); };
+            }, reduce ? 0 : k * 45)));
+            const after = reduce ? 0 : junk.length * 45 + 450;
+            popping.push(setTimeout(() => {
+                [...sheetBody.querySelectorAll('#dmess .dreal')].sort((x, y) => x.dataset.f - y.dataset.f).forEach((e, k) => { e.style.translate = ''; e.style.left = (3 + (k % 4) * 13) + '%'; e.style.top = (4 + Math.floor(k / 4) * 30) + '%'; });
+                spots = {}; try { localStorage.removeItem(FKEY); } catch {}
+                SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9);
+                clean.disabled = false; clean.textContent = 'make it messy again';
+                toast('ahh. thank you. i can breathe now ♡');
+            }, after));
+        };
         const popDesk = () => {
             popping.forEach(clearTimeout); popping = [];
             const icons = [...sheetBody.querySelectorAll('#dmess .dfolder')];
-            icons.forEach(e => e.classList.remove('popped'));
+            icons.forEach(e => { e.classList.remove('popped', 'gone'); e.style.left = e.dataset.l + '%'; e.style.top = e.dataset.t + '%'; });
+            clean.hidden = false; clean.textContent = 'help me clean it up 🧹'; tidy = false;
             if (reduce) return icons.forEach(e => e.classList.add('popped'));
             icons.forEach((e, k) => popping.push(setTimeout(() => { e.classList.add('popped'); if (e.offsetParent) SFX.pop(k); }, 700 + k * 55)));
         };
@@ -4065,7 +4206,7 @@ const AFTER = {
                 popDesk();
                 await wait(1100);
             } else {
-                mbp.classList.remove('open'); $('#lap-close').hidden = true;
+                mbp.classList.remove('open'); $('#lap-close').hidden = true; clean.hidden = true;
                 await wait(900);
                 mbp.hidden = true; $('#lap-closed').hidden = false;
             }
