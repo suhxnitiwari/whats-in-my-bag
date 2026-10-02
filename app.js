@@ -3244,7 +3244,12 @@ const AFTER = {
                         ['shaadi-18', 'xtall'], ['shaadi-28', 'portrait'], ['shaadi-17', 'tall'], ['shaadi-30', 'tall', 'sequins through the veil'], ['shaadi-29', 'square'],
                         ['shaadi-33', 'xtall', 'from above'], ['shaadi-31', 'portrait', 'side eye, but bridal'], ['shaadi-35', 'tall', 'mehendi on everything'],
                         ['shaadi-32', 'xtall'], ['shaadi-36', 'xtall', 'the full look'], ['shaadi-34', 'square'],
-                        ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
+                        ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] },
+                    { name: 'burgundy era 🍷', sub: 'wine nails, patent leather and a kelly, someday.', pins: [
+                        ['burgundy-01', 'xtall', 'wine, on my nails and in my glass'], ['burgundy-03', 'portrait', 'chanel, matching'], ['burgundy-06', 'tall'],
+                        ['burgundy-02', 'square', 'ysl rouge'], ['burgundy-04', 'xtall', 'the trench'], ['burgundy-08', 'portrait'],
+                        ['burgundy-07', 'tall', 'platforms + lace tights'], ['burgundy-05', 'portrait', 'merci gucci'], ['burgundy-12', 'square', 'mini kelly, maxi dreams'],
+                        ['burgundy-09', 'xtall'], ['burgundy-11', 'tall', 'ballet flats, but make them chanel'], ['burgundy-10', 'portrait', 'the wallet i’d keep cards in']] }
                 ];
                 const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/pins/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
