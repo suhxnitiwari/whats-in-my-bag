@@ -3042,7 +3042,8 @@ const AFTER = {
                     ['ObiwUuiVl9s', 'Sharvari’s Date Night Makeup Routine', 'Vogue India, Beauty Secrets'],
                     ['xfuLzfvgawY', 'Kriti Sanon’s Glowy Evening Glam', 'Vogue, Beauty Secrets'],
                     ['FcGq-kPm1NI', 'On the Road with Kriti Sanon in London', 'Vogue India'],
-                    ['yOXInblwY6g', 'Priyanka Chopra’s DIY Natural Skincare', 'Vogue India, Beauty Secrets']
+                    ['yOXInblwY6g', 'Priyanka Chopra’s DIY Natural Skincare', 'Vogue India, Beauty Secrets'],
+                    ['speiuhQM1dE', 'Charlotte’s Indian Wedding Makeup Look', 'Charlotte Tilbury']
                 ];
                 const render = f => {
                     view.querySelector('.yt-feed').innerHTML = (f === 'all' || f === 'grwm' ? grwm.map(([id, t, by]) => `<a class="yt-row" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><img class="yt-thumb" src="assets/videos/grwm-${id}.jpg" alt=""><span><b>${t}</b><small>${by}</small></span></a>`).join('') : '') +
