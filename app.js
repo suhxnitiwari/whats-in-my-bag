@@ -3245,7 +3245,7 @@ const AFTER = {
                         ['shaadi-33', 'xtall', 'from above'], ['shaadi-31', 'portrait', 'side eye, but bridal'], ['shaadi-35', 'tall', 'mehendi on everything'],
                         ['shaadi-32', 'xtall'], ['shaadi-36', 'xtall', 'the full look'], ['shaadi-34', 'square'],
                         ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] },
-                    { name: 'burgundy era 🍷', sub: 'wine nails, patent leather and a kelly, someday.', pins: [
+                    { name: 'burgundy ❦', sub: 'wine nails, patent leather and a kelly, someday.', pins: [
                         ['burgundy-01', 'xtall', 'wine, on my nails and in my glass'], ['burgundy-03', 'portrait', 'chanel, matching'], ['burgundy-06', 'tall'],
                         ['burgundy-02', 'square', 'ysl rouge'], ['burgundy-04', 'xtall', 'the trench'], ['burgundy-08', 'portrait'],
                         ['burgundy-07', 'tall', 'platforms + lace tights'], ['burgundy-05', 'portrait', 'merci gucci'], ['burgundy-12', 'square', 'mini kelly, maxi dreams'],

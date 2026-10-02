@@ -575,6 +575,8 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .pin-tabs { display: flex; justify-content: center; gap: 6px; margin: 0 0 12px; font-family: -apple-system, system-ui, sans-serif; }
 .pin-tabs button { padding: 7px 14px; border: 0; border-radius: 999px; background: transparent; color: #111; font: 600 .78rem -apple-system, system-ui, sans-serif; cursor: pointer; }
 .pin-tabs button[aria-selected="true"] { background: #111; color: #fff; }
+.pin-tabs button:focus:not(:focus-visible) { outline: none; }
+.pin-tabs button:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
 .pin-tabs button:not([aria-selected="true"]):hover { background: #EFEFEF; }
 .pin-board { margin: 0 0 12px; font-family: -apple-system, system-ui, sans-serif; text-align: center; }
 .pin-board b { display: block; font-size: 1.05rem; color: #111; }
