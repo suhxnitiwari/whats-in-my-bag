@@ -1053,10 +1053,22 @@ const MORE_APPS = {
             <p class="clk-h">World Clock</p>
             <div class="clk-row"><span><small>Today</small><b>Austin</b></span><em id="clk-atx"></em></div>
             <div class="clk-row"><span><small>wherever the boarding pass says</small><b>???</b></span><em>--:--</em></div>
-            <p class="clk-h">Alarms</p>
-            <div class="clk-row"><span><b class="todo">what time do you actually wake up?</b></span></div>
+            <p class="clk-h">Alarms <span class="clk-count">100</span></p>
+            <p class="clk-note">what time do i actually wake up? scroll.</p>
+            <div class="clk-alarms">${Array.from({ length: 100 }, (_, i) => {
+                // 9:00 am, then one more every minute. every single one is on.
+                const m = 9 * 60 + i, h = Math.floor(m / 60), mm = String(m % 60).padStart(2, '0');
+                const tag = { 0: 'wake up', 1: 'wake up (for real)', 5: 'seriously', 10: 'ok now', 15: 'class??', 20: 'just 5 more', 30: 'the latte won’t buy itself', 45: 'leave. NOW.', 60: 'it’s fine, i’ll email the professor', 75: 'who set all these', 90: 'running late is a personality', 99: 'final final FINAL alarm' }[i] || 'Alarm';
+                return `<div class="clk-al"><span><em>${h}:${mm}<small>AM</small></em><small>${tag}</small></span><button type="button" class="clk-tg" aria-pressed="true" aria-label="Alarm at ${h}:${mm} AM, on"></button></div>`;
+            }).join('')}</div>
+            <p class="clk-end">…and i still woke up at 10:41.</p>
         </div>`,
-        after: () => { const t = () => { const e = $('#clk-atx'); if (e) { e.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' }); setTimeout(t, 15000); } }; t(); }
+        after: v => {
+            const t = () => { const e = $('#clk-atx'); if (e) { e.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' }); setTimeout(t, 15000); } }; t();
+            const nope = ['nope. that one’s load-bearing.', 'absolutely not. i need all 100.', 'you can’t turn that off. i tried.', 'that’s the one that actually works.'];
+            let n = 0;
+            v.querySelectorAll('.clk-tg').forEach(b => b.onclick = () => { toast(nope[n++ % nope.length]); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); });
+        }
     },
     wallet: {
         html: () => `<div class="wl">
