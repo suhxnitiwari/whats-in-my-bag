@@ -2436,6 +2436,10 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .bbb-wand svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
 .bbb-wand:hover svg, .bbb.poof .bbb-wand svg { transform: rotate(-24deg); }
 .bbb-cap { margin: 0; font-size: 1.6rem; color: var(--plum); text-align: center; }
+.kshop { margin-top: 22px; }
+.kshop .bbb-photo { aspect-ratio: 1056 / 1490; background: #fff; }
+.kshop .bbb-photo img { object-fit: contain; }
+.kshop .bbb-tag { text-transform: none; letter-spacing: .04em; }
 @media (prefers-reduced-motion: reduce) { .bbb.poof .bbb-dust i, .bbb.poof .bbb-photo img { animation: none; } }
 
 /* the comb: drag it down through my hair, frizz above turns to smooth waves */

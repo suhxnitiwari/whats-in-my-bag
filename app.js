@@ -1882,7 +1882,16 @@ const VIEWS = {
             <li>Sense of direction: that’s what Maps is for</li>
             <li>Confidence: unmatched</li>
             <li>Skill: <span class="hand" style="font-size:1.3rem">whoops</span></li>
-        </ul></div>`,
+        </ul></div>
+        <div class="bbb kshop" id="kshop">
+            <div class="bbb-photo">
+                <img src="assets/img/keys-before.jpg" alt="Me as a toddler, pouting in an empty shopping cart">
+                <img class="bbb-after" src="assets/img/keys-after.jpg" alt="Me as a toddler, beaming in a cart full of shopping bags" aria-hidden="true">
+                <span class="bbb-tag mono" id="kshop-tag">before the car keys</span>
+            </div>
+            <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
+            <p class="bbb-cap hand" id="kshop-cap" aria-live="polite">no keys. no ride. no bags.</p>
+        </div>`,
 
     laptop: () => `
         <h2>My <em>MacBook Pro</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">14-inch, silver</span></h2>
@@ -2028,7 +2037,7 @@ const VIEWS = {
     mccombs: () => `
         <h2>Why <em>McCombs</em></h2>
         <p class="note">it’s on my backpack, so it goes everywhere i go</p>
-        <div class="stats"><div><b>MIS</b><span>BBA, Management Information Systems</span></div><div><b>+ Psych</b><span>BA in Psychology, alongside it</span></div><div><b>’27</b><span>Class of 2027</span></div></div>
+        <div class="stats"><div><b>MIS</b><span>BBA, Management Information Systems</span></div><div><b>Psych</b><span>BA in Psychology, alongside it</span></div><div><b>’27</b><span>Class of 2027</span></div></div>
         <p>Minors in Marketing and Educational Psychology. Scott Hemsell Memorial Scholarship and the Gerald and Linda Ridgely Endowed Presidential Scholarship (2026 to 2027), and University Honors.</p>
         <div class="row"><a class="btn solid" href="https://suhanitiwari.com/home/study#mccombs" target="_blank" rel="noopener">Why McCombs ↗</a></div>`,
 
@@ -3602,6 +3611,18 @@ const AFTER = {
             if (k === 'panic' && SFX.on && !blaring) { toast('okay. it stopped. nobody saw that.'); return; }
             toast(lines[k]);
             if (k === 'panic' && !reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
+        };
+        // before and after the car keys
+        const shop = $('#kshop');
+        $('#kshop-go').onclick = () => {
+            const on = shop.classList.toggle('after');
+            if (on) SFX.fob('unlock');
+            $('#kshop-tag').textContent = on ? 'after the car keys' : 'before the car keys';
+            $('#kshop-go').textContent = on ? 'okay, back home' : 'cmon barbie, let’s go shopping 🛍️';
+            $('#kshop-cap').textContent = on ? 'nordstrom, reformation, louis vuitton. it’s called retail therapy.' : 'no keys. no ride. no bags.';
+            shop.querySelector('.bbb-after').setAttribute('aria-hidden', !on);
+            shop.querySelector('.bbb-photo img').setAttribute('aria-hidden', on);
+            if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
         };
     },
 
