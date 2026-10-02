@@ -1787,7 +1787,7 @@ const VIEWS = {
 
     apartment: () => `
         <h2>My <em>apartment</em> fob</h2>
-        <p class="note">this one i can handle.</p>
+        <p class="note">this one i <s class="scribble">can</s> <span class="hand">can’t</span> handle. (drag the fob to the door.)</p>
         <p>Address: wouldn’t you wanna knowwww.</p>
         <div class="stats"><div><b>countless</b><span>times i’ve lost my keys</span></div><div><b>thrice</b><span>times i’ve gotten locked out</span></div><div><b>none</b><span>attempts to buy a keychain</span></div></div>
         <div class="apt" id="apt">
@@ -3435,7 +3435,25 @@ const AFTER = {
                 later(1500, () => { state = 'closed'; busy = false; });
             }
         };
-        fob.onclick = () => { if (state === 'closed') go(); };
+        // drag the fob to the reader. let go on it and the door opens; let go anywhere else and it slides back.
+        let fd = null, dragged = false;
+        fob.style.touchAction = 'none'; fob.style.cursor = 'grab';
+        fob.addEventListener('pointerdown', e => { if (state !== 'closed' || busy) return; fd = { x: e.clientX, y: e.clientY }; dragged = false; fob.style.transition = 'none'; fob.style.cursor = 'grabbing'; try { fob.setPointerCapture(e.pointerId); } catch {} });
+        fob.addEventListener('pointermove', e => {
+            if (!fd) return; const dx = e.clientX - fd.x, dy = e.clientY - fd.y;
+            if (Math.hypot(dx, dy) > 5) dragged = true;
+            fob.style.transform = `translate(${dx}px, ${dy}px) rotate(-6deg)`;
+            const b = rd.getBoundingClientRect(), near = Math.hypot(e.clientX - (b.left + b.width / 2), e.clientY - (b.top + b.height / 2)) < Math.max(46, b.width);
+            apt.classList.toggle('near', near);
+        });
+        const drop = e => {
+            if (!fd) return; fd = null; fob.style.cursor = 'grab'; fob.style.transition = '';
+            const hit = apt.classList.contains('near'); apt.classList.remove('near');
+            if (!dragged) return;
+            if (hit) go(); else { fob.style.transform = ''; say.textContent = 'closer… the little reader on the handle.'; }
+        };
+        fob.addEventListener('pointerup', drop); fob.addEventListener('pointercancel', drop);
+        fob.onclick = () => { if (dragged) { dragged = false; return; } if (state === 'closed') go(); };
         btn.onclick = go;
     },
     mascara: () => {

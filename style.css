@@ -2814,3 +2814,7 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .sh-sig { margin: auto 0 0; font-size: .9rem; color: #C2366F; }
 @media (max-width: 760px) { .ecb-notes { width: min(44vw, 230px); } .ecb-notes.open { margin-left: min(44vw, 230px); } .sh-page { padding: 8px 9px 26px 34px; } .sh-page ul { font-size: .8rem; } .sh-t { font-size: 1rem; } .sh-me { font-size: .8rem; } .sh-toc ol { font-size: .85rem; } }
 .ecb-notes .sh-page { overflow-y: auto; scrollbar-width: none; }
+
+.scribble { position: relative; text-decoration: none; }
+.scribble::after { content: ""; position: absolute; left: -3px; right: -3px; top: 50%; height: 7px; transform: translateY(-50%) rotate(-4deg); background: repeating-linear-gradient(170deg, transparent 0 1px, currentColor 1px 3px); border-radius: 3px; }
+.apt.near .apt-reader i { border-color: #F28DB4; box-shadow: 0 0 10px 3px rgba(242,141,180,.7); }
