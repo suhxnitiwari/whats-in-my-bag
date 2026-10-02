@@ -655,7 +655,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vw.open .vw-open > :nth-child(4) { transition-delay: .24s; } .vw.open .vw-open > :nth-child(5) { transition-delay: .32s; }
 .vzip { background: #4A2E22; border: 2.5px solid var(--ink); border-right: 0; border-radius: 8px 0 0 8px; position: relative; }
 .vzip::after { content: ""; position: absolute; left: 30%; top: 10%; bottom: 10%; width: 40%; background: repeating-linear-gradient(#D9A441 0 3px, #8A6A2A 3px 5px); }
-.vpanel, .vgusset, .vflap { background: #A0244E; border: 2.5px solid var(--ink); border-left: 0; position: relative;
+.vpanel, .vgusset, .vflap { background: #8E1B45; border: 2.5px solid var(--ink); border-left: 0; position: relative;
     background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 2px, transparent 2px 5px), repeating-linear-gradient(-45deg, rgba(0,0,0,.04) 0 2px, transparent 2px 5px); }
 .vgusset { background-color: #8E1D44; box-shadow: inset 6px 0 10px -6px rgba(0,0,0,.35), inset -6px 0 10px -6px rgba(0,0,0,.35); }
 .vflap { clip-path: polygon(0 0, 78% 0, 100% 50%, 78% 100%, 0 100%); border-right: 0; }
@@ -668,7 +668,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vslot .card { position: absolute; left: 8%; right: 8%; top: -18%; width: auto; transform: none; transition: transform .45s var(--ease), box-shadow .2s; box-shadow: none; z-index: 1; padding: 6% 6%; }
 .vslot .card:hover { transform: translateY(-8%); }
 .vslot .card.picked { transform: translateY(-6px); box-shadow: 0 0 0 3px var(--gold); }
-.vslot .pocket { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 2; pointer-events: none; background: inherit; background-color: #A0244E;
+.vslot .pocket { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 2; pointer-events: none; background: inherit; background-color: #8E1B45;
     background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 2px, transparent 2px 5px); border-top: 1.5px solid rgba(40,8,18,.55); box-shadow: 0 -2px 4px -2px rgba(0,0,0,.4); }
 .vslot .pocket::before, .vslot .pocket::after { content: ""; position: absolute; top: 3px; width: 3px; height: 3px; border-radius: 50%; background: #2A0A14; }
 .vslot .pocket::before { left: 5%; } .vslot .pocket::after { right: 5%; }
@@ -833,7 +833,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .vzip::after { transition: opacity .3s; }
 .zgap { position: absolute; left: 22%; width: 56%; top: 8%; height: 0; background: #1A0A10; border-radius: 3px; transition: height .45s cubic-bezier(.4,0,.2,1); z-index: 1; }
 .zpull { position: absolute; left: 50%; top: 6%; width: 150%; height: 26px; transform: translateX(-50%); z-index: 2; border-radius: 4px; background: radial-gradient(circle at 35% 30%, #F6DB94, #B8862F); border: 1.5px solid #3A2626; transition: top .45s cubic-bezier(.4,0,.2,1); }
-.zpull::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 4px; height: 16px; transform: translateX(-50%); background: #A0244E; border-radius: 2px; }
+.zpull::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 4px; height: 16px; transform: translateX(-50%); background: #8E1B45; border-radius: 2px; }
 .vw.zip-open .zgap { height: 82%; }
 .vw.zip-open .zpull { top: 84%; }
 .cash { z-index: 3; }
@@ -1581,7 +1581,7 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 /* while folding, nothing shows through: cash and the medici card stay tucked, panels are solid */
 .vw.fold-left .vbills, .vw.fold-right .vbills, .vw.fold-left .medici-peek, .vw.fold-right .medici-peek, .vw.p1-back .vbills, .vw.flap-back .vbills { visibility: hidden; }
-.vw .vw-open > .p1, .vw .vw-open > .vflap { background-color: #A0244E; }
+.vw .vw-open > .p1, .vw .vw-open > .vflap { background-color: #8E1B45; }
 .vw.p1-back .p1, .vw.flap-back .vflap { opacity: 1 !important; }
 
 /* the cash slot behind the flap: notes always peek out of the top; tap to fan them out */
@@ -2615,3 +2615,31 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .tv-play .tv-bar { margin-top: 6px; }
 .tv-t { margin: 10px 0 2px; font: 600 1rem var(--sans, system-ui); }
 .tv-s { margin: 0; font-size: .75rem; color: #aaa; }
+
+/* wallet: every card stands upright in its slot, long side down, like mine really do. the card turns 90°, so the bank cards
+   (vertical designs) read upright and the license + ID sit sideways. sliding "up" is the card's own -x now. */
+.vw .vslot .card { rotate: 90deg; transform-origin: 50% 50%; transform: translateX(-5%); }
+.vw .vslot .card:hover { transform: translateX(-12%); }
+.vw .vslot .card.picked, .vw .vslot .card.picked:hover { rotate: 90deg !important; }
+
+/* wallet, closer to the real one: deeper raspberry leather with a fine grain, crisp pocket edges, and the cards only peek a little */
+.vpanel, .vgusset, .vflap { background-image: repeating-linear-gradient(45deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px) !important; }
+.vslot .pocket { background-image: repeating-linear-gradient(45deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px) !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.14), 0 -3px 6px -3px rgba(0,0,0,.45); }
+.vw .vslot .card { transform: translateX(-1%); }
+.vw .vslot .card:hover { transform: translateX(-9%); }
+
+/* sketchbook: opening it doesn't change its size. it stays exactly as tall as the cover and gets twice as wide (two pages + the spiral). */
+.skb { --w: min(250px, 42vw); --sp: 18px; width: auto; }
+.skb-cover { width: var(--w); }
+.skb-open { width: calc(var(--w) * 2 + var(--sp)); height: calc(var(--w) * 356 / 280); margin: 0 auto; grid-template-columns: 1fr var(--sp) 1fr; grid-template-rows: 100%; padding: 5px; box-sizing: border-box; }
+.skb-page { min-height: 0; height: 100%; overflow: hidden; padding: calc(var(--w) * .06) calc(var(--w) * .05) calc(var(--w) * .1); }
+.skb-art { margin: 4px 0 calc(var(--w) * .035); }
+.skb-art img { max-height: calc(var(--w) * .62); }
+.skb-tape { width: calc(var(--w) * .2); height: calc(var(--w) * .06); margin-left: calc(var(--w) * -.1); top: calc(var(--w) * -.035); }
+.skb-t { font-size: calc(var(--w) * .085); }
+.skb-n { font-size: calc(var(--w) * .056); margin-top: 3px; }
+.skb-pg { font-size: calc(var(--w) * .042); bottom: calc(var(--w) * .03); }
+.skb-leaf { top: 5px; bottom: 5px; right: 5px; left: calc(50% + var(--sp) / 2); transform-origin: calc(var(--sp) / -2) 50%; }
+.skb-open .bk-corner { width: calc(var(--w) * .2); height: calc(var(--w) * .2); }
+.skb-open .bk-corner.r { right: 5px; bottom: 5px; } .skb-open .bk-corner.l { left: 5px; bottom: 5px; }
+@media (max-width: 760px) { .skb { --sp: 12px; } .skb-open { grid-template-columns: 1fr var(--sp) 1fr; padding: 4px; } .skb-page { min-height: 0; } .skb-art img { max-height: calc(var(--w) * .6); } .skb-leaf { left: calc(50% + var(--sp) / 2); transform-origin: calc(var(--sp) / -2) 50%; } }

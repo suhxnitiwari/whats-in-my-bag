@@ -134,6 +134,20 @@ const SFX = (() => {
             tone(c, t, .09, 2350, 2350, .09, 'square'); tone(c, t + .13, .12, 2350, 2350, .09, 'square');
             burst(c, t + .32, .03, 1200, 2, .16); tone(c, t + .32, .08, 160, 90, .16); burst(c, t + .4, .02, 3400, 5, .1);
         },
+        // a sip through the straw: a wet, rising slurp with little bubbles, then a gulp
+        slurp() {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime, d = .55;
+            const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+            src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = 3;
+            f.frequency.setValueAtTime(700, t); f.frequency.exponentialRampToValueAtTime(1500, t + d * .6); f.frequency.exponentialRampToValueAtTime(1100, t + d);
+            g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.09, t + .05);
+            for (let k = 1; k < 9; k++) g.gain.linearRampToValueAtTime(.05 + Math.random() * .07, t + k * d / 9);
+            g.gain.linearRampToValueAtTime(0, t + d);
+            src.connect(f).connect(g).connect(c.destination); src.start(t, Math.random() * .9); src.stop(t + d + .02);
+            for (let k = 0; k < 7; k++) { const at = t + .04 + Math.random() * (d - .1), f0 = 280 + Math.random() * 380; tone(c, at, .05, f0, f0 * 1.9, .05); }
+            tone(c, t + d + .07, .16, 190, 85, .2); burst(c, t + d + .07, .06, 420, 1.5, .08);
+        },
         // contactless: the little approved chime
         pay() {
             const c = ac(); if (!c) return;
@@ -435,7 +449,7 @@ const openBottle = e => {
             bottle.classList.remove('lid-open'); lid.classList.add('closing');
             setTimeout(() => lid.classList.remove('closing'), 650);
             toast('lid’s back on. no spills ♡');
-        } else { lid.classList.remove('closing'); bottle.classList.add('lid-open'); sips++; toast(sips === 1 ? 'sip ♡ (one more than usual)' : `sip #${sips}. who even am i`); }
+        } else { lid.classList.remove('closing'); bottle.classList.add('lid-open'); sips++; SFX.slurp(); toast(sips === 1 ? 'sip ♡ (one more than usual)' : `sip #${sips}. who even am i`); }
         return;
     }
     if (e.target.closest && e.target.closest('.holder')) { bsvg.style.transform = ''; bottle.classList.remove('out', 'lid-open', 'free'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
@@ -2158,14 +2172,47 @@ const VC_CHIP = (x, y) => `<rect x="${x}" y="${y}" width="10" height="8" rx="1.6
 const VC_TAP = (x, y, c) => `<path d="M${x} ${y} q2 2.5 0 5 M${x + 2} ${y - 1} q3 3.5 0 7 M${x + 4} ${y - 2} q4 4.5 0 9" fill="none" stroke="${c}" stroke-width=".8" stroke-linecap="round"/>`;
 const BOFA_FLAG = (x, y, c, w = 1) => `<g transform="translate(${x} ${y}) scale(${w})" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"><path d="M0 6 l5 -6 h9"/><path d="M3 9 l5 -6 h9"/><path d="M6 12 l5 -6 h9"/></g>`;
 const VCARD = {
-    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1650C0"/><stop offset=".5" stop-color="#2A7BE0"/><stop offset="1" stop-color="#174CB6"/></linearGradient><radialGradient id="vabm" cx=".45" cy=".45" r=".6"><stop offset="0" stop-color="#7DB8F2"/><stop offset="1" stop-color="#2F7FDC"/></radialGradient></defs>
+    // my texas license is a vertical (under-21) card, so it's drawn upright like the real one. every field is a joke, on purpose.
+    dl: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vdl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9ECF7"/><stop offset=".55" stop-color="#F3E6EE"/><stop offset="1" stop-color="#F6D9E0"/></linearGradient><filter id="vdlg"><feColorMatrix type="saturate" values="0"/></filter></defs>
+        <rect width="54" height="86" fill="url(#vdl)"/>
+        <path d="M30 40 h8 v9 l6 2 l5 -1 l4 2 v8 l-1 4 l-4 2 l-4 5 l-2 6 l-4 -1 l-3 -5 l-2 -4 l-3 -2 l-2 2 l-4 -2 l-2 -4 l1 -2 h4z" fill="#F2A9B6" opacity=".45"/>
+        <g fill="none" stroke="#9FB0E0" stroke-width=".25" opacity=".7"><path d="M0 30 q14 4 27 0 t27 0"/><path d="M0 33 q14 4 27 0 t27 0"/><path d="M0 36 q14 4 27 0 t27 0"/></g>
+        <rect x="3" y="4" width="7" height="4.6" fill="#fff" stroke="#2A2A2A" stroke-width=".15"/><rect x="3" y="4" width="2.4" height="4.6" fill="#2C4E95"/><rect x="5.4" y="6.3" width="4.6" height="2.3" fill="#C0272D"/><text x="4.2" y="7" text-anchor="middle" font-size="1.8" fill="#fff">★</text>
+        <text x="11.5" y="9" font-family="Bodoni Moda, serif" font-weight="700" font-size="7" fill="#2C4E95">Texas</text>
+        <text transform="translate(33.5 3.4) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="2" fill="#2C4E95">USA</text>
+        <path d="M40 3 h4 v4.5 l3 1 l2.5 -.5 l2 1 v4 l-.5 2 l-2 1 l-2 2.5 l-1 3 l-2 -.5 l-1.5 -2.5 l-1 -2 l-1.5 -1 l-1 1 l-2 -1 l-1 -2 l.5 -1 h2z" fill="none" stroke="#D9B45A" stroke-width=".5"/><circle cx="44" cy="11" r="2.4" fill="#E3C46E"/><text x="44" y="12.2" text-anchor="middle" font-size="3" fill="#fff">★</text>
+        <text x="20" y="15.5" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.8" fill="#2A2426">DRIVER LICENSE</text>
+        <text x="3" y="19" font-family="Instrument Sans" font-size="1.5" fill="#3A3A3A">Director:</text><path d="M10 18.6 q2 -1.4 4 0 t4 0" fill="none" stroke="#555" stroke-width=".25"/>
+        <rect x="3" y="20.5" width="19" height="24" fill="#D8D8D8"/><image href="assets/img/me.jpg" x="3" y="20.5" width="19" height="24" preserveAspectRatio="xMidYMid slice" filter="url(#vdlg)"/><rect x="3" y="20.5" width="19" height="24" fill="none" stroke="#7A7A7A" stroke-width=".25"/>
+        <rect x="24" y="20" width="28" height="6" fill="#2A2426"/><text x="38" y="24.2" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="3.1" fill="#fff">UNDER 21</text>
+        <g font-family="Instrument Sans" fill="#2A2426"><g font-size="1.6" fill="#4A4A55"><text x="24" y="30.5">4d. DL:</text><text x="24" y="34.3">9. Class:</text><text x="24" y="38.1">3. DOB:</text><text x="24" y="41.9">4b. Exp:</text><text x="24" y="45.7">4a. Iss:</text><text x="24" y="49.5">9a. End:</text></g>
+            <g font-size="2.3" font-weight="700"><text x="31" y="30.7">OOPS-143</text><text x="31.5" y="34.5">C <tspan font-weight="400" font-size="1.7">(for cute)</tspan></text><text x="30.5" y="38.3" font-size="1.9">a lady never tells</text><text x="31" y="42.1" font-size="1.9">my patience</text><text x="30.5" y="45.9" font-size="1.7">a forgiving DMV</text><text x="31" y="49.7">NONE, YET</text></g></g>
+        <text x="4" y="50" font-family="Caveat, cursive" font-size="4.4" fill="#2A2426">Suhani</text>
+        <g font-family="Instrument Sans" fill="#2A2426"><text x="3" y="56" font-size="1.6" fill="#4A4A55">1.</text><text x="5.2" y="56" font-size="3" font-weight="700">TIWARI</text>
+            <text x="3" y="60" font-size="1.6" fill="#4A4A55">2.</text><text x="5.2" y="60" font-size="3" font-weight="700">SUHANI M</text>
+            <text x="3" y="64" font-size="1.6" fill="#4A4A55">8.</text><text x="5.2" y="64" font-size="2.2">wouldn’t you wanna knowwww</text>
+            <g font-size="1.6" fill="#4A4A55"><text x="17" y="71">16. Hgt:</text><text x="17" y="75">15. Sex:</text><text x="33" y="75">18. Eyes:</text><text x="3" y="82.5">5. DD:</text></g>
+            <g font-size="2.4" font-weight="700"><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="2">dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">none of your business</text></g></g>
+        <circle cx="8.5" cy="72.5" r="5" fill="#fff" opacity=".45"/><circle cx="8.5" cy="72.5" r="5" fill="none" stroke="#B9C6EA" stroke-width=".3"/></svg>`,
+    // my blue cash everyday, drawn from the real one: the big centurion medallion, name down the side, member since 25. no card number.
+    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E3E9E"/><stop offset=".45" stop-color="#1665D0"/><stop offset="1" stop-color="#0B3C9A"/></linearGradient><radialGradient id="vabm" cx=".55" cy=".45" r=".6"><stop offset="0" stop-color="#3C8EF0"/><stop offset=".8" stop-color="#1D6FD8"/><stop offset="1" stop-color="#1557BF"/></radialGradient></defs>
         <rect width="54" height="86" fill="url(#vab)"/>
-        <circle cx="25" cy="42" r="27" fill="url(#vabm)" opacity=".85"/><circle cx="25" cy="42" r="27" fill="none" stroke="#BFE0FB" stroke-width=".5" opacity=".8"/><circle cx="25" cy="42" r="24" fill="none" stroke="#BFE0FB" stroke-width=".3" opacity=".6"/>
-        <g fill="#1F63C9" opacity=".8"><path d="M10 64 c-1 -10 2 -18 9 -21 c0 -9 7 -16 16 -15 c4 0 7 2 9 5 c-4 -1 -7 0 -8 2 c4 1 6 4 5 8 c-2 -2 -4 -2 -6 -1 c2 3 2 6 0 9 c3 1 4 4 2 7 c-3 -1 -5 0 -6 2 c-2 3 -4 4 -7 4z"/><path d="M22 30 c2 -7 9 -11 17 -9 c-6 1 -10 4 -12 8z"/></g>
-        <path d="M17 45 c3 -1 6 0 7 2 M18 50 c2 0 4 1 5 3" fill="none" stroke="#9CCBF7" stroke-width=".6" opacity=".7"/>
-        ${VC_CHIP(32, 9)}<text transform="translate(8 9) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#EAF3FF" letter-spacing=".5">SUHANI TIWARI</text>
-        <text transform="translate(48 50) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#fff" letter-spacing=".3">AMERICAN</text><text transform="translate(43 50) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#fff" letter-spacing=".55">EXPRESS</text>
-        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#EAF3FF">25</text>${VC_TAP(30, 76, '#EAF3FF')}</svg>`,
+        <circle cx="26" cy="27" r="26" fill="url(#vabm)"/><circle cx="26" cy="27" r="26" fill="none" stroke="#7FB6FF" stroke-width=".5" opacity=".7"/>
+        <g opacity=".95">
+            <path d="M7 10 q10 -8 26 -6 q14 3 18 14 q3 9 -2 17 l-6 -3 q4 -8 0 -15 q-5 -8 -16 -8 q-10 0 -16 6z" fill="#5BA6F7"/>
+            <path d="M10 14 q12 -7 24 -3 q10 4 11 14 q0 8 -6 13 q-6 5 -14 4 q-8 -1 -12 -8 q-4 -8 -3 -20z" fill="#2F7FE6"/>
+            <g fill="none" stroke="#9FCBFF" stroke-width=".35" opacity=".8"><path d="M12 15 q10 -5 20 -2"/><path d="M12 18 q10 -5 21 -2"/><path d="M12 21 q10 -5 22 -2"/><path d="M11 24 q10 -5 23 -2"/><path d="M38 14 q5 4 6 10"/><path d="M36 13 q5 5 5 11"/></g>
+            <path d="M22 33 q3 4 2 8 q-1 3 1 5 q-3 1 -4 4 q2 2 1 4 q-4 0 -6 -3 q-3 -5 -2 -11 q1 -5 4 -7z" fill="#5BA6F7"/>
+            <path d="M24 30 l9 -5 l5 2 l-3 4 l-8 4z" fill="#7DB8FA" stroke="#1557BF" stroke-width=".3"/>
+            <g fill="none" stroke="#1557BF" stroke-width=".3" opacity=".7"><path d="M27 31 l1 2"/><path d="M29 30 l1 2"/><path d="M31 29 l1 2"/><path d="M33 28 l1 2"/></g>
+        </g>
+        <rect x="28" y="10" width="8.4" height="11" rx="1.4" fill="#C8A86A" stroke="#7A5F2E" stroke-width=".35"/><path d="M28 13.6 h3 M33.4 13.6 h3 M28 17.4 h3 M33.4 17.4 h3 M31 10 v11 M33.4 10 v11" fill="none" stroke="#7A5F2E" stroke-width=".3"/>
+        <text transform="translate(5.2 7) rotate(90)" font-family="Instrument Sans" font-weight="600" font-size="3.3" letter-spacing=".2" fill="#DCEBFF">SUHANI TIWARI</text>
+        <g transform="translate(17.5 47) rotate(72)"><path d="M0 -2.4 h17 l1.4 2.4 -1.4 2.4 h-17 l1.2 -2.4z" fill="#1A63CF" stroke="#DCEBFF" stroke-width=".35"/><text x="9" y=".9" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.2" letter-spacing=".2" fill="#DCEBFF">MEMBER SINCE</text></g>
+        <text transform="translate(12 57.5) rotate(90)" font-family="Instrument Sans" font-size="3" fill="#DCEBFF">25</text>
+        <text transform="translate(46.5 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">AMERICAN</text>
+        <text transform="translate(41.3 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">EXPRESS</text>
+        <g transform="translate(29 72) rotate(90)" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M0 0 q2 2.5 0 5"/><path d="M2 -1 q3 3.5 0 7"/><path d="M4 -2 q4 4.5 0 9"/></g></svg>`,
     amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
         ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
@@ -2922,7 +2969,7 @@ const AFTER = {
             if (openMoreApp(b.dataset.app, view, home, back, '#back')) return;
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
-                    ['grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+                    ['dinner', 'grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
             } else if (b.dataset.app === 'spotify') {
                 view.innerHTML = back + `
                     <div class="sp">
@@ -3422,16 +3469,16 @@ const AFTER = {
         const tuck = () => vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
         vw.querySelectorAll('.vslot .card').forEach(card => {
             let d = null; card.style.touchAction = 'none';
-            card.addEventListener('pointerdown', e => { d = { y: e.clientY, h: card.offsetHeight, moved: false }; try { card.setPointerCapture(e.pointerId); } catch {} });
+            card.addEventListener('pointerdown', e => { d = { y: e.clientY, h: card.offsetWidth, moved: false }; try { card.setPointerCapture(e.pointerId); } catch {} });
             card.addEventListener('pointermove', e => {
                 if (!d) return; const dy = Math.min(0, e.clientY - d.y);
                 if (Math.abs(dy) > 6) d.moved = true; if (!d.moved) return;
-                card.style.transition = 'none'; card.style.transform = `translateY(calc(-36% + ${Math.max(dy, -d.h * 1.3)}px))`;
+                card.style.transition = 'none'; card.style.transform = `translateX(calc(-5% + ${Math.max(dy, -d.h * 1.3)}px))`;
             });
             card.addEventListener('pointerup', e => {
                 if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
                 if (!moved) return;
-                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateY(calc(-36% - ${card.dataset.lift || 0}px))`;
+                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateX(calc(-5% - ${card.dataset.lift || 0}px))`;
                 card.dataset.skip = '1';   // ignore the click the browser fires right after a drag
             });
         });
@@ -3446,19 +3493,17 @@ const AFTER = {
             // the whole card comes out of its slot and floats above the wallet
             requestAnimationFrame(() => {
                 const cr = card.getBoundingClientRect(), wr = vw.getBoundingClientRect();
-                const vert = card.classList.contains('vert');
-                // vertical cards (all the bank cards) turn upright once they're out of the slot
-                const extra = vert ? (card.offsetWidth - card.offsetHeight) / 2 : 0;
-                const lift = cr.bottom - wr.top + 12 + extra;   // clear the top of the wallet completely
+                // every card stands upright, long side down, so it comes straight up out of its slot the long way
+                const lift = cr.bottom - wr.top + 12;   // clear the top of the wallet completely
                 card.style.transition = 'none';
-                card.style.transform = `translateY(calc(-36% - ${lift}px))`;
+                card.style.transform = `translateX(calc(-5% - ${lift}px))`;
                 const over = card.getBoundingClientRect().bottom - (vw.getBoundingClientRect().top - 12);
                 const fixed = over > 0 ? lift + over : lift;
-                card.style.transform = 'translateY(-36%)'; void card.offsetWidth; card.style.transition = '';
-                card.style.transform = `translateY(calc(-36% - ${fixed}px))`;
+                card.style.transform = 'translateX(-5%)'; void card.offsetWidth; card.style.transition = '';
+                card.style.transform = `translateX(calc(-5% - ${fixed}px))`;
                 card.dataset.lift = fixed;
             });
-            vw.style.marginTop = `${Math.round((card.classList.contains('vert') ? card.offsetWidth : card.offsetHeight) * 1.15)}px`;
+            vw.style.marginTop = `${Math.round(card.offsetWidth * 1.15)}px`;
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
             if (TAPS[c.kind]) tapToPay(detail, TAPS[c.kind]);
@@ -3571,6 +3616,7 @@ const AFTER = {
         };
         big.onclick = flipLid; big.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipLid(); } };
         $('#sip').onclick = () => {
+            SFX.slurp();
             if (!big.classList.contains('lid-open')) return toast('lid’s still on. tap it first.');
             if (n >= 8) return toast('fully hydrated. screenshot this, it won’t happen again.');
             const cups = document.querySelectorAll('#cups .cup');
