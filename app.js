@@ -3241,7 +3241,10 @@ const AFTER = {
                         ['shaadi-21', 'tall'], ['shaadi-26', 'portrait', 'payal + heels'], ['shaadi-08', 'xtall'],
                         ['shaadi-19', 'square'], ['shaadi-02', 'tall'], ['shaadi-27', 'xtall', 'one red rose'],
                         ['shaadi-15', 'portrait'], ['shaadi-05', 'tall', 'haath phool, please'], ['shaadi-24', 'square', 'the bidaai hug'],
-                        ['shaadi-18', 'xtall'], ['shaadi-28', 'portrait'], ['shaadi-17', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
+                        ['shaadi-18', 'xtall'], ['shaadi-28', 'portrait'], ['shaadi-17', 'tall'], ['shaadi-30', 'tall', 'sequins through the veil'], ['shaadi-29', 'square'],
+                        ['shaadi-33', 'xtall', 'from above'], ['shaadi-31', 'portrait', 'side eye, but bridal'], ['shaadi-35', 'tall', 'mehendi on everything'],
+                        ['shaadi-32', 'xtall'], ['shaadi-36', 'xtall', 'the full look'], ['shaadi-34', 'square'],
+                        ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
                 ];
                 const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/pins/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
