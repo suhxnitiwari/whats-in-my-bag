@@ -3233,10 +3233,15 @@ const AFTER = {
                         ['underwater-shells', 'square'], ['teal-collage', 'xtall', 'love you to the moon and back'], ['glitter-conch', 'portrait'],
                         ['wave-curl', 'tall'], ['pearl-collage', 'xtall', 'pearls on everything'], ['sparkle-hands', 'portrait', 'main character water']] },
                     { name: 'shaadi ♡', sub: 'red, gold, mehendi and a lot of bangles. someday.', pins: [
-                        ['shaadi-01', 'tall', 'he does the necklace'], ['shaadi-09', 'portrait'], ['shaadi-07', 'xtall', 'the lehenga. the whole lehenga.'],
-                        ['shaadi-03', 'square'], ['shaadi-11', 'tall', 'giggling through the pheras'], ['shaadi-04', 'portrait'],
-                        ['shaadi-06', 'tall', 'veil moment'], ['shaadi-10', 'square', 'sindoor'], ['shaadi-08', 'xtall'],
-                        ['shaadi-02', 'portrait'], ['shaadi-05', 'tall', 'haath phool, please'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
+                        ['shaadi-01', 'tall', 'he does the necklace'], ['shaadi-13', 'portrait'], ['shaadi-25', 'xtall', 'the twirl'],
+                        ['shaadi-09', 'square'], ['shaadi-07', 'xtall', 'the lehenga. the whole lehenga.'], ['shaadi-16', 'tall'],
+                        ['shaadi-03', 'square'], ['shaadi-22', 'tall', 'kaleere, obviously'], ['shaadi-11', 'portrait', 'giggling through the pheras'],
+                        ['shaadi-20', 'xtall'], ['shaadi-04', 'square'], ['shaadi-14', 'tall', 'nath goals'],
+                        ['shaadi-06', 'portrait', 'veil moment'], ['shaadi-23', 'xtall'], ['shaadi-10', 'square', 'sindoor'],
+                        ['shaadi-21', 'tall'], ['shaadi-26', 'portrait', 'payal + heels'], ['shaadi-08', 'xtall'],
+                        ['shaadi-19', 'square'], ['shaadi-02', 'tall'], ['shaadi-27', 'xtall', 'one red rose'],
+                        ['shaadi-15', 'portrait'], ['shaadi-05', 'tall', 'haath phool, please'], ['shaadi-24', 'square', 'the bidaai hug'],
+                        ['shaadi-18', 'xtall'], ['shaadi-28', 'portrait'], ['shaadi-17', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] }
                 ];
                 const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/pins/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
