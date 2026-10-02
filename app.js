@@ -2058,6 +2058,7 @@ const VIEWS = {
                 <button type="button" class="papp" data-ip="prime"><span class="ic" style="background:#1A98FF"><svg viewBox="0 0 40 40"><text x="20" y="21" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-weight="700" font-size="10" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M27 23.4 l2.6 1.4 -1.4 2.4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Prime Video</button>
             </div>
             <div class="ipad-view" id="ipad-view" hidden></div>
+            <button type="button" class="ipad-homebar" id="ipad-homebar" aria-label="Back to the home screen" title="home" hidden><span></span></button>
         </div></div>
         </div>`,
 
@@ -3214,6 +3215,10 @@ const AFTER = {
     ipad: () => {
         const view = $('#ipad-view'), home = $('#ipad-home');
         const back = '<button type="button" class="back mono" id="ip-back">‹ home</button>';
+        // the home bar: from any app, any depth, one tap goes straight back to the home screen
+        const bar = $('#ipad-homebar');
+        new MutationObserver(() => { bar.hidden = view.hidden; }).observe(view, { attributes: true, attributeFilter: ['hidden'] });
+        bar.onclick = () => { SFX.tap(); view.hidden = true; home.hidden = false; view.classList.remove('procreate', 'tv', 'nf', 'pv'); view.innerHTML = ''; };
         sheetBody.querySelectorAll('[data-ip]').forEach(b => b.onclick = () => {
             const k = b.dataset.ip;
             if (openMoreApp(k, view, home, back, '#ip-back')) return;

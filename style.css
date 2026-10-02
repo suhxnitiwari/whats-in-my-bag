@@ -553,6 +553,12 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .folder-ic i { border-radius: 4px; border: 1px solid var(--ink); }
 .ipad-view { position: absolute; inset: 0; overflow: auto; padding: 12px 14px; background: #fff; }
 .ipad-view.procreate { background: #1B1B1F; }
+.ipad-homebar { position: absolute; left: 50%; bottom: 0; z-index: 3; transform: translateX(-50%); width: 46%; padding: 10px 0 8px; border: 0; background: none; cursor: pointer; }
+.ipad-homebar span { display: block; height: 5px; border-radius: 99px; background: rgba(27,27,31,.55); transition: background .2s, transform .2s var(--ease); }
+.ipad-homebar:hover span, .ipad-homebar:focus-visible span { background: rgba(27,27,31,.85); transform: scaleY(1.3); }
+.ipad-homebar:focus-visible { outline: 2px solid #2E6FB7; outline-offset: -2px; border-radius: 8px; }
+.ipad-view.procreate ~ .ipad-homebar span, .ipad-view.nf ~ .ipad-homebar span, .ipad-view.pv ~ .ipad-homebar span, .ipad-view.tv ~ .ipad-homebar span { background: rgba(255,255,255,.6); }
+.ipad-view:not([hidden]) { padding-bottom: 28px; }
 .ipad-view .back { background: none; border: 0; padding: 0; cursor: pointer; color: #2E6FB7; text-transform: none; font-size: .8rem; }
 .ip-title { margin: 6px 0 10px; font-family: -apple-system, system-ui, sans-serif; font-weight: 700; font-size: 1rem; color: #111; }
 .ip-title.dark { color: #fff; }
