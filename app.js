@@ -3223,8 +3223,22 @@ const AFTER = {
             const k = b.dataset.ip;
             if (openMoreApp(k, view, home, back, '#ip-back')) return;
             if (k === 'pinterest') {
-                const pins = ['art/embracing-cultural-identity', 'img/cake-solar-system', 'img/cafe', 'art/braid', 'posters/gossip-girl', 'img/nyc', 'img/cupcakes', 'art/coexistence-of-both-my-worlds', 'img/chicago', 'art/packing-home', 'img/cake-lego', 'art/vanity'];
-                view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div><div class="pins">${pins.map(f => `<img src="assets/${f}.jpg" alt="">`).join('')}</div>`;
+                // [file, shape, caption]: shapes vary so the board reads like a real masonry feed
+                const pins = [
+                    ['pins/glitter-wave', 'tall', 'the beach, but make it glitter'], ['art/embracing-cultural-identity'], ['pins/pearl-hand', 'portrait'],
+                    ['pins/pink-shell', 'square'], ['img/cake-solar-system', null, 'birthday cake, but make it space'], ['pins/candle-table', 'xtall', 'dinner party goals'],
+                    ['pins/nacre', 'portrait'], ['img/cafe'], ['pins/mermaid-tail', 'tall', 'mermaid off duty'],
+                    ['pins/pink-collage', 'xtall'], ['art/braid'], ['pins/sparkle-sunset', 'square', 'golden hour, pink edition'],
+                    ['posters/gossip-girl'], ['pins/shells-pearls', 'tall'], ['img/nyc'],
+                    ['pins/underwater-shells', 'square'], ['pins/teal-collage', 'xtall', 'love you to the moon and back'], ['img/cupcakes'],
+                    ['pins/glitter-conch', 'portrait'], ['art/coexistence-of-both-my-worlds'], ['pins/wave-curl', 'tall'],
+                    ['img/chicago'], ['pins/pearl-collage', 'xtall', 'pearls on everything'], ['art/packing-home'],
+                    ['pins/sparkle-hands', 'portrait', 'main character water'], ['img/cake-lego'], ['art/vanity']
+                ];
+                const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
+                view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
+                    <div class="pin-board"><b>pretty little things</b><small>${pins.length} pins · shells, pearls, glitter, cake and everything i love</small></div>
+                    <div class="pins">${pins.map(pinHtml).join('')}</div>`;
             } else if (k === 'procreate') {
                 const STACKS = [
                     { name: 'Paintings', items: ART.map(([t, d, f]) => [`assets/art/${f}.jpg`, t, d]) },
