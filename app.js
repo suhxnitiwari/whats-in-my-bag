@@ -3033,8 +3033,19 @@ const AFTER = {
                     ["Ideas & Brands", "How to Get Your Ideas to Spread", "Seth Godin, TED", "xBIVlM435Zg", "ideas-to-spread"],
                     ["Ideas & Brands", "The Paradox of Choice", "Barry Schwartz, TED", "VO6XEQIsCoM", "paradox-of-choice"]
                 ];
+                // GRWM: what's-in-my-bag and beauty routines i actually rewatch
+                const grwm = [
+                    ['ANitCgltBdY', 'What’s In My Bag ft. Sharvari', 'ELLE India'],
+                    ['GiGrI4CX2mg', 'Inside Deepika Padukone’s Bag', 'Vogue India'],
+                    ['mhsDlD2bF_I', 'Inside Alia Bhatt’s Gucci x Adidas Bag', 'Vogue India'],
+                    ['zVUTc2PX4V8', 'Inside Ananya Panday’s Chanel 25 Handbag', 'Vogue India'],
+                    ['ObiwUuiVl9s', 'Sharvari’s Date Night Makeup Routine', 'Vogue India, Beauty Secrets'],
+                    ['xfuLzfvgawY', 'Kriti Sanon’s Glowy Evening Glam', 'Vogue, Beauty Secrets'],
+                    ['FcGq-kPm1NI', 'On the Road with Kriti Sanon in London', 'Vogue India'],
+                    ['yOXInblwY6g', 'Priyanka Chopra’s DIY Natural Skincare', 'Vogue India, Beauty Secrets']
+                ];
                 const render = f => {
-                    view.querySelector('.yt-feed').innerHTML = (f === 'all' || f === 'grwm' ? `<a class="yt-row" href="https://www.youtube.com/results?search_query=get+ready+with+me" target="_blank" rel="noopener"><span class="yt-thumb grwm">GRWM ♡</span><span><b>get ready with me</b><small>a whole genre, honestly</small></span></a>` : '') +
+                    view.querySelector('.yt-feed').innerHTML = (f === 'all' || f === 'grwm' ? grwm.map(([id, t, by]) => `<a class="yt-row" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener"><img class="yt-thumb" src="assets/videos/grwm-${id}.jpg" alt=""><span><b>${t}</b><small>${by}</small></span></a>`).join('') : '') +
                         vids.filter(v => f === 'all' || v[0] === f).map(v => `<a class="yt-row" href="https://www.youtube.com/watch?v=${v[3]}" target="_blank" rel="noopener"><img class="yt-thumb" src="assets/videos/${v[4]}.jpg" alt=""><span><b>${v[1]}</b><small>${v[2]}</small></span></a>`).join('');
                     view.querySelectorAll('.yt-chips button').forEach(c => c.classList.toggle('on', c.dataset.f === f));
                 };
