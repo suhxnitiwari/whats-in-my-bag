@@ -249,7 +249,7 @@ const SFX = (() => {
                 sanitizer: () => { tone(c, t, .09, 220, 110, .2); burst(c, t + .05, .12, 1400, 2, .12); burst(c, t + .1, .08, 700, 3, .08); },
                 stanley: () => { ring(t, 1180, .12, .9); ring(t + .16, 1560, .06, .6); },
                 penpouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
-                pouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
+                pouch: () => { click(t, 900, .05); },
                 // the lid lifting (a soft hinge swish), then the screen waking up with a gentle two-note chime
                 laptop: () => { sweep(t, .3, 500, 1400, .05, .8); [[523.3, 0], [784, .09], [1046.5, .09]].forEach(([f, d]) => tone(c, t + .26 + d, 1.1, f, f, .05, 'sine')); },
                 'makeup-pouch': () => this.zip(true, .28),
@@ -1829,6 +1829,7 @@ const VIEWS = {
             <button type="button" class="vw-closed" id="snap" aria-label="Open the wallet">${ITEMS.find(i => i.id === 'wallet').art}</button>
             <div class="vw-open" aria-hidden="true">
                 <button type="button" class="vzip" id="vzip" aria-label="Zip pocket: unzip it" aria-pressed="false"><span class="zgap" aria-hidden="true"></span><span class="zpull" aria-hidden="true"></span></button>
+                <span class="vzip-hint hand" aria-hidden="true">pull to unzip <span>↓</span></span>
                 <div class="vpanel p1">${order.slice(0, 3).map(slot).join('')}</div>
                 <div class="vgusset"></div>
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>LOUIS VUITTON<br>PARIS<br>made in Italy</small></span></div>
@@ -2132,7 +2133,7 @@ const VIEWS = {
             [`<div class="pb-page pb-plain"><div class="pb-rot"><div class="pp-page pp-data"><span class="pp-guil"></span>
                 <span class="pp-hd"><span class="pp-word">PASSPORT<small>PASSEPORT / PASAPORTE</small></span><b class="pp-us">THE UNITED STATES OF AMERICA</b></span>
                 <span class="pp-usa">USA</span><span class="pp-photo"><img src="assets/img/me.jpg" alt=""></span>
-                <span class="pp-fields"><span><i>Type</i> <b>window seat. non-negotiable.</b></span><span><i>Passport No.</i> <b>nice try ♡</b></span><span><i>Surname</i> <b>TIWARI</b></span><span><i>Given names</i> <b>SUHANI M</b></span><span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span><span><i>Date of birth</i> <b>a lady never tells</b></span><span><i>Issued by</i> <b>my wanderlust</b></span><span><i>Countries</i> <b>6, and that’s rookie numbers</b></span><span><i>Expires</i> <b>never. never stop traveling.</b></span></span>
+                <span class="pp-fields"><span><i>Type</i> <b>window seat. non-negotiable.</b></span><span><i>Passport No.</i> <b>nice try ♡</b></span><span><i>Surname</i> <b>TIWARI</b></span><span><i>Given names</i> <b>SUHANI</b></span><span><i>Nationality</i> <b>UNITED STATES OF AMERICA</b></span><span><i>Date of birth</i> <b>a lady never tells</b></span><span><i>Issued by</i> <b>my wanderlust</b></span><span><i>Countries</i> <b>6, and that’s rookie numbers</b></span><span><i>Expires</i> <b>never. never stop traveling.</b></span></span>
                 <span class="pp-trail">✈ · · · · · · · never stop traveling</span></div></div></div>`,
              visa(2, 'waves', stamp(0, 8, 22, -8) + stamp(1, 40, 56, 6))],
             [visa(3, 'waves', '<span class="pb-note">2010 · thailand & malaysia</span>'),
@@ -2196,9 +2197,9 @@ const VC_TAP = (x, y, c) => `<path d="M${x} ${y} q2 2.5 0 5 M${x + 2} ${y - 1} q
 const BOFA_FLAG = (x, y, c, w = 1) => `<g transform="translate(${x} ${y}) scale(${w})" fill="none" stroke="${c}" stroke-width="1.6" stroke-linecap="round"><path d="M0 6 l5 -6 h9"/><path d="M3 9 l5 -6 h9"/><path d="M6 12 l5 -6 h9"/></g>`;
 const VCARD = {
     // my texas license is a vertical (under-21) card, so it's drawn upright like the real one. every field is a joke, on purpose.
-    dl: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vdl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9ECF7"/><stop offset=".55" stop-color="#F3E6EE"/><stop offset="1" stop-color="#F6D9E0"/></linearGradient><filter id="vdlg"><feColorMatrix type="saturate" values="0"/></filter></defs>
+    dl: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vdl" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#E2EBFA"/><stop offset=".5" stop-color="#F7E8F0"/><stop offset="1" stop-color="#F5CDD9"/></linearGradient><clipPath id="vdlph"><rect x="3" y="20.5" width="19" height="24" rx="1.6"/></clipPath><filter id="vdlg"><feColorMatrix type="saturate" values="0"/></filter></defs>
         <rect width="54" height="86" fill="url(#vdl)"/>
-        <path d="M30 40 h8 v9 l6 2 l5 -1 l4 2 v8 l-1 4 l-4 2 l-4 5 l-2 6 l-4 -1 l-3 -5 l-2 -4 l-3 -2 l-2 2 l-4 -2 l-2 -4 l1 -2 h4z" fill="#F2A9B6" opacity=".45"/>
+        <path d="M30 40 h8 v9 l6 2 l5 -1 l4 2 v8 l-1 4 l-4 2 l-4 5 l-2 6 l-4 -1 l-3 -5 l-2 -4 l-3 -2 l-2 2 l-4 -2 l-2 -4 l1 -2 h4z" transform="translate(-14 -8) scale(1.35)" fill="#F4AFC0" opacity=".55"/><path d="M0 74 q13 -6 27 1 t27 -4 V86 H0Z" fill="#C7D2F2" opacity=".55"/><path d="M0 79 q14 -4 27 1 t27 -2" fill="none" stroke="#fff" stroke-width=".4" opacity=".7"/>
         <g fill="none" stroke="#9FB0E0" stroke-width=".25" opacity=".7"><path d="M0 30 q14 4 27 0 t27 0"/><path d="M0 33 q14 4 27 0 t27 0"/><path d="M0 36 q14 4 27 0 t27 0"/></g>
         <rect x="3" y="4" width="7" height="4.6" fill="#fff" stroke="#2A2A2A" stroke-width=".15"/><rect x="3" y="4" width="2.4" height="4.6" fill="#2C4E95"/><rect x="5.4" y="6.3" width="4.6" height="2.3" fill="#C0272D"/><text x="4.2" y="7" text-anchor="middle" font-size="1.8" fill="#fff">★</text>
         <text x="11.5" y="9" font-family="Bodoni Moda, serif" font-weight="700" font-size="7" fill="#2C4E95">Texas</text>
@@ -2206,36 +2207,38 @@ const VCARD = {
         <path d="M40 3 h4 v4.5 l3 1 l2.5 -.5 l2 1 v4 l-.5 2 l-2 1 l-2 2.5 l-1 3 l-2 -.5 l-1.5 -2.5 l-1 -2 l-1.5 -1 l-1 1 l-2 -1 l-1 -2 l.5 -1 h2z" fill="none" stroke="#D9B45A" stroke-width=".5"/><circle cx="44" cy="11" r="2.4" fill="#E3C46E"/><text x="44" y="12.2" text-anchor="middle" font-size="3" fill="#fff">★</text>
         <text x="20" y="15.5" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.8" fill="#2A2426">DRIVER LICENSE</text>
         <text x="3" y="19" font-family="Instrument Sans" font-size="1.5" fill="#3A3A3A">Director:</text><path d="M10 18.6 q2 -1.4 4 0 t4 0" fill="none" stroke="#555" stroke-width=".25"/>
-        <rect x="3" y="20.5" width="19" height="24" fill="#D8D8D8"/><image href="assets/img/dl-photo.jpg" x="3" y="20.5" width="19" height="24" preserveAspectRatio="xMidYMid slice"/><rect x="3" y="20.5" width="19" height="24" fill="none" stroke="#7A7A7A" stroke-width=".25"/>
+        <rect x="3" y="20.5" width="19" height="24" rx="1.6" fill="#D8D8D8"/><image href="assets/img/dl-photo.jpg" x="3" y="20.5" width="19" height="24" preserveAspectRatio="xMidYMin slice" clip-path="url(#vdlph)"/><rect x="3" y="20.5" width="19" height="24" rx="1.6" fill="none" stroke="#fff" stroke-width=".5"/><path d="M19.6 46.4 c-.6 -.9 -2 -.5 -1.6 .6 c.2 .6 1.6 1.5 1.6 1.5 s1.4 -.9 1.6 -1.5 c.4 -1.1 -1 -1.5 -1.6 -.6z" fill="#E0567F"/>
         <rect x="24" y="19.6" width="28" height="7" fill="#2A2426"/><text x="38" y="22.6" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.5" fill="#fff">UNDER 21 UNTIL</text><text x="38" y="25.6" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.2" fill="#fff">IT’S MY PARTY</text>
         <g font-family="Instrument Sans" fill="#2A2426"><g font-size="1.6" fill="#4A4A55"><text x="24" y="30.4">4d. DL:</text><text x="24" y="33.9">9. Class:</text><text x="24" y="37.4">3. DOB:</text><text x="24" y="40.9">4b. Exp:</text><text x="24" y="44.4">4a. Iss:</text><text x="24" y="47.9">12. Rest:</text><text x="24" y="51.4">9a. End:</text></g>
             <g font-size="2.3" font-weight="700"><text x="31" y="30.6">CURB-1 ME-0</text><text x="31.5" y="34.1">C <tspan font-weight="400" font-size="1.7">(for cute)</tspan></text><text x="30.5" y="37.6" font-size="1.9">pisces szn. next.</text><text x="31" y="41.1" font-size="1.9">never. timeless.</text><text x="30.5" y="44.6" font-size="1.8">on try #3 (jk…?)</text><text x="31.5" y="48.1" font-size="1.6">no parallel parking</text><text x="31" y="51.6" font-size="1.9">main character</text></g></g>
-        <text x="4" y="50.5" font-family="Caveat, cursive" font-size="4.4" fill="#2A2426">Suhani</text>
+        <text x="3.5" y="51" font-family="Caveat, cursive" font-size="4.8" fill="#24305E" transform="rotate(-4 10 50)">Suhani Tiwari</text>
         <g font-family="Instrument Sans" fill="#2A2426"><text x="3" y="56" font-size="1.6" fill="#4A4A55">1.</text><text x="5.2" y="56" font-size="3" font-weight="700">TIWARI</text>
-            <text x="3" y="60" font-size="1.6" fill="#4A4A55">2.</text><text x="5.2" y="60" font-size="3" font-weight="700">SUHANI M</text>
+            <text x="3" y="60" font-size="1.6" fill="#4A4A55">2.</text><text x="5.2" y="60" font-size="3" font-weight="700">SUHANI</text>
             <text x="3" y="64" font-size="1.6" fill="#4A4A55">8.</text><text x="5.2" y="64" font-size="2.2">wouldn’t you wanna knowwww</text>
             <g font-size="1.6" fill="#4A4A55"><text x="17" y="71">16. Hgt:</text><text x="17" y="75">15. Sex:</text><text x="33" y="75">18. Eyes:</text><text x="3" y="82.5">5. DD:</text></g>
             <g font-size="2.4" font-weight="700"><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="1.9">BRN, dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">don’t even think about it</text></g></g>
         <image href="assets/img/dl-photo.jpg" x="4" y="66.5" width="9" height="12" preserveAspectRatio="xMidYMid slice" filter="url(#vdlg)" opacity=".4"/></svg>`,
     // my blue cash everyday, drawn from the real one: the big centurion medallion, name down the side, member since 25. no card number.
-    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E3E9E"/><stop offset=".45" stop-color="#1665D0"/><stop offset="1" stop-color="#0B3C9A"/></linearGradient><radialGradient id="vabm" cx=".55" cy=".45" r=".6"><stop offset="0" stop-color="#3C8EF0"/><stop offset=".8" stop-color="#1D6FD8"/><stop offset="1" stop-color="#1557BF"/></radialGradient></defs>
-        <rect width="54" height="86" fill="url(#vab)"/>
-        <circle cx="26" cy="27" r="26" fill="url(#vabm)"/><circle cx="26" cy="27" r="26" fill="none" stroke="#7FB6FF" stroke-width=".5" opacity=".7"/>
+    amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)"><defs><radialGradient id="hab" cx=".32" cy=".45" r=".85"><stop offset="0" stop-color="#5FB4F5"/><stop offset=".45" stop-color="#2A85E0"/><stop offset="1" stop-color="#0F4FB8"/></radialGradient><radialGradient id="habm" cx=".45" cy=".4" r=".6"><stop offset="0" stop-color="#9BD1FA"/><stop offset="1" stop-color="#4D9BE8"/></radialGradient></defs>
+        <rect width="86" height="54" fill="url(#hab)"/>
+        <ellipse cx="25" cy="25" rx="27" ry="31" fill="url(#habm)" opacity=".55"/>
         <g opacity=".95">
-            <path d="M7 10 q10 -8 26 -6 q14 3 18 14 q3 9 -2 17 l-6 -3 q4 -8 0 -15 q-5 -8 -16 -8 q-10 0 -16 6z" fill="#5BA6F7"/>
-            <path d="M10 14 q12 -7 24 -3 q10 4 11 14 q0 8 -6 13 q-6 5 -14 4 q-8 -1 -12 -8 q-4 -8 -3 -20z" fill="#2F7FE6"/>
-            <g fill="none" stroke="#9FCBFF" stroke-width=".35" opacity=".8"><path d="M12 15 q10 -5 20 -2"/><path d="M12 18 q10 -5 21 -2"/><path d="M12 21 q10 -5 22 -2"/><path d="M11 24 q10 -5 23 -2"/><path d="M38 14 q5 4 6 10"/><path d="M36 13 q5 5 5 11"/></g>
-            <path d="M22 33 q3 4 2 8 q-1 3 1 5 q-3 1 -4 4 q2 2 1 4 q-4 0 -6 -3 q-3 -5 -2 -11 q1 -5 4 -7z" fill="#5BA6F7"/>
-            <path d="M24 30 l9 -5 l5 2 l-3 4 l-8 4z" fill="#7DB8FA" stroke="#1557BF" stroke-width=".3"/>
-            <g fill="none" stroke="#1557BF" stroke-width=".3" opacity=".7"><path d="M27 31 l1 2"/><path d="M29 30 l1 2"/><path d="M31 29 l1 2"/><path d="M33 28 l1 2"/></g>
+            <path d="M4 14 C8 2 22 -4 34 2 C26 0 14 4 10 14Z" fill="#CFE8FD"/>
+            <path d="M9 16 C11 7 20 3 29 5 C35 6 39 11 39 17 L34 18 C33 13 29 10 23 10 C16 10 12 14 11 20Z" fill="#A9D3FA"/>
+            <path d="M11 20 C12 14 16 10 23 10 C29 10 33 13 34 18 L37 22 L35 24 L36 28 L34 29 C34 32 33 34 30 35 L28 36 L28 42 C24 44 18 44 14 42 L15 36 C11 33 10 27 11 20Z" fill="#8EC6F8"/>
+            <path d="M14 42 C10 46 6 52 6 54 H40 C38 50 34 46 28 42Z" fill="#A9D3FA"/>
         </g>
-        <rect x="28" y="10" width="8.4" height="11" rx="1.4" fill="#C8A86A" stroke="#7A5F2E" stroke-width=".35"/><path d="M28 13.6 h3 M33.4 13.6 h3 M28 17.4 h3 M33.4 17.4 h3 M31 10 v11 M33.4 10 v11" fill="none" stroke="#7A5F2E" stroke-width=".3"/>
-        <text transform="translate(5.2 7) rotate(90)" font-family="Instrument Sans" font-weight="600" font-size="3.3" letter-spacing=".2" fill="#DCEBFF">SUHANI TIWARI</text>
-        <g transform="translate(17.5 47) rotate(72)"><path d="M0 -2.4 h17 l1.4 2.4 -1.4 2.4 h-17 l1.2 -2.4z" fill="#1A63CF" stroke="#DCEBFF" stroke-width=".35"/><text x="9" y=".9" text-anchor="middle" font-family="Instrument Sans" font-weight="700" font-size="2.2" letter-spacing=".2" fill="#DCEBFF">MEMBER SINCE</text></g>
-        <text transform="translate(12 57.5) rotate(90)" font-family="Instrument Sans" font-size="3" fill="#DCEBFF">25</text>
-        <text transform="translate(46.5 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">AMERICAN</text>
-        <text transform="translate(41.3 53) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.9" letter-spacing=".1" fill="#fff">EXPRESS</text>
-        <g transform="translate(29 63) rotate(90)" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M0 0 q2 2.5 0 5"/><path d="M2 -1 q3 3.5 0 7"/><path d="M4 -2 q4 4.5 0 9"/></g><text transform="translate(28.6 72.5) rotate(90)" font-family="Instrument Sans" font-size="3" letter-spacing=".3" fill="#DCEBFF">0306</text></svg>`,
+        <g fill="none" stroke="#2C74CE" stroke-width=".45" opacity=".85"><path d="M7 12 C12 5 21 1 31 2"/><path d="M8 14 C13 7 21 3 30 4"/><path d="M27 19 q3 -1 5 1"/><path d="M33 23 q1.5 .5 2 1.5"/><path d="M30 31 q2 0 3 -1"/><path d="M14 22 q-1 6 2 11"/><path d="M12 19 q6 -6 14 -5"/><path d="M10 48 q8 -3 18 -1"/><path d="M12 51 q8 -2 20 0"/></g>
+        <circle cx="29" cy="21" r=".8" fill="#2C74CE"/>
+        <rect x="9" y="22" width="9" height="7" rx="1.3" fill="#D8DDE3" stroke="#8A97A6" stroke-width=".3"/><path d="M9 25.5 h9 M13.5 22 v7 M11 22 v2.5 M16 22 v2.5 M11 29 v-2.3 M16 29 v-2.3" stroke="#8A97A6" stroke-width=".25"/>
+        <text x="82" y="10" text-anchor="end" font-family="Instrument Sans, Arial" font-weight="800" font-size="5.6" letter-spacing=".1" fill="#fff">AMERICAN</text>
+        <text x="82" y="16" text-anchor="end" font-family="Instrument Sans, Arial" font-weight="800" font-size="5.6" letter-spacing=".1" fill="#fff">EXPRESS</text>
+        <g fill="none" stroke="#fff" stroke-width=".55" stroke-linecap="round"><path d="M68 25.5 q1.2 1.5 0 3"/><path d="M69.4 24.8 q1.8 2.2 0 4.4"/><path d="M70.8 24.1 q2.4 2.9 0 5.8"/></g>
+        <text x="74" y="28.6" font-family="Instrument Sans, Arial" font-size="3.4" letter-spacing=".25" fill="#fff">0306</text>
+        <path d="M54 36.5 h22 l1.2 1.8 l-1.2 1.8 h-22 l1.2 -1.8z" fill="none" stroke="#fff" stroke-width=".4"/><text x="65" y="39.3" text-anchor="middle" font-family="Georgia, serif" font-size="2.2" letter-spacing=".25" fill="#fff">MEMBER SINCE</text>
+        <text x="65" y="44.2" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="2.6" fill="#fff">25</text>
+        <text x="6" y="48" font-family="Instrument Sans, Arial" font-size="3.6" letter-spacing=".35" fill="#fff">SUHANI TIWARI</text>
+        <text x="82" y="51" text-anchor="end" font-family="Instrument Sans, Arial" font-size="1.6" fill="#DCEBFF">© AMEX</text></g></svg>`,
     amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
         ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
@@ -2243,13 +2246,17 @@ const VCARD = {
         <path d="M41 30 l3 -4.5 3 4.5z" fill="#C0272D" transform="translate(-2 0)"/><text transform="translate(41 33) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="3.2" fill="#2A200C">DELTA</text>
         <text transform="translate(41 47) rotate(90)" font-family="Instrument Sans" font-size="5" fill="#2A200C" letter-spacing=".8">SKYMILES</text>
         <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}<text x="34" y="80" font-family="Instrument Sans" font-size="3" letter-spacing=".3" fill="#3A2C10">SHOP</text></svg>`,
-    bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A6AAB1"/><stop offset=".5" stop-color="#E4E6EA"/><stop offset="1" stop-color="#9A9EA6"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vbg)"/><path d="M0 34 L54 14 V26 L0 46Z" fill="#fff" opacity=".22"/><path d="M54 30 L20 86 H40 L54 62Z" fill="#7E838B" opacity=".28"/><path d="M0 60 L28 86 H12 L0 74Z" fill="#fff" opacity=".18"/>
-        ${VC_CHIP(32, 12)}<circle cx="11" cy="9" r="3" fill="none" stroke="#5E646C" stroke-width=".6"/><path d="M9.6 9 h2.8 M11 7.6 v2.8" stroke="#5E646C" stroke-width=".5"/>
-        ${BOFA_FLAG(16, 24, '#4A4F57', 1.1)}
-        <text transform="translate(20 40) rotate(90)" font-family="Instrument Sans" font-weight="600" font-size="3" fill="#33373D" letter-spacing=".9">BANK OF AMERICA</text>
-        <text transform="translate(44 62) rotate(90)" font-family="Instrument Sans" font-weight="800" font-style="italic" font-size="6" fill="#1A1F71">VISA</text><text transform="translate(39 62) rotate(90)" font-family="Instrument Sans" font-style="italic" font-size="2.6" fill="#33373D">Signature</text>
-        ${VC_TAP(10, 76, '#33373D')}</svg>`,
+    bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)"><defs><linearGradient id="hbf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9CBCF"/><stop offset=".35" stop-color="#EEEFF1"/><stop offset=".6" stop-color="#B9BCC2"/><stop offset="1" stop-color="#D6D8DC"/></linearGradient></defs>
+        <rect width="86" height="54" fill="url(#hbf)"/>
+        <path d="M0 22 L86 6 V16 L0 34Z" fill="#fff" opacity=".28"/><path d="M30 54 L86 24 V40 L58 54Z" fill="#8E9299" opacity=".18"/>
+        <g opacity=".12" fill="none" stroke="#3A3F47" stroke-width="2.4"><path d="M14 30 l12 -14 h26"/><path d="M20 36 l12 -14 h26"/><path d="M26 42 l12 -14 h26"/></g>
+        <rect x="8" y="19" width="10" height="8" rx="1.4" fill="#D9DBDF" stroke="#7D838C" stroke-width=".35"/><path d="M8 23 h10 M13 19 v8 M10.5 19 v2.8 M15.5 19 v2.8 M10.5 27 v-2.6 M15.5 27 v-2.6" stroke="#7D838C" stroke-width=".28"/>
+        <g fill="none" stroke="#5B616A" stroke-width=".55" stroke-linecap="round"><path d="M78 5.5 q1.1 1.4 0 2.8"/><path d="M79.3 4.8 q1.7 2.1 0 4.2"/><path d="M80.6 4.1 q2.3 2.8 0 5.6"/></g>
+        <g fill="none" stroke-linecap="round" stroke-width="1.3"><path d="M36 25 l4.2 -4.6 h9" stroke="#3E434B"/><path d="M38.2 27.4 l4.2 -4.6 h9" stroke="#3E434B"/><path d="M40.4 29.8 l4.2 -4.6 h9" stroke="#3E434B"/></g>
+        <text x="44" y="36.5" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="3.4" letter-spacing=".55" fill="#33373D">BANK OF AMERICA</text>
+        <g transform="translate(9 46)" fill="none" stroke="#7D838C" stroke-width=".5"><circle cx="0" cy="0" r="2.6"/><path d="M-1.2 -.8 l1.2 -1.2 l1.2 1.2 M1.4 .6 l-.4 1.5 h-1.8 M-1.4 .4 l-.6 -1.2"/></g>
+        <text x="80" y="48" text-anchor="end" font-family="Instrument Sans, Arial" font-weight="800" font-style="italic" font-size="7" fill="#fff" stroke="#9AA0A8" stroke-width=".25">VISA</text>
+        <text x="80" y="51.2" text-anchor="end" font-family="Instrument Sans, Arial" font-style="italic" font-size="2.2" fill="#fff">Signature</text></g></svg>`,
     bofadebit: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C21F2B"/><stop offset=".5" stop-color="#E2403C"/><stop offset="1" stop-color="#B51C27"/></linearGradient></defs>
         <rect width="54" height="86" fill="url(#vbr)"/><path d="M54 0 L0 60 V40 L36 0Z" fill="#fff" opacity=".07"/>
         ${VC_CHIP(22, 11)}${VC_TAP(36, 13, '#fff')}
@@ -2290,7 +2297,7 @@ function cardHTML(c, i) {
             </span>
             <span class="tx-who">
                 <span><i>1.</i> <b>TIWARI</b></span>
-                <span><i>2.</i> <b>SUHANI M</b></span>
+                <span><i>2.</i> <b>SUHANI</b></span>
                 <span><i>8.</i> <b>wouldn’t you wanna knowwww</b></span>
             </span>
             <span class="tx-foot">
@@ -2305,7 +2312,7 @@ function cardHTML(c, i) {
             <span class="ut-left">
                 <span class="ut-word">TEXAS</span>
                 <span class="ut-sub">The University of Texas at Austin</span>
-                <span class="ut-name">SUHANI M TIWARI</span>
+                <span class="ut-name">SUHANI TIWARI</span>
                 <span class="ut-role">STUDENT</span>
                 <span class="ut-num">•••••• ••••••••••</span>
             </span>
@@ -3567,12 +3574,12 @@ const AFTER = {
             card.addEventListener('pointermove', e => {
                 if (!d) return; const dy = Math.min(0, e.clientY - d.y);
                 if (Math.abs(dy) > 6) d.moved = true; if (!d.moved) return;
-                card.style.transition = 'none'; card.style.transform = `translateX(calc(-5% + ${Math.max(dy, -d.h * 1.3)}px))`;
+                card.style.transition = 'none'; card.style.transform = `translateX(calc((-5% + ${Math.max(dy, -d.h * 1.3)}px) * var(--dir, 1)))`;
             });
             card.addEventListener('pointerup', e => {
                 if (!d) return; const moved = d.moved, far = d.y - e.clientY > d.h * .5; d = null; card.style.transition = '';
                 if (!moved) return;
-                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateX(calc(-5% - ${card.dataset.lift || 0}px))`;
+                if (far && !card.classList.contains('picked')) card.click(); else if (!far && !card.classList.contains('picked')) card.style.transform = ''; else card.style.transform = `translateX(calc((-5% - ${card.dataset.lift || 0}px) * var(--dir, 1)))`;
                 card.dataset.skip = '1';   // ignore the click the browser fires right after a drag
             });
         });
@@ -3590,11 +3597,11 @@ const AFTER = {
                 // every card stands upright, long side down, so it comes straight up out of its slot the long way
                 const lift = cr.bottom - wr.top + 12;   // clear the top of the wallet completely
                 card.style.transition = 'none';
-                card.style.transform = `translateX(calc(-5% - ${lift}px))`;
+                card.style.transform = `translateX(calc((-5% - ${lift}px) * var(--dir, 1)))`;
                 const over = card.getBoundingClientRect().bottom - (vw.getBoundingClientRect().top - 12);
                 const fixed = over > 0 ? lift + over : lift;
-                card.style.transform = 'translateX(-5%)'; void card.offsetWidth; card.style.transition = '';
-                card.style.transform = `translateX(calc(-5% - ${fixed}px))`;
+                card.style.transform = 'translateX(calc(-5% * var(--dir, 1)))'; void card.offsetWidth; card.style.transition = '';
+                card.style.transform = `translateX(calc((-5% - ${fixed}px) * var(--dir, 1)))`;
                 card.dataset.lift = fixed;
             });
             vw.style.marginTop = `${Math.round(card.offsetWidth * 1.15)}px`;

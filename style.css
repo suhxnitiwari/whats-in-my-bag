@@ -2033,7 +2033,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .dtool[data-tool="whiteout"] svg { width: 150px; }
 
 /* chargers: pull the top cable out first */
-.chg-svg { display: block; width: min(560px, 100%); margin: 0 auto; touch-action: none; user-select: none; }
+.chg-svg { display: block; width: min(740px, 100%); margin: 0 auto; touch-action: none; user-select: none; }
 .chg-grab { fill: transparent; cursor: grab; }
 .chg-grab:hover { fill: rgba(242,141,180,.25); }
 .chg.done .chg-grab, .chg-svg .chg.done ~ .chg-grab { cursor: default; }
@@ -2648,7 +2648,7 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 
 /* wallet: every card stands upright in its slot, long side down, like mine really do. the card turns 90°, so the bank cards
    (vertical designs) read upright and the license + ID sit sideways. sliding "up" is the card's own -x now. */
-.vw .vslot .card { rotate: 90deg; transform-origin: 50% 50%; transform: translateX(-5%); }
+.vw .vslot .card { rotate: 90deg; transform-origin: 50% 50%; transform: translateX(calc(-5% * var(--dir, 1))); }
 .vw .vslot .card:hover { transform: translateX(-12%); }
 .vw .vslot .card.picked, .vw .vslot .card.picked:hover { rotate: 90deg !important; }
 
@@ -2774,3 +2774,19 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .g2-pick.on { opacity: 1; transform: translateY(-4px); outline: 2px solid var(--plum); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .g2-card { transition: none; } .g2-sparks { display: none; } }
 .g2 { user-select: none; -webkit-user-select: none; }
+
+/* the student ID is a horizontal card: turn it the other way so it faces right like my real one */
+.vw .vslot .card.id, .vw .vslot .card.id.picked, .vw .vslot .card.id.picked:hover { rotate: -90deg !important; --dir: -1; }
+
+/* closed and open are the same height: opening only makes it longer, like the real trifold */
+.vw-closed { top: 0; bottom: 0; width: auto; height: 100%; transform: translateX(-50%); }
+.vw-closed svg { width: auto; height: 100%; display: block; }
+.vw.open .vw-closed { transform: translateX(-50%) scale(.96); }
+/* nudge: the zip pocket is easy to miss */
+.vzip-hint { position: absolute; left: -1%; top: -34px; z-index: 6; white-space: nowrap; font-size: 1.15rem; color: var(--plum); opacity: 0; transform: translateY(4px); transition: opacity .4s, transform .4s; pointer-events: none; }
+.vzip-hint span { display: inline-block; animation: vzip-bob 1.1s ease-in-out infinite; }
+.vw.settled:not(.zip-open) .vzip-hint { opacity: 1; transform: none; }
+.vw.settled:not(.zip-open) .zpull { animation: vzip-tug 1.6s ease-in-out infinite; }
+@keyframes vzip-bob { 50% { transform: translateY(4px); } }
+@keyframes vzip-tug { 0%, 60%, 100% { translate: 0 0; } 75% { translate: 0 5px; } }
+@media (prefers-reduced-motion: reduce) { .vzip-hint span, .vw.settled:not(.zip-open) .zpull { animation: none; } }
