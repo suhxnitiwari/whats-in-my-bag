@@ -2717,7 +2717,7 @@ const AFTER = {
         const size = () => { const dpr = devicePixelRatio || 1; W = hair.clientWidth; H = hair.clientHeight; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); draw(); };
         // my real hair: the tangled photo on top, the smooth photo underneath. every grid cell's tangle level is how much
         // of the tangled photo still shows there, blurred so the edges are soft. the braid photo fades in at the end.
-        const PIC = ['before', 'after', 'braid'].map(k => { const im = new Image(); im.onload = () => (W ? draw() : size()); im.src = `assets/img/me-hair-${k}.jpg`; return im; });
+        const PIC = ['before', 'after', 'braid'].map(k => { const im = new Image(); im.onload = () => (W ? draw() : size()); im.src = `assets/img/me-hair-${k}.jpg?v=2`; return im; });
         // redraw whenever the box gets (or changes) its size, so the photos always show up
         if (window.ResizeObserver) new ResizeObserver(() => { if (hair.clientWidth && hair.clientWidth !== W) size(); }).observe(hair);
         const mk = document.createElement('canvas'), mg = mk.getContext('2d'), off = document.createElement('canvas'), og = off.getContext('2d');
