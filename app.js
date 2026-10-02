@@ -3244,7 +3244,7 @@ const AFTER = {
                         ['shaadi-18', 'xtall'], ['shaadi-28', 'portrait'], ['shaadi-17', 'tall'], ['shaadi-30', 'tall', 'sequins through the veil'], ['shaadi-29', 'square'],
                         ['shaadi-33', 'xtall', 'from above'], ['shaadi-31', 'portrait', 'side eye, but bridal'], ['shaadi-35', 'tall', 'mehendi on everything'],
                         ['shaadi-32', 'xtall'], ['shaadi-36', 'xtall', 'the full look'], ['shaadi-34', 'square'],
-                        ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-12', 'xtall', 'forever, but make it red']] },
+                        ['shaadi-37', 'portrait', 'emeralds, please'], ['shaadi-38', 'tall'], ['shaadi-39', 'portrait', 'peeking through the kaleere'], ['shaadi-40', 'xtall', 'one red rose, part two'], ['shaadi-41', 'tall', 'hathphool + emeralds'], ['shaadi-42', 'xtall', 'chandelier lighting only'], ['shaadi-12', 'xtall', 'forever, but make it red']] },
                     { name: 'burgundy ❦', sub: 'wine nails, patent leather and a kelly, someday.', pins: [
                         ['burgundy-01', 'xtall', 'wine, on my nails and in my glass'], ['burgundy-03', 'portrait', 'chanel, matching'], ['burgundy-06', 'tall'],
                         ['burgundy-02', 'square', 'ysl rouge'], ['burgundy-04', 'xtall', 'the trench'], ['burgundy-08', 'portrait'],
