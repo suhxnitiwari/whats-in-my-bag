@@ -3249,7 +3249,10 @@ const AFTER = {
                         ['burgundy-01', 'xtall', 'wine, on my nails and in my glass'], ['burgundy-03', 'portrait', 'chanel, matching'], ['burgundy-06', 'tall'],
                         ['burgundy-02', 'square', 'ysl rouge'], ['burgundy-04', 'xtall', 'the trench'], ['burgundy-08', 'portrait'],
                         ['burgundy-07', 'tall', 'platforms + lace tights'], ['burgundy-05', 'portrait', 'merci gucci'], ['burgundy-12', 'square', 'mini kelly, maxi dreams'],
-                        ['burgundy-09', 'xtall'], ['burgundy-11', 'tall', 'ballet flats, but make them chanel'], ['burgundy-10', 'portrait', 'the wallet i’d keep cards in']] }
+                        ['burgundy-09', 'xtall'], ['burgundy-11', 'tall', 'ballet flats, but make them chanel'], ['burgundy-10', 'portrait', 'the wallet i’d keep cards in'],
+                        ['burgundy-13', 'xtall', 'leather gloves + a latte'], ['burgundy-17', 'portrait', 'vogue 2026'], ['burgundy-15', 'tall', 'matching phone case, obviously'],
+                        ['burgundy-19', 'square', 'rouge coco flash, every shade'], ['burgundy-14', 'portrait'], ['burgundy-18', 'tall', 'driving in burgundy'],
+                        ['burgundy-16', 'xtall', 'fall, but make it patent']] }
                 ];
                 const pinHtml = ([f, shape, cap]) => `<div class="pin"><div class="pin-img${shape ? ' ' + shape : ''}"><img src="assets/pins/${f}.jpg" alt="" loading="lazy" draggable="false"><a class="pin-save" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Save</a></div>${cap ? `<p class="pin-cap">${cap}</p>` : ''}</div>`;
                 view.innerHTML = back + `<div class="pin-head"><img src="assets/img/me.jpg" alt=""><span><b>Suhani</b><small>@suhxnitiwarii</small></span><a class="pin-btn" href="https://in.pinterest.com/suhxnitiwarii/" target="_blank" rel="noopener">Open my Pinterest</a></div>
