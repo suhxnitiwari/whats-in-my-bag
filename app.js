@@ -3729,14 +3729,18 @@ const AFTER = {
         };
         // before and after the car keys
         const shop = $('#kshop');
+        // one way only: once she's been shopping, she is not going back to the empty cart
+        let laps = 0;
+        const laps2 = ['one more lap, obviously.', 'the cart is full. the cart is never full.', 'retail therapy is still therapy.', 'okay NOW we’re going home. (we are not.)'];
         $('#kshop-go').onclick = () => {
-            const on = shop.classList.toggle('after');
-            if (on) SFX.fob('unlock');
-            $('#kshop-tag').textContent = on ? 'after the car keys' : 'before the car keys';
-            $('#kshop-go').textContent = on ? 'okay, back home' : 'cmon barbie, let’s go shopping 🛍️';
-            $('#kshop-cap').textContent = on ? 'nordstrom, reformation, louis vuitton. it’s called retail therapy.' : 'no keys. no ride. no bags.';
-            shop.querySelector('.bbb-after').setAttribute('aria-hidden', !on);
-            shop.querySelector('.bbb-photo img').setAttribute('aria-hidden', on);
+            if (!shop.classList.contains('after')) {
+                shop.classList.add('after'); SFX.fob('unlock');
+                $('#kshop-tag').textContent = 'after the car keys';
+                $('#kshop-go').textContent = 'one more lap 🛍️';
+                $('#kshop-cap').textContent = 'nordstrom, intimissimi, reformation, louis vuitton. it’s called retail therapy.';
+                shop.querySelector('.bbb-after').setAttribute('aria-hidden', 'false');
+                shop.querySelector('.bbb-photo img').setAttribute('aria-hidden', 'true');
+            } else toast(laps2[laps++ % laps2.length]);
             if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
         };
     },
