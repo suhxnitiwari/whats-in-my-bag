@@ -2817,3 +2817,7 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .scribble { position: relative; text-decoration: none; }
 .scribble::after { content: ""; position: absolute; left: -3px; right: -3px; top: 50%; height: 7px; transform: translateY(-50%) rotate(-4deg); background: repeating-linear-gradient(170deg, transparent 0 1px, currentColor 1px 3px); border-radius: 3px; }
 .apt.near .apt-reader i { border-color: #F28DB4; box-shadow: 0 0 10px 3px rgba(242,141,180,.7); }
+
+/* trunk flipbook sits on top of the photo while it plays */
+.kshop-anim { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: none !important; pointer-events: none; }
+.kshop-photo.animating .kshop-anim { opacity: 1 !important; }

@@ -1913,6 +1913,7 @@ const VIEWS = {
                 <img data-s="1" src="assets/img/keys-after.jpg?v=2" alt="Me as a toddler, beaming in a cart full of shopping bags" loading="lazy">
                 <img data-s="2" src="assets/img/keys-trunk.jpg?v=2" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
                 <img data-s="3" src="assets/img/keys-home.jpg?v=2" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
+                <img class="kshop-anim" src="assets/trunk/f00.jpg" alt="" aria-hidden="true">
                 <span class="bbb-tag mono" id="kshop-tag">before the mall</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
@@ -2227,8 +2228,8 @@ const VCARD = {
         <g font-family="Instrument Sans" fill="#2A2426"><text x="3" y="56" font-size="1.6" fill="#4A4A55">1.</text><text x="5.2" y="56" font-size="3" font-weight="700">TIWARI</text>
             <text x="3" y="60" font-size="1.6" fill="#4A4A55">2.</text><text x="5.2" y="60" font-size="3" font-weight="700">SUHANI</text>
             <text x="3" y="64" font-size="1.6" fill="#4A4A55">8.</text><text x="5.2" y="64" font-size="2.2">wouldn’t you wanna knowwww</text>
-            <g font-size="1.6" fill="#4A4A55"><text x="17" y="71">16. Hgt:</text><text x="17" y="75">15. Sex:</text><text x="33" y="75">18. Eyes:</text><text x="3" y="82.5">5. DD:</text></g>
-            <g font-size="2.4" font-weight="700"><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="1.9">BRN, dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">don’t even think about it</text></g></g>
+            <g font-size="1.6" fill="#4A4A55"><text x="33" y="71">17. Wgt:</text><text x="17" y="71">16. Hgt:</text><text x="17" y="75">15. Sex:</text><text x="33" y="75">18. Eyes:</text><text x="3" y="82.5">5. DD:</text></g>
+            <g font-size="2.4" font-weight="700"><text x="41" y="71.2" font-size="1.6">depends on the lehenga</text><text x="25" y="71.2">5′-06″</text><text x="25" y="75.2">F</text><text x="41" y="75.2" font-size="1.9">BRN, dreamy</text><text x="9" y="82.7" font-size="1.9" font-weight="600">don’t even think about it</text></g></g>
         <image href="assets/img/dl-photo.jpg?v=2" x="4" y="66.5" width="9" height="12" preserveAspectRatio="xMidYMid slice" filter="url(#vdlg)" opacity=".4"/></svg>`,
     // my blue cash everyday, drawn from the real one: the big centurion medallion, name down the side, member since 25. no card number.
     amexblue: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)"><defs><radialGradient id="hab" cx=".32" cy=".45" r=".85"><stop offset="0" stop-color="#5FB4F5"/><stop offset=".45" stop-color="#2A85E0"/><stop offset="1" stop-color="#0F4FB8"/></radialGradient><radialGradient id="habm" cx=".45" cy=".4" r=".6"><stop offset="0" stop-color="#9BD1FA"/><stop offset="1" stop-color="#4D9BE8"/></radialGradient></defs>
@@ -2251,13 +2252,22 @@ const VCARD = {
         <text x="65" y="44.2" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="2.6" fill="#fff">25</text>
         <text x="6" y="48" font-family="Instrument Sans, Arial" font-size="3.6" letter-spacing=".35" fill="#fff">SUHANI TIWARI</text>
         <text x="82" y="51" text-anchor="end" font-family="Instrument Sans, Arial" font-size="1.6" fill="#DCEBFF">© AMEX</text></g></svg>`,
-    amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9953F"/><stop offset=".45" stop-color="#E6CC7E"/><stop offset="1" stop-color="#AE8833"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vag)"/><path d="M0 0 H34 L0 52Z" fill="#fff" opacity=".2"/><path d="M34 0 H54 V28 L10 86 H0 V52Z" fill="#8A6A2A" opacity=".1"/>
-        ${VC_CHIP(33, 13)}<text transform="translate(8 6) rotate(90)" font-family="Instrument Sans" font-size="3.8" fill="#3A2C10" letter-spacing=".5">SUHANI TIWARI</text>
-        <text transform="translate(47 30) rotate(90)" font-family="Instrument Sans" font-weight="800" font-size="4.4" fill="#2A200C" letter-spacing=".3">AMERICAN EXPRESS</text>
-        <path d="M41 30 l3 -4.5 3 4.5z" fill="#C0272D" transform="translate(-2 0)"/><text transform="translate(41 33) rotate(90)" font-family="Instrument Sans" font-weight="700" font-size="3.2" fill="#2A200C">DELTA</text>
-        <text transform="translate(41 47) rotate(90)" font-family="Instrument Sans" font-size="5" fill="#2A200C" letter-spacing=".8">SKYMILES</text>
-        <text x="8" y="80" font-family="Instrument Sans" font-size="3" fill="#3A2C10">25</text>${VC_TAP(28, 76, '#3A2C10')}<text x="34" y="80" font-family="Instrument Sans" font-size="3" letter-spacing=".3" fill="#3A2C10">SHOP</text></svg>`,
+    amexgold: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)">
+        <defs><linearGradient id="hag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E9D08A"/><stop offset=".4" stop-color="#D4B262"/><stop offset=".7" stop-color="#E6CC80"/><stop offset="1" stop-color="#B48E3E"/></linearGradient></defs>
+        <rect width="86" height="54" fill="url(#hag)"/>
+        <path d="M0 20 L86 2 V12 L0 32Z" fill="#fff" opacity=".22"/><path d="M36 54 L86 28 V42 L64 54Z" fill="#7A5A1E" opacity=".12"/>
+        <g opacity=".14" fill="#7A5A1E"><path d="M4 14 C8 2 22 -4 34 2 C26 0 14 4 10 14Z"/><path d="M11 20 C12 14 16 10 23 10 C29 10 33 13 34 18 L37 22 L35 24 L36 28 L34 29 C34 32 33 34 30 35 L28 36 L28 42 C24 44 18 44 14 42 L15 36 C11 33 10 27 11 20Z"/></g>
+        <path d="M7 6 l3.4 -5 3.4 5z" fill="#C8102E"/><path d="M8.8 6 l1.6 -2.4 1.6 2.4z" fill="#8E0A20"/>
+        <text x="15" y="5.6" font-family="Instrument Sans, Arial" font-weight="700" font-size="3.2" letter-spacing=".25" fill="#1B2A4A">DELTA</text>
+        <text x="15" y="9.6" font-family="Instrument Sans, Arial" font-size="2.6" letter-spacing=".5" fill="#1B2A4A">SKYMILES</text>
+        <rect x="63" y="3" width="19" height="13" fill="#016FD0"/><text x="72.5" y="8.6" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="800" font-size="3.4" fill="#fff">AMERICAN</text><text x="72.5" y="12.9" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="800" font-size="3.4" fill="#fff">EXPRESS</text>
+        <rect x="9" y="22" width="9" height="7" rx="1.3" fill="#E9D7A0" stroke="#8A6A2A" stroke-width=".3"/><path d="M9 25.5 h9 M13.5 22 v7 M11 22 v2.5 M16 22 v2.5 M11 29 v-2.3 M16 29 v-2.3" stroke="#8A6A2A" stroke-width=".25"/>
+        <g fill="none" stroke="#3A2C10" stroke-width=".55" stroke-linecap="round"><path d="M68 25.5 q1.2 1.5 0 3"/><path d="M69.4 24.8 q1.8 2.2 0 4.4"/><path d="M70.8 24.1 q2.4 2.9 0 5.8"/></g>
+        <text x="74" y="28.6" font-family="Instrument Sans, Arial" font-size="3.2" letter-spacing=".25" fill="#3A2C10">SHOP</text>
+        <path d="M54 36.5 h22 l1.2 1.8 l-1.2 1.8 h-22 l1.2 -1.8z" fill="none" stroke="#3A2C10" stroke-width=".4"/><text x="65" y="39.3" text-anchor="middle" font-family="Georgia, serif" font-size="2.2" letter-spacing=".25" fill="#3A2C10">MEMBER SINCE</text>
+        <text x="65" y="44.2" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="2.6" fill="#3A2C10">25</text>
+        <text x="6" y="48" font-family="Instrument Sans, Arial" font-size="3.6" letter-spacing=".35" fill="#3A2C10">SUHANI TIWARI</text>
+    </g></svg>`,
     bofa: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)"><defs><linearGradient id="hbf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9CBCF"/><stop offset=".35" stop-color="#EEEFF1"/><stop offset=".6" stop-color="#B9BCC2"/><stop offset="1" stop-color="#D6D8DC"/></linearGradient></defs>
         <rect width="86" height="54" fill="url(#hbf)"/>
         <path d="M0 22 L86 6 V16 L0 34Z" fill="#fff" opacity=".28"/><path d="M30 54 L86 24 V40 L58 54Z" fill="#8E9299" opacity=".18"/>
@@ -3751,8 +3761,10 @@ const AFTER = {
             // the trunk button opens and closes the actual trunk in the photo below
             if (k === 'trunk') {
                 const opening = !trunkOpen;
-                if (opening) { SFX.fob('trunk'); toast('trunk’s open. the bags are safe ♡'); setStep(2); }
-                else { SFX.fob('lock'); toast('trunk closed. bags secured. no one will ever know.'); setStep(3); }
+                if (playing) return;
+                // start the flipbook from whatever the photo shows now, so it never jumps
+                if (opening) { SFX.fob('trunk'); playTrunk([0, 1, 2, 3, 4, 5, 6, 7], () => { setStep(2); toast('trunk’s open. the bags are safe ♡'); }); }
+                else { SFX.fob('lock'); playTrunk([10, 11, 12, 13, 14, 15], () => { setStep(3); toast('trunk closed. bags secured. no one will ever know.'); }); }
                 $('#kshop').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
                 return;
             }
@@ -3782,6 +3794,22 @@ const AFTER = {
         let trunkOpen = false;
         const setStep = n => { step = n; trunkOpen = n === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; showStep(); if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); } };
         const b2 = sheetBody.querySelector('[data-fob="trunk"]');
+        // the trunk flipbook: 20 frames. 0–5 the tailgate lifts and there are the bags, 10–14 it swings shut.
+        const anim = shop.querySelector('.kshop-anim');
+        const FR = Array.from({ length: 20 }, (_, i) => `assets/trunk/f${String(i).padStart(2, '0')}.jpg`);
+        FR.forEach(src => { const im = new Image(); im.src = src; });
+        let playing = false;
+        const playTrunk = (frames, done) => {
+            if (reduce) { done(); return; }
+            playing = true; photo.classList.add('animating');
+            let i = 0;
+            const tick = () => {
+                anim.src = FR[frames[i]];
+                if (++i < frames.length) setTimeout(tick, 95);
+                else { done(); setTimeout(() => { photo.classList.remove('animating'); playing = false; }, 800); }
+            };
+            tick();
+        };
         $('#kshop-go').onclick = () => {
             if (step < STEPS.length - 1) { step++; trunkOpen = step === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
             else toast(laps2[laps++ % laps2.length]);
