@@ -1908,9 +1908,11 @@ const VIEWS = {
             <li>Skill: <span class="hand" style="font-size:1.3rem">whoops</span></li>
         </ul></div>
         <div class="bbb kshop" id="kshop">
-            <div class="bbb-photo">
-                <img src="assets/img/keys-before.jpg" alt="Me as a toddler, pouting in an empty shopping cart">
-                <img class="bbb-after" src="assets/img/keys-after.jpg" alt="Me as a toddler, beaming in a cart full of shopping bags" aria-hidden="true">
+            <div class="bbb-photo kshop-photo" data-step="0">
+                <img data-s="0" src="assets/img/keys-before.jpg" alt="Me as a toddler, pouting in an empty shopping cart">
+                <img data-s="1" src="assets/img/keys-after.jpg" alt="Me as a toddler, beaming in a cart full of shopping bags" loading="lazy">
+                <img data-s="2" src="assets/img/keys-trunk.jpg" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
+                <img data-s="3" src="assets/img/keys-home.jpg" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
                 <span class="bbb-tag mono" id="kshop-tag">before the mall</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
@@ -3729,20 +3731,28 @@ const AFTER = {
         };
         // before and after the car keys
         const shop = $('#kshop');
-        // one way only: once she's been shopping, she is not going back to the empty cart
-        let laps = 0;
-        const laps2 = ['one more lap, obviously.', 'the cart is full. the cart is never full.', 'retail therapy is still therapy.', 'okay NOW we’re going home. (we are not.)'];
+        // the whole trip, one tap at a time: pout → mall → trunk → home. it only goes forward.
+        const STEPS = [
+            [null, 'before the mall', 'cmon barbie, let’s go shopping 🛍️', 'can we puh-weaseee go shopping? 🥺'],
+            ['unlock', 'after the mall!', 'load up the car 🚙', 'nordstrom, intimissimi, reformation, louis vuitton. it’s called retail therapy.'],
+            ['trunk', 'okay, stuff’s in the car', 'okay, time to go home 🏠', 'the trunk is full. the trunk is never full.'],
+            ['lock', 'okay, time to go home', 'one more lap 🛍️', 'DIVAAA, headed home. (via one more store.)']
+        ];
+        const laps2 = ['one more lap, obviously.', 'retail therapy is still therapy.', 'okay NOW we’re going home. (we are not.)'];
+        let step = 0, laps = 0;
+        const photo = shop.querySelector('.kshop-photo');
+        const showStep = () => {
+            const [, tag, btn, cap] = STEPS[step];
+            photo.dataset.step = step;
+            photo.querySelectorAll('img').forEach(im => im.setAttribute('aria-hidden', im.dataset.s != step));
+            $('#kshop-tag').textContent = tag; $('#kshop-go').textContent = btn; $('#kshop-cap').textContent = cap;
+        };
         $('#kshop-go').onclick = () => {
-            if (!shop.classList.contains('after')) {
-                shop.classList.add('after'); SFX.fob('unlock');
-                $('#kshop-tag').textContent = 'after the mall!';
-                $('#kshop-go').textContent = 'one more lap 🛍️';
-                $('#kshop-cap').textContent = 'nordstrom, intimissimi, reformation, louis vuitton. it’s called retail therapy.';
-                shop.querySelector('.bbb-after').setAttribute('aria-hidden', 'false');
-                shop.querySelector('.bbb-photo img').setAttribute('aria-hidden', 'true');
-            } else toast(laps2[laps++ % laps2.length]);
+            if (step < STEPS.length - 1) { step++; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
+            else toast(laps2[laps++ % laps2.length]);
             if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
         };
+        showStep();
     },
 
     stanley: () => {
