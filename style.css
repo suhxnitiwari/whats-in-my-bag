@@ -2984,11 +2984,6 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .pad-why { max-width: 52ch; margin: 4px 0 14px; padding: 10px 14px; border: 2px solid var(--ink); border-radius: 14px; background: #FBE3EA; font-size: .92rem; line-height: 1.45; }
 .pad-why a { color: var(--plum); }
 
-/* my catch-all pouch: clipped to the outside of the bag, bottom left, opposite the Stanley */
-.catchall { position: absolute; left: -9%; bottom: 3%; width: 26%; z-index: 4; cursor: pointer; transform: rotate(-6deg); transform-origin: 80% 0; transition: transform .3s var(--ease); }
-.catchall svg { display: block; width: 100%; filter: drop-shadow(0 8px 8px rgba(59,21,36,.2)); }
-.catchall:hover, .catchall:focus-visible { transform: rotate(-2deg) translateY(-4%); outline: none; }
-.catchall:focus-visible svg { outline: 3px dashed var(--plum); outline-offset: 4px; border-radius: 12px; }
 .ca { position: relative; width: min(460px, 100%); margin: 10px auto 0; padding-top: 120px; }
 .ca-pouch { position: relative; z-index: 2; pointer-events: none; }
 .ca-pouch svg { display: block; width: 100%; }
@@ -3169,3 +3164,178 @@ html, body { overflow-x: clip; }
 .sl-sw span { flex: 1; display: flex; flex-direction: column; gap: calc(var(--u) * .6); font: 500 calc(var(--u) * 1.4) var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 .sl-sw i { display: block; height: calc(var(--u) * 7); border: calc(var(--u) * .3) solid var(--ink); border-radius: calc(var(--u) * 1.2); }
 @media (max-width: 640px) { .deck.presenting .sl-wheel { grid-template-columns: repeat(2, 1fr); } .deck.presenting .sl-sw { flex-wrap: wrap; } .deck.presenting .sl-sw span { flex: 1 1 28%; } }
+.sl-wheel small { margin-top: calc(var(--u) * .4); font: 400 calc(var(--u) * 1.45)/1.35 var(--sans); color: var(--ink-2); }
+@media (max-width: 640px) { .deck.presenting .sl-wheel[style] { grid-template-columns: 1fr !important; } }
+
+/* the note on the pad is a real sticky note: baby pink, square, a lot smaller than the pad, stuck on at a tilt */
+.pd-folded, .pd-open { background: #FFDCE6; border: 0; box-shadow: 0 1px 0 rgba(0,0,0,.06), 3px 7px 12px -4px rgba(118,52,78,.4); }
+.pd-folded { background: linear-gradient(#F9C6D5 0 13%, #FFDCE6 13%); color: #C94F78; }
+.pd-open { background: linear-gradient(#F9C6D5 0 22px, #FFDCE6 22px); }
+.pd-tape { display: none; }
+.pd-note { width: 56px; height: 56px; }
+.pd.reading .pd-note, .pd.reading .pd-note { left: auto; right: 4%; top: 50%; width: min(250px, 50%); height: auto; aspect-ratio: 1; transform: translateY(-50%) rotate(3deg); }
+.pd.reading .pd-open { height: 100%; gap: 4px; padding: 28px 14px 12px; overflow: hidden; }
+.pd.reading .pd-l { font-size: clamp(.82rem, 2.6vw, .98rem); line-height: 1.15; }
+.pd.reading .pd-hi { font-size: clamp(1rem, 3vw, 1.15rem); }
+.pd.read:not(.reading) .pd-note { right: -4%; top: -10%; width: 64px; height: 64px; transform: rotate(10deg); }
+.pd.read:not(.reading) .pd-folded { font-size: 1.5rem; }
+.pd.read.unfold1:not(.reading) .pd-note { top: -14%; right: -4%; }
+.pd.reading .pdw { opacity: 1; }
+@media (max-width: 560px) { .pd.reading .pd-note { width: 62%; right: 0; } }
+
+/* someday ideas: the smoothed-out page holds a real list you can help with */
+.crumple { width: min(400px, 94%); aspect-ratio: 110 / 140; }
+.crumple .cr-ball { cursor: pointer; }
+.crumple:not(.open) .cr-flat { pointer-events: none; }
+.crumple.open .cr-ball { pointer-events: none; }
+.cr-flat > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cr-list { position: relative; align-self: stretch; justify-self: stretch; padding: 9% 7% 6% 25%; overflow-y: auto; font-family: var(--hand); color: #2C3E7A; text-align: left; }
+.cr-h { margin: 0 0 6px; font: 700 1.35rem var(--hand); }
+.cr-list ul { list-style: none; margin: 0; padding: 0; }
+.cr-list li { display: grid; grid-template-columns: 22px 1fr; column-gap: 8px; align-items: start; padding: 3px 0; font-size: 1.12rem; line-height: 1.15; }
+.cr-box { width: 17px; height: 17px; margin-top: 2px; padding: 0; border: 2px solid #2C3E7A; border-radius: 4px; background: transparent; cursor: pointer; position: relative; }
+.cr-box:hover, .cr-list li.on .cr-box { background: #FBE3EA; border-color: #C2386E; }
+.cr-list li.done .cr-box::after { content: "✓"; position: absolute; left: 1px; top: -9px; font: 700 1.5rem var(--hand); color: #C2386E; }
+.cr-list li.done .cr-t { text-decoration: line-through; text-decoration-color: #C2386E; text-decoration-thickness: 2px; opacity: .7; }
+.cr-a { grid-column: 2; color: #C2386E; font-size: 1.02rem; } .cr-a:empty { display: none; }
+.cr-help { display: grid; gap: 4px; margin: 2px 0 8px 30px; }
+.cr-help label { font-size: .62rem; letter-spacing: .08em; color: #C2386E; text-transform: uppercase; }
+.cr-help span { display: flex; gap: 6px; }
+.cr-help input { flex: 1; min-width: 0; padding: 4px 2px; border: 0; border-bottom: 2px solid #C2386E; background: transparent; font: 600 1.1rem var(--hand); color: #C2386E; outline: none; }
+.cr-help button { flex: none; padding: 4px 10px; border: 2px solid var(--ink); border-radius: 999px; background: #F4A7B9; font: 700 .95rem var(--hand); color: var(--ink); cursor: pointer; }
+.cr-send { display: inline-block; margin-top: 10px; font: 700 1.05rem var(--hand); color: #C2386E; }
+.cr-fold { display: block; margin-top: 10px; padding: 0; border: 0; background: none; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: #8A8090; text-decoration: underline; cursor: pointer; }
+@media (max-width: 480px) { .cr-list { padding-left: 22%; } .cr-list li { font-size: 1rem; } }
+
+/* canvas: one card per class */
+.cv-cards { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+button.cv-card { border: 0; padding: 0 0 8px; text-align: left; font: inherit; cursor: pointer; transition: transform .2s; }
+button.cv-card:hover { transform: translateY(-2px); }
+
+/* google calendar on my laptop: this week */
+.gcal { font: 400 .72rem/1.2 system-ui, -apple-system, sans-serif; color: #3C4043; }
+.gcal-top { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: .95rem; }
+.gcal-logo { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 4px; border: 2px solid #4285F4; border-top-width: 5px; font-size: .6rem; color: #4285F4; }
+.gcal-today { padding: 3px 10px; border: 1px solid #DADCE0; border-radius: 4px; background: #fff; font: 500 .7rem system-ui; cursor: pointer; }
+.gcal-top em { font-style: normal; font-size: .8rem; color: #3C4043; }
+.gcal-grid { display: grid; grid-template-columns: 34px repeat(5, 1fr); grid-template-rows: auto calc(var(--hrs) * 30px); }
+.gcal-hd { display: grid; justify-items: center; padding-bottom: 4px; border-bottom: 1px solid #DADCE0; font-size: .55rem; color: #70757A; }
+.gcal-hd b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 400 .95rem system-ui; color: #3C4043; }
+.gcal-hd.now small { color: #1A73E8; } .gcal-hd.now b { background: #1A73E8; color: #fff; }
+.gcal-times { display: grid; grid-template-rows: repeat(var(--hrs), 1fr); font-size: .5rem; color: #70757A; }
+.gcal-times span { transform: translateY(-5px); text-align: right; padding-right: 4px; }
+.gcal-day { position: relative; border-left: 1px solid #DADCE0; background: repeating-linear-gradient(#0000 0 29px, #E8EAED 29px 30px); }
+.gcal-ev { position: absolute; left: 2px; right: 3px; display: flex; flex-direction: column; gap: 1px; padding: 2px 4px; overflow: hidden; border: 1px solid #fff; border-radius: 4px; background: var(--c); color: #fff; text-align: left; font: inherit; cursor: pointer; }
+.gcal-ev b { font-size: .62rem; } .gcal-ev small { font-size: .52rem; opacity: .92; white-space: nowrap; }
+.gcal-ev:hover { filter: brightness(1.08); }
+.gcal-free { position: absolute; left: 0; right: 0; top: 40%; margin: 0; text-align: center; font-size: 1rem; color: #C2386E; transform: rotate(-6deg); }
+
+/* google docs on my laptop: the real to-do list */
+.gdoc { margin: -10px; min-height: calc(100% + 20px); background: #F8F9FA; font-family: Arial, sans-serif; color: #202124; }
+.gdoc-top { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #fff; border-bottom: 1px solid #E0E0E0; }
+.gdoc-ic { width: 16px; height: 21px; border-radius: 2px; background: #4285F4 linear-gradient(#fff 0 0) 4px 7px / 8px 1.5px no-repeat; box-shadow: inset 0 0 0 0 #fff; position: relative; }
+.gdoc-ic::after { content: ""; position: absolute; left: 4px; top: 11px; width: 8px; height: 5px; border-top: 1.5px solid #fff; border-bottom: 1.5px solid #fff; }
+.gdoc-top span:nth-child(2) { display: flex; flex-direction: column; } .gdoc-top b { font-weight: 400; font-size: .85rem; } .gdoc-top small { font-size: .58rem; color: #5F6368; }
+.gdoc-top em { margin-left: auto; padding: 4px 12px; border-radius: 999px; background: #C2E7FF; font: 500 .65rem Arial; font-style: normal; }
+.gdoc-page { width: min(92%, 420px); margin: 12px auto; padding: 22px 26px 28px; background: #fff; box-shadow: 0 1px 3px rgba(60,64,67,.3); }
+.gdoc-page h3 { margin: 0 0 6px; font: 400 1.35rem Arial; }
+.gdoc-page h4 { margin: 12px 0 4px; font: 700 .78rem Arial; text-transform: lowercase; color: #5F6368; }
+.gdoc-li { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: .8rem; cursor: pointer; }
+.gdoc-li input { width: 14px; height: 14px; margin: 0; accent-color: #1A73E8; }
+.gdoc-li input:checked + span { text-decoration: line-through; color: #80868B; }
+.cr-flat > svg * { vector-effect: non-scaling-stroke; }
+.cr-flat > svg > path:first-child { stroke-width: 2.5; }
+.cr-list { padding-right: 11%; }
+/* the sticky note stays stuck on the pad's top-right corner, folded or not */
+.pd:not(.reading) .pd-note, .pd.read:not(.reading) .pd-note, .pd.read.unfold1:not(.reading) .pd-note { left: auto; right: 7%; top: 13%; width: 62px; height: 62px; transform: rotate(8deg); }
+/* while it's folded, the pad packet is the big thing and the sticky note is the little thing stuck on it */
+.pdw { transition: transform .5s cubic-bezier(.4,1.2,.5,1); }
+.pd:not(.unfold1) .pdw { transform: scale(1.75); }
+.pd.reading .pd-note { left: 50%; right: auto; top: 50%; width: min(200px, 54%); transform: translate(-22%, -38%) rotate(4deg); }
+.pd.reading .pd-open { padding: 24px 12px 10px; }
+.pd.reading .pd-l { font-size: clamp(.78rem, 2.4vw, .9rem); line-height: 1.1; }
+.pd.reading .pd-hi { font-size: 1.05rem; }
+.pd.reading .pd-sig { font-size: .9rem; }
+.pd:not(.reading):not(.unfold1) .pd-note { right: auto; left: 50%; top: 50%; transform: translate(70%, -150%) rotate(8deg); }
+.pd { transition: min-height .4s; }
+.pd:not(.unfold1) { min-height: 330px; }
+.pd:not(.unfold1) .pdw { transform: scale(1.6); }
+@media (max-width: 560px) { .pd:not(.unfold1) { min-height: 290px; } .pd:not(.unfold1) .pdw { transform: scale(1.9); } .pd.reading .pd-note { width: 58%; transform: translate(-30%, -40%) rotate(4deg); } }
+.gcal-ev { padding: 2px 3px; gap: 0; }
+.gcal-ev b { font-size: .58rem; white-space: nowrap; }
+.gcal-ev small { font-size: .5rem; overflow: hidden; text-overflow: ellipsis; }
+
+/* wallet: every card is the same real card size. the slot cards fill their panel (about 90% of its width, standing upright),
+   and the Medici card + gift cards in the zip pocket match them exactly: long side = 1.42 × a panel = 42.6% of the wallet */
+.vslot { container-type: inline-size; }
+.vw .vslot .card { left: 50%; right: auto; width: 142cqw; margin-left: -71cqw; top: 10cqw; padding: 5% 6%; }
+.vpanel { clip-path: inset(-400% -40% 0 -40%); }   /* tall upright cards stay tucked inside the pocket, never poke out the bottom */
+.medici-card { aspect-ratio: 1.586; }
+.medici-peek { width: 42.6%; left: -1%; bottom: 74%; }
+.gc-peek { width: 61.7%; left: 24%; bottom: 72%; }
+.vw.cash-out .medici-peek { transform: translate(-6%, 0) rotate(-6deg); }
+.vw.cash-out .gc-peek { transform: translate(0, 0) rotate(3deg); }
+.vw.cash-out.medici-out .medici-peek { transform: translate(-2%, -14%) rotate(-2deg); }
+.vw.cash-out { margin-top: clamp(130px, 24vw, 210px); }
+.vslot .pocket { bottom: -2.5px; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.14), inset 0 -2.5px 0 var(--ink), 0 -3px 6px -3px rgba(0,0,0,.45); }
+
+/* jewelry box: the little velvet square lifts out with the necklace, like taking the whole tray piece out */
+.jw-slot.up { background: radial-gradient(circle at 50% 40%, #A44A66, #8A3854); box-shadow: inset 0 2px 6px rgba(0,0,0,.25), 0 16px 22px -10px rgba(40,20,20,.45); }
+
+/* the car, peeling out: rev (squat + shake), burnout smoke out of both exhausts, skid marks, a fishtail, and gone */
+.kshop-photo .skid, .kshop-photo .smk { position: absolute; pointer-events: none; opacity: 0; }
+.kshop-photo .skid { z-index: 1; bottom: 5%; width: 10%; height: 22%; border-radius: 45% 45% 20% 20%; background: linear-gradient(to top, rgba(28,24,26,.55), rgba(28,24,26,.25) 60%, rgba(28,24,26,0)); }
+.kshop-photo .skid.l { left: 19%; transform: skewX(-10deg); } .kshop-photo .skid.r { right: 19%; transform: skewX(10deg); }
+.kshop-photo .smk { z-index: 3; top: 58%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(205,203,208,.95) 0, rgba(225,223,228,.6) 42%, rgba(240,240,242,0) 70%); }
+.kshop-photo .smk.l { left: 0; } .kshop-photo .smk.r { right: 0; } .kshop-photo .smk.m { left: 30%; top: 50%; width: 40%; }
+.kshop-photo.vroom img[data-s="3"] { z-index: 2; transform-origin: 50% 85%; animation: car-peel 1.6s cubic-bezier(.5,0,.8,.4) forwards; }
+.kshop-photo.vroom .skid { animation: car-skid 2.8s ease-out .3s forwards; }
+.kshop-photo.vroom .smk { animation: car-smoke 2.4s ease-out .22s forwards; }
+.kshop-photo.vroom .smk.r { animation-delay: .28s; } .kshop-photo.vroom .smk.m { animation-delay: .55s; animation-duration: 2.2s; }
+.kshop-photo.vroom-back img[data-s="3"] { animation: car-back .9s cubic-bezier(.2,.8,.2,1); }
+@keyframes car-peel {
+    0% { transform: none; filter: none; opacity: 1; }
+    6% { transform: translate(-.7%, 1%) scaleY(.982); }
+    11% { transform: translate(.7%, 1.2%) scaleY(.978); }
+    16% { transform: translate(-.6%, 1%) scaleY(.982); }
+    21% { transform: translate(.5%, .8%) scaleY(.985); }
+    30% { transform: translate(0, -2%) rotate(-3deg) scale(.9); filter: none; }
+    44% { transform: translate(-7%, -9%) rotate(4deg) scale(.66); filter: blur(.4px); }
+    60% { transform: translate(6%, -15%) rotate(-2.5deg) scale(.42); filter: blur(1px); }
+    80% { transform: translate(-2%, -20%) rotate(1deg) scale(.18); filter: blur(1.5px); opacity: 1; }
+    100% { transform: translate(0, -23%) scale(.03); filter: blur(2px); opacity: 0; }
+}
+@keyframes car-back { from { transform: translate(0, -23%) scale(.03); opacity: 0; filter: blur(2px); } 40% { opacity: 1; } to { transform: none; opacity: 1; filter: none; } }
+@keyframes car-smoke { 0% { opacity: 0; transform: scale(.25); } 12% { opacity: .95; transform: scale(.8); } 40% { opacity: .85; transform: translateY(-10%) scale(2); } 100% { opacity: 0; transform: translateY(-26%) scale(3.4); } }
+@keyframes car-skid { 0% { opacity: 0; clip-path: inset(100% 0 0 0); } 18% { opacity: 1; clip-path: inset(0); } 70% { opacity: .85; } 100% { opacity: 0; clip-path: inset(0); } }
+@media (prefers-reduced-motion: reduce) { .kshop-photo.vroom img, .kshop-photo .skid, .kshop-photo .smk { animation: none !important; } }
+
+/* my ideas journal, open: self-help books + talks on the inside cover (left), my notes on the page (right). it grows as it opens so both pages read */
+.jb { width: var(--jw); transition: transform .9s cubic-bezier(.45,.05,.25,1), width .9s cubic-bezier(.45,.05,.25,1); }
+.jb.open { --jw: min(310px, 45vw); }
+.jb-back { cursor: default; padding: 7%; }
+.jb-sheet { position: relative; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; padding: 8% 6% 5%; background: #FFFBF6; border: 1.5px solid #E2B9C7; border-radius: 3px; box-shadow: 0 2px 4px rgba(58,38,38,.12); container-type: inline-size; overflow: hidden; }
+.jb-h { margin: 0 0 4cqw; font: 600 3.6cqw/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #C2386E; text-align: center; }
+.jb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.4cqw; overflow-y: auto; min-height: 0; }
+.jb-list li { display: flex; align-items: center; gap: 2cqw; }
+.jb-pick { flex: 1; display: flex; align-items: center; gap: 3cqw; min-width: 0; padding: 2.4cqw 3cqw; border: 1.5px solid transparent; border-radius: 3cqw; background: none; text-align: left; font: inherit; color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s; }
+.jb-pick:hover, .jb-pick:focus-visible { background: #FBE3EA; outline: none; }
+.jb-pick.on { background: #FBE3EA; border-color: #C2386E; }
+.jb-ico { flex: none; width: 8cqw; font-size: 5.4cqw; text-align: center; color: #C2386E; }
+.jb-pick b { display: block; font: 700 5.4cqw/1.1 var(--hand); color: #1F2D5A; }
+.jb-pick small { display: block; margin-top: .6cqw; font: 500 3.4cqw/1.2 var(--sans); color: #8A7F90; }
+.jb-go { flex: none; display: grid; place-items: center; width: 8.5cqw; aspect-ratio: 1; border-radius: 50%; border: 1.5px solid var(--ink); background: #F4A7B9; color: var(--ink); font: 700 4.4cqw/1 var(--sans); text-decoration: none; }
+.jb-go:hover, .jb-go:focus-visible { background: #C2386E; color: #fff; }
+.jb-shut { margin: auto auto 0; padding: 1cqw 4cqw; border: 0; background: none; font: 600 3.4cqw var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8A7F90; text-decoration: underline; cursor: pointer; }
+.jb-page { container-type: inline-size; }
+.jb-lines { overflow-y: auto; }
+.jb-lines p { margin: 0; }
+.jb-lines p + p::before { content: "· "; color: #C2386E; }
+.jb-nt { font-weight: 700; color: #C2386E; text-decoration: underline; text-decoration-color: #F4A7B9; text-decoration-thickness: 3px; }
+.jb-empty { color: #B9B2C6; }
+.jb-link { display: inline-block; margin-top: 4px; font: 700 1rem/22px var(--hand); color: #C2386E; }
+@media (max-width: 560px) { .jb-lines { font-size: .92rem; line-height: 20px; background-image: repeating-linear-gradient(transparent 0 19px, rgba(110,150,210,.35) 19px 20px); } .jb-link { line-height: 20px; } }
+.jb-lines p.jb-me { color: #C2386E; } .jb-lines p.jb-me::before { content: none; }
+.jb-list { flex: 1 1 0; gap: 1.2cqw; align-content: start; }
+.jb-pick { padding: 1.8cqw 3cqw; }
+.jb-shut { flex: none; margin-top: 2cqw; }

@@ -241,7 +241,7 @@ window.BAG = {
         { id: 'devices', label: 'pocket one, the work: laptop, ipad, padfolio, binder, headphones & chargers', d: 'M52 104 C52 40 248 40 248 104' },
         { id: 'main', label: 'pocket two, the mind: notebooks, pens, sketchbook, journal & books', d: 'M66 124 C66 68 234 68 234 124' },
         { id: 'shades', label: 'pocket three, the heart: passport, wallet, phone, keys & my sister', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'pocket four, the look: makeup, skincare, hair, jewelry, perfume & sunglasses', d: 'M80 196 C84 176 216 176 220 196' }
+        { id: 'front', label: 'pocket four, the look: makeup, skincare, hair, jewelry, perfume, sunglasses & my catch-all pouch', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
@@ -275,17 +275,25 @@ window.BAG = {
     </svg>`,
     /* my bag charm: a Bath & Body Works caramel frappuccino PocketBac holder (whipped cream, smiles back),
        with a White Barn Cozy Vanilla Almond hand sanitizer inside, gold cap poking out the bottom */
-    /* my catch-all pouch, clipped to the outside of the bag: quilted cream, pink piping, a gold zip that never quite closes */
-    catchall: `<svg viewBox="0 0 140 112" aria-hidden="true"><defs><pattern id="ca-q" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#FBF3EC"/><path d="M0 0 H12 M0 0 V12" stroke="#EBD9CC" stroke-width="1.2"/></pattern></defs>
-        <path class="ca-peek" d="M60 10 q10 -10 20 0" fill="none" stroke="#D9A441" stroke-width="3" stroke-linecap="round"/>
-        <g class="ca-peek"><g transform="rotate(-8 44 30)"><rect x="30" y="14" width="26" height="30" rx="2" fill="#FFFDF8" stroke="#3A2626" stroke-width="1.6"/><path d="M34 22 h18 M34 27 h14 M34 32 h18 M34 37 h10" stroke="#B9B0A2" stroke-width="1.2"/></g>
-        <g transform="rotate(10 88 28)"><rect x="76" y="12" width="24" height="30" rx="5" fill="#F7C9D6" stroke="#3A2626" stroke-width="1.6"/><path d="M80 18 l16 18 M96 18 l-16 18" stroke="#EFA3B8" stroke-width="1.2"/></g>
-        <g transform="rotate(4 64 24)"><rect x="56" y="10" width="20" height="24" fill="#FFF3A8" stroke="#3A2626" stroke-width="1.4"/><path d="M59 17 h12 M59 22 h9" stroke="#C2386E" stroke-width="1.2"/></g></g>
-        <path d="M8 34 C8 26 132 26 132 34 L126 98 C125 106 15 106 14 98Z" fill="url(#ca-q)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M14 40 H126" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 40 H126" stroke="#3A2626" stroke-width="1.2" stroke-dasharray="3 3"/>
-        <path d="M18 96 C40 100 100 100 122 96" fill="none" stroke="#F4A7B9" stroke-width="3"/>
-        <circle cx="118" cy="40" r="4.5" fill="#D9A441" stroke="#3A2626" stroke-width="1.4"/><path d="M118 44 q2 10 -2 18" fill="none" stroke="#D9A441" stroke-width="2.4" stroke-linecap="round"/><path d="M113 60 l3 10 l4 -10z" fill="#F4A7B9" stroke="#3A2626" stroke-width="1.2"/>
-        <text x="70" y="78" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="21" fill="#A3204F">catch-all</text>
+    /* my catch-all pouch, in the front pocket with the makeup: blush quilted nylon, burgundy piping, a gold zip with a pink tassel, a little leather patch */
+    catchall: `<svg viewBox="0 0 160 124" aria-hidden="true"><defs>
+        <linearGradient id="ca-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FAD3DC"/><stop offset="1" stop-color="#F0AFC0"/></linearGradient>
+        <pattern id="ca-q" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 H14 M0 0 V14" stroke="#E592AA" stroke-width="1" stroke-dasharray="2.2 1.6"/></pattern>
+        <clipPath id="ca-c"><path d="M16 34 Q16 26 24 26 H136 Q144 26 144 34 L149 100 Q150 112 137 112 H23 Q10 112 11 100Z"/></clipPath></defs>
+        <path d="M16 34 Q16 26 24 26 H136 Q144 26 144 34 L149 100 Q150 112 137 112 H23 Q10 112 11 100Z" fill="url(#ca-b)"/>
+        <g clip-path="url(#ca-c)"><rect x="0" y="36" width="160" height="80" fill="url(#ca-q)"/><ellipse cx="46" cy="52" rx="34" ry="14" fill="#fff" opacity=".28"/><path d="M8 103 Q80 110 152 103" fill="none" stroke="#76344E" stroke-width="5"/></g>
+        <path d="M16 34 Q16 26 24 26 H136 Q144 26 144 34 L149 100 Q150 112 137 112 H23 Q10 112 11 100Z" fill="none" stroke="#3A2626" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M17 36 H143" stroke="#76344E" stroke-width="2"/>
+        <path d="M24 31 H134" stroke="#B8862F" stroke-width="5" stroke-linecap="round"/><path d="M24 31 H134" stroke="#F1D27A" stroke-width="3" stroke-dasharray="1.6 1.4"/>
+        <rect x="118" y="27" width="10" height="8" rx="2" fill="#D9A441" stroke="#3A2626" stroke-width="1.3"/>
+        <circle cx="123" cy="40" r="3.6" fill="none" stroke="#D9A441" stroke-width="2"/>
+        <path d="M120 43 Q118 52 119 62 L127 62 Q128 52 126 43Z" fill="#E77D9C" stroke="#3A2626" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M119 62 l-1 9 M121 62 l-.4 10 M123 62 v10 M125 62 l.4 10 M127 62 l1 9" stroke="#E77D9C" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="118.4" y="58" width="9.2" height="3.2" rx="1" fill="#D9A441"/>
+        <rect x="46" y="60" width="68" height="30" rx="7" fill="#FBF1E8" stroke="#76344E" stroke-width="1.8"/>
+        <rect x="50" y="64" width="60" height="22" rx="5" fill="none" stroke="#C98BA0" stroke-width="1" stroke-dasharray="2.4 1.8"/>
+        <text x="80" y="81" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="17" fill="#76344E">catch-all</text>
+        <path d="M108 66 c-1.6 -2.6 -5.4 -1 -3.4 1.8 l3.4 3.2 l3.4 -3.2 c2 -2.8 -1.8 -4.4 -3.4 -1.8z" fill="#E77D9C"/>
     </svg>`,
     charm: `<svg viewBox="0 0 90 120" aria-hidden="true">
         <circle cx="45" cy="8" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
@@ -835,18 +843,22 @@ window.ITEMS = [
         open: 'bear'
     },
     {
-        id: 'todo', name: 'ideas i need to get to soon', zip: 'attached', l: 0, t: 0, w: 6.6, r: 8,
+        // my catch-all pouch: lives in the front pocket with the beauty stuff, for everything that doesn't have a pocket yet
+        id: 'catchall', name: 'my catch-all pouch', zip: 'front', l: 0, t: 0, w: 16, r: -4,
+        get art() { return window.BAG.catchall; },
+        open: 'catchall'
+    },
+    {
+        id: 'todo', name: 'ideas for someday', zip: 'attached', l: 0, t: 0, w: 6.6, r: 8,
         art: `<svg viewBox="0 0 100 100"><path d="M22 30 L40 14 L62 18 L80 28 L86 50 L78 72 L58 86 L34 84 L16 66 L12 46Z" fill="#FFFDF6" ${S} stroke-width="2.2"/>
     <g stroke="#C9D6EE" stroke-width="1.2" fill="none"><path d="M18 44 L46 40 L84 48"/><path d="M16 58 L50 56 L80 64"/><path d="M28 74 L54 70 L72 78"/></g><path d="M30 20 L32 84" stroke="#F0A7B6" stroke-width="1.2"/>
     <g stroke="#B9B0A2" stroke-width="1.2" fill="none" stroke-linejoin="round"><path d="M40 14 L46 40 L22 30"/><path d="M62 18 L46 40 L80 28"/><path d="M86 50 L58 52 L46 40"/><path d="M58 52 L78 72"/><path d="M58 52 L58 86"/><path d="M58 52 L34 64 L16 66"/><path d="M34 64 L34 84"/><path d="M34 64 L12 46"/></g>
     <g fill="#E8E2D6" opacity=".6"><path d="M46 40 L62 18 L80 28Z"/><path d="M58 52 L78 72 L58 86Z"/><path d="M34 64 L16 66 L12 46Z"/></g>
     <path d="M52 30 q4 -2 8 0 M40 52 q5 -2 9 0" stroke="#2C3E7A" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M66 60 q3 2 6 0" stroke="#C0392B" stroke-width="1.6" fill="none"/></svg>`,
-        flat: `<svg viewBox="0 0 110 120"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
+        flat: `<svg viewBox="0 0 110 120" preserveAspectRatio="none"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
     <g stroke="#C9D6EE" stroke-width="1">${[24,34,44,54,64,74,84,94,104].map(y => `<path d="M12 ${y} L100 ${y - 2}"/>`).join('')}</g><path d="M24 8 L22 114" stroke="#F0A7B6" stroke-width="1.2"/>
     <path d="M30 20 L70 30 M60 4 L52 40 M80 60 L104 62 M20 70 L44 96" stroke="#E8E2D6" stroke-width="1.2"/>
-    <g font-family="Caveat, cursive" font-weight="700" fill="#2C3E7A"><text x="28" y="21" font-size="9.5">ideas, for soon:</text>
-        <g font-size="7.4"><text x="28" y="32">♡ a “who’s watching?” mode</text><text x="34" y="40">for this bag</text><text x="28" y="51">♡ my case decks, in the</text><text x="34" y="59">padfolio</text><text x="28" y="70">♡ (privacy-friendly) analytics</text><text x="34" y="78">for this bag</text></g></g>
-    <g transform="translate(74 98) rotate(-10)"><rect x="-22" y="-9" width="44" height="18" rx="3" fill="none" stroke="#C2386E" stroke-width="2"/><text x="0" y="4.4" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="1.4" fill="#C2386E">SOON ♡</text></g></svg>`,
+</svg>`,
         open: 'todo'
     },
     {

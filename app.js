@@ -323,7 +323,22 @@ const SFX = (() => {
                 [349, 440].forEach(fr => ['sawtooth', 'sine'].forEach(ty => { const o = c.createOscillator(); o.type = ty; o.frequency.value = fr; o.connect(f); o.start(at); o.stop(at + dur + .02); }));
                 f.connect(g).connect(out || bus);
             };
-            if (kind === 'lock') {
+            if (kind === 'vroom') {
+                // she drives fast: two blips of the throttle, then a long pull that fades off into the distance
+                const lp = c.createBiquadFilter(), g = c.createGain();
+                lp.type = 'lowpass'; lp.Q.value = .8; lp.frequency.setValueAtTime(420, t); lp.frequency.linearRampToValueAtTime(900, t + .9); lp.frequency.linearRampToValueAtTime(300, t + 2.2);
+                g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.12, t + .05); g.gain.linearRampToValueAtTime(.06, t + .2); g.gain.linearRampToValueAtTime(.13, t + .28); g.gain.linearRampToValueAtTime(.07, t + .42);
+                g.gain.linearRampToValueAtTime(.15, t + .7); g.gain.exponentialRampToValueAtTime(.001, t + 2.3);
+                [[1, 'sawtooth'], [2, 'square'], [.5, 'sine']].forEach(([m, ty]) => {
+                    const o = c.createOscillator(); o.type = ty;
+                    o.frequency.setValueAtTime(48 * m, t); o.frequency.linearRampToValueAtTime(110 * m, t + .12); o.frequency.linearRampToValueAtTime(60 * m, t + .25);
+                    o.frequency.linearRampToValueAtTime(120 * m, t + .36); o.frequency.linearRampToValueAtTime(70 * m, t + .5);
+                    o.frequency.exponentialRampToValueAtTime(170 * m, t + 1.3); o.frequency.exponentialRampToValueAtTime(90 * m, t + 2.3);
+                    o.connect(lp); o.start(t); o.stop(t + 2.35);
+                });
+                lp.connect(g).connect(bus);
+                burst(c, t + .3, .9, 900, .5, .05);   // the tires, letting go
+            } else if (kind === 'lock') {
                 thunk(t, 95, .3);
                 glide(t + .18, .7, 62, 70, .05);             // the mirrors fold in
                 chime(t + .12, 1318.5, .035);
@@ -456,17 +471,6 @@ const openKeychain = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id
 keychain.addEventListener('click', openKeychain);
 keychain.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openKeychain(e); });
 
-// my catch-all pouch, clipped to the outside of the bag
-const catchall = document.createElement('span');
-catchall.className = 'catchall';
-catchall.setAttribute('role', 'button');
-catchall.setAttribute('tabindex', '0');
-catchall.setAttribute('aria-label', 'My catch-all pouch, clipped to the outside of the bag: pads, ideas, receipts and a speeding ticket');
-catchall.innerHTML = BAG.catchall;
-bagBtn.appendChild(catchall);
-const openCatchall = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'catchall', name: 'my catch-all pouch', open: 'catchall' }); };
-catchall.addEventListener('click', openCatchall);
-catchall.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCatchall(e); });
 
 /* ---------- little stickers on the page ---------- */
 const doodles = [
@@ -602,6 +606,13 @@ const openBottle = e => {
         toast('out she comes. tap the lid for a sip. one tap on “put her back” and she’s home.');
         return;
     }
+    // once she's out: the white bow-print bottom puts her back in one tap; anywhere on the pink opens the lid for a sip
+    const sr = bsvg.getBoundingClientRect(), onWhite = e.clientY && (e.clientY - sr.top) / sr.height >= 112 / 240;
+    if (onWhite && !(e.target.closest && e.target.closest('.holder, .bottle-back'))) { bsvg.style.transform = ''; bottle.classList.remove('out', 'lid-open', 'free'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in the backpack ♡'); return; }
+    if (e.clientY && !onWhite && !bottle.classList.contains('lid-open')) {
+        bottle.querySelector('.lid').classList.remove('closing'); bottle.classList.add('lid-open'); sips++; SFX.slurp();
+        toast('ooookkkayy, take a sip for me ♡'); return;
+    }
     if (e.target.closest && e.target.closest('.lid')) {
         const lid = bottle.querySelector('.lid');
         if (bottle.classList.contains('lid-open')) {
@@ -677,6 +688,9 @@ function shelf(list, x0, x1, y0, gap = 2.2) {
 function relayout() {
     if (phone()) return;
     let items = ITEMS.filter(i => i.zip !== 'side' && i.zip !== 'attached' && open.has(i.zip) && !stowed.has(i.id)).map(sizeOf);
+    // my reading glasses rest on top of the rom-com, so they don't get a spot of their own
+    const onBook = items.some(b => b.it.id === 'romcom') && items.find(b => b.it.id === 'readers');
+    if (onBook) items = items.filter(b => b !== onBook);
     items.sort((a, b) => b.w * b.h - a.w * a.h);
     if (!items.length) { stage.style.aspectRatio = ''; bagBtn.style.top = ''; return; }
     const bands = {
@@ -687,6 +701,7 @@ function relayout() {
     };
     const used = k => bands[k].list.reduce((a, b) => a + b.w * b.h, 0) / bands[k].cap;
     for (const b of items) {
+        if (b.it.id === 'catchall') { bands.bottom.list.push(b); continue; }   // the bottom of the fourth pocket = the bottom of the table
         const fits = Object.keys(bands).filter(k => b.w <= bands[k].x1 - bands[k].x0 && b.h <= bands[k].y1 - bands[k].y0);
         fits.sort((a, c) => used(a) - used(c));
         bands[fits[0] || 'bottom'].list.push(b);
@@ -700,7 +715,7 @@ function relayout() {
         const dy = Math.max(0, (B.y1 - B.y0 - res.used) / 2);
         placed.push(...res.out.map(b => ({ ...b, cy: b.cy + dy })));
     }
-    const bot = shelf(bands.bottom.list.sort((a, b) => b.h - a.h), bands.bottom.x0, bands.bottom.x1, bands.bottom.y0);
+    const bot = shelf(bands.bottom.list.sort((a, b) => (a.it.id === 'catchall') - (b.it.id === 'catchall') || b.h - a.h), bands.bottom.x0, bands.bottom.x1, bands.bottom.y0);
     placed.push(...bot.out);
     const H = Math.max(114, bands.bottom.list.length ? bands.bottom.y0 + bot.used + 4 : 105);
     stage.style.aspectRatio = `${TW} / ${H}`;
@@ -710,6 +725,16 @@ function relayout() {
         li.style.setProperty('--l', `${b.cx * CM}%`);
         li.style.setProperty('--t', `${b.cy / H * 100}%`);
         if (moved[b.it.id]) { li.style.setProperty('--l', moved[b.it.id][0] + '%'); li.style.setProperty('--t', moved[b.it.id][1] + '%'); }
+    }
+    // the glasses lie across the lower half of the book, a little crooked
+    const book = placed.find(b => b.it.id === 'romcom'), gl = document.getElementById('item-readers');
+    if (onBook && book && gl) {
+        const bl = document.getElementById('item-romcom');
+        const at = moved.romcom ? [moved.romcom[0], moved.romcom[1]] : [book.cx * CM, book.cy / H * 100];
+        gl.style.setProperty('--l', `${at[0] + 1.2}%`);
+        gl.style.setProperty('--t', `${at[1] + book.h * .24 / H * 100}%`);
+        if (moved.readers) { gl.style.setProperty('--l', moved.readers[0] + '%'); gl.style.setProperty('--t', moved.readers[1] + '%'); }
+        if (!gl.style.zIndex || +gl.style.zIndex <= +(bl.style.zIndex || 0)) gl.style.zIndex = Math.max(5, +(bl.style.zIndex || 0) + 1);
     }
 }
 
@@ -784,7 +809,8 @@ function unzip(pk, from = 0) {
         relayout();
         if (!dumping()) toast(POCKET_SAY[pk.id] || '');
         const bagBox = bagBtn.getBoundingClientRect();
-        for (const it of ITEMS.filter(i => i.zip === pk.id)) {
+        // the catch-all pouch sits at the very bottom of the fourth pocket, under all the beauty stuff, so it comes out last
+        for (const it of ITEMS.filter(i => i.zip === pk.id).sort((a, b) => (a.id === 'catchall') - (b.id === 'catchall'))) {
             const li = document.getElementById('item-' + it.id);
             li.classList.add('out');
             li.querySelector('button').tabIndex = 0;
@@ -1038,8 +1064,17 @@ const BRAND = {
     nb2: ['utility arsenal · erin condren', 'Tactile time architecture', 'Paper next to digital, on purpose. Planning by hand is how structure becomes visible.', 'structured thinking'],
     stanley: ['cultural intuition · stanley', 'High-visibility cultural currency', 'I participate in modern consumer phenomena firsthand. I understand hype cycles, community trends and lifestyle branding because I live in them.', 'trend-literate'],
     sweater: ['visual identity · ralph lauren', 'Contextual practicality', 'Pink Ralph Lauren cable knit, because I get cold easily. Designed for the real environment, without giving up the palette: the same blush, cream and burgundy as everything else in here.', 'soft luxury'],
-    wallet: ['visual identity · louis vuitton', 'Soft luxury, real loyalty loops', 'A raspberry LV Victorine holding a Medici punch card: buy 10, get 1 free. I understand retail habits and loyalty loops because I’m inside them.', 'consumer insight'],
+    wallet: ['visual identity · louis vuitton', 'Soft luxury, real loyalty loops', 'A raspberry LV Victorine holding a Medici punch card: buy 10, get 1 free. Luxury next to a coffee loyalty card, in a Samsonite: the high-low mix, and a loyalty loop I’m inside of.', 'consumer insight'],
     giftcards: ['the voice', 'Self-aware consumer realness', '“3 cards. 0 returns made on time.” I know retail friction from the customer side, and I can laugh about it.', 'high EQ'],
+    pads: ['radical generosity', 'The “I got you” principle', 'I carry pads to hand out, not just for me. Moving through shared spaces anticipating other people’s needs is unspoken consumer empathy. (It’s also why I built Cadence.)', 'community care'],
+    sanitizer: ['uncompromised precision', 'Look, don’t touch (with dirty hands)', 'Hand sanitizer, clipped to the outside of my bag. I’ll gladly let you look through everything in here; just sanitize before you touch my Chanel or my Louis Vuitton. Generous, with standards.', 'boundaries'],
+    'backup-lip': ['the brand trinity · westman atelier', 'Clean, elevated beauty', 'Westman Glögg, with a backup in the front pocket. I don’t hoard fifty cheap products; I invest in a few elite, high-performance staples and commit to them.', 'functional luxury'],
+    'makeup-pouch': ['the brand trinity · westman atelier', 'A few elite staples', 'Baby Cheeks, Face Trace, Glögg: one brand, multi-use, beautifully weighted, built to perform on the go.', 'functional luxury'],
+    sunglasses: ['the high-low mix', 'Visual capital', 'Chanel sunglasses, thrown in a Samsonite next to a coffee punch card. Luxury isn’t something I hide in a closet; it’s a daily functional partner.', 'visual capital'],
+    mirror: ['the high-low mix', 'Luxury as an everyday tool', 'A Chanel mirror that lives in a backpack and gets used every day, not a display piece.', 'visual capital'],
+    pouch: ['the visual organizer', 'An obsessive systems architect', 'The full 25-pack of Zebra Mildliners, and every color is a class I took at UT Austin. That isn’t note-taking, it’s data visualization: I organize, tag and prioritize knowledge through color hierarchy. Soft pastels on purpose: they don’t bleed through thin pages or shout at you.', 'systems thinking'],
+    penpouch: ['the visual organizer', 'Tactile precision', 'Paper Mate InkJoy gels: smooth ink flow, clean line weight, no smudging. I’m sensitive to the friction in my tools, the same way I notice the small friction points in a product that other people overlook.', 'quality control'],
+    sketchbook: ['the visual organizer', 'The creative hybrid', 'Strathmore mixed media for raw, by-hand art, next to Procreate on my iPad for digital. Analog and digital creativity, in the same bag.', 'creative range'],
     bear: ['community & bond', 'Grounded in family and memory', 'T.D., named after Teddy Duncan from Good Luck Charlie: the first gift I ever bought my little sister, Amaira. However big the ambition gets, my values stay rooted here.', 'loyalty'],
     cards: ['community & bond', 'Emotional authenticity', 'Amaira’s handmade cards, and her essay “My Lucky Charm.” The strongest brand equity comes from love, memory and real human bonds.', 'empathy']
 };
@@ -1056,7 +1091,7 @@ const brandCard = id => {
     b.onclick = () => {
         brandLens = !brandLens; sync();
         try { localStorage.setItem('brand-lens', brandLens ? '1' : '0'); } catch {}
-        toast(brandLens ? 'brand lens on. open the macbook, the stanley, the wallet, T.D.… every one is a proof point.' : 'brand lens off. back to just my stuff.');
+        toast(brandLens ? 'brand lens on. open the macbook, the pads, the sanitizer charm, the wallet, T.D.… every one is a proof point.' : 'brand lens off. back to just my stuff.');
         if (sheet.open && curItem) { sheetBody.querySelector('.brand-card')?.remove(); if (brandLens) sheetBody.insertAdjacentHTML('afterbegin', brandCard(curItem.id)); }
     };
     sync(); document.querySelector('header.top').appendChild(b);
@@ -1207,11 +1242,19 @@ const DECK = [
     { k: '08 · the synthesis', h: '“A highly organized, trend-literate strategist who bridges <em>technical efficiency with aesthetic sophistication.</em>”',
         swatches: [['#FAF1EF', 'warm cream'], ['#F2C6C8', 'muted rose'], ['#F4A7B9', 'blush'], ['#76344E', 'soft burgundy'], ['#D9A441', 'gold']],
         sub: 'functional utility (samsonite, apple, erin condren) + cultural currency (stanley, spotify, soft-pink luxury). soft luxury that feels approachable, never cold.' },
-    { k: '09 · the build', h: 'Built like a product, <em>not a template.</em>', list: ['Plain HTML, CSS and JavaScript. No framework, no build step.', 'Data-driven: every thing in the bag is one entry in a single file. Adding something new is one object.', 'Accessible by default: native dialogs, keyboard focus everywhere, a reduced-motion fallback for every animation, AA contrast.', 'Live data: Austin weather and a real clock on my phone. Every sound is synthesized in the browser, no audio files.'] },
-    { k: '10 · the trade-offs', h: 'What I chose, <em>and what it cost.</em>',
+    { k: '09 · the framework', h: 'High-status curation, <em>rooted in radical generosity.</em>',
+        grid: [['♡', 'radical generosity', '“i got you.”', 'pads and hand sanitizer, carried to hand out. anticipating other people’s needs is consumer empathy.', '#F4A7B9'], ['✦', 'uncompromised precision', '“sanitize before you touch my stuff.”', 'i’ll share my whole world, but i respect my investments and expect the same.', '#D9C8F0'],
+            ['⇅', 'the high-low mix', 'luxury as a daily partner, not a closet flex', 'chanel and louis vuitton in a samsonite, next to a coffee punch card.', '#F8E7A9'], ['◎', 'the result', 'warm generosity + exquisite standards', 'the friend who hands you a pad, and holds her gear and her work to a high bar.', '#CDE6D0']] },
+    { k: '10 · the brand trinity', h: 'Three brands, <em>full commitment.</em>', sub: 'i don’t buy whatever’s popular. i commit to brands that share my standards for utility, design and performance.', cols: 3,
+        wheel: [['1', 'erin condren', 'tactile system architecture', 'planners and notebooks: structured, color-coordinated paper that respects my time and ideas.'], ['2', 'apple', 'seamless digital flow', 'macbook, ipad, iphone, airpods max: everything speaks to everything else.'], ['3', 'westman atelier', 'clean, elevated beauty', 'glögg, baby cheeks, face trace, skin activator: a few elite staples instead of fifty drugstore ones.']] },
+    { k: '11 · the visual organizer', h: 'Twenty-five highlighters, <em>twenty-five classes.</em>', cols: 3,
+        wheel: [['1', 'the creative hybrid', 'raw visual art + digital design', 'strathmore mixed media sketchbook, procreate on my ipad.'], ['2', 'the technical architect', 'logic + visual hierarchy', 'MIS at UT austin, and every mildliner in the 25-pack mapped to a class i took.'], ['3', 'the tactile executioner', 'precision paper systems', 'paper mate inkjoy gels and erin condren notebooks.']],
+        list: ['Soft aesthetic, relentless rigor: every pastel in that arch is a hard UT class. I make heavy work feel satisfying instead of suffering through it.', 'The full pack, never the 5-pack. When I commit to a system I go all in: the full Apple ecosystem, Westman Atelier, all 25 Mildliners.'] },
+    { k: '12 · the build', h: 'Built like a product, <em>not a template.</em>', list: ['Plain HTML, CSS and JavaScript. No framework, no build step.', 'Data-driven: every thing in the bag is one entry in a single file. Adding something new is one object.', 'Accessible by default: native dialogs, keyboard focus everywhere, a reduced-motion fallback for every animation, AA contrast.', 'Live data: Austin weather and a real clock on my phone. Every sound is synthesized in the browser, no audio files.'] },
+    { k: '13 · the trade-offs', h: 'What I chose, <em>and what it cost.</em>',
         head: ['chose', 'instead of', 'why', 'the cost'],
         table: [['Hand-drawn SVG', 'stock photos or 3D', 'it’s mine, it scales, it’s on brand', 'hours per item'], ['One sheet that changes', 'separate pages', '“back” lands right where you were', 'one big script'], ['Depth', 'more items, each one shallower', 'every item has its own interaction, so people stay and explore', '~900 KB of code; next, load each item on demand']] },
-    { k: '11 · what’s next', h: 'Shipped in three days. <em>Measured next.</em>', stats: [['221', 'commits'], ['3', 'days'], ['51', 'things'], ['4', 'zippers']],
+    { k: '14 · what’s next', h: 'Shipped in three days. <em>Measured next.</em>', stats: [['221', 'commits'], ['3', 'days'], ['51', 'things'], ['4', 'zippers']],
         list: ['North star: résumé opens + “let’s connect” taps per visit.', 'First test: does opening the work pocket first lead to more résumé opens than opening the heart pocket first?', 'Privacy-friendly analytics, so I measure the bag without tracking the people in it.'] },
     { k: 'thank you', h: 'Thanks for going through <em>my bag.</em>', sub: 'that’s kind of personal, but i’ll allow it.', cls: 'cover',
         links: [['My résumé', 'https://suhanitiwari.com/resume'], ['suhanitiwari.com', 'https://suhanitiwari.com'], ['LinkedIn', 'https://www.linkedin.com/in/suhxnitiwari'], ['Say hi ✉', 'mailto:suhanitiwari@utexas.edu']] }
@@ -1220,13 +1263,24 @@ const slideHTML = (d, n) => `<section class="sl${d.cls ? ' sl-' + d.cls : ''}" d
     <p class="sl-k">${d.k}</p><h3 class="sl-h">${d.h}</h3>${d.sub ? `<p class="sl-sub">${d.sub}</p>` : ''}
     ${d.stats ? `<div class="sl-stats">${d.stats.map(([v, l]) => `<span><b>${v}</b>${l}</span>`).join('')}</div>` : ''}
     ${d.grid ? `<div class="sl-grid">${d.grid.map(([i, t, q, x, c]) => `<div style="--c:${c}"><b>${i}</b><strong>${t}</strong><span>${q}</span>${x ? `<small>${x}</small>` : ''}</div>`).join('')}</div>` : ''}
-    ${d.list ? `<ul class="sl-list">${d.list.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
-    ${d.wheel ? `<ol class="sl-wheel">${d.wheel.map(([n, t, x]) => `<li><b>${n}</b><strong>${t}</strong><span>${x}</span></li>`).join('')}</ol>` : ''}
+    ${d.wheel ? `<ol class="sl-wheel"${d.cols ? ` style="grid-template-columns: repeat(${d.cols}, 1fr)"` : ''}>${d.wheel.map(([n, t, x, m]) => `<li><b>${n}</b><strong>${t}</strong><span>${x}</span>${m ? `<small>${m}</small>` : ''}</li>`).join('')}</ol>` : ''}
     ${d.swatches ? `<div class="sl-sw">${d.swatches.map(([c, n]) => `<span><i style="background:${c}"></i>${n}</span>`).join('')}</div>` : ''}
+    ${d.list ? `<ul class="sl-list">${d.list.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
     ${d.table ? `<table class="sl-table"><thead><tr>${d.head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${d.table.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>` : ''}
     ${d.links ? `<div class="sl-links">${d.links.map(([t, h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join('')}</div>` : ''}
     ${d.foot ? `<p class="sl-foot">${d.foot}</p>` : ''}
 </section>`;
+
+// my classes this semester, straight off my UT schedule. days: 1 = monday … 5 = friday; times in hours
+const CLASSES = [
+    { c: 'MAN 336', t: 'Organizational Behavior', days: [2, 4], s: 8, e: 9.5, room: 'UTC 1.144', col: '#E67C73' },
+    { c: 'MIS 375', t: 'Enterprise Systems', days: [1, 3], s: 11, e: 12.5, room: 'CBA 4.324', col: '#BF5700' },
+    { c: 'MKT 354', t: 'Consumer Behavior', days: [2, 4], s: 11, e: 12.5, room: 'CBA 4.344', col: '#D81B60' },
+    { c: 'EDP 352K', t: 'Mindfulness, Compassion & the Self', days: [1, 3], s: 12.5, e: 14, room: 'SZB 1.510', col: '#33B679' },
+    { c: 'MIS 372T', t: 'Server-Side Web Applications', days: [2, 4], s: 12.5, e: 14, room: 'UTC 1.116', col: '#7986CB' },
+    { c: 'EDP 320', t: 'Cognition, Human Learning & Motivation', days: [2, 4], s: 14, e: 15.5, room: 'UTC 3.102', col: '#039BE5' }
+];
+const hhmm = h => `${Math.floor(h) > 12 ? Math.floor(h) - 12 : Math.floor(h)}:${h % 1 ? '30' : '00'}`;
 
 const MORE_APPS = {
     deck: {
@@ -1450,10 +1504,10 @@ const MORE_APPS = {
     },
     canvas: {
         html: () => `<div class="cv"><p class="cv-h">Dashboard</p>
-            <div class="cv-cards"><div class="cv-card" style="--c:#BF5700"><span></span><b>MIS</b><small>McCombs School of Business</small></div><div class="cv-card" style="--c:#6E4BA8"><span></span><b>Psychology</b><small>why people choose what they choose</small></div></div>
+            <div class="cv-cards">${CLASSES.map(k => `<button type="button" class="cv-card" style="--c:${k.col}" data-cv="${k.c}"><span></span><b>${k.c}</b><small>${k.t}</small></button>`).join('')}</div>
             <div class="cv-btns"><button type="button" id="cv-grades">Grades</button><button type="button" id="cv-todo">To Do</button></div>
             <a class="cv-link" href="${GH}survival-odds/" target="_blank" rel="noopener">i built an app to survive the semester ↗</a></div>`,
-        after: () => { $('#cv-grades').onclick = () => toast('nice try. those stay in the bag.'); $('#cv-todo').onclick = () => grab('todo'); }
+        after: v => { $('#cv-grades').onclick = () => toast('nice try. those stay in the bag.'); $('#cv-todo').onclick = () => grab('todo'); v.querySelectorAll('[data-cv]').forEach(b => b.onclick = () => { const k = CLASSES.find(x => x.c === b.dataset.cv); toast(`${k.c}: ${k.t}. ${k.days.map(d => 'MTWTF'[d - 1]).join('')} ${hhmm(k.s)}–${hhmm(k.e)}, ${k.room}.`); }); }
     }
 };
 const openMoreApp = (k, view, home, back, backSel) => {
@@ -1718,21 +1772,29 @@ function tapToPay(detail, T) {
         }, reduce ? 0 : 650);
     };
 }
-// a pad, drawn from the real one: long, quilted blue at both ends, the "100%" print in the middle.
-// the wrapper folds in thirds like my LV wallet, and each third of the wrapper carries its third of the pad
+// a pad: deep pink and quilted, folded in its wrapper. the wrapper folds in thirds like my LV wallet,
+// and each third of the wrapper carries its third of the pad
 const PAD_THIRD = k => `<svg viewBox="${k * 100} 0 100 110" preserveAspectRatio="none"><g stroke="#3A2626" stroke-width="2.2">
-    <path d="M14 55 C14 20 50 14 84 27 L216 27 C250 14 286 20 286 55 C286 90 250 96 216 83 L84 83 C50 96 14 90 14 55Z" fill="#FFFFFF"/></g>
-    <path d="M24 55 C24 30 52 26 78 34 L222 34 C248 26 276 30 276 55 C276 80 248 84 222 76 L78 76 C52 84 24 80 24 55Z" fill="none" stroke="#D9DDE3" stroke-width="1.4" stroke-dasharray="3 3"/>
-    <ellipse cx="62" cy="55" rx="32" ry="17" fill="#CFE6F7"/><ellipse cx="238" cy="55" rx="32" ry="17" fill="#CFE6F7"/>
-    <path d="M44 55 q18 -14 36 0 q-18 14 -36 0Z M220 55 q18 -14 36 0 q-18 14 -36 0Z" fill="none" stroke="#8EC3E8" stroke-width="1.6"/>
-    ${[118, 150, 182].map((x, i) => `<circle cx="${x}" cy="${i % 2 ? 62 : 48}" r="10" fill="none" stroke="#8EC3E8" stroke-width="1.6"/><text x="${x}" y="${(i % 2 ? 62 : 48) + 2.5}" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-weight="700" font-size="7" fill="#8EC3E8">100</text>`).join('')}</svg>`;
-// the outside of the wrapper: peach and orange arches and dots
-const PAD_PRINT = `<svg viewBox="0 0 100 110" preserveAspectRatio="none"><rect width="100" height="110" fill="#FFF3EA"/>
-    <path d="M-6 0 H60 V18 H-6Z" fill="#FBD9C2"/><path d="M8 8 H54 M8 13 H54" stroke="#F5A877" stroke-width="2"/>
-    <path d="M44 110 V78 a26 26 0 0 1 52 0 V110Z" fill="#EE7A2E"/><path d="M56 110 V80 a14 14 0 0 1 28 0 V110Z" fill="#FFF3EA"/>
-    <path d="M-10 72 a30 30 0 0 1 60 0Z" fill="#F7B48C"/><circle cx="34" cy="40" r="11" fill="#EE7A2E"/><path d="M23 40 h22" stroke="#FFF3EA" stroke-width="2"/>
-    <circle cx="80" cy="34" r="4" fill="#F7B48C"/><circle cx="16" cy="96" r="3" fill="#EE7A2E"/></svg>`;
+    <path d="M14 55 C14 20 50 14 84 27 L216 27 C250 14 286 20 286 55 C286 90 250 96 216 83 L84 83 C50 96 14 90 14 55Z" fill="#E584A2"/></g>
+    <path d="M24 55 C24 30 52 26 78 34 L222 34 C248 26 276 30 276 55 C276 80 248 84 222 76 L78 76 C52 84 24 80 24 55Z" fill="none" stroke="#FBD3DE" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <ellipse cx="62" cy="55" rx="32" ry="17" fill="#D8698B"/><ellipse cx="238" cy="55" rx="32" ry="17" fill="#D8698B"/>
+    <path d="M44 55 q18 -14 36 0 q-18 14 -36 0Z M220 55 q18 -14 36 0 q-18 14 -36 0Z" fill="none" stroke="#FBD3DE" stroke-width="1.6"/>
+    <path d="M110 55 c-3 -5 -10 -2 -6 3 l6 6 l6 -6 c4 -5 -3 -8 -6 -3z M190 55 c-3 -5 -10 -2 -6 3 l6 6 l6 -6 c4 -5 -3 -8 -6 -3z" fill="#F7B8CA"/></svg>`;
+// the outside of the wrapper: blush and raspberry arches and dots
+const PAD_PRINT = `<svg viewBox="0 0 100 110" preserveAspectRatio="none"><rect width="100" height="110" fill="#FFF0F3"/>
+    <path d="M-6 0 H60 V18 H-6Z" fill="#F9D2DC"/><path d="M8 8 H54 M8 13 H54" stroke="#E584A2" stroke-width="2"/>
+    <path d="M44 110 V78 a26 26 0 0 1 52 0 V110Z" fill="#C94F78"/><path d="M56 110 V80 a14 14 0 0 1 28 0 V110Z" fill="#FFF0F3"/>
+    <path d="M-10 72 a30 30 0 0 1 60 0Z" fill="#F2A6BC"/><circle cx="34" cy="40" r="11" fill="#C94F78"/><path d="M23 40 h22" stroke="#FFF0F3" stroke-width="2"/>
+    <circle cx="80" cy="34" r="4" fill="#F2A6BC"/><circle cx="16" cy="96" r="3" fill="#C94F78"/></svg>`;
 
+// not tasks: the little rabbit holes i want to fall down one day. if you know one, help me out and it gets checked off
+const IDEAS = ['why do some songs give you chills?', 'how perfumers build top, heart & base notes', 'the history of “millennial pink”', 'why some fonts just look expensive', 'how discover weekly picks my songs', 'why the mcdonald’s ice cream machine is always broken'];
+
+// my ideas journal: the same self-help books as my pink notebook (same notes), plus the talks i rewatch. each one links out.
+const GR = q => `https://www.goodreads.com/search?q=${encodeURIComponent(q)}`;
+const JOURNAL = [
+    ...SELFHELP.map(b => ({ kind: 'book', title: b.t, by: b.a, url: GR(`${b.t} ${b.a}`.replace(/&amp;/g, '&')), notes: b.notes, me: b.me }))
+];
 const VIEWS = {
     jewelry: () => `
         <h2>My little <em>jewelry box</em></h2>
@@ -1862,8 +1924,15 @@ const VIEWS = {
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>
         <figure class="td-pola"><img src="assets/img/td-amaira.jpg" alt="Amaira as a little girl, smiling and holding T.D. the teddy bear" loading="lazy"><figcaption class="hand">amaira &amp; T.D. ♡</figcaption></figure>`,
     todo: () => `
-        <h2>ideas i need to get to <em>soon</em></h2>
-        <div class="crumple" id="crumple"><div class="cr-ball">${ITEMS.find(i => i.id === 'todo').art}</div><div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}</div></div>
+        <h2>ideas for <em>someday</em></h2>
+        <div class="crumple" id="crumple"><div class="cr-ball" role="button" tabindex="0" aria-label="A crumpled-up list. Smooth it out">${ITEMS.find(i => i.id === 'todo').art}</div>
+            <div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}
+                <div class="cr-list"><p class="cr-h">someday, no rush:</p>
+                    <ul>${IDEAS.map((t, k) => `<li data-idea="${k}"><button type="button" class="cr-box" aria-label="Help with: ${t}"></button><span class="cr-t">${t}</span><span class="cr-a"></span></li>`).join('')}</ul>
+                    <form class="cr-help" id="cr-help" hidden><label class="mono" for="cr-in">know this one? tell me ♡</label><span><input id="cr-in" maxlength="90" autocomplete="off" placeholder="your answer…"><button type="submit">check it off ✓</button></span></form>
+                    <a class="cr-send" id="cr-send" hidden>send me your answers ✉</a>
+                    <button type="button" class="cr-fold mono" id="cr-fold">crumple it back up</button>
+                </div></div></div>
         <p class="note" id="cr-note" style="text-align:center">folded up in my catch-all pouch. tap to open it.</p>`,
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
@@ -1882,12 +1951,12 @@ const VIEWS = {
         <p class="hand tk-say" id="tk-say">tap it to flip it over</p>
         <p class="note">it lives in my catch-all pouch, where things i don’t want to look at go. and the curb. the curb knows what it did.</p>
         <figure class="tk-pic"><img src="assets/img/baby-trike.jpg" alt="Me as a toddler, grinning on a red and yellow trike"><figcaption class="hand">exhibit A: she’s always gone skrrttt skrrtttt 🏎️💨</figcaption></figure>`,
-    // my catch-all pouch, clipped to the outside of the bag: everything that doesn't have a pocket yet
+    // my catch-all pouch, in the front pocket with the makeup: everything that doesn't have a pocket yet
     catchall: () => `
         <h2>my <em>catch-all</em> pouch</h2>
-        <p class="note">clipped to the outside of my bag, for everything that doesn’t have a pocket yet. pads, ideas, receipts, and one speeding ticket. tap anything.</p>
+        <p class="note">it rides in my front pocket with the makeup, for everything that doesn’t have a pocket yet. pads, someday ideas, receipts, and one speeding ticket. tap anything.</p>
         <div class="ca" id="ca">
-            <div class="ca-things">${[['pads', 'pads'], ['todo', 'ideas, for soon'], ['receipts', 'old receipts'], ['ticket', 'a speeding ticket']].map(([id, label], k) =>
+            <div class="ca-things">${[['pads', 'pads'], ['todo', 'someday ideas'], ['receipts', 'old receipts'], ['ticket', 'a speeding ticket']].map(([id, label], k) =>
                 `<button type="button" class="ca-thing" data-ca="${id}" style="--k:${k}" aria-label="${ITEMS.find(i => i.id === id).name}"><span class="ca-art">${ITEMS.find(i => i.id === id).art}</span><span class="hand">${label}</span></button>`).join('')}</div>
             <div class="ca-pouch">${BAG.catchall}</div>
         </div>`,
@@ -1938,10 +2007,14 @@ const VIEWS = {
         <h2><em>her greatest power is believing in herself</em></h2>
         <p class="note">my pink journal. small, always on me, for the ideas that show up at the worst times.</p>
         <div class="jb" id="jb">
-            <div class="jb-page"><span class="jb-date" aria-hidden="true">DATE&nbsp;&nbsp;/&nbsp;&nbsp;/</span><div class="jb-lines" contenteditable="true" spellcheck="false" aria-label="Write an idea"></div></div>
+            <div class="jb-page"><span class="jb-date" aria-hidden="true">DATE&nbsp;&nbsp;/&nbsp;&nbsp;/</span><div class="jb-lines" id="jb-notes" aria-live="polite"><p class="jb-empty">pick something on the left, my notes are here →</p></div></div>
             <div class="jb-cover" id="jb-cover">
                 <div class="jb-front" role="button" tabindex="0" aria-label="Open the journal">${ITEMS.find(i => i.id === 'journal').art}<span class="jb-corner" aria-hidden="true">open it ←</span></div>
-                <div class="jb-back" aria-label="Close the journal"></div>
+                <div class="jb-back"><div class="jb-sheet">
+                    <p class="jb-h">read it · watch it</p>
+                    <ol class="jb-list">${JOURNAL.map((b, k) => `<li><button type="button" class="jb-pick" data-k="${k}"><span class="jb-ico" aria-hidden="true">${b.kind === 'video' ? '▶' : '📖'}</span><span><b>${b.title}</b><small>${b.by}</small></span></button><a class="jb-go" href="${b.url}" target="_blank" rel="noopener" aria-label="${b.kind === 'video' ? 'Watch' : 'Find'} ${b.title}">↗</a></li>`).join('')}</ol>
+                    <button type="button" class="jb-shut" id="jb-shut">close it</button>
+                </div></div>
             </div>
         </div>
         <p class="hand" id="jb-hint" style="text-align:center; color:var(--plum); margin:8px 0 0">tap the cover to open it</p>`,
@@ -2198,6 +2271,11 @@ const VIEWS = {
         <p class="hand skb-say" id="skb-say">tap the cover to open it</p>`,
 
     wallet: () => {
+        // the gift cards in the zip pocket: a tight little stack, each one exactly credit-card size (76 x 48 in this viewBox)
+        const GC_STACK = `<svg viewBox="-4 -6 110 76"><defs><pattern id="gcw-st" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="4" height="8" fill="#0B0B0C"/><rect x="4" width="4" height="8" fill="#FAFAFA"/></pattern></defs>
+            <g transform="rotate(-4 40 26)"><rect x="2" y="2" width="76" height="48" rx="4" fill="#E8E0D3" stroke="#3A2626" stroke-width="1.4"/><text x="40" y="17" text-anchor="middle" font-family="Georgia, serif" font-size="8" letter-spacing="2.4" fill="#2A2426">ARITZIA</text></g>
+            <g transform="rotate(2 52 34)"><rect x="14" y="10" width="76" height="48" rx="4" fill="#0D0D0F" stroke="#3A2626" stroke-width="1.4"/><text x="52" y="26" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="700" font-size="8" letter-spacing="3" fill="#F4F2EE">CHANEL</text></g>
+            <g transform="rotate(6 64 42)"><rect x="26" y="18" width="76" height="48" rx="4" fill="url(#gcw-st)" stroke="#3A2626" stroke-width="1.4"/><rect x="40" y="36" width="48" height="12" fill="#FAFAFA" stroke="#0B0B0C" stroke-width="1"/><text x="64" y="45" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="700" font-size="6.4" letter-spacing="2.2" fill="#0B0B0C">SEPHORA</text></g></svg>`;
         // left panel and center panel, three slots each, like the real Victorine
         const order = ['dl', 'amexgold', 'id', 'bofa', 'amexblue', 'bofadebit'];   // as they really sit: license + Delta gold on the left, BofA silver up top in the middle
         const idx = k => CARDS.findIndex(c => c.kind === k);
@@ -2220,7 +2298,7 @@ const VIEWS = {
                 ].map(([d, bg, ink], k) => `<span class="bill${d[0] === '$' ? ' usd100' : ''}" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
             </div>
             <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
-            <button type="button" class="gc-peek" id="gc-peek" aria-label="Some gift cards, tucked in the zip pocket">${ITEMS.find(i => i.id === 'giftcards').art}</button>
+            <button type="button" class="gc-peek" id="gc-peek" aria-label="Some gift cards, tucked in the zip pocket">${GC_STACK}</button>
         </div>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="vclose">Close the wallet</button></div>
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`;
@@ -2287,6 +2365,7 @@ const VIEWS = {
                 <img data-s="2" src="assets/img/keys-trunk.jpg?v=3" alt="My black BMW X5 with the trunk open, full of Nordstrom, Intimissimi, Reformation and Louis Vuitton bags" loading="lazy">
                 <img data-s="3" src="assets/img/keys-home.jpg?v=2" alt="My BMW X5 from the back, trunk closed, pink DIVAAA Texas plate" loading="lazy">
                 <img class="kshop-anim-base" src="assets/img/keys-home.jpg?v=2" alt="" aria-hidden="true"><img class="kshop-anim" src="assets/img/keys-home.jpg?v=2" alt="" aria-hidden="true">
+                <span class="skid l" aria-hidden="true"></span><span class="skid r" aria-hidden="true"></span><span class="smk l" aria-hidden="true"></span><span class="smk r" aria-hidden="true"></span><span class="smk m" aria-hidden="true"></span>
                 <span class="bbb-tag mono" id="kshop-tag">before the mall</span>
             </div>
             <button type="button" class="btn solid" id="kshop-go">cmon barbie, let’s go shopping 🛍️</button>
@@ -2307,7 +2386,7 @@ const VIEWS = {
                 <div class="fwin-bar"><span class="fwin-tl"><button type="button" id="fwin-x" aria-label="Close this window"></button><i></i><i></i></span><b id="fwin-title"></b></div>
                 <div class="fwin-body"><nav class="fwin-side">${FOLDERS.map(([n], i) => `<button type="button" data-side="${i}">${n}</button>`).join('')}</nav><div class="fwin-main" id="fwin-main"></div></div>
             </div>
-            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
+            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">FRI</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">2</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="the real to-do list." aria-label="Google Docs" title="Google Docs"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><path d="M12 7 H24 L30 13 V33 H12Z" fill="#4285F4"/><path d="M24 7 V13 H30Z" fill="#A1C2FA"/><path d="M16 18 h10 M16 22 h10 M16 26 h10 M16 30 h6" stroke="#fff" stroke-width="1.8"/></svg></span><i>Google Docs</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
         </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
         <div class="row" style="justify-content:center; margin-top:14px"><button class="btn solid" type="button" id="lap-clean" hidden>help me clean it up 🧹</button><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
 
@@ -3275,7 +3354,36 @@ const AFTER = {
             path.forEach(([x, y], k) => setTimeout(() => { dab(x, y); if (k === path.length - 1) $('#bl-go').textContent = 'Wipe it off'; }, reduce ? 0 : k * 22));
         };
     },
-    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'the list grows faster than i get to it. that’s the fun part. (tap to fold it back up.)' : 'folded up in my catch-all pouch. tap to open it.'; }; },
+    todo: () => {
+        const c = $('#crumple'), note = $('#cr-note'), form = $('#cr-help'), inp = $('#cr-in'), send = $('#cr-send'), KEY = 'bag-ideas';
+        let got = {}; try { got = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+        let cur = null;
+        const paint = () => {
+            c.querySelectorAll('[data-idea]').forEach(li => { const a = got[li.dataset.idea]; li.classList.toggle('done', !!a); li.querySelector('.cr-a').textContent = a ? `— ${a}` : ''; li.classList.toggle('on', li.dataset.idea === cur); });
+            const n = Object.keys(got).length;
+            send.hidden = !n;
+            send.href = 'mailto:suhanitiwari@utexas.edu?subject=' + encodeURIComponent('your someday ideas') + '&body=' + encodeURIComponent(Object.entries(got).map(([k, a]) => `${IDEAS[k]}\n→ ${a}`).join('\n\n'));
+            if (c.classList.contains('open')) note.textContent = n === IDEAS.length ? 'you answered all of them?? okay, you’re officially my research assistant ♡' : n ? `${n} checked off, thanks to you ♡ tap another if you know it.` : 'no rush on any of these. know one? tap the box and help me out.';
+        };
+        const open = () => { c.classList.add('open'); paint(); };
+        c.querySelector('.cr-ball').onclick = open;
+        c.querySelector('.cr-ball').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+        $('#cr-fold').onclick = () => { c.classList.remove('open'); cur = null; form.hidden = true; note.textContent = 'folded up in my catch-all pouch. tap to open it.'; };
+        c.querySelectorAll('[data-idea]').forEach(li => li.querySelector('.cr-box').onclick = () => {
+            const k = li.dataset.idea;
+            if (got[k]) { delete got[k]; cur = null; form.hidden = true; }
+            else { cur = cur === k ? null : k; form.hidden = cur === null; if (cur !== null) { li.after(form); inp.value = ''; inp.focus(); } }
+            try { localStorage.setItem(KEY, JSON.stringify(got)); } catch {}
+            SFX.tap(); paint();
+        });
+        form.onsubmit = e => {
+            e.preventDefault(); const a = inp.value.trim(); if (!a || cur === null) return inp.focus();
+            got[cur] = a; cur = null; form.hidden = true;
+            try { localStorage.setItem(KEY, JSON.stringify(got)); } catch {}
+            SFX.sparkle(); paint(); toast('checked off. thank you ♡');
+        };
+        paint();
+    },
     cards: () => {
         const C = [
             ['svg:welcome', '', '“welcome back didi!!!” with a cup that says “i ♡ u” and two little us, one of us holding my aritzia bag. obviously.'],
@@ -3323,11 +3431,20 @@ const AFTER = {
     journal: () => {
         // a small bound journal (the notepad is the one in my mccombs padfolio): the cover opens like a book
         const jb = $('#jb'), front = jb.querySelector('.jb-front'), hint = $('#jb-hint');
-        const open = () => { jb.classList.add('open'); hint.textContent = 'write anything. tap the inside cover to close it (nothing is saved).'; };
+        // inside: self-help books and talks on the left (each links out), my notes on whichever one you pick on the right
+        const notes = $('#jb-notes');
+        const show = k => {
+            const b = JOURNAL[k];
+            jb.querySelectorAll('.jb-pick').forEach(x => x.classList.toggle('on', +x.dataset.k === k));
+            notes.innerHTML = `<p class="jb-nt">${b.title}</p>${b.notes.map(n => `<p>${n}</p>`).join('')}${b.me ? `<p class="jb-me">${b.me}</p>` : ''}<a class="jb-link" href="${b.url}" target="_blank" rel="noopener">${b.kind === 'video' ? 'watch it ↗' : 'find the book ↗'}</a>`;
+            SFX.tap();
+        };
+        const open = () => { jb.classList.add('open'); hint.textContent = 'tap a book or a talk for my notes. ↗ opens it.'; };
         const close = () => { jb.classList.remove('open'); hint.textContent = 'tap the cover to open it'; };
         front.onclick = open;
         front.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
-        jb.querySelector('.jb-back').onclick = close;
+        jb.querySelectorAll('.jb-pick').forEach(x => x.onclick = () => show(+x.dataset.k));
+        $('#jb-shut').onclick = close;
     },
     perfume: () => {
         let n = 0;
@@ -3931,18 +4048,34 @@ const AFTER = {
         const vw = $('#vw'), detail = $('#card-detail'), read = $('#vread');
         // closing, like the real trifold: left side folds in, then the flap folds over, then it snaps
         const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
-        let closing = false, opening = false;
+        let closing = false, opening = false, stack = null;
+        const vo = vw.querySelector('.vw-open');
+        const FLIP = 255;   // with the fold's cubic-bezier(.5,0,.3,1) over .6s, the panel passes 90° at ~255ms: swap faces right then
+        // where the folded stack has to sit (and how big it has to be) to line up with the closed wallet
+        const toShut = shut => {
+            const rs = ['.p1', '.p2', '.vflap'].map(q => vw.querySelector(q).getBoundingClientRect()), o = vo.getBoundingClientRect();
+            const l = Math.min(...rs.map(r => r.left)), r = Math.max(...rs.map(r => r.right)), t = Math.min(...rs.map(r => r.top)), b = Math.max(...rs.map(r => r.bottom));
+            const k = shut.height / (b - t) || 1;
+            return { o: `${(l + r) / 2 - o.left}px ${(t + b) / 2 - o.top}px`, t: `translate(${shut.left + shut.width / 2 - (l + r) / 2}px, ${shut.top + shut.height / 2 - (t + b) / 2}px) scale(${k})` };
+        };
         // opening is the same thing backwards: unsnap, the flap swings out to the right, then the front panel swings open to the left
         const open = async () => {
             if (opening || closing || vw.classList.contains('open')) return;
             opening = true;
             if ($('#vclose')) $('#vclose').textContent = 'Close the wallet';
+            const shut = $('#snap svg').getBoundingClientRect();
             vw.classList.add('no-anim', 'open', 'fold-left', 'fold-right', 'p1-back', 'flap-back');
+            void vw.offsetWidth;
+            // the folded stack starts exactly where the closed wallet was, then glides to center as it unfolds (no jump)
+            stack = toShut(shut); vo.style.transition = 'none'; vo.style.transformOrigin = stack.o; vo.style.transform = stack.t;
             void vw.offsetWidth; vw.classList.remove('no-anim');
-            vw.querySelector('.vw-open').removeAttribute('aria-hidden'); $('#snap').tabIndex = -1;
-            await wait(120);
-            vw.classList.remove('fold-right'); setTimeout(() => vw.classList.remove('flap-back'), reduce ? 0 : 380); await wait(700);
-            vw.classList.remove('fold-left'); setTimeout(() => vw.classList.remove('p1-back'), reduce ? 0 : 380); await wait(650);
+            vo.removeAttribute('aria-hidden'); $('#snap').tabIndex = -1;
+            await wait(reduce ? 0 : 40);
+            vo.style.transition = reduce ? 'none' : 'transform 1.05s cubic-bezier(.45,0,.2,1)'; vo.style.transform = '';
+            // each fold flips its face at exactly 90°, and the second fold starts before the first one lands
+            vw.classList.remove('fold-right'); setTimeout(() => vw.classList.remove('flap-back'), reduce ? 0 : FLIP); await wait(reduce ? 0 : 400);
+            vw.classList.remove('fold-left'); setTimeout(() => vw.classList.remove('p1-back'), reduce ? 0 : FLIP); await wait(reduce ? 0 : 650);
+            vo.style.transition = '';
             vw.classList.add('settled');
             opening = false;
         };
@@ -3953,9 +4086,13 @@ const AFTER = {
             vw.querySelectorAll('.vslot .card.picked').forEach(x => { x.classList.remove('picked'); x.style.transform = ''; x.closest('.vslot').style.zIndex = ''; });
             vw.classList.remove('has-pick');
             vw.classList.remove('zip-open');
-            vw.classList.add('fold-left'); setTimeout(() => vw.classList.add('p1-back'), reduce ? 0 : 300); await wait(650);
-            vw.classList.add('fold-right'); setTimeout(() => vw.classList.add('flap-back'), reduce ? 0 : 300); await wait(650);
+            vw.classList.add('fold-left'); setTimeout(() => vw.classList.add('p1-back'), reduce ? 0 : FLIP); await wait(reduce ? 0 : 400);
+            vw.classList.add('fold-right'); setTimeout(() => vw.classList.add('flap-back'), reduce ? 0 : FLIP);
+            // and the folded stack glides back to where the closed wallet sits, so the swap at the end is invisible
+            if (stack) { vo.style.transformOrigin = stack.o; vo.style.transition = reduce ? 'none' : 'transform .75s cubic-bezier(.45,0,.2,1)'; vo.style.transform = stack.t; }
+            await wait(reduce ? 0 : 680);
             vw.classList.add('no-anim');
+            vo.style.transition = 'none'; vo.style.transform = '';
             vw.classList.remove('open', 'fold-left', 'fold-right', 'p1-back', 'flap-back');
             vw.querySelector('.vw-open').setAttribute('aria-hidden', 'true');
             $('#snap').tabIndex = 0;
@@ -4260,6 +4397,18 @@ const AFTER = {
             anim.style.clipPath = 'inset(0 0 0 0)';
             setTimeout(() => { done(); setTimeout(() => { photo.classList.remove('animating'); anim.style.clipPath = ''; playing = false; }, 800); }, 1150);
         };
+        // headed home: she does NOT drive slow. revs, burnout smoke, skid marks, a fishtail, gone. then she rolls back for the next lap.
+        const driveOff = () => {
+            if (reduce || photo.classList.contains('vroom')) return;
+            playing = true;
+            SFX.fob('vroom');
+            photo.classList.remove('vroom-back'); photo.classList.add('vroom');
+            $('#kshop-tag').textContent = 'vroom vroom 💨'; $('#kshop-cap').textContent = 'she drives fast.';
+            setTimeout(() => {
+                photo.classList.remove('vroom'); photo.classList.add('vroom-back');
+                setTimeout(() => { photo.classList.remove('vroom-back'); playing = false; showStep(); }, 900);
+            }, 3000);
+        };
         $('#kshop-go').onclick = () => {
             if (playing) return;
             // loading up the car and heading home use the real trunk animation too
@@ -4270,7 +4419,7 @@ const AFTER = {
                 return;
             }
             if (step < STEPS.length - 1) { step++; trunkOpen = step === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
-            else toast(laps2[laps++ % laps2.length]);
+            else { driveOff(); toast(laps2[laps++ % laps2.length]); }
             if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
         };
         showStep();
@@ -4501,7 +4650,7 @@ const AFTER = {
             ['Amazon', 'Arriving today', '#FF9900', 'Your package is out for delivery.', 'third day in a row. no comment.']
         ];
         const REMINDERS = ['drink water (the stanley is watching)', 'call mumma', 'apply to three jobs', 'finish chapter one of the rom-com', 'sleep before 2 a.m.'];
-        const TRASH = ['other people’s opinions of me.pdf', 'what if i fail.docx', 'comparing myself to others.zip', 'imposter syndrome.exe', 'texts i shouldn’t have sent.txt', 'my old sleep schedule.ics'];
+        const TRASH = ['other people’s opinions of me.pdf', 'what will people think.docx', 'their version of me.pages', 'needing everyone to like me.zip', 'over-explaining myself.txt', 'the group chat’s hot take.png', 'shrinking so they’re comfortable.pkg', 'waiting for permission.dmg', '“mis AND psychology?? why?”.eml', 'who viewed my story.app', 'what if i fail.docx', 'comparing myself to others.zip', 'imposter syndrome.exe', 'texts i shouldn’t have sent.txt', 'my old sleep schedule.ics'];
         const openApp = app => {
             // Messages, Mail and Reminders are their own apps: no Finder sidebar. Trash really is a Finder window, so it keeps it
             fwin.hidden = false; $('#fwin-title').textContent = app; fwin.classList.toggle('app', app !== 'Trash');
@@ -4524,6 +4673,35 @@ const AFTER = {
             if (app === 'Reminders') {
                 fmain.innerHTML = `<div class="lap-app"><p class="lap-h mono">Today</p>${REMINDERS.map((t, k) => `<label class="lap-rem"><input type="checkbox" data-rem="${k}"><span>${t}</span></label>`).join('')}</div>`;
                 fmain.querySelectorAll('[data-rem]').forEach(c => c.onchange = () => { SFX.tap(); if ([...fmain.querySelectorAll('[data-rem]')].every(x => x.checked)) toast('all done?? who even am i.'); });
+                return;
+            }
+            if (app === 'Calendar') {
+                // google calendar, this week: my real class schedule (and no class on fridays)
+                const H0 = 8, H1 = 17, days = [['MON', 28], ['TUE', 29], ['WED', 30], ['THU', 1], ['FRI', 2]];
+                fmain.innerHTML = `<div class="gcal"><div class="gcal-top"><span class="gcal-logo"><b>2</b></span><span>Calendar</span><button type="button" class="gcal-today">Today</button><em>September – October 2026</em></div>
+                    <div class="gcal-grid" style="--hrs:${H1 - H0}"><div class="gcal-hd"></div>${days.map(([d, n], k) => `<div class="gcal-hd${k === 4 ? ' now' : ''}"><small>${d}</small><b>${n}</b></div>`).join('')}
+                        <div class="gcal-times">${[...Array(H1 - H0)].map((_, k) => `<span>${k ? `${(H0 + k - 1) % 12 + 1} ${H0 + k < 12 ? 'AM' : 'PM'}` : ''}</span>`).join('')}</div>
+                        ${days.map((_, d) => `<div class="gcal-day">${CLASSES.filter(k => k.days.includes(d + 1)).map(k => `<button type="button" class="gcal-ev" data-cls="${k.c}" style="--c:${k.col}; top:${(k.s - H0) / (H1 - H0) * 100}%; height:${(k.e - k.s) / (H1 - H0) * 100}%"><b>${k.c}</b><small>${hhmm(k.s).replace(':00', '')}–${hhmm(k.e).replace(':00', '')}</small><small>${k.room}</small></button>`).join('')}${d === 4 ? '<p class="gcal-free hand">no class fridays ♡</p>' : ''}</div>`).join('')}
+                    </div></div>`;
+                fmain.querySelector('.gcal-today').onclick = () => toast('today is friday. today is free.');
+                fmain.querySelectorAll('[data-cls]').forEach(b => b.onclick = () => { const k = CLASSES.find(x => x.c === b.dataset.cls); toast(`${k.c} · ${k.t} · ${k.room}`); });
+                return;
+            }
+            if (app === 'Google Docs') {
+                // my actual to-do list lives in a google doc (the crumpled one in my catch-all is for someday)
+                const KEY = 'bag-gdoc', TODO = [
+                    ['school', ['finish HW3 for MIS 372T', 'MKT 354 reading before tuesday', 'EDP 352K reflection', 'MIS 375 office hours']],
+                    ['career', ['apply to three jobs', 'thank-you email after the coffee chat', 'update my résumé']],
+                    ['this bag', ['a “who’s watching?” mode', 'my case decks, in the padfolio', 'privacy-friendly analytics']]
+                ];
+                let done = {}; try { done = JSON.parse(localStorage.getItem(KEY)) || { 'update my résumé': 1 }; } catch { done = {}; }
+                fmain.innerHTML = `<div class="gdoc"><div class="gdoc-top"><span class="gdoc-ic"></span><span><b>to do ☆</b><small>File&nbsp;&nbsp;Edit&nbsp;&nbsp;View&nbsp;&nbsp;Insert&nbsp;&nbsp;Format&nbsp;&nbsp;Tools</small></span><em>Share</em></div>
+                    <div class="gdoc-page"><h3>to do</h3>${TODO.map(([h, l]) => `<h4>${h}</h4>${l.map(t => `<label class="gdoc-li"><input type="checkbox" data-gd="${t}"${done[t] ? ' checked' : ''}><span>${t}</span></label>`).join('')}`).join('')}</div></div>`;
+                fmain.querySelectorAll('[data-gd]').forEach(c => c.onchange = () => {
+                    SFX.tap(); c.checked ? done[c.dataset.gd] = 1 : delete done[c.dataset.gd];
+                    try { localStorage.setItem(KEY, JSON.stringify(done)); } catch {}
+                    if ([...fmain.querySelectorAll('[data-gd]')].every(x => x.checked)) toast('the whole doc?? okay, overachiever. (that’s me.)');
+                });
                 return;
             }
             if (app === 'Trash') {
@@ -4600,6 +4778,8 @@ const AFTER = {
             if (app === 'Messages') return openApp('Messages');
             if (app === 'Mail') return openApp('Mail');
             if (app === 'Reminders') return openApp('Reminders');
+            if (app === 'Calendar') return openApp('Calendar');
+            if (app === 'Google Docs') return openApp('Google Docs');
             if (app === 'Trash') return openApp('Trash');
             toast(a.dataset.say);
         });
