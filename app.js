@@ -456,6 +456,18 @@ const openKeychain = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id
 keychain.addEventListener('click', openKeychain);
 keychain.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openKeychain(e); });
 
+// my catch-all pouch, clipped to the outside of the bag
+const catchall = document.createElement('span');
+catchall.className = 'catchall';
+catchall.setAttribute('role', 'button');
+catchall.setAttribute('tabindex', '0');
+catchall.setAttribute('aria-label', 'My catch-all pouch, clipped to the outside of the bag: pads, ideas, receipts and a speeding ticket');
+catchall.innerHTML = BAG.catchall;
+bagBtn.appendChild(catchall);
+const openCatchall = e => { e.stopPropagation(); e.preventDefault(); pickUp({ id: 'catchall', name: 'my catch-all pouch', open: 'catchall' }); };
+catchall.addEventListener('click', openCatchall);
+catchall.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openCatchall(e); });
+
 /* ---------- little stickers on the page ---------- */
 const doodles = [
     ['<path d="M20 34 C4 22 4 8 14 6 C18 5 20 9 20 11 C20 9 22 5 26 6 C36 8 36 22 20 34Z" fill="#F4A7B9" stroke="#3A2626" stroke-width="2.5" stroke-linejoin="round"/>', 4, 6, 40],
@@ -484,6 +496,12 @@ function hangCharms(pt) {
 /* ---------- the zippers ---------- */
 const svgNS = 'http://www.w3.org/2000/svg';
 const zips = bagArt.querySelector('.zips');
+// the pulls ride on their own layer on top of everything clipped to the bag, so the Stanley and the charms never sit on a pull you're reaching for
+const zipLayer = document.createElement('span');
+zipLayer.className = 'zip-layer';
+zipLayer.innerHTML = `<svg viewBox="${bagArt.querySelector('svg').getAttribute('viewBox')}"><g class="zips"></g></svg>`;
+bagArt.after(zipLayer);
+const pullZips = zipLayer.querySelector('.zips');
 const open = new Set();
 BAG.pockets.forEach(pk => {
     const g = document.createElementNS(svgNS, 'g');
@@ -494,9 +512,11 @@ BAG.pockets.forEach(pk => {
             <rect x="-10" y="-5" width="20" height="32" rx="6"/><circle cx="0" cy="17" r="3.4"/>
         </g>`;
     zips.appendChild(g);
+    const pg = document.createElementNS(svgNS, 'g'); pullZips.appendChild(pg);
     const path = g.querySelector('.gap'), pull = g.querySelector('.pull'), len = path.getTotalLength();
+    pg.appendChild(pull);
     path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
-    pk.el = { g, path, pull, len };
+    pk.el = { g, pg, path, pull, len };
     place(pk, 0);
     const toggle = e => { e.stopPropagation(); open.has(pk.id) ? zipUp(pk) : unzip(pk); };
     // drag the pull yourself: it follows your finger along the zipper; let go past halfway and it finishes
@@ -758,7 +778,7 @@ function unzip(pk, from = 0) {
         stage.classList.remove('idle');
         pk.el.pull.setAttribute('aria-pressed', 'true');
         pk.el.pull.setAttribute('aria-label', `Zip up: ${pk.label}`);
-        pk.el.g.classList.add('open');
+        pk.el.g.classList.add('open'); pk.el.pg.classList.add('open');
         $('#bag-hint').textContent = '';
         await slide(pk, from, 1);
         relayout();
@@ -801,7 +821,7 @@ function zipUp(pk, from = 1) {
         open.delete(pk.id);
         ITEMS.forEach(i => { if (i.zip === pk.id) stowed.delete(i.id); });
         relayout();
-        pk.el.g.classList.remove('open');
+        pk.el.g.classList.remove('open'); pk.el.pg.classList.remove('open');
         pk.el.pull.setAttribute('aria-pressed', 'false');
         pk.el.pull.setAttribute('aria-label', `Unzip: ${pk.label}`);
         syncAllBtn();
@@ -928,10 +948,10 @@ function fairyDust(x, y) {
 
 /* ---------- snooping: progress, pocket personalities, objects that say something together ---------- */
 const POCKET_SAY = {
-    devices: 'the if-i-lost-it-i’d-cry pocket.',
-    main: 'the “i might need this” pocket. (i always do.)',
-    shades: 'the pocket for things i grab all day, things i don’t want to deal with, and a mirror. i’m very self-reflective.',
-    front: 'the girl pocket.'
+    devices: 'pocket one: the work. can she do the job? (yes.)',
+    main: 'pocket two: the mind. how i think, learn and make things.',
+    shades: 'pocket three: the heart. where i’m from, who i love, where i’m going.',
+    front: 'pocket four: the look. how i show up.'
 };
 const dumping = () => bagBtn.classList.contains('tip');
 const SNOOPABLE = ITEMS.filter(i => i.zip !== 'makeup' && i.zip !== 'attached').map(i => i.id);
@@ -939,9 +959,9 @@ const snooped = new Set();
 const COMBOS = [
     [['laptop', 'headphones'], 'laptop + headphones: do not disturb.'],
     [['ticket', 'keys'], 'a speeding ticket and the car keys. we don’t talk about it.'],
-    [['todo', 'journal'], 'an overdue to-do list hiding behind a journal about believing in herself. iconic.'],
+    [['todo', 'journal'], 'ideas in the catch-all pouch AND ideas in the journal. she is never not thinking.'],
     [['bear', 'padfolio'], 'a teddy bear next to the résumés. she contains multitudes.'],
-    [['backup-lip', 'makeup-pouch'], 'a mac lipstick in the makeup bag AND a westman backup in the grab-it pocket. priorities.'],
+    [['backup-lip', 'makeup-pouch'], 'a mac lipstick in the makeup bag AND a westman backup in the front pocket. priorities.'],
     [['bear', 'cards'], 'T.D. and a stack of her little sister’s cards. okay, now you know her soft spot.'],
     [['laptop', 'padfolio', 'nb1'], 'laptop, padfolio, notebooks. she will work anywhere.'],
     [['makeup-pouch', 'mirror', 'scrunchies'], 'makeup, mirror, scrunchies: the getting-my-life-together kit.'],
@@ -1003,7 +1023,9 @@ sheetBody.addEventListener('click', e => {
     e.preventDefault();
     openWeb(a.href, (a.querySelector('b') || a).textContent.trim().slice(0, 60));
 });
-sheet.addEventListener('close', () => { SFX.hush(); navStack.length = 0; curItem = null; });
+// whatever you tapped to open the sheet gets focus back when it closes (keyboard + screen reader users)
+let opener = null;
+sheet.addEventListener('close', () => { SFX.hush(); navStack.length = 0; curItem = null; if (opener?.isConnected) opener.focus({ preventScroll: true }); opener = null; });
 
 function pickUp(it) {
     SFX.item(it.id);
@@ -1011,7 +1033,7 @@ function pickUp(it) {
     snoop(it.id);
     sheetLabel.textContent = it.name;
     sheetBody.innerHTML = typeof it.open === 'function' ? it.open() : (VIEWS[it.open] || (() => ''))();
-    if (!sheet.open) sheet.showModal();
+    if (!sheet.open) { opener = document.activeElement; sheet.showModal(); }
     sheet.scrollTop = 0;
     (AFTER[typeof it.open === 'function' ? it.id : it.open] || (() => {}))();
 }
@@ -1125,7 +1147,7 @@ const addQ = (view, k) => {
     const b = view.querySelector('.back'); b ? b.after(p) : view.prepend(p);
 };
 const GH = 'https://suhxnitiwari.github.io/';
-const POCKET_NAME = { devices: 'the if-i-lost-it-i’d-cry pocket', main: 'the big pocket', shades: 'the sunglasses pocket', front: 'the front pocket', side: 'the side pocket', makeup: 'the makeup bag', attached: 'tucked into something else' };
+const POCKET_NAME = { devices: 'pocket one (the work)', main: 'pocket two (the mind)', shades: 'pocket three (the heart)', front: 'pocket four (the look)', side: 'the side pocket', makeup: 'the makeup bag', attached: 'tucked into something else' };
 const grab = id => { const it = ITEMS.find(i => i.id === id); if (it) goTo(it); };
 
 const MORE_APPS = {
@@ -1239,7 +1261,7 @@ const MORE_APPS = {
             ${['keys', 'headphones', 'ipad', 'stanley', 'passport', 'mirror', 'bear'].map(id => ITEMS.find(i => i.id === id)).filter(Boolean).map(it => `<div class="fm-row"><span class="fm-art">${it.art}</span><span><b>${it.name.replace(/^my /, '')}</b><small>${POCKET_NAME[it.zip] || 'somewhere in the bag'}</small></span><button type="button" data-find="${it.id}">Find</button></div>`).join('')}
         </div>`,
         after: v => v.querySelectorAll('[data-find]').forEach(b => b.onclick = () => {
-            if (b.dataset.find === 'keys') toast('*jingle jingle* found them. they were in the sunglasses pocket. again.');
+            if (b.dataset.find === 'keys') toast('*jingle jingle* found them. they were in the heart pocket, under T.D. again.');
             setTimeout(() => grab(b.dataset.find), b.dataset.find === 'keys' ? 900 : 0);
         })
     },
@@ -1249,8 +1271,8 @@ const MORE_APPS = {
                 ['shades', 'Romanticize everything', document.body.classList.contains('shades'), ''],
                 ['glogg', 'Backup lipstick (Glögg)', true, 'non-negotiable.'],
                 ['latte', 'Vanilla latte, daily', true, 'medici already knows.'],
-                ['mirror', 'Self-reflection', true, 'always on. there’s a mirror in the sunglasses pocket for a reason.'],
-                ['todo', 'To-do list reminders', false, 'it’s overdue anyway.'],
+                ['mirror', 'Self-reflection', true, 'always on. there’s a mirror in my bag for a reason.'],
+                ['todo', 'Idea reminders', true, 'the list only grows.'],
                 ['curb', 'Curb detection', false, 'it came out of nowhere.']
             ];
             return `<div class="st"><p class="st-h">Settings</p>
@@ -1381,6 +1403,19 @@ const CLUTTER = [
     ['Art Portfolio', 'folder'], ['Google Data', 'folder'], ['spotifymusic', 'img', 'me-study-headphones'], ['Lab1', 'folder'], ['PYTHON', 'folder'],
     ['cisco-setup.dmg', 'file', '#5A5A5E'], ['RideFlow plus.pdf', 'file', '#1A73E8'], ['Brand Strategies', 'folder'], ['Screenshot 5.42 PM.png', 'file', '#34A853'], ['hangout-picker', 'folder']
 ];
+// where each thing on my desktop actually belongs when you help me clean up. most of it has a real folder; true junk goes to the trash
+const CLUTTER_HOME = {
+    'MIS Syllabuses': 'MIS', 'MIS COURSEWORK': 'MIS', 'MIS 325': 'MIS', 'Lab1': 'MIS', 'PYTHON': 'MIS', 'HW3 photos': 'MIS', 'RideFlow plus.pdf': 'MIS',
+    'MKT 337': 'MKT', 'Final Project.pdf': 'MKT', 'Brand Strategies': 'MKT',
+    'Week 1 - Intro.pdf': 'PSY', 'Personality': 'PSY', 'Practice Survey.docx': 'PSY',
+    'Week 2 - Memory.pdf': 'EDP', 'Midterm Guide.docx': 'EDP',
+    'Netflix.pdf': 'Job Applications', 'how-i-work': 'Job Applications',
+    'cake3updated': 'Photographs', 'imageforsuhani': 'Photographs', 'CUPCAKES': 'Photographs', 'spotifymusic': 'Photographs', 'favorites': 'Photographs',
+    'hue-are-you': 'Personal Projects', 'survival-odds': 'Personal Projects', 'period-tracker': 'Personal Projects', 'Rise': 'Personal Projects', 'listening-history': 'Personal Projects',
+    'suhani-world': 'Personal Projects', 'bunny-trails': 'Personal Projects', 'cup-theory': 'Personal Projects', 'baby-name-maker': 'Personal Projects', 'Austin Places': 'Personal Projects',
+    'suhaiku': 'Personal Projects', 'Art Portfolio': 'Personal Projects', 'Google Data': 'Personal Projects', 'hangout-picker': 'Personal Projects'
+    // the rest (takeout-001.zip, RENDER_THIS.txt, cisco-setup.dmg, the screenshot) really is trash
+};
 const DESK = (() => {
     let seed = 23; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     const all = [...FOLDERS.map(([n], i) => ({ n, f: i })), ...CLUTTER.map(([n, t, x], c) => ({ n, t, x, c }))].map(d => [R(), d]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
@@ -1560,6 +1595,21 @@ function tapToPay(detail, T) {
         }, reduce ? 0 : 650);
     };
 }
+// a pad, drawn from the real one: long, quilted blue at both ends, the "100%" print in the middle.
+// the wrapper folds in thirds like my LV wallet, and each third of the wrapper carries its third of the pad
+const PAD_THIRD = k => `<svg viewBox="${k * 100} 0 100 110" preserveAspectRatio="none"><g stroke="#3A2626" stroke-width="2.2">
+    <path d="M14 55 C14 20 50 14 84 27 L216 27 C250 14 286 20 286 55 C286 90 250 96 216 83 L84 83 C50 96 14 90 14 55Z" fill="#FFFFFF"/></g>
+    <path d="M24 55 C24 30 52 26 78 34 L222 34 C248 26 276 30 276 55 C276 80 248 84 222 76 L78 76 C52 84 24 80 24 55Z" fill="none" stroke="#D9DDE3" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <ellipse cx="62" cy="55" rx="32" ry="17" fill="#CFE6F7"/><ellipse cx="238" cy="55" rx="32" ry="17" fill="#CFE6F7"/>
+    <path d="M44 55 q18 -14 36 0 q-18 14 -36 0Z M220 55 q18 -14 36 0 q-18 14 -36 0Z" fill="none" stroke="#8EC3E8" stroke-width="1.6"/>
+    ${[118, 150, 182].map((x, i) => `<circle cx="${x}" cy="${i % 2 ? 62 : 48}" r="10" fill="none" stroke="#8EC3E8" stroke-width="1.6"/><text x="${x}" y="${(i % 2 ? 62 : 48) + 2.5}" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-weight="700" font-size="7" fill="#8EC3E8">100</text>`).join('')}</svg>`;
+// the outside of the wrapper: peach and orange arches and dots
+const PAD_PRINT = `<svg viewBox="0 0 100 110" preserveAspectRatio="none"><rect width="100" height="110" fill="#FFF3EA"/>
+    <path d="M-6 0 H60 V18 H-6Z" fill="#FBD9C2"/><path d="M8 8 H54 M8 13 H54" stroke="#F5A877" stroke-width="2"/>
+    <path d="M44 110 V78 a26 26 0 0 1 52 0 V110Z" fill="#EE7A2E"/><path d="M56 110 V80 a14 14 0 0 1 28 0 V110Z" fill="#FFF3EA"/>
+    <path d="M-10 72 a30 30 0 0 1 60 0Z" fill="#F7B48C"/><circle cx="34" cy="40" r="11" fill="#EE7A2E"/><path d="M23 40 h22" stroke="#FFF3EA" stroke-width="2"/>
+    <circle cx="80" cy="34" r="4" fill="#F7B48C"/><circle cx="16" cy="96" r="3" fill="#EE7A2E"/></svg>`;
+
 const VIEWS = {
     jewelry: () => `
         <h2>My little <em>jewelry box</em></h2>
@@ -1653,8 +1703,8 @@ const VIEWS = {
         </div>`,
     chargers: () => `
         <h2>My <em>chargers</em></h2>
-        <p class="note">macbook, iphone, headphones. always at the very bottom of my bag. always one knot.</p>
-        <svg class="chg-svg" id="chg-svg" viewBox="20 20 360 360" role="img" aria-label="Three tangled chargers. Drag a plug to pull its cable free, starting with whichever one is on top"></svg>
+        <p class="note">yes, i remember everything. i pack every single charger: macbook, iphone, headphones, and my old iphone one too, even though i switched to the new one. it won’t be perfect, though. they’re always at the very bottom, and always one knot.</p>
+        <svg class="chg-svg" id="chg-svg" viewBox="20 20 360 360" role="img" aria-label="Four tangled chargers. Drag a plug to pull its cable free, starting with whichever one is on top"></svg>
         <p class="hand chg-note" id="chg-note">drag a plug out. the one on top comes free first.</p>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="chg-reset">Throw them back in the bag</button></div>`,
     backuplip: () => {
@@ -1689,9 +1739,9 @@ const VIEWS = {
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>
         <figure class="td-pola"><img src="assets/img/td-amaira.jpg" alt="Amaira as a little girl, smiling and holding T.D. the teddy bear" loading="lazy"><figcaption class="hand">amaira &amp; T.D. ♡</figcaption></figure>`,
     todo: () => `
-        <h2>an <em>overdue</em> to-do list</h2>
+        <h2>ideas i need to get to <em>soon</em></h2>
         <div class="crumple" id="crumple"><div class="cr-ball">${ITEMS.find(i => i.id === 'todo').art}</div><div class="cr-flat">${ITEMS.find(i => i.id === 'todo').flat}</div></div>
-        <p class="note" id="cr-note" style="text-align:center">crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.</p>`,
+        <p class="note" id="cr-note" style="text-align:center">folded up in my catch-all pouch. tap to open it.</p>`,
     ticket: () => `
         <h2>a <em>speeding ticket</em></h2>
         <button type="button" class="tk" id="tk" aria-label="My speeding ticket: tap to flip it over">
@@ -1707,8 +1757,25 @@ const VIEWS = {
                 <text x="16" y="140" font-family="Caveat" font-size="12" fill="#8E2A24">ouch.</text></svg></span>
         </button>
         <p class="hand tk-say" id="tk-say">tap it to flip it over</p>
-        <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>
+        <p class="note">it lives in my catch-all pouch, where things i don’t want to look at go. and the curb. the curb knows what it did.</p>
         <figure class="tk-pic"><img src="assets/img/baby-trike.jpg" alt="Me as a toddler, grinning on a red and yellow trike"><figcaption class="hand">exhibit A: she’s always gone skrrttt skrrtttt 🏎️💨</figcaption></figure>`,
+    // my catch-all pouch, clipped to the outside of the bag: everything that doesn't have a pocket yet
+    catchall: () => `
+        <h2>my <em>catch-all</em> pouch</h2>
+        <p class="note">clipped to the outside of my bag, for everything that doesn’t have a pocket yet. pads, ideas, receipts, and one speeding ticket. tap anything.</p>
+        <div class="ca" id="ca">
+            <div class="ca-things">${[['pads', 'pads'], ['todo', 'ideas, for soon'], ['receipts', 'old receipts'], ['ticket', 'a speeding ticket']].map(([id, label], k) =>
+                `<button type="button" class="ca-thing" data-ca="${id}" style="--k:${k}" aria-label="${ITEMS.find(i => i.id === id).name}"><span class="ca-art">${ITEMS.find(i => i.id === id).art}</span><span class="hand">${label}</span></button>`).join('')}</div>
+            <div class="ca-pouch">${BAG.catchall}</div>
+        </div>`,
+    receipts: () => `
+        <h2>old <em>receipts</em></h2>
+        <p class="note">i keep every receipt. for the returns i swear i’ll make. (see: the gift cards in my wallet.)</p>
+        <div class="rcpts">
+            <div class="rcpt" style="--r:-3deg"><b>MEDICI</b><small>roasting · austin</small><span><em>vanilla latte</em><em>1</em></span><span><em>regulars card</em><em>stamped</em></span><i>“see you tomorrow”</i></div>
+            <div class="rcpt" style="--r:2deg"><b>ULTA BEAUTY</b><small>beauty rewards member</small><span><em>mac fix+ stay over</em><em>1</em></span><span><em>the last step</em><em>✓</em></span><i>keep for returns</i></div>
+            <div class="rcpt" style="--r:-1deg"><b>RETURN SLIP</b><small>online order</small><span><em>return by</em><em>(passed)</em></span><span><em>box by my door</em><em>✓</em></span><button type="button" class="link" id="rc-gc">store credit issued ↗</button></div>
+        </div>`,
     giftcards: () => `
         <h2>some <em>gift cards</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(store credit, technically)</span></h2>
         <p class="note">i online shop. i mean to return things. then the return window closes while the box sits by my door, and i get store credit instead. tap a card to flip it, then scratch.</p>
@@ -1720,10 +1787,10 @@ const VIEWS = {
     pads: () => `
         <h2><em>pads</em></h2>
         <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>
+        <p class="pad-why">this is also why i built <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener"><b>Cadence</b> ↗</a>: a free, private period app, designed for your first period and built for every one after. no account, no ads, nothing leaves your phone.</p>
         <div class="pd" id="pd">
             <button type="button" class="pd-pad" id="pd-pad" aria-label="A wrapped pad. Open it">
-                <span class="pd-inside" aria-hidden="true"><svg viewBox="0 0 120 200" preserveAspectRatio="none"><path d="M42 8 h36 q14 0 14 22 v32 q22 4 22 18 q0 14 -22 18 v62 q0 32 -32 32 q-32 0 -32 -32 v-62 q-22 -4 -22 -18 q0 -14 22 -18 v-32 q0 -22 14 -22z" fill="#FFFDF8" stroke="#3A2626" stroke-width="2.5"/><path d="M60 26 q24 0 24 40 v74 q0 34 -24 34 q-24 0 -24 -34 v-74 q0 -40 24 -40z" fill="#E9DDF7"/><path d="M60 34 q18 0 18 34 v70 q0 28 -18 28 q-18 0 -18 -28 v-70 q0 -34 18 -34z" fill="none" stroke="#B9A6E3" stroke-width="1.6" stroke-dasharray="3 3"/></svg></span>
-                <span class="pd-tri" aria-hidden="true"><span class="pd-f pd-f1"></span><span class="pd-f pd-f2"><span class="pd-tab">peel</span></span><span class="pd-f pd-f3"></span><span class="pd-label">take care</span></span>
+                <span class="pdw" aria-hidden="true">${[0, 1, 2].map(k => `<span class="pdw-p pdw-${'lmr'[k]}"><span class="pdw-in">${PAD_THIRD(k)}</span>${k === 1 ? '' : `<span class="pdw-out">${PAD_PRINT}${k === 2 ? '<span class="pdw-tab"></span>' : ''}</span>`}</span>`).join('')}</span>
             </button>
             <button type="button" class="pd-note" id="pd-note" aria-expanded="false" aria-label="A little folded note taped to the pad. Unfold it">
                 <span class="pd-folded" aria-hidden="true"><span class="pd-tape"></span>♡</span>
@@ -1736,7 +1803,7 @@ const VIEWS = {
             </button>
         </div>
         <p class="hand pd-say" id="pd-say">read my note first ♡ then tap it to fold it up.</p>
-        <p class="pad-more" id="pd-more" hidden>i care about this so much i’m working on an app for it: <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener">Cadence ↗</a>, a free, private period app for your first one and every one after.</p>`,
+`,
 
     brushes: () => `
         <h2>My <em>Morphe</em> brushes</h2>
@@ -1843,6 +1910,9 @@ const VIEWS = {
         </div>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="as-open">Open it</button><button class="btn" type="button" id="as-flip">Flip it over</button></div>
         <p class="hand pd-say" id="as-say">it lives in my front pocket. yes, it fits. barely.</p>`,
+    hairkit: () => VIEWS.haircomb().replace('<h2>My <em>wide-tooth</em> comb</h2>', '<h2>My <em>comb</em> + silk scrunchies</h2>')
+        .replace('<p class="note">wide teeth, for long hair.', '<p class="note">they travel together: a wide-tooth comb and two silk scrunchies, pink and brown. wide teeth, for long hair.')
+        + `<div class="solo">${window.SCRUNCHIE ? `<svg viewBox="0 0 150 90">${window.SCRUNCHIE(48, 46, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(102, 42, 25, ...window.SCR_PINK)}</svg>` : ''}</div>`,
     haircomb: () => `
         <h2>My <em>wide-tooth</em> comb</h2>
         <p class="note">wide teeth, for long hair. drag it down through my hair. (it never works on the first try.)</p>
@@ -1884,13 +1954,14 @@ const VIEWS = {
         <div class="lists">
             <div class="love"><h3>always in my bag</h3><ul>
                 <li><b>MAC Sleek Satin lipstick, Espresso Yourself.</b> In the makeup bag.</li>
-                <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the grab-it pocket.</li>
+                <li><b>Westman Atelier lipstick, Glögg.</b> My favorite lipstick, period. The backup lives in the front pocket.</li>
                 <li><b>Westman Atelier Baby Cheeks Blush Stick, Mimi.</b> Tawny beige. One swipe and done.</li>
                 <li><b>Westman Atelier Face Trace Cream Contour Stick, Biscuit.</b> Cool beige coffee. My contour.</li>
                 <li><b>Estée Lauder Futurist Aqua Brilliance Watery Glow Primer.</b> My primer. Goes on before the foundation.</li>
                 <li><b>Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral.</b> My foundation.</li>
                 <li><b>Hourglass Vanish Airbrush Concealer.</b> My favorite concealer. Full coverage, no creasing.</li>
                 <li><b>Lancôme Lash Idôle mascara.</b> My favorite mascara. Lifts without the clumps.</li>
+                <li><b>MAC Fix+ Stay Over setting spray.</b> Alcohol-free. The last step, so all of it stays put.</li>
                 <li><b>Morphe brushes.</b> M241 angled bronzer, M242 cream bronzer, M132 angled concealer, and the Eye Want It All 7-piece set.</li>
                 <li><span class="todo">add another love</span></li>
             </ul></div>
@@ -1930,6 +2001,7 @@ const VIEWS = {
                 <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:38px; --a:9deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
                 <button type="button" class="mk" data-mk="foundation" style="--h:238px; --x:76px; --a:18deg; --d:270ms" aria-label="Charlotte Tilbury Beautiful Skin Foundation, 6 Neutral">${ITEMS.find(i => i.id === 'foundation').art}<span>foundation</span></button>
                 <button type="button" class="mk" data-mk="concealer" style="--h:187px; --x:152px; --a:36deg; --d:450ms" aria-label="Hourglass Vanish Airbrush Concealer">${ITEMS.find(i => i.id === 'concealer').art}<span>concealer</span></button>
+                <button type="button" class="mk" data-mk="spray" style="--h:190px; --x:190px; --a:45deg; --d:540ms" aria-label="MAC Fix+ Stay Over alcohol-free setting spray, the last step">${ITEMS.find(i => i.id === 'spray').art}<span>setting spray</span></button>
                 <button type="button" class="mk" data-mk="blush" style="--h:172px; --rise:-34px; --x:-76px; --a:-18deg; --d:90ms" aria-label="Westman Atelier Baby Cheeks blush stick, Mimi">${ITEMS.find(i => i.id === 'blush').art}<span>blush</span></button>
                 <button type="button" class="mk" data-mk="contour" style="--h:172px; --rise:-34px; --x:-38px; --a:-9deg; --d:135ms" aria-label="Westman Atelier Face Trace Cream Contour Stick, Biscuit">${ITEMS.find(i => i.id === 'contour').art}<span>contour</span></button>
                 <button type="button" class="mk brushes" data-mk="brushes" style="--h:255px; --x:114px; --a:27deg; --d:360ms" aria-label="My Morphe brushes"><svg viewBox="0 0 90 215"><g transform="rotate(-9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M41 62 C38 44 42 26 45 18 C48 26 52 44 49 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C34 44 38 30 45 28 C52 30 56 44 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(-2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M35 62 C27 42 33 20 45 18 C57 20 63 42 55 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(2 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M38 62 C33 46 37 30 45 29 C53 30 57 46 52 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(5.5 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><path d="M42 62 C41 52 42 44 45 40 C48 44 49 52 48 62Z" fill="#9C928C" stroke="#3A2626" stroke-width="2" stroke-linejoin="round"/><path d="M45 24 v34" stroke="#B8AFA9" stroke-width="2" opacity=".7"/></g><g transform="rotate(9 45 210)"><rect x="39" y="60" width="12" height="150" rx="6" fill="#F2EFEA" stroke="#3A2626" stroke-width="2.2"/><rect x="38.5" y="58" width="13" height="16" rx="2" fill="#E8E4DE" stroke="#3A2626" stroke-width="2"/><rect x="43" y="22" width="4" height="40" rx="2" fill="#8A8079"/><path d="M38 26 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 30 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 34 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 38 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 42 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 46 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 50 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M39 54 h12" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/><path d="M38 58 h14" stroke="#8A8079" stroke-width="2" stroke-linecap="round"/></g></svg><span>brushes</span></button>
@@ -2009,7 +2081,7 @@ const VIEWS = {
         const slot = (k, n) => { const i = idx(k); return i < 0 ? '' : `<div class="vslot" style="--n:${n}">${cardHTML(CARDS[i], i)}<span class="pocket"></span></div>`; };
         return `
         <h2>My <em>wallet</em></h2>
-        <p class="note">louis vuitton victorine. tap a card, or unzip the zip pocket.</p>
+        <p class="note">louis vuitton victorine. tap a card, or unzip the zip pocket (my medici card and some gift cards live in there).</p>
         <div class="vread" id="vread" aria-live="polite"></div>
         <div class="vw" id="vw">
             <button type="button" class="vw-closed" id="snap" aria-label="Open the wallet">${ITEMS.find(i => i.id === 'wallet').art}</button>
@@ -2021,10 +2093,11 @@ const VIEWS = {
                 <div class="vpanel p2">${order.slice(3).map(slot).join('')}<span class="vstamp">SUHANI<br><small>LOUIS VUITTON<br>PARIS<br>made in Italy</small></span></div>
                 <div class="vflap"><span class="vsnap"></span></div>
                 <button type="button" class="vbills" id="vbills" aria-label="Bill compartment: take the cash out" aria-pressed="false">${[
-                    ['₹500', '#B9B4A8', '#4E4A40'], ['₹200', '#EBC76A', '#6A4A08'], ['₹100', '#B9A9DC', '#3E2E70'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F'], ['$100', '#D8E2D2', '#24401F']
-                ].map(([d, bg, ink], k) => `<span class="bill${d === '$100' ? ' usd100' : ''}" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
+                    ['₹500', '#B9B4A8', '#4E4A40'], ['$20', '#D8E2D2', '#24401F']
+                ].map(([d, bg, ink], k) => `<span class="bill${d[0] === '$' ? ' usd100' : ''}" style="--k:${k}; --bg:${bg}; --ink:${ink}"><b>${d}</b><i>${d[0] === '₹' ? 'भारतीय रिज़र्व बैंक' : 'THE UNITED STATES OF AMERICA'}</i></span>`).join('')}</button>
             </div>
             <button type="button" class="medici-peek" id="medici" aria-label="My Medici regulars card">${mediciHTML(mediciStamps())}</button>
+            <button type="button" class="gc-peek" id="gc-peek" aria-label="Some gift cards, tucked in the zip pocket">${ITEMS.find(i => i.id === 'giftcards').art}</button>
         </div>
         <div class="row" style="justify-content:center"><button class="btn" type="button" id="vclose">Close the wallet</button></div>
         <div class="card-detail" id="card-detail" aria-live="polite"><p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p></div>`;
@@ -2125,7 +2198,7 @@ const VIEWS = {
             </div>
         </div>
         <h2>Mirror, mirror: <em>the real me</em></h2>
-        <p class="note">chanel miroir double facettes: a regular mirror in the lid, a magnifying one below. yes, the blair waldorf one. it lives in my sunglasses pocket, because i’m a very self-reflective person.</p>
+        <p class="note">chanel miroir double facettes: a regular mirror in the lid, a magnifying one below. yes, the blair waldorf one. it lives in the front pocket with everything else about how i show up, because i’m a very self-reflective person.</p>
         <p>I’m Suhani. I study Management Information Systems and Psychology at UT Austin’s McCombs School of Business. I study why people choose what they choose, then build what they’d choose.</p>
         <p>I’m also a published children’s book author, the founder of two Girls Who Code chapters, and a digital artist who paints about growing up between two worlds.</p>
         <div class="row"><a class="btn solid" href="https://suhanitiwari.com" target="_blank" rel="noopener">My portfolio ↗</a></div>
@@ -2265,7 +2338,7 @@ const VIEWS = {
 
     phone: () => `
         <h2>My <em>phone</em></h2>
-        <p class="note">iphone 18 pro max in its pink case. lives in the sunglasses pocket.</p>
+        <p class="note">iphone 18 pro max in its pink case. lives in the heart pocket: everyone i love is in here.</p>
         <div class="phone-big">
             <div class="screen" id="screen">
                 <p class="clock mono" id="clock"></p>
@@ -2628,6 +2701,9 @@ const AFTER = {
         $('#as-flip').onclick = () => { st.side = st.side === 'back' ? 'front' : 'back'; SFX.tap(); say.textContent = st.side === 'front' ? 'the other side: the vents, and the little pink lock button.' : 'the screen side.'; draw(); };
         draw();
     },
+    hairkit: () => AFTER.haircomb(),
+    catchall: () => sheetBody.querySelectorAll('[data-ca]').forEach(b => b.onclick = () => goTo(ITEMS.find(i => i.id === b.dataset.ca))),
+    receipts: () => { $('#rc-gc').onclick = () => goTo(ITEMS.find(i => i.id === 'giftcards')); },
     haircomb: () => {
         // my hair, drawn strand by strand. every bit of it has its own tangle level; each stroke of the comb loosens whatever it passes through,
         // but only once per stroke, so it takes a few passes (and the knots near the ends snag the comb and stop it cold).
@@ -2978,9 +3054,9 @@ const AFTER = {
     },
     chargers: () => {
         const svg = $('#chg-svg'), CH = window.CHARGERS, note = $('#chg-note');
-        // the knot: headphone cable on top, then the iphone one, the macbook brick at the very bottom
-        const order = ['head', 'phone', 'mac'];
-        const t = { mac: 0, phone: 0, head: 0 }, free = new Set();
+        // the knot: the old iphone cable i don't even need on top, then headphones, then the iphone one, the macbook brick at the very bottom
+        const order = ['old', 'head', 'phone', 'mac'];
+        const t = { mac: 0, phone: 0, head: 0, old: 0 }, free = new Set();
         const draw = () => {
             const by = id => CH.list.find(c => c.id === id);
             // drawing order: freed cables stay in their lanes, the knot is drawn bottom to top
@@ -3012,7 +3088,7 @@ const AFTER = {
             if (t[id] > .55) tween(id, 1, () => {
                 free.add(id); draw();
                 const left = order.filter(o => !free.has(o));
-                note.textContent = left.length ? 'one down. keep going.' : 'all three, untangled. it’ll be a knot again by tuesday.';
+                note.textContent = left.length ? 'one down. keep going.' : 'all four, untangled. it’ll be a knot again by tuesday.';
                 if (!left.length) toast('untangled! put that on my résumé.');
             });
             else tween(id, 0);
@@ -3075,7 +3151,7 @@ const AFTER = {
             path.forEach(([x, y], k) => setTimeout(() => { dab(x, y); if (k === path.length - 1) $('#bl-go').textContent = 'Wipe it off'; }, reduce ? 0 : k * 22));
         };
     },
-    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'tucked away so it can’t make eye contact with me. (tap to crumple it back up.)' : 'crumpled up in the don’t-want-to-deal-with-it pocket. tap to smooth it out.'; }; },
+    todo: () => { const c = $('#crumple'); c.onclick = () => { const o = c.classList.toggle('open'); $('#cr-note').textContent = o ? 'the list grows faster than i get to it. that’s the fun part. (tap to fold it back up.)' : 'folded up in my catch-all pouch. tap to open it.'; }; },
     cards: () => {
         const C = [
             ['svg:welcome', '', '“welcome back didi!!!” with a cup that says “i ♡ u” and two little us, one of us holding my aritzia bag. obviously.'],
@@ -3471,10 +3547,11 @@ const AFTER = {
                 mascara: ['#141214', 'Lancôme Lash Idôle · black', 'mascara'],
                 concealer: ['#D9B48F', 'Hourglass Vanish concealer', null],
                 primer: ['#E3C3BA', 'Estée Lauder Futurist Aqua Brilliance · watery glow', null],
-                foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null]
+                foundation: ['#C8966F', 'Charlotte Tilbury Beautiful Skin · 6 Neutral', null],
+                spray: ['#F4B8D4', 'MAC Fix+ Stay Over · the last step. set, spritz, done.', null]
             }[b.dataset.mk];
             if (!SH) { pickUp({ id: 'brushes', name: 'my morphe brushes', open: 'brushes' }); return backToPouch(); }
-            SFX.item(b.dataset.mk === 'lipliner' ? 'pencil' : 'lipstick');
+            SFX.item(b.dataset.mk === 'lipliner' ? 'pencil' : b.dataset.mk === 'spray' ? 'perfume' : 'lipstick');
             b.classList.remove('squeeze'); void b.offsetWidth; b.classList.add('squeeze');
             const sw = $('#swatch'), lbl = $('#swatch-label');
             $('#swipe').setAttribute('stroke', SH[0]);
@@ -3802,7 +3879,7 @@ const AFTER = {
             if (!vw.classList.contains('zip-open')) {
                 vw.classList.add('zip-open'); z.setAttribute('aria-pressed', 'true'); z.setAttribute('aria-label', 'Zip pocket: zip it back up');
                 await new Promise(r => setTimeout(r, reduce ? 0 : 480));
-                vw.classList.add('cash-out'); toast('my medici card ♡ a vanilla latte a day');
+                vw.classList.add('cash-out'); toast('my medici card and some gift cards ♡');
             } else {
                 vw.classList.remove('cash-out', 'medici-out');
                 if (/medici/i.test(detail.textContent)) detail.innerHTML = '<p class="hand" style="font-size:1.4rem; color:var(--plum); text-align:center">pick a card, any card</p>';
@@ -3811,12 +3888,14 @@ const AFTER = {
             }
             zipping = false;
         };
-        // the bill compartment, behind the flap: rupees for home, dollars for here
+        // the bill compartment, behind the flap: one $20 for emergencies (everything else is apple pay) and one ₹500, a keepsake from a visit to india
         $('#vbills').onclick = () => {
             const out = vw.classList.toggle('bills-out');
             $('#vbills').setAttribute('aria-pressed', out); $('#vbills').setAttribute('aria-label', out ? 'Bill compartment: tuck the cash back in' : 'Bill compartment: take the cash out');
-            toast(out ? 'rupees for home, five hundreds for here. don’t get any ideas ♡' : 'cash tucked away');
+            toast(out ? 'one $20 for emergencies (it’s all apple pay, always) and one ₹500, a keepsake from a visit to india ♡' : 'cash tucked away');
         };
+        // the gift cards ride in the zip pocket with the Medici card
+        $('#gc-peek').onclick = () => goTo(ITEMS.find(i => i.id === 'giftcards'));
         // the Medici card comes out with the cash. Tap it for a vanilla latte stamp.
         $('#medici').onclick = () => {
             if (vw.classList.contains('medici-out')) {
@@ -3962,7 +4041,7 @@ const AFTER = {
         };
         // a real pad wrapper: a little square packet. tap once and the top third unfolds, tap again and the bottom does. then it's open.
         let step = 0;
-        const STEP_SAY = ['folded back up into a little square. it’s yours whenever.', 'one unfold…', 'two. boom, it’s open. take two if you need them.'];
+        const STEP_SAY = ['folded back up into a little square. it’s yours whenever.', 'peel the tab, and one side opens…', 'then the other. there she is. take two if you need them.'];
         pad.onclick = () => {
             if (pd.classList.contains('reading')) return;
             if (!read) { say.textContent = 'read the note first ♡'; note.classList.remove('nudge'); void note.offsetWidth; note.classList.add('nudge'); return; }
@@ -3971,7 +4050,6 @@ const AFTER = {
             pad.setAttribute('aria-label', ['A wrapped pad, folded in thirds. Unfold it', 'Half unfolded. Unfold the other side', 'The pad, unwrapped. Tap to fold it back up'][step]);
             SFX.zip(step > 0, .3);
             say.textContent = STEP_SAY[step];
-            $('#pd-more').hidden = step !== 2;
         };
     },
 
@@ -3996,9 +4074,14 @@ const AFTER = {
                 return;
             }
             const blaring = SFX.fob(k);
-            if (k === 'panic' && SFX.on && !blaring) { toast('okay. it stopped. nobody saw that.'); return; }
+            if (k === 'panic' && SFX.on && !blaring) { panic(false); toast('okay. it stopped. nobody saw that.'); return; }
             toast(lines[k]);
-            if (k === 'panic' && !reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
+            if (k === 'panic') {
+                if (!reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
+                // the car honks and flashes back at me: hellooo, i'm right here
+                panic(true); shop.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+                setTimeout(() => { if (photo.classList.contains('panic')) toast('*HONK HONK* hellooo suhani?? i’m RIGHT HERE 🚨'); }, 1800);
+            }
         };
         // before and after the car keys
         const shop = $('#kshop');
@@ -4012,6 +4095,19 @@ const AFTER = {
         const laps2 = ['medici. vanilla latte. obviously ☕', 'one stamp closer to a free one.', 'okay NOW we’re going home ♡'];
         let step = 0, laps = 0;
         const photo = shop.querySelector('.kshop-photo');
+        // panic: the car shakes and the lights flash with every honk, for as long as the horn goes (about five seconds)
+        let panicT = 0;
+        const panic = on => {
+            clearTimeout(panicT);
+            photo.classList.toggle('panic', on);
+            // still at the mall? the car is what's honking, so that's what you see
+            if (on && step < 2) { photo.dataset.step = 3; $('#kshop-tag').textContent = 'hellooo, over here 🚨'; }
+            const done = () => { photo.classList.remove('panic'); showStep(); };
+            if (on) panicT = setTimeout(done, 4960); else done();
+        };
+        // load both trunk photos now, so the trunk never wipes in from a blank frame
+        const TRUNK_SRC = { open: 'assets/img/keys-trunk.jpg?v=3', shut: 'assets/img/keys-home.jpg?v=2' };
+        Object.values(TRUNK_SRC).forEach(src => { const im = new Image(); im.src = src; });
         const showStep = () => {
             const [, tag, btn, cap] = STEPS[step];
             photo.dataset.step = step;
@@ -4019,16 +4115,20 @@ const AFTER = {
             $('#kshop-tag').textContent = tag; $('#kshop-go').textContent = btn; $('#kshop-cap').textContent = cap;
         };
         let trunkOpen = false;
-        const setStep = n => { step = n; trunkOpen = n === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; showStep(); if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); } };
+        // no poof after the trunk: the wipe already was the animation
+        const setStep = n => { step = n; trunkOpen = n === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; showStep(); };
         const b2 = sheetBody.querySelector('[data-fob="trunk"]');
         // the trunk: the incoming photo wipes in along the tailgate. opening sweeps up from the bumper, closing sweeps down from the roof.
         const anim = shop.querySelector('.kshop-anim');
         let playing = false;
-        const playTrunk = (opening, done) => {
+        const playTrunk = async (opening, done) => {
             if (reduce) { done(); return; }
             playing = true;
-            shop.querySelector('.kshop-anim-base').src = opening ? 'assets/img/keys-home.jpg?v=2' : 'assets/img/keys-trunk.jpg?v=3';
-            anim.src = opening ? 'assets/img/keys-trunk.jpg?v=3' : 'assets/img/keys-home.jpg?v=2';
+            const base = shop.querySelector('.kshop-anim-base');
+            base.src = opening ? TRUNK_SRC.shut : TRUNK_SRC.open;
+            anim.src = opening ? TRUNK_SRC.open : TRUNK_SRC.shut;
+            // wait until both frames are decoded, or the wipe starts on a white frame and glitches
+            await Promise.all([base, anim].map(im => im.decode().catch(() => {})));
             anim.style.transition = 'none';
             anim.style.clipPath = opening ? 'inset(78% 0 0 0)' : 'inset(0 0 100% 0)';
             photo.classList.add('animating'); void anim.offsetWidth;
@@ -4037,6 +4137,14 @@ const AFTER = {
             setTimeout(() => { done(); setTimeout(() => { photo.classList.remove('animating'); anim.style.clipPath = ''; playing = false; }, 800); }, 1150);
         };
         $('#kshop-go').onclick = () => {
+            if (playing) return;
+            // loading up the car and heading home use the real trunk animation too
+            if (step === 1 || step === 2) {
+                const next = step + 1;
+                SFX.fob(next === 2 ? 'trunk' : 'trunkclose');
+                playTrunk(next === 2, () => setStep(next));
+                return;
+            }
             if (step < STEPS.length - 1) { step++; trunkOpen = step === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
             else toast(laps2[laps++ % laps2.length]);
             if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
@@ -4167,27 +4275,35 @@ const AFTER = {
         // the desktop explodes into mess when the lid opens: every icon pops in, one after another, with a little pop
         let popping = [], tidy = false;
         const clean = $('#lap-clean');
-        // you can help: the clutter flies into the trash, one by one, and my real folders line up neatly
+        // you can help: my real folders line up neatly, then each piece of clutter flies into the folder it belongs in. only the true junk goes to the trash
         clean.onclick = () => {
             tidy = true; clean.disabled = true;
             popping.forEach(clearTimeout); popping = [];
-            const trash = sheetBody.querySelector('.dock-app[aria-label="Trash"]').getBoundingClientRect();
+            const reals = [...sheetBody.querySelectorAll('#dmess .dreal')].sort((x, y) => x.dataset.f - y.dataset.f);
+            reals.forEach((e, k) => { e.style.translate = ''; e.style.left = (3 + (k % 4) * 13) + '%'; e.style.top = (4 + Math.floor(k / 4) * 30) + '%'; });
+            spots = {}; try { localStorage.removeItem(FKEY); } catch {}
             const junk = [...sheetBody.querySelectorAll('#dmess .dclut')].filter(e => e.offsetParent && !e.classList.contains('gone'));
-            junk.forEach((e, k) => popping.push(setTimeout(() => {
-                const r = e.getBoundingClientRect(), dx = trash.left + trash.width / 2 - (r.left + r.width / 2), dy = trash.top + trash.height / 2 - (r.top + r.height / 2);
-                SFX.swish(0, .16, 2600, 900, .05);
-                const done = () => e.classList.add('gone');
-                if (reduce || !e.animate) return done();
-                e.animate([{ translate: e.style.translate || '0px 0px', scale: 1, opacity: 1 }, { translate: `${dx}px ${dy}px`, scale: .2, opacity: .2 }], { duration: 380, easing: 'cubic-bezier(.5,0,.8,.6)' }).onfinish = () => { e.style.translate = ''; done(); };
-            }, reduce ? 0 : k * 45)));
-            const after = reduce ? 0 : junk.length * 45 + 450;
+            let filed = 0, trashed = 0;
             popping.push(setTimeout(() => {
-                [...sheetBody.querySelectorAll('#dmess .dreal')].sort((x, y) => x.dataset.f - y.dataset.f).forEach((e, k) => { e.style.translate = ''; e.style.left = (3 + (k % 4) * 13) + '%'; e.style.top = (4 + Math.floor(k / 4) * 30) + '%'; });
-                spots = {}; try { localStorage.removeItem(FKEY); } catch {}
-                SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9);
-                clean.disabled = false; clean.hidden = true;
-                toast('thank you ♡ now let’s organize. move the folders around.'); $('#lap-note').textContent = 'thank you ♡ now let’s organize. drag the folders anywhere.';
-            }, after));
+                const trashBtn = sheetBody.querySelector('.dock-app[aria-label="Trash"]');
+                junk.forEach((e, k) => popping.push(setTimeout(() => {
+                    const name = e.querySelector('span')?.textContent.trim() || e.getAttribute('aria-label') || '';
+                    const home = CLUTTER_HOME[name], to = home ? reals.find(f => FOLDERS[f.dataset.f][0] === home) : null;
+                    const dest = (to || trashBtn).getBoundingClientRect(), r = e.getBoundingClientRect();
+                    const dx = dest.left + dest.width / 2 - (r.left + r.width / 2), dy = dest.top + dest.height / 2 - (r.top + r.height / 2);
+                    to ? filed++ : trashed++;
+                    SFX.swish(0, .16, 2600, 900, .05);
+                    const done = () => { e.classList.add('gone'); if (to && !reduce && to.animate) to.animate([{ scale: 1 }, { scale: 1.12 }, { scale: 1 }], { duration: 220 }); };
+                    if (reduce || !e.animate) return done();
+                    e.animate([{ translate: e.style.translate || '0px 0px', scale: 1, opacity: 1 }, { translate: `${dx}px ${dy}px`, scale: .2, opacity: .2 }], { duration: 420, easing: 'cubic-bezier(.5,0,.8,.6)' }).onfinish = () => { e.style.translate = ''; done(); };
+                }, reduce ? 0 : k * 55)));
+                popping.push(setTimeout(() => {
+                    SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9);
+                    clean.disabled = false; clean.hidden = true;
+                    const msg = `thank you ♡ ${filed} things filed into folders, ${trashed} in the trash. open a folder, or drag them around.`;
+                    toast(msg); $('#lap-note').textContent = msg;
+                }, reduce ? 0 : junk.length * 55 + 500));
+            }, reduce ? 0 : 450));
         };
         const popDesk = () => {
             popping.forEach(clearTimeout); popping = [];

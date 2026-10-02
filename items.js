@@ -234,13 +234,14 @@ const INK = '#3A2626';
 const S = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
 
 window.BAG = {
-    /* my real backpack: black Samsonite, red accents. Four zippers, back to front:
-       devices (laptop + iPad), main (notebooks, pens, makeup), the sunglasses pocket up top, the front pocket */
+    /* my real backpack: black Samsonite, red accents. Four zippers, back to front, and they work like a nav bar:
+       each one answers a question you'd have about me. one: the work (can she do the job?). two: the mind (how does she think?).
+       three: the heart (who is she, really?). four: the look (how does she show up?). every pocket has one confession in it. */
     pockets: [
-        { id: 'devices', label: 'laptop, ipad, headphones, wallet & passport', d: 'M52 104 C52 40 248 40 248 104' },
-        { id: 'main', label: 'notebooks, pens & makeup', d: 'M66 124 C66 68 234 68 234 124' },
-        { id: 'shades', label: 'sunglasses pocket', d: 'M96 148 C110 132 190 132 204 148' },
-        { id: 'front', label: 'makeup, skincare, hair & the little things', d: 'M80 196 C84 176 216 176 220 196' }
+        { id: 'devices', label: 'pocket one, the work: laptop, ipad, padfolio, binder, headphones & chargers', d: 'M52 104 C52 40 248 40 248 104' },
+        { id: 'main', label: 'pocket two, the mind: notebooks, pens, sketchbook, journal & books', d: 'M66 124 C66 68 234 68 234 124' },
+        { id: 'shades', label: 'pocket three, the heart: passport, wallet, phone, keys & my sister', d: 'M96 148 C110 132 190 132 204 148' },
+        { id: 'front', label: 'pocket four, the look: makeup, skincare, hair, jewelry, perfume & sunglasses', d: 'M80 196 C84 176 216 176 220 196' }
     ],
     closed: `<svg viewBox="0 0 300 350" aria-hidden="true" class="bag-svg">
         <path d="M118 46 C118 12 182 12 182 46" fill="none" ${S} stroke-width="14"/>
@@ -274,6 +275,18 @@ window.BAG = {
     </svg>`,
     /* my bag charm: a Bath & Body Works caramel frappuccino PocketBac holder (whipped cream, smiles back),
        with a White Barn Cozy Vanilla Almond hand sanitizer inside, gold cap poking out the bottom */
+    /* my catch-all pouch, clipped to the outside of the bag: quilted cream, pink piping, a gold zip that never quite closes */
+    catchall: `<svg viewBox="0 0 140 112" aria-hidden="true"><defs><pattern id="ca-q" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="12" height="12" fill="#FBF3EC"/><path d="M0 0 H12 M0 0 V12" stroke="#EBD9CC" stroke-width="1.2"/></pattern></defs>
+        <path class="ca-peek" d="M60 10 q10 -10 20 0" fill="none" stroke="#D9A441" stroke-width="3" stroke-linecap="round"/>
+        <g class="ca-peek"><g transform="rotate(-8 44 30)"><rect x="30" y="14" width="26" height="30" rx="2" fill="#FFFDF8" stroke="#3A2626" stroke-width="1.6"/><path d="M34 22 h18 M34 27 h14 M34 32 h18 M34 37 h10" stroke="#B9B0A2" stroke-width="1.2"/></g>
+        <g transform="rotate(10 88 28)"><rect x="76" y="12" width="24" height="30" rx="5" fill="#F7C9D6" stroke="#3A2626" stroke-width="1.6"/><path d="M80 18 l16 18 M96 18 l-16 18" stroke="#EFA3B8" stroke-width="1.2"/></g>
+        <g transform="rotate(4 64 24)"><rect x="56" y="10" width="20" height="24" fill="#FFF3A8" stroke="#3A2626" stroke-width="1.4"/><path d="M59 17 h12 M59 22 h9" stroke="#C2386E" stroke-width="1.2"/></g></g>
+        <path d="M8 34 C8 26 132 26 132 34 L126 98 C125 106 15 106 14 98Z" fill="url(#ca-q)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M14 40 H126" stroke="#F4A7B9" stroke-width="5" stroke-linecap="round"/><path d="M14 40 H126" stroke="#3A2626" stroke-width="1.2" stroke-dasharray="3 3"/>
+        <path d="M18 96 C40 100 100 100 122 96" fill="none" stroke="#F4A7B9" stroke-width="3"/>
+        <circle cx="118" cy="40" r="4.5" fill="#D9A441" stroke="#3A2626" stroke-width="1.4"/><path d="M118 44 q2 10 -2 18" fill="none" stroke="#D9A441" stroke-width="2.4" stroke-linecap="round"/><path d="M113 60 l3 10 l4 -10z" fill="#F4A7B9" stroke="#3A2626" stroke-width="1.2"/>
+        <text x="70" y="78" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="21" fill="#A3204F">catch-all</text>
+    </svg>`,
     charm: `<svg viewBox="0 0 90 120" aria-hidden="true">
         <circle cx="45" cy="8" r="7" fill="none" stroke="#B9BCC2" stroke-width="4"/>
         <path d="M45 15 v10" stroke="#B9BCC2" stroke-width="4"/>
@@ -301,19 +314,20 @@ window.SCRUNCHIE = (cx, cy, r, c, dark, light) => {
 window.SCR_PINK = ['#F6B3B5', '#D98A8E', '#FFE3E2'];
 window.SCR_BROWN = ['#B26B55', '#7E4535', '#E2A891'];
 
-/* my three chargers, always knotted together at the very bottom of the bag.
+/* my four chargers (yes, including the old lightning one), always knotted together at the very bottom of the bag.
    each cable is a list of points; t = 0 is the knot, t = 1 is laid out straight */
 window.CHARGERS = (() => {
     const C = [
         { id: 'mac', name: 'macbook charger', col: '#F4F3F0', lane: 345 },
         { id: 'phone', name: 'iphone charger', col: '#E6E4E1', lane: 300 },
-        { id: 'head', name: 'headphone charger', col: '#EFE6D6', lane: 258 }
+        { id: 'head', name: 'headphone charger', col: '#EFE6D6', lane: 258 },
+        { id: 'old', name: 'old iphone charger', col: '#FFFFFF', lane: 214 }
     ];
     const N = 13;
     C.forEach((c, k) => {
         c.knot = Array.from({ length: N }, (_, i) => {
-            if (i === 0) return [[120, 230, 300][k], [70, 250, 90][k]];
-            if (i === N - 1) return [[300, 90, 130][k], [235, 205, 60][k]];
+            if (i === 0) return [[120, 230, 300, 96][k], [70, 250, 90, 168][k]];
+            if (i === N - 1) return [[300, 90, 130, 286][k], [235, 205, 60, 128][k]];
             const a = k * 2.1 + i * 1.75, r = 22 + 34 * Math.abs(Math.sin(i * 1.27 + k * 1.9));
             return [200 + r * Math.cos(a), 150 + r * .8 * Math.sin(a)];
         });
@@ -540,7 +554,20 @@ window.ITEMS = [
         open: 'mascara'
     },
     {
-        id: 'wallet', name: 'my wallet', zip: 'devices', l: 79.0, t: 36.2, w: 9.0, r: -6,
+        // the last step: mac fix+ stay over, alcohol-free setting spray. white bottle, black pump, hot pink script
+        id: 'spray', name: 'mac fix+ stay over setting spray', zip: 'makeup', l: 0, t: 0, w: 3.6, r: 0,
+        art: `<svg viewBox="0 0 80 220"><rect x="27" y="4" width="26" height="14" rx="3" fill="#141214" ${S} stroke-width="2"/><circle cx="46" cy="11" r="2.4" fill="#4A4646"/>
+            <rect x="18" y="16" width="44" height="58" rx="5" fill="#1B191B" ${S}/><path d="M24 22 v46" stroke="#4A4646" stroke-width="3" stroke-linecap="round"/><path d="M18 62 H62" stroke="#3A3638" stroke-width="2"/>
+            <rect x="8" y="72" width="64" height="142" rx="13" fill="#FBFBFA" ${S}/><path d="M16 84 v118" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+            <text x="40" y="92" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="8" fill="#141214" letter-spacing="3">M·A·C</text>
+            <text x="36" y="124" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="30" fill="#E8178A" transform="rotate(-8 36 118)">fix</text><path d="M55 100 v14 M48 107 h14" stroke="#E8178A" stroke-width="3.4" stroke-linecap="round"/>
+            <text x="44" y="146" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="17" fill="#E8178A" transform="rotate(-8 44 142)">Stay Over</text>
+            <g font-family="Instrument Sans, sans-serif" font-weight="600" font-size="4.6" fill="#141214" text-anchor="middle"><text x="40" y="166">ALCOHOL-FREE</text><text x="40" y="173">LONG-LASTING SETTING SPRAY</text><text x="40" y="190" font-weight="400" font-size="4.2">1.0 FL. OZ. / 30 ML</text></g>
+        </svg>`,
+        open: 'makeup'
+    },
+    {
+        id: 'wallet', name: 'my wallet', zip: 'shades', l: 79.0, t: 36.2, w: 9.0, r: -6,
         art: `<svg viewBox="0 0 100 140"><defs>
             <!-- my victorine, from the real one: big monogram canvas, the pointed envelope flap across the right with its gold snap, and the fuchsia ribbon poking out the bottom -->
             <g id="lvf4"><path d="M0 -4.6 Q1.1 -1.1 4.6 0 Q1.1 1.1 0 4.6 Q-1.1 1.1 -4.6 0 Q-1.1 -1.1 0 -4.6Z"/><circle r="1.1" fill="#3F2718"/></g>
@@ -581,18 +608,18 @@ window.ITEMS = [
 
     },
     {
-        id: 'sunglasses', name: 'my chanel sunglasses', zip: 'shades', l: 84.6, t: 3.8, w: 13.2, r: -6,
+        id: 'sunglasses', name: 'my chanel sunglasses', zip: 'front', l: 84.6, t: 3.8, w: 13.2, r: -6,
         art: `<img src="assets/img/sunglasses.png" alt="" draggable="false" style="display:block; width:100%; height:auto">`,
         open: 'sunglasses'
     },
     {
         // black frames with the little gold bees on the corners
-        id: 'readers', name: 'my reading glasses', zip: 'shades', l: 0, t: 0, w: 12.5, r: 4,
+        id: 'readers', name: 'my reading glasses', zip: 'main', l: 0, t: 0, w: 12.5, r: 4,
         art: `<img src="assets/img/reading-glasses.png" alt="" draggable="false" style="display:block; width:100%; height:auto">`,
         open: 'readers'
     },
     {
-        id: 'jewelry', name: 'my little jewelry box', zip: 'shades', l: 0, t: 0, w: 23.2, r: -5,
+        id: 'jewelry', name: 'my little jewelry box', zip: 'front', l: 0, t: 0, w: 23.2, r: -5,
         art: `<svg viewBox="0 0 120 84"><defs><pattern id="jwq" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#F4C3CF"/><path d="M0 0 H10 M0 0 V10" stroke="#E7A9B9" stroke-width="1"/></pattern></defs>
             <rect x="6" y="10" width="108" height="68" rx="12" fill="url(#jwq)" ${S}/><path d="M6 46 H114" ${S} stroke-width="2"/><path d="M14 16 h92" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/>
             <rect x="50" y="38" width="20" height="16" rx="4" fill="#E2B24A" ${S} stroke-width="2"/><circle cx="60" cy="46" r="2.4" fill="#9C7420"/></svg>`,
@@ -604,7 +631,7 @@ window.ITEMS = [
         open: 'keys'
     },
     {
-        id: 'mirror', name: 'my chanel miroir double facettes', zip: 'shades', l: 24.4, t: 55.4, w: 7.5, r: 0,
+        id: 'mirror', name: 'my chanel miroir double facettes', zip: 'front', l: 24.4, t: 55.4, w: 7.5, r: 0,
         art: `<svg viewBox="0 0 120 120"><defs><linearGradient id="lacq" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A383B"/><stop offset=".35" stop-color="#0E0D0F"/><stop offset="1" stop-color="#1B1A1D"/></linearGradient></defs>
             <path d="M18 6 C40 3 80 3 102 6 C112 8 116 14 116 24 C118 48 118 72 116 96 C116 106 112 112 102 114 C80 117 40 117 18 114 C8 112 4 106 4 96 C2 72 2 48 4 24 C4 14 8 8 18 6Z" fill="url(#lacq)" ${S}/>
             <path d="M14 22 C26 12 50 10 70 12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".22"/><path d="M8 60 C8 40 10 28 18 18" fill="none" stroke="#fff" stroke-width="1.6" opacity=".14"/>
@@ -643,7 +670,7 @@ window.ITEMS = [
         open: 'stanley'
     },
     {
-        id: 'sweater', name: 'my pink ralph lauren cable knit', zip: 'main', l: 15.0, t: 41.7, w: 28.2, r: -4,
+        id: 'sweater', name: 'my pink ralph lauren cable knit', zip: 'front', l: 15.0, t: 41.7, w: 28.2, r: -4,
         art: `<svg viewBox="0 0 240 170"><defs>
             <pattern id="rib" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern>
             <pattern id="cable" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/>
@@ -701,9 +728,13 @@ window.ITEMS = [
         open: 'romcom'
     },
     {
-        id: 'scrunchies', name: 'my silk scrunchies', zip: 'front', l: 34.3, t: 21.2, w: 16.9, r: 0,
-        get art() { return `<svg viewBox="0 0 150 90">${window.SCRUNCHIE(48, 46, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(102, 42, 25, ...window.SCR_PINK)}</svg>`; },
-        open: 'hairpony'
+        // my hair kit: the wide-tooth comb with both silk scrunchies looped over it
+        id: 'scrunchies', name: 'my comb + silk scrunchies', zip: 'front', l: 34.3, t: 21.2, w: 18, r: 0,
+        get art() {
+            const comb = ITEMS.find(i => i.id === 'comb').art.replace('<svg viewBox="0 0 150 150">', '<svg x="18" y="0" width="150" height="150" viewBox="0 0 150 150">');
+            return `<svg viewBox="0 0 190 150">${comb}${window.SCRUNCHIE(44, 104, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(96, 116, 25, ...window.SCR_PINK)}</svg>`;
+        },
+        open: 'hairkit'
     },
     {
         id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 3.1, r: -6,
@@ -716,7 +747,7 @@ window.ITEMS = [
         open: 'airwrap'
     },
     {
-        id: 'comb', name: 'my wide-tooth comb', zip: 'front', l: 54.5, t: 20.5, w: 15.5, r: 0,
+        id: 'comb', name: 'my wide-tooth comb', zip: 'attached', l: 54.5, t: 20.5, w: 15.5, r: 0,
         art: `<svg viewBox="0 0 150 150"><defs><linearGradient id="cw2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8E5A2A"/><stop offset=".5" stop-color="#76461F"/><stop offset="1" stop-color="#5E3617"/></linearGradient></defs>
             <g fill="none"><path d="M34.5 27.5 L14.5 47.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M41 34 L21 54" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M47.5 39.5 L27.5 59.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M53.5 45.5 L33.5 65.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M59.5 52 L39.5 72" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M65.5 58 L45.5 78" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M71.5 64.5 L51.5 84.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M77.5 70.5 L57.5 90.5" stroke="#2E1B0E" stroke-width="5.6" stroke-linecap="round"/><path d="M82 84 L66 98" stroke="#2E1B0E" stroke-width="8" stroke-linecap="round"/><path d="M34.5 27.5 L14.5 47.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M30.5 30.5 L17.5 43.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M41 34 L21 54" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M37 37 L24 50" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M47.5 39.5 L27.5 59.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M43.5 42.5 L30.5 55.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M53.5 45.5 L33.5 65.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M49.5 48.5 L36.5 61.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M59.5 52 L39.5 72" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M55.5 55 L42.5 68" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M65.5 58 L45.5 78" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M61.5 61 L48.5 74" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M71.5 64.5 L51.5 84.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M67.5 67.5 L54.5 80.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M77.5 70.5 L57.5 90.5" stroke="url(#cw2)" stroke-width="3.6" stroke-linecap="round"/><path d="M73.5 73.5 L60.5 86.5" stroke="#A06A36" stroke-width=".6" stroke-linecap="round" opacity=".6"/><path d="M82 84 L66 98" stroke="url(#cw2)" stroke-width="6" stroke-linecap="round"/></g>
             <path d="M6 45 C4 38 10 28 21 17 L31 25 C23 31 15 38 10 46 C9 48 7 48 6 45Z" fill="url(#cw2)" stroke="#2E1B0E" stroke-width="1.6" stroke-linejoin="round"/>
@@ -727,7 +758,7 @@ window.ITEMS = [
         open: 'haircomb'
     },
     {
-        id: 'cap', name: 'my brown ny cap', zip: 'main', l: 13.2, t: 25.3, w: 24.4, r: -6,
+        id: 'cap', name: 'my brown ny cap', zip: 'front', l: 13.2, t: 25.3, w: 24.4, r: -6,
         art: `<svg viewBox="0 0 200 150"><defs><linearGradient id="capg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7A5A49"/><stop offset=".65" stop-color="#6E4F3F"/><stop offset="1" stop-color="#5F4334"/></linearGradient></defs>
             <path d="M36 104 C26 56 62 16 112 16 C160 16 192 52 188 102 C160 94 120 92 84 94 C66 95 50 99 36 104Z" fill="url(#capg2)" ${S}/>
             <path d="M112 17 C104 40 100 68 100 93 M112 17 C138 30 156 58 162 96 M112 17 C82 26 58 52 50 98" fill="none" stroke="#5A3E30" stroke-width="1.6"/>
@@ -740,7 +771,7 @@ window.ITEMS = [
         open: 'cap'
     },
     {
-        id: 'padfolio', name: 'my mccombs padfolio', zip: 'main', l: 83.7, t: 82.7, w: 23.9, r: -3,
+        id: 'padfolio', name: 'my mccombs padfolio', zip: 'devices', l: 83.7, t: 82.7, w: 23.9, r: -3,
         art: `<svg viewBox="0 0 120 156"><rect x="4" y="4" width="112" height="148" rx="9" fill="#1D1D21" ${S}/>
             <rect x="9" y="9" width="102" height="138" rx="6" fill="none" stroke="#3B3B42" stroke-width="1.3" stroke-dasharray="2.5 2"/>
             <path d="M116 14 V142" stroke="#45454D" stroke-width="2.5" stroke-dasharray="1.5 1.5"/>
@@ -751,7 +782,7 @@ window.ITEMS = [
         open: 'padfolio'
     },
     {
-        id: 'boarding', name: 'my boarding pass', zip: 'devices', l: 50.8, t: 28.7, w: 18.8, r: 4,
+        id: 'boarding', name: 'my boarding pass', zip: 'shades', l: 50.8, t: 28.7, w: 18.8, r: 4,
         art: `<svg viewBox="0 0 200 80"><path d="M6 4 H194 V30 a6 6 0 0 0 0 12 V76 H6 V42 a6 6 0 0 0 0 -12Z" fill="#FFFDF8" ${S} stroke-width="2.5"/>
             <rect x="6" y="4" width="188" height="16" fill="#F4A7B9" stroke="#3A2626" stroke-width="2"/><text x="14" y="15.5" font-family="Instrument Sans" font-weight="600" font-size="8" fill="#3A2626" letter-spacing="1.5">BOARDING PASS</text>
             <path d="M146 20 V76" stroke="#3A2626" stroke-width="1.5" stroke-dasharray="3 3"/>
@@ -786,7 +817,7 @@ window.ITEMS = [
         open: 'journal'
     },
     {
-        id: 'bear', name: 'T.D., my teddy bear', zip: 'main', l: 0, t: 0, w: 19, r: -6,
+        id: 'bear', name: 'T.D., my teddy bear', zip: 'shades', l: 0, t: 0, w: 19, r: -6,
         art: `<svg viewBox="-8 -4 216 230">
             <!-- T.D., from the real one: shaggy honey-gold fur that sticks out everywhere, little beige felt ears, beige muzzle and foot pads, a brown felt bow -->
             <ellipse cx="62" cy="36" rx="13" ry="14" fill="#DCCDB8" stroke="#3A2626" stroke-width="3.5"/><ellipse cx="140" cy="34" rx="13" ry="14" fill="#DCCDB8" stroke="#3A2626" stroke-width="3.5"/>
@@ -804,7 +835,7 @@ window.ITEMS = [
         open: 'bear'
     },
     {
-        id: 'todo', name: 'an overdue to-do list', zip: 'shades', l: 0, t: 0, w: 6.6, r: 8,
+        id: 'todo', name: 'ideas i need to get to soon', zip: 'attached', l: 0, t: 0, w: 6.6, r: 8,
         art: `<svg viewBox="0 0 100 100"><path d="M22 30 L40 14 L62 18 L80 28 L86 50 L78 72 L58 86 L34 84 L16 66 L12 46Z" fill="#FFFDF6" ${S} stroke-width="2.2"/>
     <g stroke="#C9D6EE" stroke-width="1.2" fill="none"><path d="M18 44 L46 40 L84 48"/><path d="M16 58 L50 56 L80 64"/><path d="M28 74 L54 70 L72 78"/></g><path d="M30 20 L32 84" stroke="#F0A7B6" stroke-width="1.2"/>
     <g stroke="#B9B0A2" stroke-width="1.2" fill="none" stroke-linejoin="round"><path d="M40 14 L46 40 L22 30"/><path d="M62 18 L46 40 L80 28"/><path d="M86 50 L58 52 L46 40"/><path d="M58 52 L78 72"/><path d="M58 52 L58 86"/><path d="M58 52 L34 64 L16 66"/><path d="M34 64 L34 84"/><path d="M34 64 L12 46"/></g>
@@ -813,13 +844,20 @@ window.ITEMS = [
         flat: `<svg viewBox="0 0 110 120"><path d="M8 8 L60 4 L104 10 L100 60 L106 112 L52 116 L6 110 L12 62Z" fill="#FFFDF6" ${S} stroke-width="2"/>
     <g stroke="#C9D6EE" stroke-width="1">${[24,34,44,54,64,74,84,94,104].map(y => `<path d="M12 ${y} L100 ${y - 2}"/>`).join('')}</g><path d="M24 8 L22 114" stroke="#F0A7B6" stroke-width="1.2"/>
     <path d="M30 20 L70 30 M60 4 L52 40 M80 60 L104 62 M20 70 L44 96" stroke="#E8E2D6" stroke-width="1.2"/>
-    <g fill="none" stroke="#2C3E7A" stroke-width="1.4" stroke-linecap="round"><path d="M30 31 q6 -3 12 0 t12 0 t12 0"/><path d="M30 41 q8 -3 16 0 t16 0"/><path d="M30 51 q6 -3 12 0 t12 0 t12 0 t10 0"/><path d="M30 61 q8 -3 16 0"/><path d="M30 71 q6 -3 12 0 t12 0 t12 0"/></g>
-    <path d="M28 30 h44" stroke="#2C3E7A" stroke-width="1.2"/>
-    <g transform="translate(70 92) rotate(-12)"><rect x="-26" y="-9" width="52" height="18" rx="3" fill="none" stroke="#C0392B" stroke-width="2"/><text x="0" y="4.4" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="1.4" fill="#C0392B">OVERDUE</text></g></svg>`,
+    <g font-family="Caveat, cursive" font-weight="700" fill="#2C3E7A"><text x="28" y="21" font-size="9.5">ideas, for soon:</text>
+        <g font-size="7.4"><text x="28" y="32">♡ a “who’s watching?” mode</text><text x="34" y="40">for this bag</text><text x="28" y="51">♡ my case decks, in the</text><text x="34" y="59">padfolio</text><text x="28" y="70">♡ (privacy-friendly) analytics</text><text x="34" y="78">for this bag</text></g></g>
+    <g transform="translate(74 98) rotate(-10)"><rect x="-22" y="-9" width="44" height="18" rx="3" fill="none" stroke="#C2386E" stroke-width="2"/><text x="0" y="4.4" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="10" letter-spacing="1.4" fill="#C2386E">SOON ♡</text></g></svg>`,
         open: 'todo'
     },
     {
-        id: 'ticket', name: 'a speeding ticket', zip: 'shades', l: 0, t: 0, w: 10.3, r: -5,
+        // old receipts, curling up at the ends, for the returns i swear i'll make
+        id: 'receipts', name: 'old receipts', zip: 'attached', l: 0, t: 0, w: 7, r: -4,
+        art: `<svg viewBox="0 0 90 120"><g transform="rotate(-8 40 60)"><path d="M14 10 H58 V104 l-5.5 5 -5.5 -5 -5.5 5 -5.5 -5 -5.5 5 -5.5 -5 -5.5 5 -5.5 -5Z" fill="#FBFAF6" ${S} stroke-width="2"/><path d="M20 22 h32 M20 30 h22 M20 40 h32 M20 48 h26 M20 56 h32 M20 72 h32" stroke="#B9B0A2" stroke-width="1.6"/><path d="M20 82 h18" stroke="#3A2626" stroke-width="2.4"/></g>
+            <g transform="rotate(9 58 62)"><path d="M38 18 H80 V108 l-5.25 5 -5.25 -5 -5.25 5 -5.25 -5 -5.25 5 -5.25 -5 -5.25 5 -5.25 -5Z" fill="#FFFDF8" ${S} stroke-width="2"/><path d="M44 30 h30 M44 38 h20 M44 48 h30 M44 56 h24 M44 74 h30" stroke="#B9B0A2" stroke-width="1.6"/><path d="M44 86 h16" stroke="#3A2626" stroke-width="2.4"/><path d="M38 18 q-6 6 -2 14" fill="none" stroke="#3A2626" stroke-width="1.4"/></g></svg>`,
+        open: 'receipts'
+    },
+    {
+        id: 'ticket', name: 'a speeding ticket', zip: 'attached', l: 0, t: 0, w: 10.3, r: -5,
         art: `<svg viewBox="0 0 120 92"><path d="M6 10 L112 4 L116 84 L10 90Z" fill="#FBF8EE" ${S} stroke-width="2"/><path d="M8 46 L114 42" stroke="#D9D2C2" stroke-width="1.4" stroke-dasharray="3 2"/>
     <rect x="12" y="12" width="96" height="12" fill="#3A5A9A" transform="rotate(-3 60 18)"/><text x="60" y="21.5" text-anchor="middle" font-family="Instrument Sans" font-weight="800" font-size="7" fill="#fff" letter-spacing="1.4" transform="rotate(-3 60 18)">CITATION · SPEEDING</text>
     <g font-family="Instrument Sans" font-size="4.6" fill="#3A2626" transform="rotate(-3 60 50)"><text x="14" y="34">NAME: SUHANI TIWARI</text><text x="14" y="40">SPEED: a little too excited</text><text x="14" y="56">OFFICER NOTES: “she was very polite.”</text><text x="14" y="63">STATUS: tucked in the front pocket</text></g>
@@ -827,7 +865,7 @@ window.ITEMS = [
         open: 'ticket'
     },
     {
-        id: 'giftcards', name: 'some gift cards', zip: 'shades', l: 0, t: 0, w: 10.3, r: 3,
+        id: 'giftcards', name: 'some gift cards', zip: 'attached', l: 0, t: 0, w: 10.3, r: 3,
         art: `<svg viewBox="0 0 130 100"><defs><pattern id="gc-st" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="4" height="8" fill="#0B0B0C"/><rect x="4" width="4" height="8" fill="#FAFAFA"/></pattern></defs>
     <g transform="rotate(-10 40 50)"><rect x="6" y="24" width="76" height="48" rx="5" fill="#E8E0D3" stroke="#3A2626" stroke-width="1.6"/><text x="44" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="9" letter-spacing="2.6" fill="#2A2426">ARITZIA</text></g>
     <g transform="rotate(4 70 50)"><rect x="30" y="18" width="76" height="48" rx="5" fill="#0D0D0F" stroke="#3A2626" stroke-width="1.6"/><text x="68" y="44" text-anchor="middle" font-family="Helvetica Neue, Arial" font-weight="700" font-size="9" letter-spacing="3" fill="#F4F2EE">CHANEL</text><text x="68" y="53" text-anchor="middle" font-family="Helvetica Neue, Arial" font-size="3.6" letter-spacing="2.4" fill="#BDB8B0">BEAUTY</text></g>
@@ -835,25 +873,25 @@ window.ITEMS = [
         open: 'giftcards'
     },
     {
-        id: 'pads', name: 'pads', zip: 'front', l: 0, t: 0, w: 10, r: 0,
+        id: 'pads', name: 'pads', zip: 'attached', l: 0, t: 0, w: 10, r: 0,
         art: `<svg viewBox="-4 0 112 100"><g transform="rotate(-8 45 45)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#F4B6CA" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#E995AF" stroke-width="2" stroke-dasharray="2 2"/><circle cx="45" cy="45" r="9" fill="#FBE3EA"/><path d="M41 45 q4 -6 8 0 q-4 6 -8 0z" fill="#E995AF"/></g>
     <g transform="rotate(10 50 56) translate(10 14)"><path d="M14 18 h62 a6 6 0 0 1 6 6 v42 a6 6 0 0 1 -6 6 h-62 a6 6 0 0 1 -6 -6 v-42 a6 6 0 0 1 6 -6z" fill="#C9B6E8" ${S} stroke-width="2"/><path d="M8 30 h74 M8 60 h74" stroke="#A996D6" stroke-width="2" stroke-dasharray="2 2"/></g></svg>`,
         open: 'pads'
     },
     {
-        id: 'cards', name: 'amaira’s cards', zip: 'devices', l: 0, t: 0, w: 9.8, r: -4,
+        id: 'cards', name: 'amaira’s cards', zip: 'shades', l: 0, t: 0, w: 9.8, r: -4,
         art: `<svg viewBox="0 0 120 100"><g transform="rotate(-12 50 55)"><rect x="10" y="20" width="70" height="60" fill="#F6C6D3" ${S} stroke-width="2"/><path d="M30 50 c-6 -8 4 -14 8 -6 c4 -8 14 -2 8 6 l-8 9z" fill="#E0457E"/></g>
     <g transform="rotate(6 70 55)"><rect x="34" y="16" width="72" height="62" fill="#FFFDF8" ${S} stroke-width="2"/><g font-family="Caveat, cursive" font-size="10" fill="#B13A6A"><text x="42" y="34">Happy</text><text x="42" y="46">Bithday</text><text x="42" y="58" fill="#3A5A9A">Didi!</text></g><path d="M86 40 l2 4 4 1 -3 3 1 4 -4 -2 -4 2 1 -4 -3 -3 4 -1z" fill="#F2C14E"/><path d="M84 62 c-4 -6 3 -10 6 -4 c3 -6 10 -2 6 4 l-6 7z" fill="#E0457E"/></g>
     <g transform="rotate(-3 60 70)"><rect x="18" y="52" width="66" height="40" fill="#FBF6EA" ${S} stroke-width="2"/><text x="24" y="66" font-family="Caveat, cursive" font-size="8" fill="#6A4FB0">xoxo,</text><text x="24" y="78" font-family="Caveat, cursive" font-size="9" fill="#6A4FB0">Amaira</text><path d="M64 60 q4 -6 8 0 q4 -6 8 0 q-8 10 -8 10 q-8 -10 -8 -10z" fill="#5BA7C4"/></g></svg>`,
         open: 'cards'
     },
     {
-        id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'shades', l: 0, t: 0, w: 3.9, r: 18,
+        id: 'backup-lip', name: 'my backup lipstick (westman glögg)', zip: 'front', l: 0, t: 0, w: 3.9, r: 18,
         art: `<svg viewBox="0 0 70 150"><rect x="9" y="66" width="52" height="80" rx="6" fill="#F7F7F5" ${S}/><path d="M16 74 v64" stroke="#E2E2DF" stroke-width="4" stroke-linecap="round"/><rect x="13" y="58" width="44" height="11" rx="4" fill="#EEEEEB" ${S} stroke-width="2.5"/><rect x="19" y="36" width="32" height="24" rx="3" fill="#F7F7F5" ${S} stroke-width="2.5"/><path d="M22 37 V14 C22 5 31 3 35 8 L48 24 V37Z" fill="#8E2A24" ${S} stroke-width="2.5"/><path d="M26 16 q3 -6 7 -6" fill="none" stroke="#C45A4E" stroke-width="2.5" stroke-linecap="round"/><text x="35" y="118" text-anchor="middle" font-family="Instrument Sans" font-size="6" fill="#A9A9A6" transform="rotate(-90 35 106)" letter-spacing="1.4">WESTMAN ATELIER</text></svg>`,
         open: 'backuplip'
     },
     {
-        id: 'chargers', name: 'my chargers (a tangled mess)', zip: 'main', l: 0, t: 0, w: 13, r: -8,
+        id: 'chargers', name: 'my chargers (a tangled mess)', zip: 'devices', l: 0, t: 0, w: 13, r: -8,
         get art() { return `<svg viewBox="40 20 320 260">${window.CHARGERS.list.map(c => window.CHARGERS.cable(c, 0)).join('')}</svg>`; },
         open: 'chargers'
     },
@@ -869,7 +907,7 @@ window.ITEMS = [
         open: 'onward'
     },
     {
-        id: 'binder', name: 'my pink binder', zip: 'main', l: 13.6, t: 83.4, w: 24.4, r: -6,
+        id: 'binder', name: 'my pink binder', zip: 'devices', l: 13.6, t: 83.4, w: 24.4, r: -6,
         art: `<svg viewBox="0 0 170 200"><rect x="20" y="10" width="140" height="180" rx="6" fill="#FFFDF9" ${S} stroke-width="2"/><path d="M34 30 h110 M34 42 h96 M34 54 h104 M34 66 h80" stroke="#B9B2AE" stroke-width="3"/><rect x="8" y="4" width="152" height="192" rx="10" fill="#F4C9D2" fill-opacity=".82" ${S}/><rect x="8" y="4" width="30" height="192" rx="10" fill="#EDB6C2" fill-opacity=".9" ${S}/><path d="M14 20 q40 -6 60 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/></svg>`,
         open: 'binder'
     },
@@ -897,7 +935,7 @@ window.ITEMS = [
         open: 'phone'
     },
     {
-        id: 'passport', name: 'my passport', zip: 'devices', l: 91.2, t: 36.2, w: 9, r: 7,
+        id: 'passport', name: 'my passport', zip: 'shades', l: 91.2, t: 36.2, w: 9, r: 7,
         cover: `<svg viewBox="0 0 110 150"><rect x="6" y="4" width="98" height="142" rx="7" fill="#1E2A4A" ${S}/>
             <g fill="#D9B45A" font-family="Bodoni Moda" text-anchor="middle">
                 <text x="55" y="26" font-size="13" font-weight="600" letter-spacing="1.2">PASSPORT</text>
@@ -1031,7 +1069,7 @@ window.KEYRING = big => `<svg viewBox="0 0 200 252" class="keyring${big ? ' big'
 /* my wallet: student ID, driver license, and my cards. Cards pop out like file folders. */
 window.CARDS = [
     { kind: 'id', title: 'UT Austin student ID', big: 'Suhani Tiwari', sub: 'Management Information Systems + Psychology', metric: 'McCombs School of Business · Class of 2027 · 3.5 GPA', body: 'BBA in MIS and a BA in Psychology, with minors in Marketing and Educational Psychology. Two McCombs scholarships this year.' },
-    { kind: 'dl', title: 'Driver license', big: 'Suhani Tiwari', metric: 'Class: C (for cute)<br>Restrictions: no parallel parking<br>Endorsements: main character', body: 'Height: 5′6″ (5′9″ in heels, so, always).<br>Weight: depends on the lehenga. (and the jewelry. and the dinner.)<br>Eyes: brown and dreamy.<br>Hair: dark, long, and always done.<br>Address: wouldn’t you wanna knowwww.<br>DOB: pisces season. that’s all you get.<br>Expires: never. i’m timeless.<br>Driving skill: see my car keys. actually, don’t.' },
+    { kind: 'dl', title: 'Driver license', big: 'Suhani Tiwari', metric: 'Class: C (for cute)<br>Restrictions: no parallel parking<br>Endorsements: main character', body: 'Height: 5′6″ (5′9″ in heels, so, always).<br>Weight: don’t ask.<br>Eyes: brown and dreamy.<br>Hair: dark, long, and always done.<br>Address: wouldn’t you wanna knowwww.<br>DOB: pisces season. that’s all you get.<br>Expires: never. i’m timeless.<br>Driving skill: see my car keys. actually, don’t.' },
     { kind: 'bofa', title: 'Bank of America credit card', big: 'Recent transactions', metric: 'vanilla latte · vanilla latte · Westman Atelier · “just looking” at Target · vanilla latte', body: 'Mostly vanilla lattes. Also Glögg (obviously), Lash Idôle, and a 25-pack of Mildliners. I was “just looking.” I am never just looking.' },
     { kind: 'bofadebit', title: 'Bank of America debit card', big: 'Balance', metric: 'Balance: low. high splurging + multiple comfort buys = low balances.', body: 'The red one. Feel free to ask for my number. Not to flirt with me, to Zelle me money.' },
     { kind: 'amexgold', title: 'Amex Delta SkyMiles Gold', big: 'Where the miles went', metric: 'Thailand + Malaysia 2010 · Switzerland, France, Italy 2016 · Mexico 2020', body: 'Window seat or I’m not going. The stamps are in my passport.', go: 'passport' },

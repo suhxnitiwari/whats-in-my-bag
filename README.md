@@ -12,7 +12,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Strathmore Mixed Media sketchbook (11×14, pink) | A flip-through of my digital art |
 | Victoria's Secret makeup pouch | Unzip it: Westman Atelier lipstick (Glögg), Westman Baby Cheeks blush (Mimi), Hourglass Vanish concealer, Charlotte Tilbury Beautiful Skin foundation (6N), Lancôme Lash Idôle, Make Up For Ever Artist Color Pencil lip liner (600 Anywhere Caffeine) and my Morphe brushes (M241, M242, M132, Eye Want It All set) pop out. Then wave the wand: bibbidi bobbidi boo, before and after |
 | Passport | Stamps: Thailand and Malaysia (2010), Switzerland, France and Italy (2016), Mexico (2020) |
-| Wallet (LV Victorine) | Opens into the raspberry trifold: cards tucked in the slots (UT ID, a joke Texas license, BofA credit and debit, Delta Gold, Amex Blue Cash Everyday; no numbers, ever), and rupees + dollars in the zip pocket |
+| Wallet (LV Victorine) | Opens into the raspberry trifold: cards tucked in the slots (UT ID, a joke Texas license, BofA credit and debit, Delta Gold, Amex Blue Cash Everyday; no numbers, ever), and one $20 (emergencies only, it’s all Apple Pay) + one ₹500 behind the flap, a keepsake from a visit to India |
 | Mildliner pouch | The full 25-pack: every color is a class I took at UT Austin, highlighted when you pick it |
 | Paper Mate pouch | 20 InkJoy Gel pens: pick one and type in its color (switch mid-sentence), plus my BIC mechanical pencils: an erasable sketch pad |
 | Phone (iPhone 18 Pro Max, pink case) | Photos, Instagram, LinkedIn, Spotify, YouTube, Netflix, Prime, Google Calendar and Duolingo |
