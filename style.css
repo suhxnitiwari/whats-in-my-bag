@@ -869,6 +869,10 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .bottle.out svg { transform: translateY(-46%); }
 .bottle svg { overflow: visible; }
 .bottle .holder { z-index: 2; cursor: pointer; }
+/* one tap and the Stanley goes back in its pocket */
+.bottle-back { position: absolute; left: 50%; bottom: 46%; z-index: 5; transform: translateX(-50%) scale(.6); opacity: 0; pointer-events: none; white-space: nowrap; padding: 4px 11px; border: 2px solid var(--ink); border-radius: 999px; background: #FBE3EA; color: var(--plum); font-size: 1rem; cursor: pointer; box-shadow: 2px 2px 0 var(--ink); transition: opacity .25s .5s, transform .3s cubic-bezier(.3,1.5,.5,1) .5s; }
+.bottle.out .bottle-back { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+.bottle-back:hover { background: #F7CFDC; }
 .bottle .lid { transform-box: view-box; transform-origin: 21px 25px; transition: transform .45s cubic-bezier(.3,1.4,.5,1); cursor: pointer; }
 .bottle.lid-open .lid { animation: unscrew .7s ease-out forwards; }
 .bottle .lid.closing { animation: rescrew .6s ease-in forwards; }
@@ -1920,6 +1924,17 @@ body.shades .tint { background: linear-gradient(180deg, rgba(244, 166, 190, .22)
 .gm-row > span:nth-child(2) { flex: 1; display: grid; } .gm-row small { color: #8A8A8E; }
 .gm-row em { font-style: normal; font-weight: 700; font-size: .7rem; }
 .lap-app { padding: 4px 8px; }
+.fwin.app .fwin-side { display: none; }
+.fwin.app .fwin-body { grid-template-columns: 1fr; }
+.lap-notes { display: grid; grid-template-columns: minmax(110px, 30%) 1fr; height: 100%; }
+.lap-notes nav { display: flex; flex-direction: column; gap: 2px; padding: 8px 6px; background: #FBF7E8; border-right: 1px solid #EDE6CC; }
+.lap-notes nav button { text-align: left; border: 0; background: none; padding: 6px 8px; border-radius: 6px; font: inherit; font-size: .72rem; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lap-notes nav button.on { background: #F8D85A; font-weight: 600; }
+.lap-notes .ftext { padding: 10px 14px; }
+.lap-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 4px; padding: 6px; }
+.lap-photos button { padding: 0; border: 0; background: none; cursor: pointer; }
+.lap-photos img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 25%; border-radius: 3px; }
+.lap-photos img[src$="/saree.jpg"] { object-position: 52% 16%; }
 .lap-h { margin: 2px 0 6px; font-size: .7rem; color: #8A8A8E; }
 .lap-mail { width: 100%; border: 0; border-bottom: 1px solid #eee; background: none; text-align: left; cursor: pointer; font: inherit; }
 .lap-mail.on { background: #EEF4FF; }
@@ -2212,7 +2227,7 @@ button.pf-pen:hover { transform: translateY(-4px) rotate(-3deg); }
 .pd-flap::before { content: ""; position: absolute; inset: 7px; border: 2px dashed rgba(233,149,175,.9); border-radius: 12px; }
 .pd-tab { position: absolute; left: 50%; top: -2px; transform: translate(-50%, -50%); padding: 3px 12px; border: 2px solid var(--ink); border-radius: 999px; background: #FFF6F8; font: 600 .62rem var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--plum); }
 .pd.opened .pd-flap { transform: rotateX(-82deg); opacity: 0; }
-.pd.opened .pd-inside { transform: translateY(-5%) rotate(-3deg); }
+.pd.opened .pd-inside { transform: none; }
 /* the note: folded, it's a little square taped to the corner; unfolded, it's still smaller than the pad */
 .pd-note { position: absolute; z-index: 3; right: -6%; top: 10%; width: 64px; height: 64px; padding: 0; border: 0; background: none; cursor: pointer; transform: rotate(9deg); transition: all .5s cubic-bezier(.4,1.3,.5,1); }
 .pd-folded, .pd-open { position: absolute; border: 2px solid var(--ink); background: #FFF1F5; color: var(--plum); box-shadow: 3px 3px 0 var(--ink); }
@@ -2869,14 +2884,16 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .pd-f::before { content: ""; position: absolute; inset: 5px; border: 2px dashed rgba(255,255,255,.55); border-radius: 6px; }
 .pd-f1 { top: 0; border-radius: 22px 22px 4px 4px; transform-origin: 50% 100%; transform: rotateX(-180deg); z-index: 3; }
 .pd-f2 { top: 33.3%; border-radius: 6px; z-index: 1; box-shadow: 4px 4px 0 var(--ink); background: linear-gradient(160deg, #1E3A7A, #2F5BB0); }
-.pd-f2::after { content: "always"; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: italic 700 1.5rem Georgia, serif; color: #fff; letter-spacing: -.02em; }
+/* the little label on the folded packet: "take care", along the bottom. it goes away once you start unfolding */
+.pd-label { position: absolute; left: 0; right: 0; top: 33.3%; height: 33.4%; z-index: 5; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6%; font: italic 700 1.3rem Georgia, serif; color: #fff; letter-spacing: -.01em; text-shadow: 0 1px 2px rgba(120,50,20,.35); transition: opacity .2s; pointer-events: none; }
+.pd.unfold1 .pd-label, .pd.opened .pd-label { opacity: 0; }
 .pd-f3 { bottom: 0; border-radius: 4px 4px 22px 22px; transform-origin: 50% 0; transform: rotateX(180deg); z-index: 2; }
 .pd .pd-tab { top: -2px; z-index: 4; }
-.pd-inside { inset: 5% 18%; opacity: 0; transition: opacity .3s; z-index: 3; }
+/* the pad is the full size of the open wrapper and stuck flat onto it */
+.pd-inside { inset: 3% 16%; opacity: 0; transition: opacity .3s; z-index: 3; }
 .pd.unfold1 .pd-f1 { transform: rotateX(0deg); }
 .pd.opened .pd-f3 { transform: rotateX(0deg); }
 .pd.unfold1 .pd-f2, .pd.opened .pd-f2 { background: repeating-linear-gradient(90deg, #F39A6B 0 14px, #F7B48C 14px 22px, #EE8A58 22px 30px); box-shadow: none; }
-.pd.unfold1 .pd-f2::after { content: none; }
 .pd.opened .pd-inside { opacity: 1; transition-delay: .45s; }
 .pd.reading .pd-tri { opacity: .35; }
 
@@ -2901,6 +2918,11 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .as-spin { animation: as-spin .5s linear infinite; }
 @keyframes as-spin { to { transform: rotate(360deg); } }
 .aw-glow { animation: as-pulse-o 1.4s ease-in-out infinite; }
+/* the power button slides up its slot to turn on, and back down to turn off */
+.aw-pw.slid-up { animation: aw-slide-up .28s cubic-bezier(.3,1.4,.5,1); }
+.aw-pw.slid-down { animation: aw-slide-down .28s cubic-bezier(.3,1.4,.5,1); }
+@keyframes aw-slide-up { from { transform: translateY(12px); } }
+@keyframes aw-slide-down { from { transform: translateY(-12px); } }
 @keyframes as-pulse-o { 50% { opacity: .35; } }
 .as-stage.blowing .as-air i { animation-duration: var(--blow, 1s); }
 .as-stage[data-heat="0"] .as-air i { background: linear-gradient(transparent, rgba(240,96,62,.6), transparent); }

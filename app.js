@@ -566,7 +566,7 @@ bottle.className = 'bottle';
 bottle.setAttribute('role', 'button');
 bottle.setAttribute('tabindex', '0');
 bottle.setAttribute('aria-label', 'My pink Stanley, in the backpack’s water bottle pocket');
-bottle.innerHTML = ITEMS.find(i => i.id === 'stanley').art + '<span class="holder" aria-hidden="true"></span>';
+bottle.innerHTML = ITEMS.find(i => i.id === 'stanley').art + '<span class="holder" aria-hidden="true"></span><button type="button" class="bottle-back hand" tabindex="-1">put her back ↩</button>';
 bagBtn.appendChild(bottle);
 // wrap the cap so it can open
 const capRect = bottle.querySelector('svg rect[x="21"][y="6"]');
@@ -579,7 +579,7 @@ const openBottle = e => {
         // one tap: up out of the side pocket, then set down on the floor next to the bag
         bottle.classList.add('out'); bottle.setAttribute('aria-label', 'My pink Stanley, out of the pocket. Tap the lid to open it, the bottle for my water tracker, the pocket to put it back');
         setTimeout(() => { bottle.classList.add('free'); bsvg.style.transform = `translate(${Math.round(bsvg.getBoundingClientRect().width * 1.1)}px, 0px)`; }, reduce ? 0 : 420);
-        toast('out she comes. tap the lid for a sip, drag her back to put her away.');
+        toast('out she comes. tap the lid for a sip. one tap on “put her back” and she’s home.');
         return;
     }
     if (e.target.closest && e.target.closest('.lid')) {
@@ -591,7 +591,7 @@ const openBottle = e => {
         } else { lid.classList.remove('closing'); bottle.classList.add('lid-open'); sips++; SFX.slurp(); toast(sips === 1 ? 'sip ♡ (one more than usual)' : `sip #${sips}. who even am i`); }
         return;
     }
-    if (e.target.closest && e.target.closest('.holder')) { bsvg.style.transform = ''; bottle.classList.remove('out', 'lid-open', 'free'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
+    if (e.target.closest && e.target.closest('.holder, .bottle-back')) { bsvg.style.transform = ''; bottle.classList.remove('out', 'lid-open', 'free'); bottle.querySelector('.lid').classList.remove('closing'); toast('back in its pocket'); return; }
     pickUp(ITEMS.find(i => i.id === 'stanley'));
 };
 // grab the Stanley: pull it out of the side pocket, set it down anywhere, drag it back over the pocket to put it away
@@ -1722,8 +1722,8 @@ const VIEWS = {
         <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>
         <div class="pd" id="pd">
             <button type="button" class="pd-pad" id="pd-pad" aria-label="A wrapped pad. Open it">
-                <span class="pd-inside" aria-hidden="true"><svg viewBox="0 0 120 200"><path d="M42 8 h36 q14 0 14 22 v32 q22 4 22 18 q0 14 -22 18 v62 q0 32 -32 32 q-32 0 -32 -32 v-62 q-22 -4 -22 -18 q0 -14 22 -18 v-32 q0 -22 14 -22z" fill="#FFFDF8" stroke="#3A2626" stroke-width="2.5"/><path d="M60 26 q24 0 24 40 v74 q0 34 -24 34 q-24 0 -24 -34 v-74 q0 -40 24 -40z" fill="#E9DDF7"/><path d="M60 34 q18 0 18 34 v70 q0 28 -18 28 q-18 0 -18 -28 v-70 q0 -34 18 -34z" fill="none" stroke="#B9A6E3" stroke-width="1.6" stroke-dasharray="3 3"/></svg></span>
-                <span class="pd-tri" aria-hidden="true"><span class="pd-f pd-f1"></span><span class="pd-f pd-f2"><span class="pd-tab">peel</span></span><span class="pd-f pd-f3"></span></span>
+                <span class="pd-inside" aria-hidden="true"><svg viewBox="0 0 120 200" preserveAspectRatio="none"><path d="M42 8 h36 q14 0 14 22 v32 q22 4 22 18 q0 14 -22 18 v62 q0 32 -32 32 q-32 0 -32 -32 v-62 q-22 -4 -22 -18 q0 -14 22 -18 v-32 q0 -22 14 -22z" fill="#FFFDF8" stroke="#3A2626" stroke-width="2.5"/><path d="M60 26 q24 0 24 40 v74 q0 34 -24 34 q-24 0 -24 -34 v-74 q0 -40 24 -40z" fill="#E9DDF7"/><path d="M60 34 q18 0 18 34 v70 q0 28 -18 28 q-18 0 -18 -28 v-70 q0 -34 18 -34z" fill="none" stroke="#B9A6E3" stroke-width="1.6" stroke-dasharray="3 3"/></svg></span>
+                <span class="pd-tri" aria-hidden="true"><span class="pd-f pd-f1"></span><span class="pd-f pd-f2"><span class="pd-tab">peel</span></span><span class="pd-f pd-f3"></span><span class="pd-label">take care</span></span>
             </button>
             <button type="button" class="pd-note" id="pd-note" aria-expanded="false" aria-label="A little folded note taped to the pad. Unfold it">
                 <span class="pd-folded" aria-hidden="true"><span class="pd-tape"></span>♡</span>
@@ -1924,7 +1924,7 @@ const VIEWS = {
         <p class="note">victoria’s secret, pink stripes. unzip it.</p>
         <div class="mbag" id="mbag">
             <div class="mbag-inside" aria-live="polite">
-                <button type="button" class="mk" data-mk="lipliner" style="--h:250px; --rise:-34px; --x:-152px; --a:-36deg; --d:0ms" aria-label="Make Up For Ever Artist Color Pencil lip liner, 600 Anywhere Caffeine">${ITEMS.find(i => i.id === 'lipliner').art}<span>lip liner</span></button>
+                <button type="button" class="mk" data-mk="lipliner" style="--h:250px; --rise:48px; --x:-140px; --a:-36deg; --d:0ms" aria-label="Make Up For Ever Artist Color Pencil lip liner, 600 Anywhere Caffeine">${ITEMS.find(i => i.id === 'lipliner').art}<span>lip liner</span></button>
                 <button type="button" class="mk" data-mk="lipstick" style="--h:150px; --rise:-34px; --x:-114px; --a:-27deg; --d:45ms" aria-label="MAC Sleek Satin lipstick, Espresso Yourself">${ITEMS.find(i => i.id === 'lipstick').art}<span>lipstick</span></button>
                 <button type="button" class="mk" data-mk="mascara" style="--h:238px; --x:0px; --a:0deg; --d:180ms" aria-label="Lancôme Lash Idôle mascara">${ITEMS.find(i => i.id === 'mascara').art}<span>mascara</span></button>
                 <button type="button" class="mk" data-mk="primer" style="--h:238px; --x:38px; --a:9deg; --d:225ms" aria-label="Estée Lauder Futurist Aqua Brilliance Watery Glow Primer">${ITEMS.find(i => i.id === 'primer').art}<span>primer</span></button>
@@ -2556,11 +2556,11 @@ const AFTER = {
         };
         const press = k => {
             SFX.tap();
-            if (k === 'power') { st.on = !st.on; if (st.on) SFX.fan(1.4, .1); say.textContent = st.on ? 'whooosh. curls in progress. don’t talk to me for 40 minutes.' : 'off. worth every single minute.'; }
+            if (k === 'power') { st.on = !st.on; st.slid = st.on ? 'up' : 'down'; if (st.on) SFX.fan(1.4, .1); say.textContent = st.on ? 'whooosh. curls in progress. don’t talk to me for 40 minutes.' : 'off. worth every single minute.'; }
             if (k === 'fan') { st.fan = (st.fan + 1) % 3; say.textContent = `airflow: ${FAN[st.fan]}.`; }
             if (k === 'heat') { st.heat = (st.heat + 1) % 3; say.textContent = ['very hot. for the stubborn sections.', 'hot. the everyday one.', 'cold shot. locks the curl in.'][st.heat]; }
             if (st.on && k !== 'power') SFX.fan(.5, .05);
-            draw();
+            draw(); st.slid = '';
             face.querySelector(`[data-aw="${k}"]`)?.focus();
         };
         face.addEventListener('click', e => { const b = e.target.closest('[data-aw]'); if (b) press(b.dataset.aw); });
@@ -4169,7 +4169,6 @@ const AFTER = {
         const clean = $('#lap-clean');
         // you can help: the clutter flies into the trash, one by one, and my real folders line up neatly
         clean.onclick = () => {
-            if (tidy) { popDesk(); toast('and… it’s back. that was fast.'); return; }
             tidy = true; clean.disabled = true;
             popping.forEach(clearTimeout); popping = [];
             const trash = sheetBody.querySelector('.dock-app[aria-label="Trash"]').getBoundingClientRect();
@@ -4186,8 +4185,8 @@ const AFTER = {
                 [...sheetBody.querySelectorAll('#dmess .dreal')].sort((x, y) => x.dataset.f - y.dataset.f).forEach((e, k) => { e.style.translate = ''; e.style.left = (3 + (k % 4) * 13) + '%'; e.style.top = (4 + Math.floor(k / 4) * 30) + '%'; });
                 spots = {}; try { localStorage.removeItem(FKEY); } catch {}
                 SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9);
-                clean.disabled = false; clean.textContent = 'make it messy again';
-                toast('ahh. thank you. i can breathe now ♡');
+                clean.disabled = false; clean.hidden = true;
+                toast('thank you ♡ now let’s organize. move the folders around.'); $('#lap-note').textContent = 'thank you ♡ now let’s organize. drag the folders anywhere.';
             }, after));
         };
         const popDesk = () => {
@@ -4221,7 +4220,7 @@ const AFTER = {
         const fwin = $('#fwin'), fmain = $('#fwin-main');
         const openFolder = i => {
             const [name, files] = FOLDERS[i];
-            fwin.hidden = false; $('#fwin-title').textContent = name;
+            fwin.hidden = false; $('#fwin-title').textContent = name; fwin.classList.remove('app');
             fwin.querySelectorAll('[data-side]').forEach(b => b.classList.toggle('on', +b.dataset.side === i));
             fmain.innerHTML = files.length
                 ? `<div class="fgrid">${files.map(([n, , , ic], j) => `<button type="button" class="ffile" data-file="${j}">${fileIcon(n, ic)}<span>${n}</span></button>`).join('')}</div><p class="fcount mono">${files.length} items</p>`
@@ -4264,8 +4263,24 @@ const AFTER = {
         const REMINDERS = ['drink water (the stanley is watching)', 'call mumma', 'apply to three jobs', 'finish chapter one of the rom-com', 'sleep before 2 a.m.'];
         const TRASH = ['other people’s opinions of me.pdf', 'what if i fail.docx', 'comparing myself to others.zip', 'imposter syndrome.exe', 'texts i shouldn’t have sent.txt', 'my old sleep schedule.ics'];
         const openApp = app => {
-            fwin.hidden = false; $('#fwin-title').textContent = app;
+            // Messages, Mail and Reminders are their own apps: no Finder sidebar. Trash really is a Finder window, so it keeps it
+            fwin.hidden = false; $('#fwin-title').textContent = app; fwin.classList.toggle('app', app !== 'Trash');
             fwin.querySelectorAll('[data-side]').forEach(b => b.classList.remove('on'));
+            if (app === 'Notes') {
+                const notes = FOLDERS.flatMap(([, files]) => files).filter(f => f[1] === 'note');
+                const show = k => { const [n, , t] = notes[k]; fmain.innerHTML = `<div class="lap-notes"><nav>${notes.map(([nn], j) => `<button type="button" data-note="${j}" class="${j === k ? 'on' : ''}">${nn.replace(/\.txt$/, '')}</button>`).join('')}</nav><div class="ftext"><b>${n.replace(/\.txt$/, '')}</b><pre>${t}</pre></div></div>`; fmain.querySelectorAll('[data-note]').forEach(b => b.onclick = () => show(+b.dataset.note)); };
+                return show(0);
+            }
+            if (app === 'Photos') {
+                const name = f => ({ me: 'taxi' }[f] || f);
+                const grid = () => { fmain.innerHTML = `<div class="lap-photos">${PHOTOS.map((f, k) => `<button type="button" data-ph="${k}" aria-label="${name(f)}"><img src="assets/img/${f}.jpg" alt=""></button>`).join('')}</div>`; fmain.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => one(+b.dataset.ph)); };
+                const one = k => {
+                    fmain.innerHTML = `<div class="fql"><button type="button" class="fback mono">‹ Photos</button><img src="assets/img/${PHOTOS[k]}.jpg" alt=""><div class="fql-nav"><button type="button" data-d="-1" aria-label="Previous">‹</button><span class="mono">${name(PHOTOS[k])}.jpg</span><button type="button" data-d="1" aria-label="Next">›</button></div></div>`;
+                    fmain.querySelector('.fback').onclick = grid;
+                    fmain.querySelectorAll('[data-d]').forEach(d => d.onclick = () => one((k + +d.dataset.d + PHOTOS.length) % PHOTOS.length));
+                };
+                return grid();
+            }
             if (app === 'Reminders') {
                 fmain.innerHTML = `<div class="lap-app"><p class="lap-h mono">Today</p>${REMINDERS.map((t, k) => `<label class="lap-rem"><input type="checkbox" data-rem="${k}"><span>${t}</span></label>`).join('')}</div>`;
                 fmain.querySelectorAll('[data-rem]').forEach(c => c.onchange = () => { SFX.tap(); if ([...fmain.querySelectorAll('[data-rem]')].every(x => x.checked)) toast('all done?? who even am i.'); });
@@ -4340,8 +4355,8 @@ const AFTER = {
             a.classList.remove('bounce'); void a.offsetWidth; a.classList.add('bounce');
             const app = a.getAttribute('aria-label');
             if (app === 'Finder') return openFolder(1);
-            if (app === 'Photos') return openFolder(2);
-            if (app === 'Notes') { openFolder(0); fmain.querySelector('[data-file="1"]').click(); return; }
+            if (app === 'Photos') return openApp('Photos');
+            if (app === 'Notes') return openApp('Notes');
             if (app === 'Messages') return openApp('Messages');
             if (app === 'Mail') return openApp('Mail');
             if (app === 'Reminders') return openApp('Reminders');

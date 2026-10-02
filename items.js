@@ -80,9 +80,9 @@ window.AIRWRAP = (head = 'curl', st = {}, u = 'b') => {
         <circle cx="38.7" cy="${133.4 + heat * 3.1}" r="2.1" fill="#4E2732" stroke="#2A1218" stroke-width=".4"/><circle cx="38.7" cy="${133.4 + heat * 3.1}" r=".6" fill="#FFF"/>
         <text x="32" y="148" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="3.3"><tspan fill="#E8642F">i.d.</tspan><tspan fill="#8A807C" font-weight="400">curl</tspan></text>
         <rect x="28.4" y="150.5" width="7.2" height="11" rx="3.6" fill="#0D0C0E"/>
-        <circle cx="32" cy="157.4" r="3" fill="url(#awp)" stroke="#5A4A58" stroke-width=".4"/>${[1, 1.8, 2.5].map(r => `<circle cx="32" cy="157.4" r="${r}" fill="none" stroke="#fff" stroke-width=".18" opacity=".5"/>`).join('')}
-        ${on ? `<circle cx="32" cy="157.4" r="4.4" fill="none" stroke="#F7B9CF" stroke-width=".8" opacity=".9"/>` : ''}
-        <path d="M37.6 155.6 v3" stroke="#8A807C" stroke-width=".4"/><circle cx="32" cy="164" r=".8" fill="none" stroke="#8A807C" stroke-width=".35"/>
+        <circle cx="32" cy="${on ? 153.9 : 158.1}" r="3" fill="url(#awp)" stroke="#5A4A58" stroke-width=".4"/>${[1, 1.8, 2.5].map(r => `<circle cx="32" cy="${on ? 153.9 : 158.1}" r="${r}" fill="none" stroke="#fff" stroke-width=".18" opacity=".5"/>`).join('')}
+        ${on ? `<circle cx="32" cy="153.9" r="4.4" fill="none" stroke="#F7B9CF" stroke-width=".8" opacity=".9"/>` : ''}
+        <path d="M37.6 152.4 v3" stroke="#8A807C" stroke-width=".4"/><circle cx="32" cy="164" r=".8" fill="none" stroke="#8A807C" stroke-width=".35"/>
     </g>
     <text x="30" y="210" font-family="Instrument Sans, Arial" font-weight="500" font-size="6" fill="#9C928C" transform="rotate(90 30 210)" letter-spacing=".2">dyson</text>
     <text x="32" y="240.5" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="1.6" fill="#9C928C">ᛒ • FILTRE</text>
@@ -94,7 +94,7 @@ window.AIRWRAP = (head = 'curl', st = {}, u = 'b') => {
 };
 // a close-up of the face, big enough to press (what's on the handle, at 4x)
 window.AIRWRAP_FACE = (st = {}) => {
-    const { on = false, fan = 0, heat = 1 } = st;
+    const { on = false, fan = 0, heat = 1, slid = '' } = st;
     return `<svg viewBox="0 0 100 128" class="aw-face-big"><defs>
         <linearGradient id="awfb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCCDBE"/><stop offset=".4" stop-color="#F8F0E6"/><stop offset="1" stop-color="#D6C6B7"/></linearGradient>
         <linearGradient id="awfr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A5547"/><stop offset=".5" stop-color="#D99484"/><stop offset="1" stop-color="#A35E50"/></linearGradient>
@@ -118,9 +118,11 @@ window.AIRWRAP_FACE = (st = {}) => {
     <g class="aw-btn" data-aw="power" role="button" tabindex="0" aria-label="${on ? 'Turn it off' : 'Turn it on'}" aria-pressed="${on}">
         <rect x="38" y="81" width="24" height="34" rx="12" fill="#0D0C0E"/>
         <path d="M41 88 Q50 80 59 88" stroke="#2C3A36" stroke-width="2" fill="none" opacity=".7"/>
-        <circle cx="50" cy="102" r="9.5" fill="url(#awfp)" stroke="#5A4A58" stroke-width="1"/>${[3, 5.5, 7.8].map(r => `<circle cx="50" cy="102" r="${r}" fill="none" stroke="#fff" stroke-width=".35" opacity=".55"/>`).join('')}
-        ${on ? `<circle cx="50" cy="102" r="12.5" fill="none" stroke="#F49CBE" stroke-width="1.6" class="aw-glow"/>` : ''}
-        <path d="M67 99 v8" stroke="#8A807C" stroke-width="1"/><circle cx="50" cy="119" r="1.6" fill="none" stroke="#8A807C" stroke-width=".8"/>
+        <g class="aw-pw${slid ? ' slid-' + slid : ''}">
+            <circle cx="50" cy="${on ? 92 : 104}" r="9.5" fill="url(#awfp)" stroke="#5A4A58" stroke-width="1"/>${[3, 5.5, 7.8].map(r => `<circle cx="50" cy="${on ? 92 : 104}" r="${r}" fill="none" stroke="#fff" stroke-width=".35" opacity=".55"/>`).join('')}
+            ${on ? `<circle cx="50" cy="92" r="12.5" fill="none" stroke="#F49CBE" stroke-width="1.6" class="aw-glow"/>` : ''}
+        </g>
+        <path d="M67 88 v8" stroke="#8A807C" stroke-width="1"/><circle cx="50" cy="119" r="1.6" fill="none" stroke="#8A807C" stroke-width=".8"/>
     </g>
 </svg>`;
 };
@@ -980,7 +982,7 @@ window.STICKERS = [
 
 window.LID = (big) => `<svg viewBox="0 0 300 214" ${big ? 'class="lid-big"' : ''} aria-hidden="${big ? 'false' : 'true'}">
     <defs><clipPath id="lidclip${big ? 'b' : ''}"><rect x="2" y="2" width="296" height="210" rx="12"/></clipPath></defs>
-    <image href="assets/img/laptop-lid.jpg?v=1790826509" x="2" y="2" width="296" height="210" preserveAspectRatio="xMidYMid slice" clip-path="url(#lidclip${big ? 'b' : ''})"/>
+    <image href="assets/img/laptop-lid.jpg?v=1790928985" x="2" y="2" width="296" height="210" preserveAspectRatio="xMidYMid slice" clip-path="url(#lidclip${big ? 'b' : ''})"/>
     <rect x="2" y="2" width="296" height="210" rx="12" fill="none" ${S}/>
     ${big ? window.STICKERS.map(k => `<g class="stk" tabindex="0" role="button" aria-label="${k.label}" data-sticker="${k.id}"><circle class="stk-in" cx="${k.x}" cy="${k.y}" r="${k.r}" fill="#fff" fill-opacity="0"/></g>`).join('') : ''}
 </svg>`;
