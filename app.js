@@ -1027,12 +1027,48 @@ sheetBody.addEventListener('click', e => {
 let opener = null;
 sheet.addEventListener('close', () => { SFX.hush(); navStack.length = 0; curItem = null; if (opener?.isConnected) opener.focus({ preventScroll: true }); opener = null; });
 
+/* ---------- the brand lens: a personal-branding teardown of the things i carry ----------
+   brands don't just signal money, they signal a mind. turn the lens on and every branded thing shows what it says about me */
+const BRAND = {
+    laptop: ['utility arsenal · apple', 'Integrated execution platform', 'MacBook Pro 14", in the same ecosystem as my iPad, iPhone and AirPods Max. Seamless cross-device workflows and premium UX: tech isn’t a chore, it’s a creative extension. And the stickers are load-bearing: Mozart’s, Tradition Starts Here, each one a narrative object.', 'built for execution'],
+    ipad: ['utility arsenal · apple', 'Multi-dimensional creative range', 'Procreate and my published book, Pinterest boards, ChatGPT prompts like “romanticize my monday,” and a Bollywood shelf (Yeh Jawaani Hai Deewani, Jab We Met). Business frameworks by day, mood boards and pop culture by night.', 'creative range'],
+    phone: ['utility arsenal · apple', 'The ecosystem, in my hand', 'Same ecosystem as everything else in here. Netflix, Spotify, Pinterest, Duolingo: the apps I live in are the brands I study.', 'built for execution'],
+    headphones: ['cultural intuition · spotify', 'Mood curation', 'AirPods Max for the execution, Spotify for the culture. I understand how media shapes emotion and identity, and I put four years of my own listening into a SQL warehouse to see it.', 'trend fluency'],
+    nb1: ['utility arsenal · erin condren', 'Tactile time architecture', 'I balance digital systems with paper planning. Every class gets handwritten notes: attention to detail, time management, visual organization.', 'structured thinking'],
+    nb2: ['utility arsenal · erin condren', 'Tactile time architecture', 'Paper next to digital, on purpose. Planning by hand is how structure becomes visible.', 'structured thinking'],
+    stanley: ['cultural intuition · stanley', 'High-visibility cultural currency', 'I participate in modern consumer phenomena firsthand. I understand hype cycles, community trends and lifestyle branding because I live in them.', 'trend-literate'],
+    sweater: ['visual identity · ralph lauren', 'Contextual practicality', 'Pink Ralph Lauren cable knit, because I get cold easily. Designed for the real environment, without giving up the palette: the same blush, cream and burgundy as everything else in here.', 'soft luxury'],
+    wallet: ['visual identity · louis vuitton', 'Soft luxury, real loyalty loops', 'A raspberry LV Victorine holding a Medici punch card: buy 10, get 1 free. I understand retail habits and loyalty loops because I’m inside them.', 'consumer insight'],
+    giftcards: ['the voice', 'Self-aware consumer realness', '“3 cards. 0 returns made on time.” I know retail friction from the customer side, and I can laugh about it.', 'high EQ'],
+    bear: ['community & bond', 'Grounded in family and memory', 'T.D., named after Teddy Duncan from Good Luck Charlie: the first gift I ever bought my little sister, Amaira. However big the ambition gets, my values stay rooted here.', 'loyalty'],
+    cards: ['community & bond', 'Emotional authenticity', 'Amaira’s handmade cards, and her essay “My Lucky Charm.” The strongest brand equity comes from love, memory and real human bonds.', 'empathy']
+};
+let brandLens = false;
+try { brandLens = localStorage.getItem('brand-lens') === '1'; } catch {}
+const brandCard = id => {
+    const b = BRAND[id]; if (!b) return '';
+    return `<aside class="brand-card" aria-label="Brand teardown"><p class="mono bc-k">✦ brand teardown · ${b[0]}</p><p class="bc-sig"><span class="mono">the signal</span>${b[1]}</p><p class="bc-body">${b[2]}</p><p class="mono bc-attr">core attribute: <b>${b[3]}</b></p></aside>`;
+};
+{
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sound-btn lens-btn mono';
+    const sync = () => { b.textContent = brandLens ? '✦ brand lens on' : '✦ brand lens'; b.setAttribute('aria-pressed', brandLens); b.classList.toggle('on', brandLens); };
+    b.onclick = () => {
+        brandLens = !brandLens; sync();
+        try { localStorage.setItem('brand-lens', brandLens ? '1' : '0'); } catch {}
+        toast(brandLens ? 'brand lens on. open the macbook, the stanley, the wallet, T.D.… every one is a proof point.' : 'brand lens off. back to just my stuff.');
+        if (sheet.open && curItem) { sheetBody.querySelector('.brand-card')?.remove(); if (brandLens) sheetBody.insertAdjacentHTML('afterbegin', brandCard(curItem.id)); }
+    };
+    sync(); document.querySelector('header.top').appendChild(b);
+}
+
 function pickUp(it) {
     SFX.item(it.id);
     curItem = it;
     snoop(it.id);
     sheetLabel.textContent = it.name;
     sheetBody.innerHTML = typeof it.open === 'function' ? it.open() : (VIEWS[it.open] || (() => ''))();
+    if (brandLens) sheetBody.insertAdjacentHTML('afterbegin', brandCard(it.id));
     if (!sheet.open) { opener = document.activeElement; sheet.showModal(); }
     sheet.scrollTop = 0;
     (AFTER[typeof it.open === 'function' ? it.id : it.open] || (() => {}))();
@@ -1162,10 +1198,20 @@ const DECK = [
         list: ['The work: four chargers, every single one packed. Still always one knot.', 'The mind: three weeks in, still on chapter one of the rom-com.', 'The heart: the car keys, and the truth about my driving.', 'The look: a backup lipstick, because dry lips, always.', 'The catch-all pouch: pads (and Cadence, the period app I built), ideas for soon, receipts, one speeding ticket.'] },
     { k: '05 · the psychology', h: 'Designed with psychology, <em>not just pixels.</em>',
         grid: [['?', 'curiosity gap', 'a closed bag begs to be opened. nobody needs to be told to pull a zipper.', '', '#F4A7B9'], ['↓', 'progressive disclosure', 'one zipper at a time, so it’s never fifty things at once.', '', '#D9C8F0'], ['✓', 'goal gradient', 'a “things snooped” counter pulls you toward the end.', '', '#F8E7A9'], ['♡', 'voice', 'every line sounds like me, so you remember me.', '', '#CDE6D0']] },
-    { k: '06 · the build', h: 'Built like a product, <em>not a template.</em>', list: ['Plain HTML, CSS and JavaScript. No framework, no build step.', 'Data-driven: every thing in the bag is one entry in a single file. Adding something new is one object.', 'Accessible by default: native dialogs, keyboard focus everywhere, a reduced-motion fallback for every animation, AA contrast.', 'Live data: Austin weather and a real clock on my phone. Every sound is synthesized in the browser, no audio files.'] },
-    { k: '07 · the trade-offs', h: 'What I chose, <em>and what it cost.</em>',
+    { k: '06 · the brand wheel', h: 'Eight slices, <em>one brand.</em>', sub: 'every object, color, line of copy and interaction in this bag is a proof point.',
+        wheel: [['1', 'core purpose', 'empathy-driven strategy'], ['2', 'visual identity', 'blush, cream & gold'], ['3', 'utility arsenal', 'samsonite & the apple ecosystem'], ['4', 'dual brain', 'MIS + psychology'],
+            ['5', 'the voice', 'playful self-awareness'], ['6', 'tactile UX', 'unzip it, pull it, flip it'], ['7', 'cultural intuition', 'stanley, spotify, pinterest, bollywood'], ['8', 'community & bond', 'T.D., amaira, medici & mozart’s']] },
+    { k: '07 · the arsenal', h: 'High utility meets <em>cultural currency.</em>',
+        table: [['Samsonite backpack', 'industrial utility & durability', 'built for long days between class, coffee shops and meetings'], ['Stanley', 'high-visibility cultural currency', 'i understand hype cycles because i live in them'], ['Erin Condren', 'tactile time architecture', 'paper planning next to digital systems'], ['Apple ecosystem', 'integrated execution platform', 'tech is a creative extension, not a chore'], ['Ralph Lauren cable knit', 'contextual practicality', 'i design for the real environment (i get cold easily)']],
+        head: ['the item', 'the signal', 'what it proves'] },
+    { k: '08 · the synthesis', h: '“A highly organized, trend-literate strategist who bridges <em>technical efficiency with aesthetic sophistication.</em>”',
+        swatches: [['#FAF1EF', 'warm cream'], ['#F2C6C8', 'muted rose'], ['#F4A7B9', 'blush'], ['#76344E', 'soft burgundy'], ['#D9A441', 'gold']],
+        sub: 'functional utility (samsonite, apple, erin condren) + cultural currency (stanley, spotify, soft-pink luxury). soft luxury that feels approachable, never cold.' },
+    { k: '09 · the build', h: 'Built like a product, <em>not a template.</em>', list: ['Plain HTML, CSS and JavaScript. No framework, no build step.', 'Data-driven: every thing in the bag is one entry in a single file. Adding something new is one object.', 'Accessible by default: native dialogs, keyboard focus everywhere, a reduced-motion fallback for every animation, AA contrast.', 'Live data: Austin weather and a real clock on my phone. Every sound is synthesized in the browser, no audio files.'] },
+    { k: '10 · the trade-offs', h: 'What I chose, <em>and what it cost.</em>',
+        head: ['chose', 'instead of', 'why', 'the cost'],
         table: [['Hand-drawn SVG', 'stock photos or 3D', 'it’s mine, it scales, it’s on brand', 'hours per item'], ['One sheet that changes', 'separate pages', '“back” lands right where you were', 'one big script'], ['Depth', 'more items, each one shallower', 'every item has its own interaction, so people stay and explore', '~900 KB of code; next, load each item on demand']] },
-    { k: '08 · what’s next', h: 'Shipped in three days. <em>Measured next.</em>', stats: [['221', 'commits'], ['3', 'days'], ['51', 'things'], ['4', 'zippers']],
+    { k: '11 · what’s next', h: 'Shipped in three days. <em>Measured next.</em>', stats: [['221', 'commits'], ['3', 'days'], ['51', 'things'], ['4', 'zippers']],
         list: ['North star: résumé opens + “let’s connect” taps per visit.', 'First test: does opening the work pocket first lead to more résumé opens than opening the heart pocket first?', 'Privacy-friendly analytics, so I measure the bag without tracking the people in it.'] },
     { k: 'thank you', h: 'Thanks for going through <em>my bag.</em>', sub: 'that’s kind of personal, but i’ll allow it.', cls: 'cover',
         links: [['My résumé', 'https://suhanitiwari.com/resume'], ['suhanitiwari.com', 'https://suhanitiwari.com'], ['LinkedIn', 'https://www.linkedin.com/in/suhxnitiwari'], ['Say hi ✉', 'mailto:suhanitiwari@utexas.edu']] }
@@ -1175,7 +1221,9 @@ const slideHTML = (d, n) => `<section class="sl${d.cls ? ' sl-' + d.cls : ''}" d
     ${d.stats ? `<div class="sl-stats">${d.stats.map(([v, l]) => `<span><b>${v}</b>${l}</span>`).join('')}</div>` : ''}
     ${d.grid ? `<div class="sl-grid">${d.grid.map(([i, t, q, x, c]) => `<div style="--c:${c}"><b>${i}</b><strong>${t}</strong><span>${q}</span>${x ? `<small>${x}</small>` : ''}</div>`).join('')}</div>` : ''}
     ${d.list ? `<ul class="sl-list">${d.list.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
-    ${d.table ? `<table class="sl-table"><thead><tr><th>chose</th><th>instead of</th><th>why</th><th>the cost</th></tr></thead><tbody>${d.table.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>` : ''}
+    ${d.wheel ? `<ol class="sl-wheel">${d.wheel.map(([n, t, x]) => `<li><b>${n}</b><strong>${t}</strong><span>${x}</span></li>`).join('')}</ol>` : ''}
+    ${d.swatches ? `<div class="sl-sw">${d.swatches.map(([c, n]) => `<span><i style="background:${c}"></i>${n}</span>`).join('')}</div>` : ''}
+    ${d.table ? `<table class="sl-table"><thead><tr>${d.head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${d.table.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>` : ''}
     ${d.links ? `<div class="sl-links">${d.links.map(([t, h]) => `<a href="${h}" target="_blank" rel="noopener">${t} ↗</a>`).join('')}</div>` : ''}
     ${d.foot ? `<p class="sl-foot">${d.foot}</p>` : ''}
 </section>`;
