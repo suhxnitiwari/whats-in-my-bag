@@ -215,6 +215,7 @@ window.ITEMS = [
                 <button type="button" class="study-hp" id="study-hp" aria-label="Put my headphones on me">${ITEMS_HP_ART()}</button>
             </div>
             <p class="hand study-say" id="study-say">i’m studying. drag my headphones onto me.</p>
+            <div class="ari"><button type="button" class="btn solid" id="ari-play" aria-pressed="false">♪ play a little ariana</button><p class="mono ari-now" id="ari-now" aria-live="polite"></p></div>
             <div class="row"><a class="btn solid" href="https://listening-history.onrender.com/" target="_blank" rel="noopener">Open Listening History ↗</a><a class="btn" href="https://github.com/suhxnitiwari/listening-history" target="_blank" rel="noopener">Code ↗</a></div>`
     },
     {
@@ -780,10 +781,10 @@ window.KEYRING = big => `<svg viewBox="0 0 200 252" class="keyring${big ? ' big'
 window.CARDS = [
     { kind: 'id', title: 'UT Austin student ID', big: 'Suhani Tiwari', sub: 'Management Information Systems + Psychology', metric: 'McCombs School of Business · Class of 2027 · 3.5 GPA', body: 'BBA in MIS and a BA in Psychology, with minors in Marketing and Educational Psychology. Two McCombs scholarships this year.' },
     { kind: 'dl', title: 'Driver license', big: 'Suhani Tiwari', metric: 'Class: C (for cute)<br>Endorsements: none, yet', body: 'Height: 5′6″.<br>Weight: don’t ask.<br>Eyes: dreamy.<br>Hair: dark, long, and always done.<br>Address: wouldn’t you wanna knowwww.<br>DOB: a lady never tells.<br>Driving skill: see my car keys.' },
-    { kind: 'bofa', title: 'Bank of America credit card', big: 'Recent transactions', metric: 'Westman Atelier · Lancôme · Staples · Target · Bath & Body Works', body: 'Glögg (obviously). Lash Idôle. A 25-pack of Mildliners. InkJoy gel pens. One more Cozy Vanilla Almond PocketBac. Everything in this bag, basically.' },
+    { kind: 'bofa', title: 'Bank of America credit card', big: 'Recent transactions', metric: 'Coffee · coffee · Westman Atelier · coffee · Target · coffee', body: 'Mostly vanilla lattes. Also Glögg (obviously), Lash Idôle, and a 25-pack of Mildliners. But mostly vanilla lattes.' },
     { kind: 'bofadebit', title: 'Bank of America debit card', big: 'Balance', metric: 'Balance: none of your business', body: 'The red one. For when the credit cards need a break.' },
     { kind: 'amexgold', title: 'Amex Delta SkyMiles Gold', big: 'Where the miles went', metric: 'Thailand + Malaysia 2010 · Switzerland, France, Italy 2016 · Mexico 2020', body: 'The stamps are in my passport.', go: 'passport' },
-    { kind: 'amexblue', title: 'Amex Blue Cash Everyday', big: 'The everyday card', metric: 'Coffee runs · Target trips · gas for the car the curb keeps attacking', body: 'Not pictured: the receipts.' }
+    { kind: 'amexblue', title: 'Amex Blue Cash Everyday', big: 'The everyday card', metric: 'Sushi · tacos · pasta · ramen · brunch · repeat', body: 'My love language is good food, and this card has proof.' }
 ];
 
 /* my pencil pouch: every pen is a tool I actually use */

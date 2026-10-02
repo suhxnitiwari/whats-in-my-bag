@@ -32,24 +32,35 @@ const SFX = (() => {
         g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .006); g.gain.exponentialRampToValueAtTime(.0008, at + dur);
         o.connect(g).connect(c.destination); o.start(at); o.stop(at + dur + .02);
     };
+    // a zipper run: warm filtered noise chopped at the rate the teeth pass, so it reads as "zzzip" and not as static
+    const rasp = (c, at, dur, f0, f1, rate, vol, rate1 = rate) => {
+        const src = c.createBufferSource(), f = c.createBiquadFilter(), am = c.createGain(), g = c.createGain(), lfo = c.createOscillator(), depth = c.createGain();
+        src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = 1.1;
+        f.frequency.setValueAtTime(f0, at); f.frequency.exponentialRampToValueAtTime(f1, at + dur);
+        lfo.type = 'triangle'; lfo.frequency.setValueAtTime(rate, at); lfo.frequency.linearRampToValueAtTime(rate1, at + dur);
+        am.gain.value = .55; depth.gain.value = .45; lfo.connect(depth).connect(am.gain);
+        g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + Math.min(.03, dur * .3)); g.gain.setValueAtTime(vol, at + dur * .75); g.gain.linearRampToValueAtTime(0, at + dur);
+        src.connect(f).connect(am).connect(g).connect(c.destination);
+        src.start(at, Math.random() * .9); lfo.start(at); src.stop(at + dur + .02); lfo.stop(at + dur + .02);
+    };
+    let alarm = null;
     const last = new Map();
     return {
         get on() { return on; },
         set(v) { on = v; try { localStorage.setItem('bag-sound', v ? 'on' : 'off'); } catch {} if (!v && ctx) ctx.suspend(); },
-        // zipper teeth: one click per bit the pull travels, so dragging it slowly clicks slowly. opening sounds a touch brighter than closing.
+        // zipper teeth: a soft rasp that runs as fast as the pull moves, so dragging it slowly purrs slowly. opening sounds a touch brighter than closing.
         teeth(key, t) {
             const prev = last.get(key); last.set(key, t);
             if (prev === undefined) return;
             const n = Math.min(14, Math.floor(Math.abs(t - prev) / .011));
             const c = n && ac(); if (!c) return;
-            const up = t > prev, now = c.currentTime;
-            for (let k = 0; k < n; k++) burst(c, now + k * (.045 / n) + Math.random() * .003, .012, (up ? 3400 : 2700) + Math.random() * 900, 3.5, .16);
+            const up = t > prev;
+            rasp(c, c.currentTime, .07, up ? 1050 : 850, up ? 1250 : 950, Math.max(18, n / .05), .1);
         },
-        // a whole zip in one go (for pouches that don't track the pull)
+        // a whole zip in one go (for pouches that don't track the pull): "zzzip", speeding up as it goes
         zip(open = true, dur = .5) {
             const c = ac(); if (!c) return;
-            const n = Math.round(dur * 70), now = c.currentTime;
-            for (let k = 0; k < n; k++) burst(c, now + k * dur / n + Math.random() * .004, .012, (open ? 2900 : 2400) + k * (open ? 18 : -10) + Math.random() * 700, 3.5, .14);
+            rasp(c, c.currentTime, dur, open ? 850 : 1250, open ? 1400 : 800, open ? 38 : 60, .12, open ? 75 : 45);
         },
         // something landing on the desk: a soft thunk, lower for bigger things
         land(size = 10) {
@@ -98,6 +109,103 @@ const SFX = (() => {
             const c = ac(); if (!c) return;
             burst(c, c.currentTime, .008, 3200, 5, .05);
         },
+        // a gel pen sliding out of the pouch onto the desk: a little plastic clack (softer going back in)
+        pen(out = true) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime + Math.random() * .015, f = 2600 + Math.random() * 900;
+            burst(c, t, .02, out ? f : f * .8, 4, out ? .09 : .05); tone(c, t, .045, out ? 1150 : 900, 650, out ? .035 : .02, 'triangle');
+        },
+        // a page turning: a papery swoosh that brightens as the leaf lifts, then a soft flap as it lands (the cover is heavier)
+        page(cover = false) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime, d = cover ? .38 : .3;
+            const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+            src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.Q.value = .9;
+            f.frequency.setValueAtTime(cover ? 500 : 900, t); f.frequency.exponentialRampToValueAtTime(cover ? 1800 : 3600, t + d * .7); f.frequency.exponentialRampToValueAtTime(1400, t + d);
+            g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.07, t + d * .25); g.gain.linearRampToValueAtTime(.13, t + d * .65); g.gain.exponentialRampToValueAtTime(.0008, t + d);
+            src.connect(f).connect(g).connect(c.destination); src.start(t, Math.random() * .9); src.stop(t + d + .02);
+            burst(c, t + d * .62, .05, 5200 + Math.random() * 1500, 2.5, .05);
+            burst(c, t + d, .07, cover ? 300 : 700, 1, cover ? .18 : .08);
+        },
+        // a door reader: two quick high beeps, then the lock motor clicking open
+        reader() {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime;
+            tone(c, t, .09, 2350, 2350, .09, 'square'); tone(c, t + .13, .12, 2350, 2350, .09, 'square');
+            burst(c, t + .32, .03, 1200, 2, .16); tone(c, t + .32, .08, 160, 90, .16); burst(c, t + .4, .02, 3400, 5, .1);
+        },
+        // contactless: the little approved chime
+        pay() {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime;
+            tone(c, t, .12, 1568, 1568, .08); tone(c, t + .11, .3, 2093, 2093, .08);
+        },
+        // the comb catching on a knot: a tight little tug
+        snag() {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime;
+            tone(c, t, .14, 260, 150, .12, 'sawtooth'); burst(c, t, .08, 900, 2.5, .12); burst(c, t + .05, .05, 2200, 4, .06);
+        },
+        // a coin-ish scratch on foil: a short gritty hiss
+        scratch() {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime;
+            burst(c, t, .05, 4500 + Math.random() * 2500, 1.2, .07); burst(c, t + .015, .03, 2200 + Math.random() * 800, 2, .04);
+        },
+        // glasses: the two hinges clicking open, then a soft slide onto my face (and the reverse)
+        glasses(on = true) {
+            const c = ac(); if (!c) return;
+            const t = c.currentTime, k = on ? 1 : .85;
+            burst(c, t, .014, 3800 * k, 6, .14); tone(c, t, .03, 1700 * k, 1000, .04, 'square');
+            burst(c, t + .13, .014, 4100 * k, 6, .12); tone(c, t + .13, .03, 1800 * k, 1000, .035, 'square');
+            burst(c, t + .24, .2, on ? 1600 : 1300, .8, .035);
+        },
+        // my car, from the fob: the BMW door locks, the tailgate, and the horn (sorry, Austin)
+        fob(kind) {
+            const c = ac(); if (!c) return false;
+            const t = c.currentTime;
+            // a door lock actuator: a low thunk with a plastic clack on top
+            const thunk = (at, f, vol) => { tone(c, at, .09, f, f * .55, vol); burst(c, at, .035, 1500, 1.8, vol * .55); burst(c, at + .01, .02, 3800, 5, vol * .3); };
+            // the horn: two buzzy notes a third apart through a lowpass, like the real dual-tone one
+            const horn = (at, dur, vol, out) => {
+                const f = c.createBiquadFilter(), g = c.createGain();
+                f.type = 'lowpass'; f.frequency.value = 1800; f.Q.value = 1.4;
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .012); g.gain.setValueAtTime(vol, at + dur - .025); g.gain.linearRampToValueAtTime(0, at + dur);
+                [415, 523].forEach(fr => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = fr; o.connect(f); o.start(at); o.stop(at + dur + .02); });
+                f.connect(g).connect(out || c.destination);
+            };
+            if (kind === 'lock') {
+                [0, .035, .06, .09].forEach((d, k) => thunk(t + d, 150 - k * 12, .26));
+                horn(t + .32, .06, .1);
+            } else if (kind === 'unlock') {
+                [0, .03].forEach((d, k) => thunk(t + d, 200 + k * 25, .2));
+                [.36, .39].forEach((d, k) => thunk(t + d, 190 + k * 25, .16));
+            } else if (kind === 'trunk') {
+                // the latch pops, then the power tailgate hums up on its motor
+                tone(c, t, .14, 95, 45, .32); burst(c, t, .06, 700, 1, .2); burst(c, t + .02, .03, 3000, 4, .12);
+                const o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain(), at = t + .25, dur = 2.2;
+                o.type = 'sawtooth'; o.frequency.setValueAtTime(110, at); o.frequency.linearRampToValueAtTime(150, at + .3); o.frequency.linearRampToValueAtTime(140, at + dur);
+                f.type = 'bandpass'; f.frequency.value = 520; f.Q.value = 2.2;
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.09, at + .25); g.gain.setValueAtTime(.09, at + dur - .3); g.gain.linearRampToValueAtTime(0, at + dur);
+                o.connect(f).connect(g).connect(c.destination); o.start(at); o.stop(at + dur + .02);
+                rasp(c, at, dur, 380, 420, 70, .025);
+                thunk(t + .25 + dur, 120, .12);
+            } else if (kind === 'panic') {
+                // press it again to make it stop
+                if (alarm) { this.hush(); return false; }
+                const out = c.createGain(); out.connect(c.destination); alarm = out;
+                for (let k = 0; k < 14; k++) horn(t + k * .55, .32, .17, out);
+                setTimeout(() => { if (alarm === out) alarm = null; }, 14 * 550);
+                return true;
+            }
+            return false;
+        },
+        hush() {
+            if (!alarm || !ctx) { alarm = null; return; }
+            const a = alarm; alarm = null;
+            a.gain.setValueAtTime(a.gain.value, ctx.currentTime); a.gain.linearRampToValueAtTime(0, ctx.currentTime + .06);
+            setTimeout(() => a.disconnect(), 120);
+        },
         // every thing has its own little sound when you pick it up
         item(id) {
             const c = ac(); if (!c) return;
@@ -128,7 +236,8 @@ const SFX = (() => {
                 stanley: () => { ring(t, 1180, .12, .9); ring(t + .16, 1560, .06, .6); },
                 penpouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
                 pouch: () => { click(t, 3000, .2); click(t + .11, 3800, .17); },
-                laptop: () => { for (let k = 0; k < 5; k++) click(t + k * .07 + r() * .02, 1900 + r() * 900, .1); },
+                // the lid lifting (a soft hinge swish), then the screen waking up with a gentle two-note chime
+                laptop: () => { sweep(t, .3, 500, 1400, .05, .8); [[523.3, 0], [784, .09], [1046.5, .09]].forEach(([f, d]) => tone(c, t + .26 + d, 1.1, f, f, .05, 'sine')); },
                 'makeup-pouch': () => this.zip(true, .28),
                 'skin-pouch': () => this.zip(true, .28),
                 sunglasses: () => click(t, 2400, .18),
@@ -727,7 +836,7 @@ sheetBody.addEventListener('click', e => {
     e.preventDefault();
     openWeb(a.href, (a.querySelector('b') || a).textContent.trim().slice(0, 60));
 });
-sheet.addEventListener('close', () => { navStack.length = 0; curItem = null; });
+sheet.addEventListener('close', () => { SFX.hush(); navStack.length = 0; curItem = null; });
 
 function pickUp(it) {
     SFX.item(it.id);
@@ -1174,6 +1283,7 @@ const bookHTML = (cover, say) => `
             <div class="bk-open" aria-live="polite">
                 <div class="bk-page bk-l"><div class="bk-art"><img id="bk-img" alt=""></div><span class="bk-pg l mono" id="bk-pl"></span></div>
                 <div class="bk-page bk-r"><p class="bk-ch" id="bk-ch"></p><h3 id="bk-t"></h3><p class="bk-a" id="bk-a"></p><p class="bk-s" id="bk-s"></p><span class="bk-pg r mono" id="bk-pr"></span></div>
+                <button type="button" class="bk-corner l" id="bk-cl" aria-label="Turn back a page" hidden></button><button type="button" class="bk-corner r" id="bk-cr" aria-label="Turn the page"></button>
                 <div class="bk-leaf" id="bk-leaf"></div>
             </div>
         </div>
@@ -1200,17 +1310,53 @@ function chapterBook(list, bye) {
         // real page numbers: even on the left, odd on the right
         $('#bk-pl').textContent = 2 * (ch + 1); $('#bk-pr').textContent = 2 * (ch + 1) + 1;
         requestAnimationFrame(fitSyn);
-        $('#rcx-prev').hidden = ch === 0;
+        $('#rcx-prev').hidden = ch === 0; $('#bk-cl').hidden = ch === 0;
         btn.textContent = ch === list.length - 1 ? 'Close it' : 'next chapter ›';
     };
-    const turn = dir => { leaf.className = 'bk-leaf ' + (dir > 0 ? 'fwd' : 'back'); void leaf.offsetWidth; leaf.classList.add('go'); setTimeout(fill, reduce ? 0 : 280); };
+    const turn = dir => { SFX.page(); leaf.className = 'bk-leaf ' + (dir > 0 ? 'fwd' : 'back'); void leaf.offsetWidth; leaf.classList.add('go'); setTimeout(fill, reduce ? 0 : 280); };
     const next = () => {
-        if (!bk.classList.contains('open')) { bk.classList.add('open'); ch = 0; return fill(); }
-        if (ch === list.length - 1) { bk.classList.remove('open'); ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast(bye); }
+        if (!bk.classList.contains('open')) { SFX.page(true); bk.classList.add('open'); ch = 0; return fill(); }
+        if (ch === list.length - 1) { SFX.page(true); bk.classList.remove('open'); ch = -1; $('#rcx-prev').hidden = true; btn.textContent = 'Open it'; return toast(bye); }
         ch++; turn(1);
     };
     btn.onclick = next; $('#bk-closed').onclick = next;
+    // or grab the bottom corners like a real book: bottom right turns forward, bottom left turns back
+    $('#bk-cr').onclick = next;
+    $('#bk-cl').onclick = () => { if (ch > 0) { ch--; turn(-1); } };
     $('#rcx-prev').onclick = () => { if (ch > 0) { ch--; turn(-1); } };
+}
+// the two cards that get tapped the most: the amex for good food, the bofa for coffee (way too often)
+const TAPS = {
+    amexblue: {
+        btn: 'Tap it for dinner 🍽', head: 'recently, at restaurants:',
+        buys: [['🍣', 'sushi, the good kind', 38.4], ['🌮', 'tacos (again)', 14.75], ['🍝', 'pasta, extra parmesan', 26.1], ['🍜', 'ramen on a rainy day', 18.6], ['🥞', 'brunch that turned into lunch', 31.2], ['🍛', 'butter chicken + garlic naan', 24.9], ['🍕', 'one slice. fine, two.', 9.5], ['🥗', 'a salad (to feel something)', 16.25]],
+        say: n => ['i love good food. this is a love letter.', 'worth it.', 'the cashback is basically paying for itself', 'i’m a foodie, it’s a personality trait', 'okay one more place'][n % 5]
+    },
+    bofa: {
+        btn: 'Tap it for coffee ☕', head: 'this week, coffee:',
+        buys: [['☕', 'vanilla latte', 6.25], ['🧋', 'iced vanilla latte', 6.75], ['☕', 'vanilla latte, oat milk', 6.95], ['🥐', 'vanilla latte + a croissant', 10.5], ['☕', 'another vanilla latte', 6.25]],
+        say: n => n < 3 ? 'it’s a need, not a want' : n < 6 ? `coffee #${n + 1}. this week.` : n < 9 ? 'the barista said “the usual?” and i felt seen' : 'okay this is way too often. anyway, one more.'
+    }
+};
+function tapToPay(detail, T) {
+    detail.insertAdjacentHTML('beforeend', `<div class="tap">
+        <div class="tap-term" aria-hidden="true"><span class="tap-scr mono" id="tap-scr">tap card</span><span class="tap-ico">)))</span></div>
+        <button class="btn solid" type="button" id="tap-go">${T.btn}</button>
+        <p class="mono tap-head">${T.head}</p><ul class="tap-log" id="tap-log" aria-live="polite"></ul><p class="m tap-sum" id="tap-sum"></p></div>`);
+    let n = 0, total = 0, busy = false;
+    $('#tap-go').onclick = () => {
+        if (busy) return; busy = true;
+        const [ico, what, amt] = T.buys[n % T.buys.length], term = detail.querySelector('.tap'), scr = $('#tap-scr');
+        term.classList.remove('paid'); term.classList.add('tapping'); scr.textContent = '•••';
+        setTimeout(() => {
+            term.classList.remove('tapping'); term.classList.add('paid'); scr.textContent = 'approved ✓'; SFX.pay();
+            total += amt;
+            const li = document.createElement('li'); li.innerHTML = `<span>${ico} ${what}</span><b>$${amt.toFixed(2)}</b>`; $('#tap-log').prepend(li);
+            $('#tap-sum').textContent = `${n + 1} tap${n ? 's' : ''} · $${total.toFixed(2)} total`;
+            toast(T.say(n)); n++;
+            setTimeout(() => { scr.textContent = 'tap card'; term.classList.remove('paid'); busy = false; }, reduce ? 0 : 900);
+        }, reduce ? 0 : 650);
+    };
 }
 const VIEWS = {
     jewelry: () => `
@@ -1358,7 +1504,8 @@ const VIEWS = {
                 <text x="16" y="140" font-family="Caveat" font-size="12" fill="#8E2A24">ouch.</text></svg></span>
         </button>
         <p class="hand tk-say" id="tk-say">tap it to flip it over</p>
-        <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>`,
+        <p class="note">see also: my car keys, right next to it in the don’t-want-to-deal-with-it pocket. and the curb. the curb knows what it did.</p>
+        <figure class="tk-pic"><img src="assets/img/baby-trike.jpg" alt="Me as a toddler, grinning on a red and yellow trike"><figcaption class="hand">exhibit A: she’s always gone skrrttt skrrtttt 🏎️💨</figcaption></figure>`,
     giftcards: () => `
         <h2>some <em>gift cards</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(store credit, technically)</span></h2>
         <p class="note">i online shop. i mean to return things. then the return window closes while the box sits by my door, and i get store credit instead. tap a card to flip it.</p>
@@ -1369,22 +1516,32 @@ const VIEWS = {
                     <span class="gc-stripe"></span>
                     <span class="gc-bk"><b>${g.name.toUpperCase()} · MERCHANDISE CREDIT</b>
                         <small>issued for: ${g.why}</small>
-                        <span class="gc-scratch" data-scratch><span class="gc-bal">balance: ${g.bal}</span><span class="gc-foil">scratch for balance ✦</span></span>
+                        <span class="gc-scratch" data-scratch><span class="gc-bal">balance: ${g.bal}</span><canvas class="gc-foil" aria-label="scratch-off foil: rub it to see the balance"></canvas></span>
                         <span class="gc-bar"></span><small class="mono">•••• •••• •••• ${g.last}</small></span>
                 </span>
             </button>`).join('')}</div>
         <p class="hand gc-tally" id="gc-tally">3 cards. 0 returns made on time.</p>`,
     pads: () => `
         <h2><em>pads</em></h2>
-        <div class="big-obj" style="max-width:220px">${ITEMS.find(i => i.id === 'pads').art}</div>
         <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>
-        <div class="pad-note">
-            <p>hey girl ♡</p>
-            <p>if you’re on your period right now, take one. take two. i hope you’re taking care of yourself: drink some water, eat something warm, rest if you can, and be a little extra nice to you today.</p>
-            <p>you deserve to feel better. i hope you do ♡</p>
-            <p class="pad-sig">— suhani</p>
+        <div class="pd" id="pd">
+            <button type="button" class="pd-pad" id="pd-pad" aria-label="A wrapped pad. Open it">
+                <span class="pd-inside" aria-hidden="true"><svg viewBox="0 0 120 200"><path d="M42 8 h36 q14 0 14 22 v32 q22 4 22 18 q0 14 -22 18 v62 q0 32 -32 32 q-32 0 -32 -32 v-62 q-22 -4 -22 -18 q0 -14 22 -18 v-32 q0 -22 14 -22z" fill="#FFFDF8" stroke="#3A2626" stroke-width="2.5"/><path d="M60 26 q24 0 24 40 v74 q0 34 -24 34 q-24 0 -24 -34 v-74 q0 -40 24 -40z" fill="#E9DDF7"/><path d="M60 34 q18 0 18 34 v70 q0 28 -18 28 q-18 0 -18 -28 v-70 q0 -34 18 -34z" fill="none" stroke="#B9A6E3" stroke-width="1.6" stroke-dasharray="3 3"/></svg></span>
+                <span class="pd-back" aria-hidden="true"></span>
+                <span class="pd-flap" aria-hidden="true"><span class="pd-tab">peel</span></span>
+            </button>
+            <button type="button" class="pd-note" id="pd-note" aria-expanded="false" aria-label="A little folded note taped to the pad. Unfold it">
+                <span class="pd-folded" aria-hidden="true"><span class="pd-tape"></span>♡</span>
+                <span class="pd-open">
+                    <span class="pd-l pd-hi">hey girl ♡</span>
+                    <span class="pd-l">if you’re on your period right now, take one. take two. i hope you’re taking care of yourself: drink some water, eat something warm, rest if you can, and be a little extra nice to you today.</span>
+                    <span class="pd-l">you deserve to feel better. i hope you do ♡</span>
+                    <span class="pd-l pd-sig">— suhani</span>
+                </span>
+            </button>
         </div>
-        <p class="pad-more">i care about this so much i built an app for it: <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener">Cadence ↗</a>, a free, private period app for your first one and every one after.</p>`,
+        <p class="hand pd-say" id="pd-say">there’s a little note taped to it. unfold it first.</p>
+        <p class="pad-more" id="pd-more" hidden>i care about this so much i’m working on an app for it: <a href="https://suhxnitiwari.github.io/cadence-period-tracker/" target="_blank" rel="noopener">Cadence ↗</a>, a free, private period app for your first one and every one after.</p>`,
 
     brushes: () => `
         <h2>My <em>Morphe</em> brushes</h2>
@@ -1475,15 +1632,14 @@ const VIEWS = {
         <div class="solo">${ITEMS.find(i => i.id === 'scrunchies').art}</div>`,
     haircomb: () => `
         <h2>My <em>wide-tooth</em> comb</h2>
-        <p class="note">wide teeth, for long hair. drag it down through my hair.</p>
+        <p class="note">wide teeth, for long hair. drag it down through my hair. (it never works on the first try.)</p>
         <div class="hair" id="hair">
-            <img src="assets/img/me-hair-before.jpg" alt="My hair before combing: frizzy">
-            <img class="hair-after" id="hair-after" src="assets/img/me-hair-after.jpg" alt="My hair after combing: smooth waves">
-            <button type="button" class="hair-comb" id="hair-comb" aria-label="Comb my hair: drag down, or press to comb it all the way">${ITEMS.find(i => i.id === 'comb').art}</button>
-            <img class="hair-braid" src="assets/img/me-hair-braid.jpg" alt="My hair in one long braid" aria-hidden="true">
-            <span class="hair-tag mono" id="hair-tag">before</span>
+            <canvas id="hair-cv" role="img" aria-label="The back of my head: long dark hair, tangled"></canvas>
+            <button type="button" class="hair-comb" id="hair-comb" aria-label="Comb my hair: drag it down through my hair, or press Enter for one stroke">${ITEMS.find(i => i.id === 'comb').art}</button>
+            <span class="hair-tag mono" id="hair-tag">tangled</span>
+            <span class="hair-meter" aria-hidden="true"><i id="hair-bar"></i></span>
         </div>
-        <p class="pen-note" id="hair-note">before → after, one comb.</p>
+        <p class="pen-note" id="hair-note">drag the comb down through my hair. it’ll take a few strokes.</p>
         <div class="row" style="justify-content:center"><button type="button" class="btn solid" id="hair-braid" hidden>now braid it</button></div>`,
 
     bag: () => `
@@ -1593,10 +1749,23 @@ const VIEWS = {
 `,
 
     apartment: () => `
-        <div class="fob" style="width:110px">${SALTO_FOB}</div>
         <h2>My <em>apartment</em> fob</h2>
         <p class="note">this one i can handle.</p>
         <p>Address: wouldn’t you wanna knowwww.</p>
+        <div class="stats"><div><b>countless</b><span>times i’ve lost my keys</span></div><div><b>thrice</b><span>times i’ve gotten locked out</span></div><div><b>none</b><span>attempts to buy a keychain</span></div></div>
+        <div class="apt" id="apt">
+            <div class="apt-frame">
+                <div class="apt-in" aria-hidden="true"><img src="assets/img/room.jpg" alt=""></div>
+                <div class="apt-door" id="apt-door">
+                    <span class="apt-panel"></span><span class="apt-panel"></span>
+                    <span class="apt-num mono">4♡</span>
+                    <span class="apt-lock"><span class="apt-reader" id="apt-reader"><i></i></span><span class="apt-handle"></span></span>
+                </div>
+            </div>
+            <button type="button" class="apt-fob" id="apt-fob" aria-label="My fob: tap it on the reader">${SALTO_FOB}</button>
+            <div class="apt-walk" id="apt-walk" aria-hidden="true"><img class="aw-room" src="assets/img/room.jpg" alt="My room, from the doorway"><img class="aw-bed" src="assets/img/room-bed.jpg" alt="My princess bed, covered in stuffies"></div>
+        </div>
+        <p class="hand apt-say" id="apt-say">tap my fob on the reader by the handle</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="beep">Tap it on the reader</button></div>`,
 
     pencil: () => `
@@ -1606,11 +1775,19 @@ const VIEWS = {
         <div class="pad procreate-pad"><canvas id="pad-canvas" aria-label="Canvas: draw with my Apple Pencil"></canvas><span class="pad-hint" id="pad-hint">draw anything…</span><button type="button" class="pad-clear mono" id="pad-clear">clear</button></div>`,
 
     sketchbook: () => `
-        <div class="spread" id="spread">
-            <div class="l"><img id="art-img" src="" alt=""></div>
-            <div class="r"><h3 id="art-title"></h3><p id="art-note"></p><p class="mono" id="art-num" style="color:var(--muted)"></p></div>
+        <h2>My <em>sketchbook</em></h2>
+        <p class="note">strathmore mixed media. tap the cover to open it, then grab a bottom corner to turn the page.</p>
+        <div class="skb" id="skb">
+            <button type="button" class="skb-cover" id="skb-cover" aria-label="Open my sketchbook">${ITEMS.find(i => i.id === 'sketchbook').art}</button>
+            <div class="skb-open" id="skb-open">
+                <div class="skb-page l"><figure class="skb-art"><img alt=""><span class="skb-tape"></span></figure><p class="skb-t"></p><p class="skb-n"></p><span class="skb-pg mono"></span></div>
+                <span class="skb-spiral" aria-hidden="true"></span>
+                <div class="skb-page r"><figure class="skb-art"><img alt=""><span class="skb-tape"></span></figure><p class="skb-t"></p><p class="skb-n"></p><span class="skb-pg mono"></span></div>
+                <span class="skb-leaf" id="skb-leaf" aria-hidden="true"></span>
+                <button type="button" class="bk-corner l" id="skb-cl" aria-label="Turn back a page"></button><button type="button" class="bk-corner r" id="skb-cr" aria-label="Turn the page"></button>
+            </div>
         </div>
-        <div class="row" style="justify-content:space-between"><button class="btn" type="button" id="art-prev">← previous page</button><button class="btn solid" type="button" id="art-next">next page →</button></div>`,
+        <p class="hand skb-say" id="skb-say">tap the cover to open it</p>`,
 
     wallet: () => {
         // left panel and center panel, three slots each, like the real Victorine
@@ -1854,6 +2031,8 @@ const VIEWS = {
                 <button type="button" class="papp" data-ip="chatgpt"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><g fill="none" stroke="#111" stroke-width="2.2"><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(0 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(60 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(120 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(180 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(240 20 20)"/><ellipse cx="20" cy="15.5" rx="4.6" ry="7.4" transform="rotate(300 20 20)"/></g></svg></span>ChatGPT</button>
                 <button type="button" class="papp" data-ip="github"><span class="ic" style="background:#1B1F24"><svg viewBox="0 0 40 40"><path d="M20 8 a12 12 0 0 0 -3.8 23.4 c.6 .1 .8 -.3 .8 -.6 v-2.2 c-3.3 .7 -4 -1.4 -4 -1.4 -.6 -1.4 -1.3 -1.8 -1.3 -1.8 -1.1 -.7 .1 -.7 .1 -.7 1.2 .1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1 -.8 .4 -1.3 .8 -1.6 -2.7 -.3 -5.5 -1.3 -5.5 -5.9 0 -1.3 .5 -2.4 1.2 -3.2 -.1 -.3 -.5 -1.5 .1 -3.2 0 0 1 -.3 3.3 1.2 a11.5 11.5 0 0 1 6 0 c2.3 -1.5 3.3 -1.2 3.3 -1.2 .7 1.7 .2 2.9 .1 3.2 .8 .8 1.2 1.9 1.2 3.2 0 4.6 -2.8 5.6 -5.5 5.9 .4 .4 .8 1.1 .8 2.2 v3.3 c0 .3 .2 .7 .8 .6 A12 12 0 0 0 20 8z" fill="#fff"/></svg></span>GitHub</button>
                 <button type="button" class="papp" data-ip="canvas"><span class="ic" style="background:#E72429"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="6" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="31.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="27.8" r="1.8" fill="#fff"/><circle cx="20.0" cy="31.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="27.8" r="1.8" fill="#fff"/><circle cx="9.0" cy="20.0" r="1.8" fill="#fff"/><circle cx="12.2" cy="12.2" r="1.8" fill="#fff"/><circle cx="20.0" cy="9.0" r="1.8" fill="#fff"/><circle cx="27.8" cy="12.2" r="1.8" fill="#fff"/></svg></span>Canvas</button>
+                <button type="button" class="papp" data-ip="netflix"><span class="ic" style="background:#000"><svg viewBox="0 0 40 40"><path d="M13 8 h5 l4 14 v-14 h5 v24 h-5 l-4 -14 v14 h-5z" fill="#E50914"/></svg></span>Netflix</button>
+                <button type="button" class="papp" data-ip="prime"><span class="ic" style="background:#1A98FF"><svg viewBox="0 0 40 40"><text x="20" y="21" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-weight="700" font-size="10" fill="#fff">prime</text><path d="M11 25 q9 5 18 0" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M27 23.4 l2.6 1.4 -1.4 2.4" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Prime Video</button>
             </div>
             <div class="ipad-view" id="ipad-view" hidden></div>
         </div></div>
@@ -2078,41 +2257,169 @@ const AFTER = {
         const t = $('#rg-text'), btn = $('#rg-on');
         btn.onclick = () => {
             const on = t.classList.toggle('sharp');
+            SFX.glasses(on);
             btn.textContent = on ? 'Take them off' : 'Put them on';
             btn.setAttribute('aria-pressed', on);
             sheetBody.querySelector('.rg-big').classList.toggle('worn', on);
         };
     },
     haircomb: () => {
-        // drag the comb down: everything above it is combed, everything below is still frizz.
-        // the comb only goes one way: combed hair never frizzes back up
-        const hair = $('#hair'), comb = $('#hair-comb');
-        let done = false, drag = false, combed = 0;
-        const set = f => {
-            f = Math.max(combed, Math.max(0, Math.min(1, f)));
-            if (f > .97) f = 1;
-            combed = f;
-            hair.style.setProperty('--comb', f);
-            $('#hair-tag').textContent = f > .97 ? 'after' : f < .03 ? 'before' : 'combing…';
-            if (f > .97 && !done) { done = true; $('#hair-note').textContent = 'see? smooth. the comb stays in the bag.'; $('#hair-braid').hidden = false; }
+        // my hair, drawn strand by strand. every bit of it has its own tangle level; each stroke of the comb loosens whatever it passes through,
+        // but only once per stroke, so it takes a few passes (and the knots near the ends snag the comb and stop it cold).
+        const hair = $('#hair'), cv = $('#hair-cv'), g = cv.getContext('2d'), comb = $('#hair-comb'), say = $('#hair-note'), tag = $('#hair-tag'), bar = $('#hair-bar');
+        const COLS = 10, ROWS = 14, R = (() => { let x = 7; return () => (x = (x * 16807) % 2147483647) / 2147483647; })();
+        const T = [...Array(COLS)].map(() => [...Array(ROWS)].map((_, r) => Math.min(1, .5 + .5 * r / ROWS + R() * .12)));
+        const STR = [...Array(170)].map((_, k) => ({ x: .27 + .46 * (k / 169) + (R() - .5) * .02, len: .78 + R() * .16, ph: R() * 6.3, s: R() * 99, a: .5 + R(), c: ['#24150F', '#2E1B13', '#3A2318', '#452A1D'][k % 4], w: .9 + R() * 1.1 }));
+        const KNOTS = [...Array(10)].map(() => [.3 + R() * .4, .55 + R() * .35, 4 + R() * 5]);
+        let W = 0, H = 0, done = false, braided = false, braidP = 0, strokes = 0;
+        const tAt = (x, y) => { const c = Math.max(0, Math.min(COLS - 1, Math.floor(x / W * COLS))), r = Math.max(0, Math.min(ROWS - 1, Math.floor(y / H * ROWS))); return T[c][r]; };
+        const size = () => { const dpr = devicePixelRatio || 1; W = hair.clientWidth; H = hair.clientHeight; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); draw(); };
+        const scene = () => {
+            const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#F2D7BC'); bg.addColorStop(1, '#E2B99C'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+            const glow = g.createRadialGradient(W * .15, H * .32, 0, W * .15, H * .32, W * .6); glow.addColorStop(0, 'rgba(255,226,170,.75)'); glow.addColorStop(1, 'rgba(255,226,170,0)'); g.fillStyle = glow; g.fillRect(0, 0, W, H);
+            // shoulders in my pink top
+            g.fillStyle = '#E9A9B8'; g.strokeStyle = '#3A2626'; g.lineWidth = 2;
+            g.beginPath(); g.moveTo(-10, H); g.lineTo(-10, H * .44); g.quadraticCurveTo(W * .08, H * .33, W * .36, H * .31); g.lineTo(W * .64, H * .31); g.quadraticCurveTo(W * .92, H * .33, W + 10, H * .44); g.lineTo(W + 10, H); g.closePath(); g.fill(); g.stroke();
+            // the back of my head
+            g.fillStyle = '#2A1812'; g.beginPath(); g.ellipse(W * .5, H * .17, W * .23, H * .135, 0, 0, Math.PI * 2); g.fill();
         };
-        const at = e => { const r = hair.getBoundingClientRect(); return (e.clientY - r.top) / r.height; };
+        const loose = () => {
+            // the hair mass first, so there are no gaps between strands, then every strand on top with its own frizz
+            g.fillStyle = '#2A1812'; g.beginPath();
+            for (let v = 0; v <= 1.0001; v += .05) { const y = H * (.16 + v * .74), x = W * (.5 - .23 - .17 * v); const f = tAt(x + 8, y); g.lineTo(x - f * 14 * Math.sin(v * 37), y); }
+            for (let v = 1; v >= -.0001; v -= .05) { const y = H * (.16 + v * .74), x = W * (.5 + .23 + .17 * v); const f = tAt(x - 8, y); g.lineTo(x + f * 14 * Math.sin(v * 41), y); }
+            g.closePath(); g.fill();
+            for (const st of STR) {
+                const top = H * (.08 + .07 * ((st.x - .5) / .23) ** 2), bot = H * st.len;
+                g.beginPath(); g.strokeStyle = st.c; g.lineWidth = st.w; g.globalAlpha = .85;
+                for (let k = 0; k <= 36; k++) {
+                    const v = k / 36, y = top + v * (bot - top);
+                    let x = W * (.5 + (st.x - .5) * (1 + .75 * v)) + Math.sin(v * 5 + st.ph) * W * .012;
+                    const f = tAt(x, y), fr = f * f * Math.sqrt(v);
+                    x += fr * (Math.sin(v * 46 + st.s) * W * .035 + Math.sin(v * 97 + st.s * 2) * W * .02 * st.a);
+                    k ? g.lineTo(x, y + fr * Math.sin(v * 63 + st.s) * 6) : g.moveTo(x, y);
+                }
+                g.stroke();
+            }
+            // flyaways and knots wherever it's still bad
+            g.globalAlpha = 1; g.strokeStyle = '#1C100B'; g.lineWidth = 1.2;
+            for (const [kx, ky, kr] of KNOTS) {
+                const f = tAt(kx * W, ky * H); if (f < .55) continue;
+                g.globalAlpha = Math.min(1, (f - .55) * 3); g.beginPath();
+                for (let a = 0; a < 16; a += .4) g.lineTo(kx * W + Math.cos(a) * kr * (1 + .3 * Math.sin(a * 3)), ky * H + Math.sin(a) * kr * .8 + a * .4);
+                g.stroke();
+            }
+            g.globalAlpha = 1;
+            // the shine comes back where it's smooth
+            for (const st of STR) {
+                if ((st.s | 0) % 3) continue;
+                const top = H * (.08 + .07 * ((st.x - .5) / .23) ** 2);
+                g.beginPath(); g.lineWidth = 1.3;
+                for (let k = 4; k <= 16; k++) {
+                    const v = k / 36, y = top + v * (H * st.len - top), x = W * (.5 + (st.x - .5) * (1 + .75 * v)) + Math.sin(v * 5 + st.ph) * W * .012;
+                    const sm = 1 - tAt(x, y); g.strokeStyle = `rgba(160,104,70,${(sm * sm * .55).toFixed(3)})`;
+                    k > 4 ? g.lineTo(x, y) : g.moveTo(x, y);
+                }
+                g.stroke();
+            }
+        };
+        const braid = p => {
+            // smooth, pulled back to the nape, then one long braid that grows as it's woven
+            g.fillStyle = '#2A1812'; g.beginPath(); g.ellipse(W * .5, H * .17, W * .235, H * .14, 0, 0, Math.PI * 2); g.fill();
+            g.lineWidth = 1.1;
+            for (let k = 0; k < 40; k++) { const sx = W * (.29 + .42 * k / 39); g.strokeStyle = k % 3 ? '#3A2318' : 'rgba(160,104,70,.6)'; g.beginPath(); g.moveTo(sx, H * (.07 + .06 * ((sx / W - .5) / .21) ** 2)); g.quadraticCurveTo(sx, H * .27, W * .5 + (sx - W * .5) * .15, H * .32); g.stroke(); }
+            const n = 15, y0 = H * .31, y1 = H * .86, step = (y1 - y0) / n, m = Math.max(1, Math.round(n * p));
+            for (let i = 0; i < m; i++) {
+                const y = y0 + step * (i + .5), wd = W * (.115 - .045 * i / n), side = i % 2 ? 1 : -1;
+                g.save(); g.translate(W * .5 + side * wd * .32, y); g.rotate(side * -.5);
+                g.fillStyle = i % 2 ? '#33201A' : '#2A1812'; g.strokeStyle = '#140B07'; g.lineWidth = 1.4;
+                g.beginPath(); g.ellipse(0, 0, wd * .78, step * .78, 0, 0, Math.PI * 2); g.fill(); g.stroke();
+                g.strokeStyle = 'rgba(170,112,76,.55)'; g.beginPath(); g.ellipse(-wd * .15, -step * .1, wd * .4, step * .45, 0, Math.PI * 1.1, Math.PI * 1.7); g.stroke();
+                g.restore();
+            }
+            if (p >= 1) {
+                g.fillStyle = '#F28DB2'; g.strokeStyle = '#3A2626'; g.lineWidth = 2; g.beginPath(); g.ellipse(W * .5, y1 + 4, W * .055, H * .016, 0, 0, Math.PI * 2); g.fill(); g.stroke();
+                g.strokeStyle = '#2E1B13'; g.lineWidth = 1.3;
+                for (let k = -4; k <= 4; k++) { g.beginPath(); g.moveTo(W * .5 + k * 2, y1 + 10); g.quadraticCurveTo(W * .5 + k * 5, y1 + 30, W * .5 + k * 7, y1 + 42); g.stroke(); }
+            }
+        };
+        const draw = () => { if (!W) return; scene(); braided || braidP > 0 ? braid(braidP) : loose(); };
+        const progress = () => {
+            let sum = 0, max = 0; T.forEach(col => col.forEach(t => { sum += t; max = Math.max(max, t); }));
+            const pct = 1 - sum / (COLS * ROWS); bar.style.width = (pct * 100).toFixed(0) + '%';
+            if ((pct > .8 || max < .14) && !done) {
+                done = true; T.forEach(col => col.fill(0)); draw(); SFX.sparkle();
+                const r = hair.getBoundingClientRect(); fairyDust(r.left + r.width / 2, r.top + r.height * .45);
+                tag.textContent = 'smooth'; say.textContent = `see? smooth. only took ${strokes} strokes. the comb stays in the bag.`;
+                cv.setAttribute('aria-label', 'The back of my head: long dark hair, smooth and shiny');
+                $('#hair-braid').hidden = false;
+            } else if (!done) tag.textContent = pct < .25 ? 'tangled' : pct < .7 ? 'getting there' : 'almost';
+        };
+        // one stroke: everything under the comb between where it was and where it is now loosens, once
+        let stroke = null;
+        const put = (x, y) => { comb.style.left = x + 'px'; comb.style.top = y + 'px'; };
+        const rest = () => { comb.style.left = ''; comb.style.top = ''; };
+        const pass = (x, y0, y1) => {
+            const cw = W * .46, c0 = Math.max(0, Math.floor((x - cw / 2) / W * COLS)), c1 = Math.min(COLS - 1, Math.floor((x + cw / 2) / W * COLS));
+            const r0 = Math.max(0, Math.floor(y0 / H * ROWS)), r1 = Math.min(ROWS - 1, Math.floor(y1 / H * ROWS));
+            for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+                const key = c * 100 + r; if (stroke.hit.has(key)) continue;
+                stroke.hit.add(key);
+                // a bad knot grabs the comb: it only loosens a little and the stroke is over
+                if (T[c][r] > .82 && !stroke.snagged && R() < .3) { T[c][r] -= .3; stroke.snagged = true; return false; }
+                T[c][r] = Math.max(0, T[c][r] - .4);
+            }
+            return true;
+        };
+        const snag = () => {
+            stroke = null; hair.classList.remove('dragging'); SFX.snag();
+            comb.classList.remove('snag'); void comb.offsetWidth; comb.classList.add('snag');
+            say.textContent = ['ow! a knot. go again, gentler ↓', 'ouch. start from where it got stuck.', 'that one’s stubborn. again ↓'][strokes % 3];
+            setTimeout(rest, reduce ? 0 : 450);
+        };
+        const pt = e => { if (!W) size(); const r = hair.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; };
         hair.style.touchAction = 'none';
-        hair.addEventListener('pointerdown', e => { if (hair.classList.contains('braided')) return; drag = true; hair.classList.add('dragging'); try { hair.setPointerCapture(e.pointerId); } catch {} set(at(e)); });
-        hair.addEventListener('pointermove', e => { if (drag) set(at(e)); });
-        const end = () => { drag = false; hair.classList.remove('dragging'); };
+        hair.addEventListener('pointerdown', e => {
+            if (braided || done) return;
+            const [x, y] = pt(e); stroke = { x, y, hit: new Set(), moved: 0 }; strokes++;
+            hair.classList.add('dragging'); put(x, y); try { hair.setPointerCapture(e.pointerId); } catch {}
+        });
+        hair.addEventListener('pointermove', e => {
+            if (!stroke) return;
+            const [x, y] = pt(e); put(x, y);
+            if (y > stroke.y) {
+                const ok = pass(x, stroke.y, y);
+                stroke.moved += y - stroke.y; if (stroke.moved > 14) { SFX.rustle(.12, .045); stroke.moved = 0; }
+                draw(); progress();
+                if (!ok) return snag();
+                if (!done && strokes > 0) say.textContent = 'keep going… all the way to the ends.';
+            }
+            if (stroke) { stroke.x = x; stroke.y = y; }
+        });
+        const end = () => { if (!stroke) return; stroke = null; hair.classList.remove('dragging'); rest(); if (!done) say.textContent = tag.textContent === 'tangled' ? 'still a mess. again ↓ (try the sides too)' : 'better. a few more strokes ↓'; };
         hair.addEventListener('pointerup', end); hair.addEventListener('pointercancel', end);
-        comb.onkeydown = e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); set((+hair.style.getPropertyValue('--comb') || 0) + (e.key === 'ArrowDown' ? .1 : -.1)); } };
-        comb.onclick = e => { if (e.detail) return; set(1); };
-        // combed out, then one long braid for bed. while it's braided the comb stays put.
-        $('#hair-braid').onclick = () => {
-            const on = hair.classList.toggle('braided');
-            $('#hair-tag').textContent = on ? 'braided' : 'after';
-            $('#hair-braid').textContent = on ? 'take it down' : 'now braid it';
-            $('#hair-note').textContent = on ? 'one long braid for bed.' : 'see? smooth. the comb stays in the bag.';
-            hair.querySelector('.hair-braid').setAttribute('aria-hidden', !on);
+        // keyboard: one full stroke down the middle and one down each side
+        comb.onkeydown = e => {
+            if (!['Enter', ' ', 'ArrowDown'].includes(e.key) || braided || done) return; e.preventDefault();
+            strokes++; stroke = { hit: new Set() }; [W * .28, W * .5, W * .72].forEach(x => { stroke.hit.clear(); pass(x, 0, H); });
+            stroke = null; SFX.rustle(.5, .05); draw(); progress();
         };
-        set(0);
+        comb.onclick = e => { if (e.detail === 0) comb.onkeydown({ key: 'Enter', preventDefault() {} }); };
+        // combed out, then one long braid for bed
+        $('#hair-braid').onclick = () => {
+            braided = !braided;
+            tag.textContent = braided ? 'braided' : 'smooth';
+            $('#hair-braid').textContent = braided ? 'take it down' : 'now braid it';
+            say.textContent = braided ? 'one long braid for bed.' : 'see? smooth. the comb stays in the bag.';
+            hair.classList.toggle('braided', braided);
+            cancelAnimationFrame(hair._raf);
+            if (!braided) { braidP = 0; return draw(); }
+            const t0 = performance.now();
+            const grow = t => { braidP = reduce ? 1 : Math.min(1, (t - t0) / 1100); draw(); if (braidP < 1) hair._raf = requestAnimationFrame(grow); else SFX.rustle(.3, .04); };
+            hair._raf = requestAnimationFrame(grow);
+        };
+        new ResizeObserver(size).observe(hair); size();
+        progress();
     },
     headphones: () => {
         // drag my headphones onto me while i study; tap me to take them back off
@@ -2147,6 +2454,28 @@ const AFTER = {
         hp.addEventListener('pointerup', up); hp.addEventListener('pointercancel', up);
         // a plain tap (or the keyboard) works too
         hp.addEventListener('click', () => { if (skip) { skip = false; return; } on(); });
+        // a little ariana: Apple Music's official 30-second previews, looked up when you press play. a different song each time.
+        const ARI = ['we can\u2019t be friends', '7 rings', 'positions', 'thank u, next', 'dangerous woman', 'into you', 'god is a woman', 'no tears left to cry'];
+        const btn = $('#ari-play'), now = $('#ari-now');
+        let k = Math.floor(Math.random() * ARI.length), audio = null;
+        const stop = () => { if (audio) { audio.pause(); audio = null; } btn.textContent = '♪ play a little ariana'; btn.setAttribute('aria-pressed', 'false'); };
+        sheet.addEventListener('close', stop, { once: true });
+        btn.onclick = async () => {
+            if (audio) { stop(); now.textContent = ''; return; }
+            const song = ARI[k]; k = (k + 1) % ARI.length;
+            btn.textContent = 'finding it…';
+            try {
+                const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent('ariana grande ' + song)}&entity=song&limit=5`).then(r => r.json());
+                const t = r.results.find(x => /ariana grande/i.test(x.artistName) && x.previewUrl);
+                if (!t) throw 0;
+                audio = new Audio(t.previewUrl); audio.volume = .7;
+                audio.onended = () => { stop(); now.textContent = 'that\u2019s the snippet. press it again for another one ♡'; };
+                await audio.play();
+                btn.textContent = '❚❚ stop'; btn.setAttribute('aria-pressed', 'true');
+                const link = Object.assign(document.createElement('a'), { href: t.trackViewUrl, target: '_blank', rel: 'noopener', textContent: 'preview from Apple Music ↗' });
+                now.replaceChildren(`now playing: ${t.trackName} · `, link);
+            } catch { stop(); now.textContent = 'couldn\u2019t reach the music right now. try again?'; }
+        };
     },
     jewelry: () => {
         const jw = $('#jw'), say = $('#jw-say');
@@ -2593,7 +2922,7 @@ const AFTER = {
             if (openMoreApp(b.dataset.app, view, home, back, '#back')) return;
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
-                    ['cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+                    ['grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc', 'chicago', 'nyc', 'owala', 'listening', 'saturday'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
             } else if (b.dataset.app === 'spotify') {
                 view.innerHTML = back + `
                     <div class="sp">
@@ -2862,7 +3191,33 @@ const AFTER = {
                 gallery(); view.classList.add('procreate'); home.hidden = true; view.hidden = false; addQ(view, k);
                 return;
             }
+            if (k === 'netflix' || k === 'prime') {
+                // both streaming apps open to the same thing i’m always mid-way through
+                const nf = k === 'netflix';
+                const play = () => {
+                    view.innerHTML = back + `<div class="tv-play"><img src="assets/img/couch-potato.jpg" alt="Me as a toddler, fast asleep on the couch holding two remotes"><span class="tv-bar"><i></i></span></div>
+                        <p class="tv-t">couch potato hani</p><p class="tv-s">S1 E1 · fell asleep holding both remotes. never finished the episode.</p>`;
+                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                };
+                const row = () => {
+                    view.innerHTML = back + `<p class="tv-head">${nf ? 'Continue Watching for hani' : 'Continue watching'}</p>
+                        <button type="button" class="tv-card" id="tv-card"><img src="assets/img/couch-potato.jpg" alt=""><span class="tv-prog"><i></i></span><b>couch potato hani</b></button>
+                        <p class="tv-head">${nf ? 'Because you watched couch potato hani' : 'Recommended for you'}</p>
+                        <p class="tv-s">more naps. more snacks. the remote stays with me.</p>`;
+                    $('#tv-card').onclick = play;
+                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                };
+                view.classList.remove('procreate'); view.classList.add('tv', nf ? 'nf' : 'pv'); view.classList.remove(nf ? 'pv' : 'nf');
+                if (nf) {
+                    view.innerHTML = back + `<p class="tv-who">Who’s watching?</p><button type="button" class="tv-prof" id="tv-prof"><span>h</span>hani</button>`;
+                    $('#tv-prof').onclick = row;
+                    $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('tv', 'nf', 'pv'); };
+                } else row();
+                home.hidden = true; view.hidden = false;
+                return;
+            }
             if (k !== 'procreate') view.classList.remove('procreate');
+            view.classList.remove('tv', 'nf', 'pv');
             addQ(view, k);
             home.hidden = true; view.hidden = false;
             $('#ip-back').onclick = () => { view.hidden = true; home.hidden = false; view.classList.remove('procreate'); };
@@ -2877,26 +3232,72 @@ const AFTER = {
             $('#swatches').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
         };
     },
-    apartment: () => { $('#beep').onclick = () => toast('beep. door’s open. welcome home ♡'); },
+    apartment: () => {
+        // the fob flies to the reader on the door handle, the ring blinks green, the lock clicks, and the door swings open.
+        // then you can walk in, all the way to my bed, and cuddle my stuffies.
+        const apt = $('#apt'), fob = $('#apt-fob'), rd = $('#apt-reader'), say = $('#apt-say'), btn = $('#beep'), walk = $('#apt-walk');
+        let state = 'closed', busy = false;
+        const later = (ms, f) => setTimeout(f, reduce ? 0 : ms);
+        const go = () => {
+            if (busy) return; busy = true;
+            if (state === 'closed') {
+                const a = fob.getBoundingClientRect(), b = rd.getBoundingClientRect();
+                fob.style.transform = `translate(${b.left + b.width / 2 - a.left - a.width / 2}px, ${b.top + b.height / 2 - a.top - a.height / 2}px) rotate(-10deg) scale(.62)`;
+                later(520, () => { apt.classList.add('ok'); SFX.reader(); say.textContent = 'beep beep.'; });
+                later(1150, () => { fob.style.transform = ''; apt.classList.add('open'); say.textContent = 'door’s open. welcome home ♡ come in?'; btn.textContent = 'Walk in →'; });
+                later(1900, () => { apt.classList.remove('ok'); state = 'open'; busy = false; });
+            } else if (state === 'open') {
+                apt.classList.add('inside'); walk.setAttribute('aria-hidden', 'false'); SFX.rustle(.8, .05);
+                say.textContent = 'come in, come in…';
+                later(1500, () => { say.textContent = 'now lay down on my princess bed and cuddle my stuffies ♡'; btn.textContent = 'Cuddle the stuffies'; state = 'inside'; busy = false; });
+            } else if (state === 'inside') {
+                const r = walk.getBoundingClientRect();
+                fairyDust(r.left + r.width * .38, r.top + r.height * .62); later(350, () => fairyDust(r.left + r.width * .75, r.top + r.height * .68));
+                SFX.sparkle(); apt.classList.add('cuddled');
+                say.textContent = 'so soft. stay as long as you want.'; btn.textContent = 'Head back out';
+                state = 'cuddled'; later(500, () => { busy = false; });
+            } else {
+                apt.classList.remove('inside', 'cuddled'); walk.setAttribute('aria-hidden', 'true');
+                later(800, () => { apt.classList.remove('open'); SFX.land(16); say.textContent = 'door shut. locked. keys? …in the bag. probably.'; btn.textContent = 'Tap it on the reader'; });
+                later(1500, () => { state = 'closed'; busy = false; });
+            }
+        };
+        fob.onclick = () => { if (state === 'closed') go(); };
+        btn.onclick = go;
+    },
     mascara: () => {
         setTimeout(() => $('#masc') && $('#masc').classList.add('out'), reduce ? 0 : 350);
     },
 
     sketchbook: () => {
-        let page = 0;
-        const show = i => {
-            page = (i + ART.length) % ART.length;
-            const [t, n, f] = ART[page];
-            $('#art-img').src = `assets/art/${f}.jpg`; $('#art-img').alt = t;
-            $('#art-title').textContent = t;
-            $('#art-note').textContent = n || 'digital painting, from the portfolio that won a VASE award.';
-            $('#art-num').textContent = `page ${page + 1} of ${ART.length}`;
-            const sp = $('#spread'); sp.classList.remove('flip'); void sp.offsetWidth; sp.classList.add('flip');
+        // a real spread: one piece on each page, written up underneath in my handwriting. bottom corners turn the page.
+        const skb = $('#skb'), leaf = $('#skb-leaf'), say = $('#skb-say'), N = Math.ceil(ART.length / 2), pages = [...skb.querySelectorAll('.skb-page')];
+        let sp = 0;
+        const fill = () => {
+            pages.forEach((pg, k) => {
+                const i = sp * 2 + k, a = ART[i];
+                pg.classList.toggle('blank', !a);
+                pg.querySelector('img').src = a ? `assets/art/${a[2]}.jpg` : ''; pg.querySelector('img').alt = a ? a[0] : '';
+                pg.querySelector('.skb-t').textContent = a ? a[0] : '';
+                pg.querySelector('.skb-n').textContent = a ? (a[1] || 'digital painting, from the portfolio that won a VASE award.') : '';
+                pg.querySelector('.skb-pg').textContent = a ? i + 1 : '';
+            });
+            $('#skb-cl').setAttribute('aria-label', sp === 0 ? 'Close the sketchbook' : 'Turn back a page');
+            $('#skb-cr').setAttribute('aria-label', sp === N - 1 ? 'Close the sketchbook' : 'Turn the page');
+            say.textContent = sp === N - 1 ? 'last page. tap the corner to close it ♡' : `pages ${sp * 2 + 1}–${Math.min(ART.length, sp * 2 + 2)} of ${ART.length}`;
         };
-        $('#art-prev').onclick = () => show(page - 1);
-        $('#art-next').onclick = () => show(page + 1);
-        sheet.onkeydown = e => { if (!$('#spread')) return; if (e.key === 'ArrowRight') show(page + 1); if (e.key === 'ArrowLeft') show(page - 1); };
-        show(0);
+        const close = () => { SFX.page(true); skb.classList.remove('open'); say.textContent = 'tap the cover to open it'; };
+        const turn = dir => {
+            const to = sp + dir;
+            if (to < 0 || to >= N) return close();
+            SFX.page(); sp = to;
+            leaf.className = 'skb-leaf ' + (dir > 0 ? 'fwd' : 'back'); void leaf.offsetWidth; leaf.classList.add('go');
+            setTimeout(fill, reduce ? 0 : 260);
+        };
+        $('#skb-cover').onclick = () => { SFX.page(true); sp = 0; fill(); skb.classList.add('open'); };
+        $('#skb-cr').onclick = () => turn(1);
+        $('#skb-cl').onclick = () => turn(-1);
+        sheet.onkeydown = e => { if (!skb.isConnected || !skb.classList.contains('open')) return; if (e.key === 'ArrowRight') turn(1); if (e.key === 'ArrowLeft') turn(-1); };
     },
 
     wallet: () => {
@@ -2998,17 +3399,21 @@ const AFTER = {
                 toast('back in the zip pocket ♡'); return;
             }
             vw.classList.add('medici-out');
-            const draw = () => {
+            // go get her a coffee: the stamp goes on the card, and there she is with her vanilla latte
+            let served = false;
+            const draw = (fresh = false) => {
                 const n = mediciStamps();
                 detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">Medici regulars card</p><h3>One vanilla latte, every day</h3>
                     <div class="medici-big">${mediciHTML(n)}</div>
                     <p class="m">${n}/10 stamps · ${10 - n} more until a free one</p>
-                    <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="latte">Get my vanilla latte ☕</button></div>`;
+                    <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="latte">${served ? 'Get her another one ☕' : 'Go get her a Medici coffee ☕'}</button></div>
+                    ${served ? `<figure class="medici-pic${fresh && !reduce ? ' drop' : ''}"><span class="medici-cup" aria-hidden="true">☕</span><img src="assets/img/medici.jpg" alt="Me at Medici with my vanilla latte, latte art and all"><figcaption class="hand">for me?? thank you ♡</figcaption></figure>` : ''}`;
                 $('#latte').onclick = () => {
-                    let k = mediciStamps() + 1;
-                    if (k >= 10) { saveStamps(10); draw(); toast('10/10! the next vanilla latte is on medici ♡'); saveStamps(0); setTimeout(() => { draw(); }, 1600); }
-                    else { saveStamps(k); draw(); toast(['stamped ♡', 'same order as yesterday', 'they know my name by now', 'vanilla latte, obviously'][k % 4]); }
+                    let k = mediciStamps() + 1; served = true; SFX.pay();
+                    if (k >= 10) { saveStamps(10); draw(true); toast('10/10! the next vanilla latte is on medici ♡'); saveStamps(0); setTimeout(() => { draw(); }, 1600); }
+                    else { saveStamps(k); draw(true); toast(['stamped ♡', 'same order as yesterday', 'they know my name by now', 'vanilla latte, obviously'][k % 4]); }
                     $('#medici').innerHTML = mediciHTML(mediciStamps());
+                    detail.querySelector('.medici-pic')?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
                 };
             };
             draw(); detail.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
@@ -3056,6 +3461,7 @@ const AFTER = {
             vw.style.marginTop = `${Math.round((card.classList.contains('vert') ? card.offsetWidth : card.offsetHeight) * 1.15)}px`;
             detail.innerHTML = `<p class="mono" style="margin:0 0 4px; color:var(--muted)">${c.title}</p><h3>${c.kind === 'id' ? c.sub : c.big}</h3><p class="m">${c.metric}</p><p>${c.body}</p>`;
             if (c.go) { detail.insertAdjacentHTML('beforeend', `<button class="btn solid" type="button" id="card-go">Open my passport</button>`); $('#card-go').onclick = () => pickUp(ITEMS.find(x => x.id === c.go)); }
+            if (TAPS[c.kind]) tapToPay(detail, TAPS[c.kind]);
         });
         if (!reduce) setTimeout(open, 700); else open();
     },
@@ -3101,6 +3507,7 @@ const AFTER = {
         place();
         $('#shades').onclick = () => {
             const on = rz.classList.toggle('on');
+            SFX.glasses(on);
             document.body.classList.toggle('shades', on);
             $('#shades').textContent = on ? 'Take them off' : 'Put them on';
             $('#shades-note').textContent = on ? 'see? it was always this pretty.' : 'ew. reality.';
@@ -3113,6 +3520,30 @@ const AFTER = {
         };
     },
 
+    pads: () => {
+        // first the note: unfold it, read it, fold it back up and it tucks itself aside. then the pad opens.
+        const pd = $('#pd'), note = $('#pd-note'), pad = $('#pd-pad'), say = $('#pd-say');
+        let read = false;
+        note.onclick = () => {
+            if (pd.classList.contains('opened')) return;
+            const open = pd.classList.toggle('reading');
+            note.setAttribute('aria-expanded', open);
+            note.setAttribute('aria-label', open ? 'The note, unfolded. Tap to fold it back up' : 'The little note. Unfold it again');
+            SFX.page();
+            if (open) { read = true; say.textContent = 'tap the note to fold it back up.'; }
+            else { pd.classList.add('read'); say.textContent = 'okay. now open the pad ↑'; }
+        };
+        pad.onclick = () => {
+            if (pd.classList.contains('reading')) return;
+            if (!read) { say.textContent = 'read the note first ♡'; note.classList.remove('nudge'); void note.offsetWidth; note.classList.add('nudge'); return; }
+            const open = pd.classList.toggle('opened');
+            pad.setAttribute('aria-label', open ? 'The pad, unwrapped. Tap to wrap it back up' : 'A wrapped pad. Open it');
+            SFX.zip(open, .35);
+            say.textContent = open ? 'there you go. take two if you need them.' : 'wrapped back up. it’s yours whenever.';
+            $('#pd-more').hidden = !open;
+        };
+    },
+
     keys: () => {
         const lines = {
             lock: 'locked. probably. let me press it again.',
@@ -3122,8 +3553,10 @@ const AFTER = {
         };
         sheetBody.querySelector('.fob-btns').onclick = e => {
             const b = e.target.closest('[data-fob]'); if (!b) return;
-            toast(lines[b.dataset.fob]);
-            if (b.dataset.fob === 'panic' && !reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
+            const k = b.dataset.fob, blaring = SFX.fob(k);
+            if (k === 'panic' && SFX.on && !blaring) { toast('okay. it stopped. nobody saw that.'); return; }
+            toast(lines[k]);
+            if (k === 'panic' && !reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
         };
     },
 
@@ -3154,12 +3587,49 @@ const AFTER = {
         const flipped = new Set();
         sheetBody.querySelectorAll('.gc').forEach(c => c.onclick = e => {
             const s = e.target.closest('[data-scratch]');
-            if (s && c.classList.contains('flip')) { s.classList.add('done'); toast(GIFTCARDS[+c.dataset.gc].bal + ' ✨'); return; }
+            if (s && c.classList.contains('flip')) return;
             const on = c.classList.toggle('flip');
             sheetBody.querySelectorAll('.gc').forEach(o => o !== c && o.classList.remove('up'));
             c.classList.toggle('up', on);
             if (on) flipped.add(c.dataset.gc);
             $('#gc-tally').textContent = flipped.size === 3 ? 'all three. all from returns i forgot about. no regrets ♡' : `3 cards. 0 returns made on time.`;
+        });
+        // the foil is real: rub it off with your finger (or the mouse). once most of it's gone, the rest flakes away.
+        sheetBody.querySelectorAll('[data-scratch]').forEach(s => {
+            const cv = s.querySelector('canvas'), g = cv.getContext('2d'), card = s.closest('.gc');
+            let w = 0, h = 0, last = null, done = false, moved = 0;
+            const paint = () => {
+                const dpr = devicePixelRatio || 1; w = s.clientWidth; h = s.clientHeight; if (!w) return;
+                cv.width = w * dpr; cv.height = h * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+                const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#D4D7DC'); gr.addColorStop(.5, '#B3B7BE'); gr.addColorStop(1, '#C9CCD2');
+                g.globalCompositeOperation = 'source-over'; g.fillStyle = gr; g.fillRect(0, 0, w, h);
+                g.strokeStyle = 'rgba(255,255,255,.28)'; g.lineWidth = 2;
+                for (let x = -h; x < w; x += 7) { g.beginPath(); g.moveTo(x, h); g.lineTo(x + h, 0); g.stroke(); }
+                g.fillStyle = '#4A4E55'; g.font = '600 9px Instrument Sans, system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle';
+                g.fillText('scratch for balance ✦', w / 2, h / 2 + .5);
+            };
+            paint();
+            const pt = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * w / r.width, y: (e.clientY - r.top) * h / r.height }; };
+            const cleared = () => { const d = g.getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 32) if (d[i] < 40) n++; return n / (d.length / 32); };
+            const rub = p => {
+                g.globalCompositeOperation = 'destination-out'; g.lineCap = g.lineJoin = 'round'; g.lineWidth = 11;
+                g.beginPath(); g.moveTo((last || p).x, (last || p).y); g.lineTo(p.x + .1, p.y); g.stroke();
+                moved += last ? Math.hypot(p.x - last.x, p.y - last.y) : 0; last = p;
+                if (moved > 6) { SFX.scratch(); moved = 0; }
+            };
+            const finish = () => {
+                if (done || cleared() < .55) return;
+                done = true; s.classList.add('done');
+                toast(GIFTCARDS[+card.dataset.gc].bal + ' ✨');
+            };
+            cv.addEventListener('pointerdown', e => {
+                if (!card.classList.contains('flip') || done) return;
+                e.stopPropagation(); if (!w) paint();
+                last = null; rub(pt(e)); try { cv.setPointerCapture(e.pointerId); } catch {}
+            });
+            cv.addEventListener('pointermove', e => { if (last && !done) rub(pt(e)); });
+            const up = () => { if (last) { last = null; finish(); } };
+            cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
         });
     },
     sweater: () => {
@@ -3351,8 +3821,8 @@ function zipperPouch(pf, pens, btn, note) {
         SFX.teeth(pf, p);
         pull.style.transform = `translateX(${-TRACK * p}px)`;
         pf.classList.toggle('unzipped', p > .02);
-        // pens come out one at a time, from the end the zipper opens first
-        list.forEach((el, i) => el.classList.toggle('out', p * (N + 1) > N - i));
+        // pens come out one at a time, from the end the zipper opens first, each with a little clack
+        list.forEach((el, i) => { const o = p * (N + 1) > N - i; if (o !== el.classList.contains('out')) { el.classList.toggle('out', o); SFX.pen(o); } });
         btn.textContent = p > .5 ? 'Zip it' : 'Unzip it';
         note.textContent = p === 0 ? 'zipped. 20 pens and 5 pencils in there' : p < 1 ? `${list.filter(el => el.classList.contains('out')).length} out…` : pens.dataset.pick;
     };
