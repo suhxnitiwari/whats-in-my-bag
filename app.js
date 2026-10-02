@@ -707,9 +707,14 @@ list.addEventListener('click', e => {
 
 /* gift cards = store credit from every online order i didn't return in time */
 const GIFTCARDS = [
-    { id: 'aritzia', name: 'Aritzia', front: '<span class="gc-word">ARITZIA</span>', why: 'an online order. return window: missed.', bal: 'enough for one (1) sweater', last: '0731' },
-    { id: 'chanel', name: 'Chanel', front: '<span class="gc-word">CHANEL</span><span class="gc-sub">BEAUTY</span>', why: 'a return, mailed one day late.', bal: 'a lipstick, maybe two', last: '1910' },
-    { id: 'sephora', name: 'Sephora', front: '<span class="gc-stripes"></span><span class="gc-word">SEPHORA</span>', why: 'the box sat by my door for 31 days.', bal: 'a mystery, honestly', last: '1969' }
+    { id: 'aritzia', name: 'Aritzia', why: 'an online order. return window: missed.', bal: 'enough for one (1) sweater', last: '0731',
+      front: `<span class="g2-word">ARITZIA</span><span class="g2-tag">everyday luxury</span>
+        <svg class="g2-bow" viewBox="0 0 120 120" aria-hidden="true"><path d="M78 0 V120" stroke="#E9B7C3" stroke-width="13"/><path d="M78 0 V120" stroke="#F6D4DC" stroke-width="4" opacity=".7"/><path d="M78 52 C58 30 36 34 42 50 C48 64 66 60 78 52Z M78 52 C98 30 120 34 114 50 C108 64 90 60 78 52Z" fill="#EDB3C2" stroke="#C98A9B" stroke-width="1.5"/><path d="M78 52 L64 84 L70 82 L72 90Z M78 52 L92 84 L86 82 L84 90Z" fill="#E6A3B5" stroke="#C98A9B" stroke-width="1.2"/><circle cx="78" cy="52" r="6" fill="#F3C4D0" stroke="#C98A9B" stroke-width="1.5"/></svg>` },
+    { id: 'chanel', name: 'Chanel', why: 'a return, mailed one day late.', bal: 'a lipstick, maybe two', last: '1910',
+      front: `<span class="g2-quilt"></span><span class="g2-word">CHANEL</span><span class="g2-tag">BEAUTY</span>
+        <svg class="g2-camellia" viewBox="0 0 60 60" aria-hidden="true">${[0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="30" cy="16" rx="11" ry="14" transform="rotate(${a} 30 30)" fill="#FBFAF7" stroke="#D9D5CD" stroke-width="1"/>`).join('')}${[30, 90, 150, 210, 270, 330].map(a => `<ellipse cx="30" cy="21" rx="8" ry="10" transform="rotate(${a} 30 30)" fill="#fff" stroke="#E2DED6" stroke-width=".8"/>`).join('')}<circle cx="30" cy="30" r="6" fill="#F4F1EA" stroke="#D9D5CD"/></svg>` },
+    { id: 'sephora', name: 'Sephora', why: 'the box sat by my door for 31 days.', bal: 'a mystery, honestly', last: '1969',
+      front: `<span class="g2-stripes"></span><span class="g2-word">SEPHORA</span>` }
 ];
 
 
@@ -1537,19 +1542,12 @@ const VIEWS = {
         <figure class="tk-pic"><img src="assets/img/baby-trike.jpg" alt="Me as a toddler, grinning on a red and yellow trike"><figcaption class="hand">exhibit A: she’s always gone skrrttt skrrtttt 🏎️💨</figcaption></figure>`,
     giftcards: () => `
         <h2>some <em>gift cards</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(store credit, technically)</span></h2>
-        <p class="note">i online shop. i mean to return things. then the return window closes while the box sits by my door, and i get store credit instead. tap a card to flip it.</p>
-        <div class="gcs" id="gcs">${GIFTCARDS.map((g, k) => `
-            <button type="button" class="gc gc-${g.id}" style="--k:${k}" data-gc="${k}" aria-label="${g.name} card: tap to flip it over">
-                <span class="gc-face gc-front">${g.front}<span class="gc-chip-txt">GIFT CARD</span></span>
-                <span class="gc-face gc-back">
-                    <span class="gc-stripe"></span>
-                    <span class="gc-bk"><b>${g.name.toUpperCase()} · MERCHANDISE CREDIT</b>
-                        <small>issued for: ${g.why}</small>
-                        <span class="gc-scratch" data-scratch><span class="gc-bal">balance: ${g.bal}</span><canvas class="gc-foil" aria-label="scratch-off foil: rub it to see the balance"></canvas></span>
-                        <span class="gc-bar"></span><small class="mono">•••• •••• •••• ${g.last}</small></span>
-                </span>
-            </button>`).join('')}</div>
-        <p class="hand gc-tally" id="gc-tally">3 cards. 0 returns made on time.</p>`,
+        <p class="note">i online shop. i mean to return things. then the return window closes while the box sits by my door, and i get store credit instead. tap a card to flip it, then scratch.</p>
+        <div class="g2" id="g2">
+            <div class="g2-stage"><button type="button" class="g2-card" id="g2-card" aria-label="Gift card: tap to flip it over"></button></div>
+            <div class="g2-picks">${GIFTCARDS.map((g, k) => `<button type="button" class="g2-pick g2-${g.id}" data-pick="${k}" aria-label="${g.name} gift card"><span class="g2-face">${g.front}</span></button>`).join('')}</div>
+            <p class="hand gc-tally" id="gc-tally">3 cards. 0 returns made on time.</p>
+        </div>`,
     pads: () => `
         <h2><em>pads</em></h2>
         <p class="note">obviously. and yes, you can have one. just don’t give it back to me.</p>
@@ -3738,53 +3736,74 @@ const AFTER = {
         tk.onclick = () => { const f = tk.classList.toggle('flip'); $('#tk-say').textContent = f ? '$350. three hundred and fifty dollars. for going “a little too excited.”' : 'tap it to flip it over'; if (f) toast('$350. i could’ve bought a lot of lipstick.'); };
     },
     giftcards: () => {
-        const flipped = new Set();
-        sheetBody.querySelectorAll('.gc').forEach(c => c.onclick = e => {
-            const s = e.target.closest('[data-scratch]');
-            if (s && c.classList.contains('flip')) return;
-            const on = c.classList.toggle('flip');
-            sheetBody.querySelectorAll('.gc').forEach(o => o !== c && o.classList.remove('up'));
-            c.classList.toggle('up', on);
-            if (on) flipped.add(c.dataset.gc);
-            $('#gc-tally').textContent = flipped.size === 3 ? 'all three. all from returns i forgot about. no regrets ♡' : `3 cards. 0 returns made on time.`;
-        });
-        // the foil is real: rub it off with your finger (or the mouse). once most of it's gone, the rest flakes away.
-        sheetBody.querySelectorAll('[data-scratch]').forEach(s => {
-            const cv = s.querySelector('canvas'), g = cv.getContext('2d'), card = s.closest('.gc');
-            let w = 0, h = 0, last = null, done = false, moved = 0;
+        const card = $('#g2-card'), tally = $('#gc-tally'), scratched = new Set();
+        let k = 0, back = false;
+        const face = g => `<span class="g2-face g2-front">${g.front}<span class="g2-chip">GIFT CARD</span><span class="g2-shine"></span></span>`;
+        const rear = g => `<span class="g2-face g2-back"><span class="g2-mag"></span>
+            <span class="g2-bk"><b>${g.name.toUpperCase()} · MERCHANDISE CREDIT</b><small>issued for: ${g.why}</small>
+                <span class="g2-scratch${scratched.has(g.id) ? ' done' : ''}"><span class="g2-bal">✦ ${g.bal} ✦</span><canvas class="g2-foil" aria-label="scratch-off foil: rub it to see the balance"></canvas></span>
+                <span class="g2-row"><span class="gc-bar"></span><small class="mono">•••• ${g.last}</small></span></span></span>`;
+        const render = () => {
+            const g = GIFTCARDS[k];
+            card.className = `g2-card g2-${g.id}${back ? ' is-back' : ''}`;
+            card.innerHTML = back ? rear(g) : face(g);
+            card.setAttribute('aria-label', `${g.name} gift card: ${back ? 'scratch the foil, or tap to flip back' : 'tap to flip it over'}`);
+            sheetBody.querySelectorAll('[data-pick]').forEach(p => p.classList.toggle('on', +p.dataset.pick === k));
+            if (back) setupFoil(g);
+        };
+        // flat 2D flip: squash to nothing, swap sides, unsquash. no 3D, so the foil is always touchable.
+        const flip = () => {
+            if (reduce) { back = !back; render(); return; }
+            card.classList.add('flipping');
+            setTimeout(() => { back = !back; render(); card.classList.add('flipping'); requestAnimationFrame(() => requestAnimationFrame(() => card.classList.remove('flipping'))); }, 180);
+        };
+        let rubbed = false;
+        card.onclick = () => { if (rubbed) { rubbed = false; return; } SFX.tap(); flip(); };
+        sheetBody.querySelectorAll('[data-pick]').forEach(p => p.onclick = () => { if (+p.dataset.pick === k) return; SFX.tap(); k = +p.dataset.pick; back = false; render(); });
+        // tilt + holographic shine that follows the pointer, on the front only
+        card.onpointermove = e => {
+            if (back || reduce) return;
+            const r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+            card.style.setProperty('--rx', `${(0.5 - y) * 14}deg`); card.style.setProperty('--ry', `${(x - 0.5) * 18}deg`);
+            card.style.setProperty('--sx', `${x * 100}%`); card.style.setProperty('--sy', `${y * 100}%`);
+        };
+        card.onpointerleave = () => { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); };
+        const setupFoil = gift => {
+            const s = card.querySelector('.g2-scratch'), cv = s.querySelector('canvas'), g = cv.getContext('2d');
+            if (s.classList.contains('done')) return;
+            let w = 0, h = 0, last = null, moved = 0, rubbing = false;
             const paint = () => {
                 const dpr = devicePixelRatio || 1; w = s.clientWidth; h = s.clientHeight; if (!w) return;
                 cv.width = w * dpr; cv.height = h * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
-                const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#D4D7DC'); gr.addColorStop(.5, '#B3B7BE'); gr.addColorStop(1, '#C9CCD2');
+                const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#E3D9DE'); gr.addColorStop(.35, '#C9BDC4'); gr.addColorStop(.6, '#EFE6EA'); gr.addColorStop(1, '#BFB2BA');
                 g.globalCompositeOperation = 'source-over'; g.fillStyle = gr; g.fillRect(0, 0, w, h);
-                g.strokeStyle = 'rgba(255,255,255,.28)'; g.lineWidth = 2;
-                for (let x = -h; x < w; x += 7) { g.beginPath(); g.moveTo(x, h); g.lineTo(x + h, 0); g.stroke(); }
-                g.fillStyle = '#4A4E55'; g.font = '600 9px Instrument Sans, system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle';
-                g.fillText('scratch for balance ✦', w / 2, h / 2 + .5);
+                for (let n = 0; n < 90; n++) { g.fillStyle = `rgba(255,255,255,${Math.random() * .5})`; g.fillRect(Math.random() * w, Math.random() * h, 1.4, 1.4); }
+                g.fillStyle = '#6E5A66'; g.font = '600 11px Instrument Sans, system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle';
+                g.fillText('scratch me ✦', w / 2, h / 2 + .5);
             };
-            paint();
+            requestAnimationFrame(paint);
             const pt = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * w / r.width, y: (e.clientY - r.top) * h / r.height }; };
             const cleared = () => { const d = g.getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 32) if (d[i] < 40) n++; return n / (d.length / 32); };
             const rub = p => {
-                g.globalCompositeOperation = 'destination-out'; g.lineCap = g.lineJoin = 'round'; g.lineWidth = 11;
+                g.globalCompositeOperation = 'destination-out'; g.lineCap = g.lineJoin = 'round'; g.lineWidth = 16;
                 g.beginPath(); g.moveTo((last || p).x, (last || p).y); g.lineTo(p.x + .1, p.y); g.stroke();
                 moved += last ? Math.hypot(p.x - last.x, p.y - last.y) : 0; last = p;
-                if (moved > 6) { SFX.scratch(); moved = 0; }
+                if (moved > 8) { SFX.scratch(); moved = 0; }
             };
             const finish = () => {
-                if (done || cleared() < .55) return;
-                done = true; s.classList.add('done');
-                toast(GIFTCARDS[+card.dataset.gc].bal + ' ✨');
+                if (s.classList.contains('done') || cleared() < .5) return;
+                s.classList.add('done'); scratched.add(gift.id);
+                if (!reduce) { const sp = document.createElement('span'); sp.className = 'g2-sparks'; sp.innerHTML = Array.from({ length: 14 }, (_, i) => `<i style="--a:${i * 26}deg;--d:${i % 3 * .05}s"></i>`).join(''); s.appendChild(sp); }
+                toast(gift.bal + ' ✨');
+                tally.textContent = scratched.size === 3 ? 'all three scratched. all from returns i forgot about. no regrets ♡' : `${scratched.size} of 3 scratched. 0 returns made on time.`;
             };
-            cv.addEventListener('pointerdown', e => {
-                if (!card.classList.contains('flip') || done) return;
-                e.stopPropagation(); if (!w) paint();
-                last = null; rub(pt(e)); try { cv.setPointerCapture(e.pointerId); } catch {}
-            });
-            cv.addEventListener('pointermove', e => { if (last && !done) rub(pt(e)); });
-            const up = () => { if (last) { last = null; finish(); } };
+            cv.addEventListener('pointerdown', e => { e.stopPropagation(); if (!w) paint(); rubbing = true; rubbed = true; last = null; rub(pt(e)); try { cv.setPointerCapture(e.pointerId); } catch {} });
+            cv.addEventListener('pointermove', e => { if (rubbing) rub(pt(e)); });
+            const up = () => { if (rubbing) { rubbing = false; last = null; finish(); } };
             cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
-        });
+            cv.addEventListener('click', e => e.stopPropagation());
+        };
+        render();
     },
     sweater: () => {
         const sw = $('#sw');

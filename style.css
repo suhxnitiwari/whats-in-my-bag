@@ -2711,3 +2711,66 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .clk-tg.nope { animation: clk-nope .4s; }
 @keyframes clk-nope { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
 .clk-end { margin: 10px 0 4px; text-align: center; font-size: .72rem; color: #8A8A8E; }
+
+/* gift cards: the hidden face must not catch touches, or the foil can't be scratched */
+
+/* gift cards, take two: one big flat card, flips in 2D so the foil always works */
+.g2 { display: grid; justify-items: center; gap: 14px; margin: 14px 0 4px; }
+.g2-stage { perspective: 900px; padding: 8px 0; }
+.g2-card { --rx: 0deg; --ry: 0deg; --sx: 50%; --sy: 30%; position: relative; display: block; width: min(330px, 84vw); aspect-ratio: 85.6 / 54; padding: 0; border: 0; border-radius: 16px; background: none; cursor: pointer;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform .25s ease-out, scale .18s ease-in; filter: drop-shadow(0 18px 22px rgba(58,38,38,.28)) drop-shadow(0 3px 4px rgba(58,38,38,.18)); }
+.g2-card.flipping { scale: 0 1; }
+.g2-card.is-back { transform: none; cursor: default; }
+.g2-card:focus-visible { outline: 3px solid var(--plum); outline-offset: 4px; }
+.g2-face { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 16px; overflow: hidden; }
+.g2-front::before { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.15); z-index: 3; pointer-events: none; }
+.g2-shine { position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: soft-light;
+  background: radial-gradient(circle at var(--sx) var(--sy), rgba(255,255,255,.75), transparent 45%), linear-gradient(115deg, transparent 30%, rgba(255,214,235,.35) 45%, rgba(190,230,255,.3) 55%, transparent 70%); }
+.g2-chip { position: absolute; left: 7%; bottom: 8%; z-index: 1; font: 600 .55rem var(--sans, system-ui); letter-spacing: .18em; opacity: .7; }
+.g2-word { position: relative; z-index: 1; }
+.g2-tag { position: absolute; z-index: 1; top: 64%; font-size: .55rem; letter-spacing: .45em; }
+/* aritzia: warm cream card stock with a pink satin ribbon */
+.g2-aritzia .g2-face { background: radial-gradient(130% 100% at 25% 15%, #FBF6EE, #E9DDCC); color: #2A2426; }
+.g2-aritzia .g2-word { font: 400 1.6rem/1 Georgia, 'Times New Roman', serif; letter-spacing: .34em; margin-left: .34em; }
+.g2-aritzia .g2-tag { font: italic 400 .62rem Georgia, serif; letter-spacing: .12em; color: #8C7B6B; }
+.g2-bow { position: absolute; right: -6%; top: 0; height: 100%; z-index: 1; }
+/* chanel: black quilted leather and a white camellia */
+.g2-chanel .g2-face { background: linear-gradient(160deg, #1C1C20, #060607 75%); color: #F5F3EF; }
+.g2-quilt { position: absolute; inset: 0; opacity: .5; background: repeating-linear-gradient(45deg, transparent 0 21px, rgba(255,255,255,.07) 21px 22px), repeating-linear-gradient(-45deg, transparent 0 21px, rgba(255,255,255,.07) 21px 22px); }
+.g2-chanel .g2-word { font: 700 1.7rem/1 'Helvetica Neue', Arial, sans-serif; letter-spacing: .34em; margin-left: .34em; }
+.g2-chanel .g2-tag { font-family: 'Helvetica Neue', Arial, sans-serif; color: #CFCBC4; }
+.g2-camellia { position: absolute; right: 7%; top: 9%; width: 22%; z-index: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+/* sephora: glossy black and white stripes */
+.g2-sephora .g2-face { background: #0B0B0C; color: #0B0B0C; }
+.g2-stripes { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, #0B0B0C 0 12px, #FAFAFA 12px 24px); }
+.g2-stripes::after { content: ""; position: absolute; inset: 0; background: linear-gradient(170deg, rgba(255,255,255,.35), transparent 40%); }
+.g2-sephora .g2-word { background: #FAFAFA; padding: 9px 18px 9px 24px; font: 700 1.25rem/1 'Helvetica Neue', Arial, sans-serif; letter-spacing: .42em; box-shadow: 0 0 0 2px #0B0B0C; }
+.g2-sephora .g2-chip { color: #0B0B0C; background: #FAFAFA; padding: 2px 6px; opacity: 1; }
+/* the back */
+.g2-back { display: grid; grid-template-rows: auto 1fr; place-items: stretch; background: #FAF7F3; color: #2A2426; }
+.g2-chanel .g2-back { background: #141416; color: #EEE; }
+.g2-mag { display: block; height: 20%; margin-top: 6%; background: linear-gradient(#1B1B1B, #34343A); }
+.g2-bk { display: flex; flex-direction: column; gap: 5px; padding: 8px 14px 10px; text-align: left; font: 500 .62rem var(--sans, system-ui); }
+.g2-bk b { font-size: .62rem; letter-spacing: .14em; }
+.g2-bk small { opacity: .8; }
+.g2-scratch { position: relative; display: block; height: 42px; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, #FFF4F7, #FDE3EC); color: #7A2E4A; border: 1px dashed rgba(122,46,74,.35); }
+.g2-chanel .g2-scratch { background: linear-gradient(135deg, #2A2A2E, #1A1A1D); color: #F4D9E3; border-color: rgba(255,255,255,.2); }
+.g2-bal { position: absolute; inset: 0; display: grid; place-items: center; font: 600 .8rem var(--hand); font-size: 1.15rem; }
+.g2-foil { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ccircle cx='14' cy='14' r='11' fill='%23E9C46A' stroke='%23A8842E' stroke-width='2'/%3E%3Ccircle cx='14' cy='14' r='6.5' fill='none' stroke='%23C9A24A' stroke-width='1.2'/%3E%3C/svg%3E") 14 14, crosshair; transition: opacity .5s; }
+.g2-scratch.done .g2-foil { opacity: 0; pointer-events: none; }
+.g2-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.g2-row .gc-bar { width: 58%; }
+.g2-sparks { position: absolute; left: 50%; top: 50%; pointer-events: none; }
+.g2-sparks i { position: absolute; width: 8px; height: 8px; margin: -4px; background: #F4B6C8; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: g2-spark .9s ease-out var(--d) forwards; }
+.g2-sparks i:nth-child(odd) { background: #F2D27A; }
+@keyframes g2-spark { from { transform: rotate(var(--a)) translateY(0) scale(.4); opacity: 1; } to { transform: rotate(var(--a)) translateY(-46px) scale(1); opacity: 0; } }
+/* the little cards underneath */
+.g2-picks { display: flex; gap: 12px; }
+.g2-pick { position: relative; width: 78px; aspect-ratio: 85.6 / 54; padding: 0; border: 0; border-radius: 7px; background: none; cursor: pointer; opacity: .55; transform: translateY(0); transition: opacity .2s, transform .2s; box-shadow: 0 4px 8px rgba(58,38,38,.2); }
+.g2-pick .g2-face { border-radius: 7px; font-size: 26%; }
+.g2-pick .g2-word { font-size: .5rem !important; padding: 2px 5px 2px 7px !important; }
+.g2-pick .g2-tag, .g2-pick .g2-camellia { display: none; }
+.g2-pick:hover { opacity: .85; transform: translateY(-3px); }
+.g2-pick.on { opacity: 1; transform: translateY(-4px); outline: 2px solid var(--plum); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .g2-card { transition: none; } .g2-sparks { display: none; } }
+.g2 { user-select: none; -webkit-user-select: none; }
