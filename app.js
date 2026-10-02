@@ -1904,7 +1904,7 @@ const VIEWS = {
         <div class="record"><p class="mono" style="margin:0 0 6px; color:var(--plum)">My driving record, honestly</p><ul>
             <li>Parallel parking: working on it</li>
             <li>Sense of direction: that’s what Maps is for</li>
-            <li>Confidence: unmatched</li>
+            <li>Confidence: unmatched. the chanel sunnies are on, after all 🕶️</li>
             <li>Skill: <span class="hand" style="font-size:1.3rem">whoops</span></li>
         </ul></div>
         <div class="bbb kshop" id="kshop">
