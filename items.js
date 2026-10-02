@@ -1,3 +1,43 @@
+/* my dyson airwrap in ceramic pink: the body plus whichever attachment is on it */
+window.AIRWRAP_HEADS = {
+    curl: ['the curling barrel', `<path d="M24 112 L26 18 Q30 4 34 18 L36 112 Z" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><path d="M28 30 L27 106" stroke="#4A484E" stroke-width="1.4"/><circle cx="30" cy="12" r="5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`],
+    wide: ['the wide curling barrel', `<rect x="21" y="34" width="18" height="78" rx="3" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><path d="M25 40 v66" stroke="#4A484E" stroke-width="1.4"/><circle cx="30" cy="30" r="5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`],
+    round: ['the round volumizing brush', `<rect x="19" y="56" width="22" height="56" rx="6" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/>${[0,1,2,3,4,5,6].map(r => [0,1,2].map(c => `<circle cx="${23 + c * 7}" cy="${61 + r * 7.5}" r="1.4" fill="#C9C6CC"/>`).join('')).join('')}<circle cx="30" cy="52" r="4.5" fill="#D6A08E" stroke="#141316" stroke-width="1.2"/>`],
+    smooth: ['the smoothing brush', `<rect x="20" y="52" width="20" height="60" rx="3" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/>${[0,1,2,3,4,5,6,7,8].map(k => `<path d="M${22 + k * 2} 56 v52" stroke="#55535A" stroke-width=".8"/>`).join('')}`],
+    dryer: ['the pre-styling dryer', `<path d="M23 112 L24 76 Q30 62 36 76 L37 112 Z" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><ellipse cx="30" cy="62" rx="10" ry="14" fill="none" stroke="#D6A08E" stroke-width="4"/><ellipse cx="30" cy="62" rx="10" ry="14" fill="none" stroke="#141316" stroke-width="1"/>`],
+    flyaway: ['the flyaway smoother', `<rect x="20" y="66" width="20" height="46" rx="4" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><rect x="38" y="70" width="6" height="36" rx="2" fill="#D6A08E" stroke="#141316" stroke-width="1.2"/><circle cx="30" cy="62" r="4.5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`]
+};
+window.AIRWRAP = (head = 'curl', on = false, u = 'b') => `<svg viewBox="0 0 60 310" class="airwrap"><defs>
+        <linearGradient id="awb${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E3CFC6"/><stop offset=".45" stop-color="#FBEDE6"/><stop offset="1" stop-color="#DCC3B8"/></linearGradient>
+        <linearGradient id="awr${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A86A5E"/><stop offset=".5" stop-color="#E3A796"/><stop offset="1" stop-color="#9C5F53"/></linearGradient>
+        <pattern id="awm${u}" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#8A5A54"/><circle cx="1.5" cy="1.5" r=".7" fill="#3E2422"/></pattern></defs>
+    ${window.AIRWRAP_HEADS[head][1]}
+    <rect x="18" y="112" width="24" height="14" rx="2" fill="url(#awr${u})" stroke="#3A2024" stroke-width="1.5"/>
+    <rect x="18" y="126" width="24" height="130" rx="3" fill="url(#awb${u})" stroke="#5A3A36" stroke-width="1.5"/>
+    <circle cx="25" cy="150" r="2.3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/><circle cx="35" cy="150" r="2.3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/><circle cx="30" cy="160" r="3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/>
+    <text x="31" y="214" font-family="Instrument Sans, Arial" font-size="5" fill="#8A6A62" transform="rotate(90 31 214)">dyson</text>
+    <circle cx="29" cy="236" r="1.2" fill="${on ? '#38E0D2' : '#B5A49C'}"/>
+    <rect x="18" y="256" width="24" height="24" rx="2" fill="url(#awm${u})" stroke="#3A2024" stroke-width="1.5"/>
+    <path d="M22 280 L30 296 L38 280 Z" fill="#1F2230"/><path d="M30 296 v14" stroke="#1F2230" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+
+window.AIRSTRAIT = (open = 0, on = false, uid = 'a') => `<svg viewBox="0 0 120 300" class="airstrait"><defs>
+        <linearGradient id="asp${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3E2337"/><stop offset=".35" stop-color="#7C5470"/><stop offset=".55" stop-color="#B58AA6"/><stop offset=".75" stop-color="#6C4560"/><stop offset="1" stop-color="#3A2033"/></linearGradient>
+        <linearGradient id="asr${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C99A8C"/><stop offset=".5" stop-color="#F1CFC3"/><stop offset="1" stop-color="#BE8E80"/></linearGradient>
+        <pattern id="ash${uid}" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="url(#asr${uid})"/><circle cx="2" cy="2" r=".9" fill="#7A5048" opacity=".55"/></pattern></defs>
+    <path d="M60 262 c-10 4 -10 10 0 14 c10 4 10 10 0 14 c-10 4 -10 8 -4 10" fill="none" stroke="#2A2426" stroke-width="5" stroke-linecap="round"/>
+    <g class="as-arm as-l" style="transform-origin:60px 228px; transform: rotate(${-open * 7}deg)">
+        <path d="M44 14 L58 6 L58 214 L46 214 Z" fill="url(#asp${uid})" stroke="#2A1626" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M49 16 L49 206" stroke="#E8C6DA" stroke-width="1.6" opacity=".5"/></g>
+    <g class="as-arm as-r" style="transform-origin:60px 228px; transform: rotate(${open * 7}deg)">
+        <path d="M76 14 L62 6 L62 214 L74 214 Z" fill="url(#asp${uid})" stroke="#2A1626" stroke-width="2" stroke-linejoin="round"/>
+        <rect x="63.5" y="112" width="9" height="16" rx="1.5" fill="#141016"/>
+        <path d="M66 117 q2 -3 4 0 q-1 3 -2 6 M66 123 q2 2 4 0" fill="none" stroke="${on ? '#38E0D2' : '#3A3440'}" stroke-width="1.1" stroke-linecap="round"/>
+        ${[136, 146, 156, 166].map((y, k) => `<circle cx="68" cy="${y}" r="2.6" fill="${['#E2564F', '#E2564F', '#5C8FE0', '#E8B9C8'][k]}" stroke="#2A1626" stroke-width=".8" opacity="${on ? 1 : .55}"/>`).join('')}</g>
+    <rect x="42" y="210" width="36" height="52" rx="7" fill="url(#ash${uid})" stroke="#2A1626" stroke-width="2"/>
+    <path d="M46 216 v40" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+</svg>`;
+
 /* Everything in my bag. Each thing has:
    id, name (the hover tag), where it lands once it falls out (l, t, w, r: left/top/width as % of the table, rotation),
    art (a doodle for now; swap in a photo of the real thing any time with  art: '<img src="assets/img/....png" alt="">'),
@@ -477,6 +517,16 @@ window.ITEMS = [
         id: 'scrunchies', name: 'my silk scrunchies', zip: 'front', l: 34.3, t: 21.2, w: 16.9, r: 0,
         get art() { return `<svg viewBox="0 0 150 90">${window.SCRUNCHIE(48, 46, 25, ...window.SCR_BROWN)}${window.SCRUNCHIE(102, 42, 25, ...window.SCR_PINK)}</svg>`; },
         open: 'hairpony'
+    },
+    {
+        id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 7, r: -6,
+        get art() { return window.AIRSTRAIT(0, false, 'i'); },
+        open: 'airstrait'
+    },
+    {
+        id: 'airwrap', name: 'my dyson airwrap (ceramic pink)', zip: 'front', l: 0, t: 0, w: 4.6, r: 5,
+        get art() { return window.AIRWRAP('curl', false, 'i'); },
+        open: 'airwrap'
     },
     {
         id: 'comb', name: 'my wide-tooth comb', zip: 'front', l: 54.5, t: 20.5, w: 15.5, r: 0,

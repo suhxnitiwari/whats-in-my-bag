@@ -1666,6 +1666,19 @@ const VIEWS = {
         <h2>My silk <em>scrunchies</em></h2>
         <p class="note">two of them, pink and brown.</p>
         <div class="solo">${ITEMS.find(i => i.id === 'scrunchies').art}</div>`,
+    airwrap: () => `
+        <h2>My <em>Dyson Airwrap</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(ceramic pink)</span></h2>
+        <p class="note">the curls, the blowout, the whole personality. snap on an attachment and turn it on.</p>
+        <div class="as-stage aw-stage" id="aw-stage"><div class="aw-big" id="aw-big">${window.AIRWRAP('curl')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
+        <div class="aw-heads" role="group" aria-label="Attachments">${Object.entries(window.AIRWRAP_HEADS).map(([k, [n]]) => `<button type="button" class="aw-head" data-head="${k}" aria-label="${n}" title="${n}"><svg viewBox="12 0 36 120">${window.AIRWRAP_HEADS[k][1]}</svg></button>`).join('')}</div>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="aw-power">Turn it on</button></div>
+        <p class="hand pd-say" id="aw-say">the curling barrel’s on. it always is.</p>`,
+    airstrait: () => `
+        <h2>My <em>Dyson Airstrait</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(jasper plum)</span></h2>
+        <p class="note">wet to dry, straight, in one step. with air, not hot plates. and i still somehow run late.</p>
+        <div class="as-stage" id="as-stage"><div class="as-big" id="as-big">${window.AIRSTRAIT(0, false, 'b')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
+        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="as-power">Turn it on</button><button class="btn" type="button" id="as-open">Open it</button><button class="btn" type="button" id="as-mode">Mode: wet</button></div>
+        <p class="hand pd-say" id="as-say">it lives in my front pocket. yes, it fits. barely.</p>`,
     haircomb: () => `
         <h2>My <em>wide-tooth</em> comb</h2>
         <p class="note">wide teeth, for long hair. drag it down through my hair. (it never works on the first try.)</p>
@@ -2365,6 +2378,26 @@ const AFTER = {
             btn.setAttribute('aria-pressed', on);
             sheetBody.querySelector('.rg-big').classList.toggle('worn', on);
         };
+    },
+    airwrap: () => {
+        const big = $('#aw-big'), stage = $('#aw-stage'), say = $('#aw-say');
+        let head = 'curl', on = false;
+        const LINES = { curl: 'the curling barrel. the air wraps the hair around it by itself. witchcraft.', wide: 'the wide barrel. big, bouncy, “i woke up like this” curls.', round: 'the round brush. volume. so much volume.', smooth: 'the smoothing brush. sleek. glossy. done.', dryer: 'the pre-styling dryer. step one, before anything else.', flyaway: 'the flyaway smoother. for the baby hairs that will not cooperate.' };
+        const draw = () => { big.innerHTML = window.AIRWRAP(head, on); stage.classList.toggle('blowing', on); sheetBody.querySelectorAll('[data-head]').forEach(b => b.classList.toggle('on', b.dataset.head === head)); };
+        sheetBody.querySelectorAll('[data-head]').forEach(b => b.onclick = () => { head = b.dataset.head; SFX.tap(); big.classList.remove('snap'); void big.offsetWidth; big.classList.add('snap'); say.textContent = LINES[head]; draw(); });
+        $('#aw-power').onclick = () => { on = !on; SFX.tap(); if (on) SFX.rustle(.8, .06); $('#aw-power').textContent = on ? 'Turn it off' : 'Turn it on'; say.textContent = on ? 'whooosh. curls in progress. don’t talk to me for 40 minutes.' : 'off. worth every single minute.'; draw(); };
+        draw();
+    },
+    airstrait: () => {
+        // power, open/close the arms, and cycle the modes. the screen lights up, the air blows when it's on and closed.
+        const big = $('#as-big'), stage = $('#as-stage'), say = $('#as-say');
+        let on = false, open = 1, mode = 0;
+        const MODES = [['wet', 'wet hair, straight from the shower. no blow dry first.'], ['dry', 'dry hair, quick touch up before class.'], ['cool', 'cool shot. locks it in. pretends it’s a salon blowout.']];
+        const draw = () => { big.innerHTML = window.AIRSTRAIT(open, on, 'b'); stage.classList.toggle('blowing', on && !open); };
+        $('#as-power').onclick = () => { on = !on; SFX.tap(); if (on) SFX.rustle(.6, .05); $('#as-power').textContent = on ? 'Turn it off' : 'Turn it on'; say.textContent = on ? 'on. the little screen lights up teal ♡ close it on a section.' : 'off. cooling down in the bag. (not really, i just throw it in.)'; draw(); };
+        $('#as-open').onclick = () => { open = open ? 0 : 1; SFX.tap(); $('#as-open').textContent = open ? 'Close it' : 'Open it'; if (on && !open) { SFX.rustle(.9, .06); say.textContent = 'whoooosh. that’s air, not plates. glass hair loading…'; } else say.textContent = open ? 'open. grab a section.' : 'closed. turn it on and it blows.'; draw(); };
+        $('#as-mode').onclick = () => { mode = (mode + 1) % MODES.length; SFX.tap(); $('#as-mode').textContent = `Mode: ${MODES[mode][0]}`; say.textContent = MODES[mode][1]; };
+        open = 1; $('#as-open').textContent = 'Close it'; draw();
     },
     haircomb: () => {
         // my hair, drawn strand by strand. every bit of it has its own tangle level; each stroke of the comb loosens whatever it passes through,
