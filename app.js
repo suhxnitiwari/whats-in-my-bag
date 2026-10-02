@@ -2269,14 +2269,19 @@ const VCARD = {
         <g transform="translate(9 46)" fill="none" stroke="#7D838C" stroke-width=".5"><circle cx="0" cy="0" r="2.6"/><path d="M-1.2 -.8 l1.2 -1.2 l1.2 1.2 M1.4 .6 l-.4 1.5 h-1.8 M-1.4 .4 l-.6 -1.2"/></g>
         <text x="80" y="48" text-anchor="end" font-family="Instrument Sans, Arial" font-weight="800" font-style="italic" font-size="7" fill="#fff" stroke="#9AA0A8" stroke-width=".25">VISA</text>
         <text x="80" y="51.2" text-anchor="end" font-family="Instrument Sans, Arial" font-style="italic" font-size="2.2" fill="#fff">Signature</text></g></svg>`,
-    bofadebit: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><defs><linearGradient id="vbr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C21F2B"/><stop offset=".5" stop-color="#E2403C"/><stop offset="1" stop-color="#B51C27"/></linearGradient></defs>
-        <rect width="54" height="86" fill="url(#vbr)"/><path d="M54 0 L0 60 V40 L36 0Z" fill="#fff" opacity=".07"/>
-        ${VC_CHIP(22, 11)}${VC_TAP(36, 13, '#fff')}
-        ${BOFA_FLAG(18, 32, '#fff', 1.05)}
-        <text x="27" y="52" text-anchor="middle" font-family="Instrument Sans" font-weight="600" font-size="3.6" fill="#fff" letter-spacing=".8">BANK OF AMERICA</text>
-        <text x="46" y="66" text-anchor="end" font-family="Instrument Sans" font-weight="600" font-size="4.6" fill="#fff">debit</text>
-        <circle cx="38" cy="76" r="4.4" fill="#EB001B"/><circle cx="44" cy="76" r="4.4" fill="#F79E1B" opacity=".9"/><path d="M41 72.6 a4.4 4.4 0 0 1 0 6.8 a4.4 4.4 0 0 1 0 -6.8z" fill="#FF5F00"/>
-        <path d="M8 74 l2 -3 2 3 M13 75 l-1 3 -3 0 M7 76 l1 3 h3" fill="none" stroke="#fff" stroke-width=".7" stroke-linecap="round"/></svg>`
+    bofadebit: `<svg viewBox="0 0 54 86" preserveAspectRatio="none"><g transform="translate(0 86) rotate(-90)">
+        <defs><linearGradient id="hbd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E3343A"/><stop offset=".45" stop-color="#C8102E"/><stop offset="1" stop-color="#9E0B24"/></linearGradient></defs>
+        <rect width="86" height="54" fill="url(#hbd)"/>
+        <path d="M0 20 L86 4 V13 L0 31Z" fill="#fff" opacity=".1"/><path d="M34 54 L86 26 V42 L62 54Z" fill="#000" opacity=".1"/>
+        <g opacity=".1" fill="none" stroke="#fff" stroke-width="2.4"><path d="M14 30 l12 -14 h26"/><path d="M20 36 l12 -14 h26"/><path d="M26 42 l12 -14 h26"/></g>
+        <rect x="8" y="19" width="10" height="8" rx="1.4" fill="#E2C46E" stroke="#8A6A2A" stroke-width=".35"/><path d="M8 23 h10 M13 19 v8 M10.5 19 v2.8 M15.5 19 v2.8 M10.5 27 v-2.6 M15.5 27 v-2.6" stroke="#8A6A2A" stroke-width=".28"/>
+        <g fill="none" stroke="#fff" stroke-width=".55" stroke-linecap="round"><path d="M78 5.5 q1.1 1.4 0 2.8"/><path d="M79.3 4.8 q1.7 2.1 0 4.2"/><path d="M80.6 4.1 q2.3 2.8 0 5.6"/></g>
+        <g fill="none" stroke-linecap="round" stroke-width="1.3" stroke="#fff"><path d="M36 25 l4.2 -4.6 h9"/><path d="M38.2 27.4 l4.2 -4.6 h9"/><path d="M40.4 29.8 l4.2 -4.6 h9"/></g>
+        <text x="44" y="36.5" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="3.4" letter-spacing=".55" fill="#fff">BANK OF AMERICA</text>
+        <text x="6" y="48" font-family="Instrument Sans, Arial" font-size="3.4" letter-spacing=".35" fill="#fff">SUHANI TIWARI</text>
+        <text x="68" y="42" text-anchor="end" font-family="Instrument Sans, Arial" font-weight="600" font-size="3" fill="#fff">debit</text>
+        <circle cx="72" cy="46" r="4.2" fill="#EB001B"/><circle cx="78" cy="46" r="4.2" fill="#F79E1B"/><path d="M75 42.85 a4.2 4.2 0 0 1 0 6.3 a4.2 4.2 0 0 1 0 -6.3z" fill="#FF5F00"/>
+    </g></svg>`
 };
 
 function cardHTML(c, i) {
