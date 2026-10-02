@@ -3747,7 +3747,16 @@ const AFTER = {
         };
         sheetBody.querySelector('.fob-btns').onclick = e => {
             const b = e.target.closest('[data-fob]'); if (!b) return;
-            const k = b.dataset.fob, blaring = SFX.fob(k);
+            const k = b.dataset.fob;
+            // the trunk button opens and closes the actual trunk in the photo below
+            if (k === 'trunk') {
+                const opening = !trunkOpen;
+                if (opening) { SFX.fob('trunk'); toast('trunk’s open. the bags are safe ♡'); setStep(2); }
+                else { SFX.fob('lock'); toast('trunk closed. bags secured. no one will ever know.'); setStep(3); }
+                $('#kshop').scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+                return;
+            }
+            const blaring = SFX.fob(k);
             if (k === 'panic' && SFX.on && !blaring) { toast('okay. it stopped. nobody saw that.'); return; }
             toast(lines[k]);
             if (k === 'panic' && !reduce) { const f = $('#fob'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); }
@@ -3770,8 +3779,11 @@ const AFTER = {
             photo.querySelectorAll('img').forEach(im => im.setAttribute('aria-hidden', im.dataset.s != step));
             $('#kshop-tag').textContent = tag; $('#kshop-go').textContent = btn; $('#kshop-cap').textContent = cap;
         };
+        let trunkOpen = false;
+        const setStep = n => { step = n; trunkOpen = n === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; showStep(); if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); } };
+        const b2 = sheetBody.querySelector('[data-fob="trunk"]');
         $('#kshop-go').onclick = () => {
-            if (step < STEPS.length - 1) { step++; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
+            if (step < STEPS.length - 1) { step++; trunkOpen = step === 2; b2.textContent = trunkOpen ? 'Close trunk' : 'Trunk'; if (STEPS[step][0]) SFX.fob(STEPS[step][0]); showStep(); }
             else toast(laps2[laps++ % laps2.length]);
             if (!reduce) { shop.classList.remove('poof'); void shop.offsetWidth; shop.classList.add('poof'); }
         };
