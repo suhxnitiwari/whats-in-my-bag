@@ -2413,7 +2413,9 @@ const AFTER = {
         const size = () => { const dpr = devicePixelRatio || 1; W = hair.clientWidth; H = hair.clientHeight; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); draw(); };
         // my real hair: the tangled photo on top, the smooth photo underneath. every grid cell's tangle level is how much
         // of the tangled photo still shows there, blurred so the edges are soft. the braid photo fades in at the end.
-        const PIC = ['before', 'after', 'braid'].map(k => { const im = new Image(); im.src = `assets/img/me-hair-${k}.jpg`; im.onload = () => draw(); return im; });
+        const PIC = ['before', 'after', 'braid'].map(k => { const im = new Image(); im.onload = () => (W ? draw() : size()); im.src = `assets/img/me-hair-${k}.jpg`; return im; });
+        // redraw whenever the box gets (or changes) its size, so the photos always show up
+        if (window.ResizeObserver) new ResizeObserver(() => { if (hair.clientWidth && hair.clientWidth !== W) size(); }).observe(hair);
         const mk = document.createElement('canvas'), mg = mk.getContext('2d'), off = document.createElement('canvas'), og = off.getContext('2d');
         mk.width = COLS; mk.height = ROWS;
         const cover = (ctx, im, w, h) => { if (!im.complete || !im.naturalWidth) return; const r = Math.max(w / im.naturalWidth, h / im.naturalHeight), iw = im.naturalWidth * r, ih = im.naturalHeight * r; ctx.drawImage(im, (w - iw) / 2, (h - ih) / 2, iw, ih); };
@@ -3721,14 +3723,18 @@ const AFTER = {
             if (open) { read = true; say.textContent = 'tap the note to fold it back up.'; }
             else { pd.classList.add('read'); say.textContent = 'okay. now unfold the pad ↑'; }
         };
+        // a real pad wrapper: a little square packet. tap once and the top third unfolds, tap again and the bottom does. then it's open.
+        let step = 0;
+        const STEP_SAY = ['folded back up into a little square. it’s yours whenever.', 'one unfold…', 'two. boom, it’s open. take two if you need them.'];
         pad.onclick = () => {
             if (pd.classList.contains('reading')) return;
             if (!read) { say.textContent = 'read the note first ♡'; note.classList.remove('nudge'); void note.offsetWidth; note.classList.add('nudge'); return; }
-            const open = pd.classList.toggle('opened');
-            pad.setAttribute('aria-label', open ? 'The pad, unwrapped. Tap to wrap it back up' : 'A wrapped pad. Open it');
-            SFX.zip(open, .35);
-            say.textContent = open ? 'unfolded. there you go. take two if you need them.' : 'folded back up in thirds. it’s yours whenever.';
-            $('#pd-more').hidden = !open;
+            step = (step + 1) % 3;
+            pd.classList.toggle('unfold1', step >= 1); pd.classList.toggle('opened', step === 2);
+            pad.setAttribute('aria-label', ['A wrapped pad, folded in thirds. Unfold it', 'Half unfolded. Unfold the other side', 'The pad, unwrapped. Tap to fold it back up'][step]);
+            SFX.zip(step > 0, .3);
+            say.textContent = STEP_SAY[step];
+            $('#pd-more').hidden = step !== 2;
         };
     },
 

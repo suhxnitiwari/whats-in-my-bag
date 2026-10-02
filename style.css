@@ -2827,22 +2827,25 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 /* pads: the note is big and centered, front and center. folded, it slides off to the side. */
 .pd.reading .pd-note { left: 6%; right: 6%; top: 4%; width: auto; transform: rotate(-1.2deg); }
 .pd-l { font-size: clamp(1.05rem, 3.9vw, 1.25rem); }
-.pd.read:not(.reading) .pd-note { right: -12%; top: -8%; left: auto; width: 64px; }
-/* a trifold wrapper: top and bottom thirds folded over the middle, they swing open, then the pad is right there */
+.pd.read:not(.reading) .pd-note { right: -16%; top: 6%; left: auto; width: 118px; height: 118px; }
+.pd.read:not(.reading) .pd-folded { font-size: 2.4rem; }
+/* a real pad wrapper: same size as the pad, folded in thirds into a little square. top third unfolds first, then the bottom. */
 .pd-back, .pd-flap { display: none; }
-.pd-tri { position: absolute; inset: 0; z-index: 2; transform-style: preserve-3d; pointer-events: none; }
-.pd-f { position: absolute; left: 0; right: 0; height: 33.4%; border: 2.5px solid var(--ink); background: #F4B6CA; backface-visibility: visible; transition: transform .6s cubic-bezier(.5,0,.3,1); }
-.pd-f::before { content: ""; position: absolute; inset: 6px; border: 2px dashed rgba(233,149,175,.95); border-radius: 8px; }
-.pd-f1 { top: 0; border-radius: 18px 18px 4px 4px; transform-origin: 50% 100%; transform: rotateX(-180deg); background: #EFA6BD; transition-delay: .25s; }
-.pd-f2 { top: 33.3%; border-radius: 4px; box-shadow: 5px 5px 0 var(--ink); z-index: 1; }
-.pd-f3 { bottom: 0; border-radius: 4px 4px 18px 18px; transform-origin: 50% 0; transform: rotateX(180deg); background: #EFA6BD; }
-.pd .pd-tab { top: -2px; }
-.pd-inside { opacity: 0; transition: opacity .3s, transform .6s cubic-bezier(.3,1.4,.5,1) .25s; z-index: 3; }
-.pd.opened .pd-f1, .pd.opened .pd-f3 { transform: rotateX(0deg); }
-.pd.opened .pd-f3 { transition-delay: .2s; } .pd.opened .pd-f1 { transition-delay: 0s; }
-.pd.opened .pd-f2 { box-shadow: none; }
-.pd.opened .pd-inside { opacity: 1; transition-delay: .7s, .7s; }
-.pd.opened .pd-tri::after { content: ""; position: absolute; inset: 0; border-radius: 18px; box-shadow: 5px 5px 0 var(--ink); }
+.pd-tri { position: absolute; inset: 3% 16%; z-index: 2; perspective: 900px; pointer-events: none; }
+.pd-f { position: absolute; left: 0; right: 0; height: 33.4%; border: 2.5px solid var(--ink); backface-visibility: visible; transition: transform .55s cubic-bezier(.5,0,.3,1);
+  background: repeating-linear-gradient(90deg, #F39A6B 0 14px, #F7B48C 14px 22px, #EE8A58 22px 30px); }
+.pd-f::before { content: ""; position: absolute; inset: 5px; border: 2px dashed rgba(255,255,255,.55); border-radius: 6px; }
+.pd-f1 { top: 0; border-radius: 22px 22px 4px 4px; transform-origin: 50% 100%; transform: rotateX(-180deg); z-index: 3; }
+.pd-f2 { top: 33.3%; border-radius: 6px; z-index: 1; box-shadow: 4px 4px 0 var(--ink); background: linear-gradient(160deg, #1E3A7A, #2F5BB0); }
+.pd-f2::after { content: "always"; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: italic 700 1.5rem Georgia, serif; color: #fff; letter-spacing: -.02em; }
+.pd-f3 { bottom: 0; border-radius: 4px 4px 22px 22px; transform-origin: 50% 0; transform: rotateX(180deg); z-index: 2; }
+.pd .pd-tab { top: -2px; z-index: 4; }
+.pd-inside { inset: 5% 18%; opacity: 0; transition: opacity .3s; z-index: 3; }
+.pd.unfold1 .pd-f1 { transform: rotateX(0deg); }
+.pd.opened .pd-f3 { transform: rotateX(0deg); }
+.pd.unfold1 .pd-f2, .pd.opened .pd-f2 { background: repeating-linear-gradient(90deg, #F39A6B 0 14px, #F7B48C 14px 22px, #EE8A58 22px 30px); box-shadow: none; }
+.pd.unfold1 .pd-f2::after { content: none; }
+.pd.opened .pd-inside { opacity: 1; transition-delay: .45s; }
 .pd.reading .pd-tri { opacity: .35; }
 
 /* dyson airstrait */
