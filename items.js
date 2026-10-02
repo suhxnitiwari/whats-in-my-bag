@@ -1,42 +1,227 @@
-/* my dyson airwrap in ceramic pink: the body plus whichever attachment is on it */
+/* my dyson airwrap i.d. curl: cream body, rose-gold band, mauve filter cage, matte black attachments with mauve caps.
+   drawn from photos of the real one. one handle width = 24 units; the handle is 7 widths long (band + cream + filter).
+   every attachment clicks straight on top of the rose-gold band (its collar ends at y 104). */
+const AWX = 32;   // centre line
+const awCollar = (x0, x1, btn = true) => `<rect x="${x0}" y="96" width="${x1 - x0}" height="8" rx="1" fill="url(#awk)" stroke="#0A090B" stroke-width=".8"/><path d="M${x0} 99.5 H${x1}" stroke="#2E2B30" stroke-width=".5"/>${btn ? `<circle cx="${x1 - 3}" cy="100" r="1.1" fill="#2A272C" stroke="#0A090B" stroke-width=".4"/>` : ''}`;
+// the mauve "lipstick" cap: flat disc, knurled band, dome
+const awCap = (y, discW = 18) => `<rect x="${AWX - discW / 2}" y="${y}" width="${discW}" height="3" rx=".8" fill="url(#awm)" stroke="#2A2026" stroke-width=".6"/>
+    <rect x="${AWX - 5}" y="${y - 7}" width="10" height="7" fill="url(#awm)" stroke="#2A2026" stroke-width=".6"/>${[0, 1, 2, 3, 4, 5, 6, 7].map(k => `<path d="M${AWX - 4 + k * 1.15} ${y - 6.6} v6.2" stroke="#3E3138" stroke-width=".45"/>`).join('')}
+    <path d="M${AWX - 5} ${y - 7} Q${AWX - 5} ${y - 13} ${AWX} ${y - 13} Q${AWX + 5} ${y - 13} ${AWX + 5} ${y - 7} Z" fill="url(#awm)" stroke="#2A2026" stroke-width=".6"/><path d="M${AWX - 3} ${y - 10} q1.5 -1.6 3.4 -1.4" stroke="#D9C6CF" stroke-width=".8" fill="none" stroke-linecap="round" opacity=".7"/>`;
 window.AIRWRAP_HEADS = {
-    curl: ['the curling barrel', `<path d="M24 112 L26 18 Q30 4 34 18 L36 112 Z" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><path d="M28 30 L27 106" stroke="#4A484E" stroke-width="1.4"/><circle cx="30" cy="12" r="5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`],
-    wide: ['the wide curling barrel', `<rect x="21" y="34" width="18" height="78" rx="3" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><path d="M25 40 v66" stroke="#4A484E" stroke-width="1.4"/><circle cx="30" cy="30" r="5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`],
-    round: ['the round volumizing brush', `<rect x="19" y="56" width="22" height="56" rx="6" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/>${[0,1,2,3,4,5,6].map(r => [0,1,2].map(c => `<circle cx="${23 + c * 7}" cy="${61 + r * 7.5}" r="1.4" fill="#C9C6CC"/>`).join('')).join('')}<circle cx="30" cy="52" r="4.5" fill="#D6A08E" stroke="#141316" stroke-width="1.2"/>`],
-    smooth: ['the smoothing brush', `<rect x="20" y="52" width="20" height="60" rx="3" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/>${[0,1,2,3,4,5,6,7,8].map(k => `<path d="M${22 + k * 2} 56 v52" stroke="#55535A" stroke-width=".8"/>`).join('')}`],
-    dryer: ['the pre-styling dryer', `<path d="M23 112 L24 76 Q30 62 36 76 L37 112 Z" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><ellipse cx="30" cy="62" rx="10" ry="14" fill="none" stroke="#D6A08E" stroke-width="4"/><ellipse cx="30" cy="62" rx="10" ry="14" fill="none" stroke="#141316" stroke-width="1"/>`],
-    flyaway: ['the flyaway smoother', `<rect x="20" y="66" width="20" height="46" rx="4" fill="#2B2A2E" stroke="#141316" stroke-width="1.5"/><rect x="38" y="70" width="6" height="36" rx="2" fill="#D6A08E" stroke="#141316" stroke-width="1.2"/><circle cx="30" cy="62" r="4.5" fill="#6E4E58" stroke="#141316" stroke-width="1.2"/>`]
+    curl: ['the long curling barrel', `
+        <rect x="23" y="22" width="18" height="75" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        ${[26.5, 30.5, 34.5, 38].map(x => `<path d="M${x} 24 V95" stroke="#0B0A0C" stroke-width="1.1"/><path d="M${x + .9} 24 V95" stroke="#4A464D" stroke-width=".4"/>`).join('')}
+        <path d="M30.6 27.5 l-1.8 1.2 l1.8 1.2z M33.4 27.5 l1.8 1.2 l-1.8 1.2z" fill="#C9C4CB"/>
+        ${awCap(19)}${awCollar(22.5, 41.5)}`],
+    tapered: ['the tapered barrel', `
+        <path d="M23.5 96 L27.2 19 H36.8 L40.5 96 Z" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        <path d="M28.5 24 L26.6 94 M32 22 V94 M35.5 24 L37.4 94" stroke="#0E0D10" stroke-width=".6" opacity=".8"/>
+        <rect x="26.5" y="15" width="11" height="4" rx="1" fill="url(#awm)" stroke="#2A2026" stroke-width=".6"/>
+        <path d="M27.6 15 Q27.6 8.5 32 8.5 Q36.4 8.5 36.4 15 Z" fill="url(#awm)" stroke="#2A2026" stroke-width=".6"/><path d="M29.3 12 q1.3 -1.5 3 -1.3" stroke="#D9C6CF" stroke-width=".8" fill="none" stroke-linecap="round" opacity=".7"/>
+        ${awCollar(23, 41)}`],
+    round: ['the round volumizing brush', `
+        <g stroke="#111013" stroke-width=".55" stroke-linecap="round">${[...Array(15)].map((_, r) => [...Array(7)].map((_, c) => { const y = 55 + r * 2.6 + (c % 2) * 1.3, x = 19.5 + c * 4.2, sp = 7 + ((r * 7 + c * 3) % 5); return `<path d="M${x} ${y} L${x < AWX ? x - sp : x + sp} ${y + ((r + c) % 3 - 1) * .8}"/>`; }).join('')).join('')}</g>
+        <rect x="18.5" y="50" width="27" height="43" rx="1.5" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        ${[...Array(13)].map((_, r) => [...Array(6)].map((_, c) => `<circle cx="${21.4 + c * 4.2 + (r % 2) * 2.1}" cy="${54 + r * 2.85}" r=".95" fill="#060507"/>`).join('')).join('')}
+        <g stroke="#1A181C" stroke-width=".6" stroke-linecap="round">${[...Array(13)].map((_, r) => `<path d="M18.5 ${54.6 + r * 2.85} h-${6 + (r * 5) % 4} M45.5 ${55.6 + r * 2.85} h${6 + (r * 3) % 4}"/>`).join('')}</g>
+        <rect x="18" y="48" width="28" height="2.6" rx=".8" fill="url(#awr)" stroke="#5A2E28" stroke-width=".5"/>
+        <path d="M29 48.5 V40 Q29 36.5 32 36.5 Q35 36.5 35 40 V48.5 Z" fill="url(#awr)" stroke="#5A2E28" stroke-width=".6"/><path d="M30.4 46 V40.5" stroke="#F4CFC2" stroke-width=".8" stroke-linecap="round" opacity=".8"/>
+        <rect x="18.5" y="91" width="27" height="5" fill="url(#awk)" stroke="#0A090B" stroke-width=".7"/>
+        ${awCollar(24, 40, false)}`],
+    smooth: ['the paddle smoothing brush', `
+        <path d="M13 96 V52 Q13 46 19 46 H45 Q51 46 51 52 V96 Z" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        <rect x="13" y="46" width="38" height="5" rx="3" fill="#1A181B"/>
+        <rect x="15" y="53" width="16" height="40" fill="#0D0C0E"/><rect x="33" y="53" width="16" height="40" fill="#0D0C0E"/>
+        ${[...Array(13)].map((_, r) => [17, 33].map(x0 => `<path d="M${x0} ${55 + r * 3} l3 1.2 l3 -1.2 l3 1.2 l3 -1.2" stroke="#2C292E" stroke-width=".9" fill="none"/>`).join('')).join('')}
+        ${[...Array(13)].map((_, r) => [17.5, 22.5, 27.5, 35, 40, 45].map(x => `<circle cx="${x + (r % 2) * .8}" cy="${55 + r * 3}" r=".95" fill="#F2A48A" stroke="#7A3E2E" stroke-width=".25"/>`).join('')).join('')}
+        <path d="M13 92 H51 V96 H13 Z" fill="#141215"/>
+        <path d="M30.5 97 l1.5 -1.8 l1.5 1.8z" fill="#5E5A60"/>
+        ${awCollar(22, 42, false)}`],
+    coanda: ['the coanda smoothing dryer', `
+        <path d="M28 50 L23 57 H41 L36 50 Z" fill="url(#awk)" stroke="#0A090B" stroke-width=".7"/>
+        <rect x="28.5" y="43.5" width="7" height="6.5" fill="url(#awm)" stroke="#2A2026" stroke-width=".5"/>${[0, 1, 2, 3, 4].map(k => `<path d="M${29.4 + k * 1.3} 44 v5.6" stroke="#3E3138" stroke-width=".4"/>`).join('')}
+        <path d="M28.5 43.5 Q28.5 39 32 39 Q35.5 39 35.5 43.5 Z" fill="url(#awm)" stroke="#2A2026" stroke-width=".5"/>
+        <rect x="20" y="58" width="24" height="35" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        <rect x="44" y="58" width="6" height="35" fill="#151316" stroke="#0A090B" stroke-width=".7"/>
+        <rect x="45.2" y="60" width="2.6" height="31" fill="#050405"/>${[...Array(15)].map((_, k) => `<path d="M45.2 ${61 + k * 2} h2.6" stroke="#2A272C" stroke-width=".45"/>`).join('')}
+        <path d="M19 55 H50 V59 H19 Z M19 92 H50 V96 H19 Z" fill="#1A181B" stroke="#0A090B" stroke-width=".7"/>
+        <rect x="50.5" y="54" width="5" height="43" rx="2.5" fill="url(#awr)" stroke="#5A2E28" stroke-width=".6"/><path d="M52 57 V94" stroke="#F4CFC2" stroke-width=".7" stroke-linecap="round" opacity=".75"/>
+        ${awCollar(23, 41)}`],
+    dryer: ['the pre-styling dryer', `
+        <path d="M22.5 104 V97 L26 88 H38 L41.5 97 V104 Z" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        <path d="M26 88 L32 96 L38 88" fill="#121013" stroke="#0A090B" stroke-width=".5"/>
+        <rect x="11" y="48" width="44" height="41" rx="4" fill="url(#awk)" stroke="#0A090B" stroke-width=".9"/>
+        <path d="M15 48 H11 Q11 48 11 52 V85 Q11 89 15 89" fill="none" stroke="url(#awr)" stroke-width="2.4"/>
+        <text x="17" y="53" font-family="Instrument Sans, Arial" font-size="3.4" fill="#BDB7BE" transform="rotate(90 17 53)">dyson</text>
+        <path d="M48 51 Q52 51 52 56 V80" stroke="#4A464D" stroke-width=".8" fill="none" opacity=".7"/>`]
 };
-window.AIRWRAP = (head = 'curl', on = false, u = 'b') => `<svg viewBox="0 0 60 310" class="airwrap"><defs>
-        <linearGradient id="awb${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E3CFC6"/><stop offset=".45" stop-color="#FBEDE6"/><stop offset="1" stop-color="#DCC3B8"/></linearGradient>
-        <linearGradient id="awr${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A86A5E"/><stop offset=".5" stop-color="#E3A796"/><stop offset="1" stop-color="#9C5F53"/></linearGradient>
-        <pattern id="awm${u}" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#8A5A54"/><circle cx="1.5" cy="1.5" r=".7" fill="#3E2422"/></pattern></defs>
+window.AW_DEFS = `<defs>
+        <linearGradient id="awb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D3C4B5"/><stop offset=".38" stop-color="#F7EFE5"/><stop offset=".6" stop-color="#F1E6DA"/><stop offset="1" stop-color="#CDBCAC"/></linearGradient>
+        <linearGradient id="awr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7E4238"/><stop offset=".35" stop-color="#C98272"/><stop offset=".5" stop-color="#EAB3A2"/><stop offset=".7" stop-color="#B5705F"/><stop offset="1" stop-color="#743A31"/></linearGradient>
+        <linearGradient id="awk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#121113"/><stop offset=".4" stop-color="#36333A"/><stop offset=".55" stop-color="#2A282D"/><stop offset="1" stop-color="#0E0D0F"/></linearGradient>
+        <linearGradient id="awm" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4A3A44"/><stop offset=".45" stop-color="#9C8792"/><stop offset="1" stop-color="#43343D"/></linearGradient>
+        <radialGradient id="awp" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#FFF4F8"/><stop offset=".35" stop-color="#E9C6D6"/><stop offset=".7" stop-color="#B999B2"/><stop offset="1" stop-color="#8E7590"/></radialGradient>
+        <pattern id="awh" width="3.2" height="2.8" patternUnits="userSpaceOnUse"><rect width="3.2" height="2.8" fill="#6E5C64"/><circle cx=".8" cy=".7" r=".85" fill="#241C21"/><circle cx="2.4" cy="2.1" r=".85" fill="#241C21"/></pattern></defs>`;
+// the face on the front of the handle: fan slider (3 dots), heat slider (red, red, blue), i.d.curl, power
+window.AIRWRAP = (head = 'curl', st = {}, u = 'b') => {
+    const { on = false, fan = 0, heat = 1, crop = false } = st;
+    return `<svg viewBox="${crop ? '14 0 36 292' : '0 0 64 292'}" class="airwrap" role="img" aria-label="Dyson Airwrap with ${window.AIRWRAP_HEADS[head][0]}">${window.AW_DEFS}
     ${window.AIRWRAP_HEADS[head][1]}
-    <rect x="18" y="112" width="24" height="14" rx="2" fill="url(#awr${u})" stroke="#3A2024" stroke-width="1.5"/>
-    <rect x="18" y="126" width="24" height="130" rx="3" fill="url(#awb${u})" stroke="#5A3A36" stroke-width="1.5"/>
-    <circle cx="25" cy="150" r="2.3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/><circle cx="35" cy="150" r="2.3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/><circle cx="30" cy="160" r="3" fill="#B58A80" stroke="#5A3A36" stroke-width=".8"/>
-    <text x="31" y="214" font-family="Instrument Sans, Arial" font-size="5" fill="#8A6A62" transform="rotate(90 31 214)">dyson</text>
-    <circle cx="29" cy="236" r="1.2" fill="${on ? '#38E0D2' : '#B5A49C'}"/>
-    <rect x="18" y="256" width="24" height="24" rx="2" fill="url(#awm${u})" stroke="#3A2024" stroke-width="1.5"/>
-    <path d="M22 280 L30 296 L38 280 Z" fill="#1F2230"/><path d="M30 296 v14" stroke="#1F2230" stroke-width="3" stroke-linecap="round"/>
+    <rect x="20" y="104" width="24" height="19" fill="url(#awr)" stroke="#5A2E28" stroke-width=".9"/>
+    <path d="M23 106 V121" stroke="#F4CFC2" stroke-width=".9" opacity=".5" stroke-linecap="round"/>
+    <rect x="20" y="123" width="24" height="120" fill="url(#awb)" stroke="#9C8A7C" stroke-width=".9"/>
+    <path d="M24 126 V240" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/>
+    <g class="aw-face">
+        <rect x="23" y="131" width="4.6" height="11" rx="2.3" fill="#0D0C0E"/>
+        ${[0, 1, 2].map(k => `<circle cx="21.7" cy="${133 + k * 3.4}" r=".42" fill="#7A6E68"/>`).join('')}
+        <circle cx="25.3" cy="${133.4 + fan * 3.1}" r="2.1" fill="#4E2732" stroke="#2A1218" stroke-width=".4"/><path d="M25.3 ${133.4 + fan * 3.1} m0 -1.2 v1.2 l1 .7 M25.3 ${133.4 + fan * 3.1} l-1 .7" stroke="#E7D6DA" stroke-width=".35" fill="none"/>
+        <rect x="36.4" y="131" width="4.6" height="11" rx="2.3" fill="#0D0C0E"/>
+        ${['#E0533F', '#E0533F', '#4F8FD8'].map((c, k) => `<circle cx="42.3" cy="${133 + k * 3.4}" r=".42" fill="${c}"/>`).join('')}
+        <circle cx="38.7" cy="${133.4 + heat * 3.1}" r="2.1" fill="#4E2732" stroke="#2A1218" stroke-width=".4"/><circle cx="38.7" cy="${133.4 + heat * 3.1}" r=".6" fill="#FFF"/>
+        <text x="32" y="148" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="3.3"><tspan fill="#E8642F">i.d.</tspan><tspan fill="#8A807C" font-weight="400">curl</tspan></text>
+        <rect x="28.4" y="150.5" width="7.2" height="11" rx="3.6" fill="#0D0C0E"/>
+        <circle cx="32" cy="157.4" r="3" fill="url(#awp)" stroke="#5A4A58" stroke-width=".4"/>${[1, 1.8, 2.5].map(r => `<circle cx="32" cy="157.4" r="${r}" fill="none" stroke="#fff" stroke-width=".18" opacity=".5"/>`).join('')}
+        ${on ? `<circle cx="32" cy="157.4" r="4.4" fill="none" stroke="#F7B9CF" stroke-width=".8" opacity=".9"/>` : ''}
+        <path d="M37.6 155.6 v3" stroke="#8A807C" stroke-width=".4"/><circle cx="32" cy="164" r=".8" fill="none" stroke="#8A807C" stroke-width=".35"/>
+    </g>
+    <text x="30" y="210" font-family="Instrument Sans, Arial" font-weight="500" font-size="6" fill="#9C928C" transform="rotate(90 30 210)" letter-spacing=".2">dyson</text>
+    <text x="32" y="240.5" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="1.6" fill="#9C928C">ᛒ • FILTRE</text>
+    <path d="M20 243 H44 V266 Q44 271 39 273 H25 Q20 271 20 266 Z" fill="url(#awh)" stroke="#2E2428" stroke-width=".9"/>
+    <path d="M20 243 H44" stroke="#4A3A40" stroke-width="1.2"/>
+    <path d="M25 273 H39 L37 283 H27 Z" fill="#1E1C1F" stroke="#0A090B" stroke-width=".6"/>${[0, 1, 2, 3].map(k => `<path d="M${25.6 + k * .5} ${275 + k * 2.2} H${38.4 - k * .5}" stroke="#3A373C" stroke-width=".6"/>`).join('')}
+    <path d="M32 283 C32 288 30 290 26 292" stroke="#1E1C1F" stroke-width="4" fill="none" stroke-linecap="round"/>
 </svg>`;
+};
+// a close-up of the face, big enough to press (what's on the handle, at 4x)
+window.AIRWRAP_FACE = (st = {}) => {
+    const { on = false, fan = 0, heat = 1 } = st;
+    return `<svg viewBox="0 0 100 128" class="aw-face-big"><defs>
+        <linearGradient id="awfb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCCDBE"/><stop offset=".4" stop-color="#F8F0E6"/><stop offset="1" stop-color="#D6C6B7"/></linearGradient>
+        <linearGradient id="awfr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A5547"/><stop offset=".5" stop-color="#D99484"/><stop offset="1" stop-color="#A35E50"/></linearGradient>
+        <radialGradient id="awfp" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#FFF6FA"/><stop offset=".35" stop-color="#EBC9D9"/><stop offset=".7" stop-color="#BA9BB4"/><stop offset="1" stop-color="#8E7590"/></radialGradient></defs>
+    <rect x="0" y="0" width="100" height="14" fill="url(#awfr)"/>
+    <rect x="0" y="14" width="100" height="114" fill="url(#awfb)"/>
+    <g class="aw-btn" data-aw="fan" role="button" tabindex="0" aria-label="Airflow: ${['high', 'medium', 'low'][fan]}">
+        <rect x="14" y="22" width="22" height="40" fill="transparent"/>
+        <rect x="18" y="24" width="14" height="36" rx="7" fill="#0D0C0E"/>
+        ${[0, 1, 2].map(k => `<circle cx="13" cy="${30 + k * 12}" r="1.3" fill="#8A7E78"/>`).join('')}
+        <g transform="translate(25 ${30 + fan * 12})"><circle r="6.4" fill="#4E2732" stroke="#2A1218" stroke-width="1"/><circle r="4.8" fill="none" stroke="#3A1C25" stroke-width=".6"/>
+            <path d="M0 0 C-1 -3 -3.6 -4.2 -3.4 -1.6 Z M0 0 C3 -1 4.4 -3.4 1.8 -3.6 Z M0 0 C1.4 2.8 0 5 -1.8 3 Z" fill="none" stroke="#EBDADF" stroke-width=".8" stroke-linejoin="round"/></g>
+    </g>
+    <g class="aw-btn" data-aw="heat" role="button" tabindex="0" aria-label="Heat: ${['very hot', 'hot', 'cold'][heat]}">
+        <rect x="64" y="22" width="26" height="40" fill="transparent"/>
+        <rect x="68" y="24" width="14" height="36" rx="7" fill="#0D0C0E"/>
+        ${['#E0533F', '#E0533F', '#4F8FD8'].map((c, k) => `<circle cx="87" cy="${30 + k * 12}" r="1.5" fill="${c}"/>`).join('')}
+        <g transform="translate(75 ${30 + heat * 12})"><circle r="6.4" fill="#4E2732" stroke="#2A1218" stroke-width="1"/><circle r="4.8" fill="none" stroke="#3A1C25" stroke-width=".6"/><circle r="1.6" fill="#fff"/></g>
+    </g>
+    <text x="50" y="76" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="9"><tspan fill="#E8642F">i.d.</tspan><tspan fill="#8A807C" font-weight="400">curl</tspan></text>
+    <g class="aw-btn" data-aw="power" role="button" tabindex="0" aria-label="${on ? 'Turn it off' : 'Turn it on'}" aria-pressed="${on}">
+        <rect x="38" y="81" width="24" height="34" rx="12" fill="#0D0C0E"/>
+        <path d="M41 88 Q50 80 59 88" stroke="#2C3A36" stroke-width="2" fill="none" opacity=".7"/>
+        <circle cx="50" cy="102" r="9.5" fill="url(#awfp)" stroke="#5A4A58" stroke-width="1"/>${[3, 5.5, 7.8].map(r => `<circle cx="50" cy="102" r="${r}" fill="none" stroke="#fff" stroke-width=".35" opacity=".55"/>`).join('')}
+        ${on ? `<circle cx="50" cy="102" r="12.5" fill="none" stroke="#F49CBE" stroke-width="1.6" class="aw-glow"/>` : ''}
+        <path d="M67 99 v8" stroke="#8A807C" stroke-width="1"/><circle cx="50" cy="119" r="1.6" fill="none" stroke="#8A807C" stroke-width=".8"/>
+    </g>
+</svg>`;
+};
 
-window.AIRSTRAIT = (open = 0, on = false, uid = 'a') => `<svg viewBox="0 0 120 300" class="airstrait"><defs>
-        <linearGradient id="asp${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3E2337"/><stop offset=".35" stop-color="#7C5470"/><stop offset=".55" stop-color="#B58AA6"/><stop offset=".75" stop-color="#6C4560"/><stop offset="1" stop-color="#3A2033"/></linearGradient>
-        <linearGradient id="asr${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C99A8C"/><stop offset=".5" stop-color="#F1CFC3"/><stop offset="1" stop-color="#BE8E80"/></linearGradient>
-        <pattern id="ash${uid}" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="url(#asr${uid})"/><circle cx="2" cy="2" r=".9" fill="#7A5048" opacity=".55"/></pattern></defs>
-    <path d="M60 262 c-10 4 -10 10 0 14 c10 4 10 10 0 14 c-10 4 -10 8 -4 10" fill="none" stroke="#2A2426" stroke-width="5" stroke-linecap="round"/>
-    <g class="as-arm as-l" style="transform-origin:60px 228px; transform: rotate(${-open * 7}deg)">
-        <path d="M44 14 L58 6 L58 214 L46 214 Z" fill="url(#asp${uid})" stroke="#2A1626" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M49 16 L49 206" stroke="#E8C6DA" stroke-width="1.6" opacity=".5"/></g>
-    <g class="as-arm as-r" style="transform-origin:60px 228px; transform: rotate(${open * 7}deg)">
-        <path d="M76 14 L62 6 L62 214 L74 214 Z" fill="url(#asp${uid})" stroke="#2A1626" stroke-width="2" stroke-linejoin="round"/>
-        <rect x="63.5" y="112" width="9" height="16" rx="1.5" fill="#141016"/>
-        <path d="M66 117 q2 -3 4 0 q-1 3 -2 6 M66 123 q2 2 4 0" fill="none" stroke="${on ? '#38E0D2' : '#3A3440'}" stroke-width="1.1" stroke-linecap="round"/>
-        ${[136, 146, 156, 166].map((y, k) => `<circle cx="68" cy="${y}" r="2.6" fill="${['#E2564F', '#E2564F', '#5C8FE0', '#E8B9C8'][k]}" stroke="#2A1626" stroke-width=".8" opacity="${on ? 1 : .55}"/>`).join('')}</g>
-    <rect x="42" y="210" width="36" height="52" rx="7" fill="url(#ash${uid})" stroke="#2A1626" stroke-width="2"/>
-    <path d="M46 216 v40" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+/* my dyson airstrait in jasper plum: glossy plum lower body, matte plum blades, blush-pink filter, cable out the bottom.
+   it opens like tweezers from the hinge just above the filter. one side has the vented blades and the little pink lock button;
+   the other side has the screen and the five buttons. from tips to filter it's exactly as long as my Stanley.
+   st: { open 0..1, side 'back'|'front', screen (what the little display shows, see AIRSTRAIT_SCREEN), crop } */
+const ASX = 50, AS_HINGE = 228;
+// the little display. drawn in its own 40 x 56 box
+window.AIRSTRAIT_SCREEN = (scr = { k: 'off' }) => {
+    if (!scr || scr.k === 'off') return '';
+    const ink = '#8FD8FF', label = (t, c = '#fff', s = 7) => `<text x="20" y="47" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="600" font-size="${s}" fill="${c}">${t}</text>`;
+    const head = (wet) => `<g fill="none" stroke="${ink}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 34 C9 28 10 22 13 18 C16 14 22 12 26 15 C29 17 29 21 28 24 L30 27 L28 28 L28 31 Q27 33 24 33 L23 36"/>
+        <path d="M19 14 C22 17 22 22 25 26 M15 16 C17 21 16 26 19 31 M23 13 C27 15 29 19 31 25"/></g>
+        ${wet ? `<g fill="${ink}"><path d="M30 20 q1.4 2 0 3 q-1.4 -1 0 -3z"/><path d="M27 29 q1.2 1.8 0 2.6 q-1.2 -.8 0 -2.6z"/></g><path d="M25 7 q1.5 1.5 0 3 q-1.5 1.5 0 3 M28.5 6 q1.5 1.5 0 3 q-1.5 1.5 0 3" stroke="#F0563E" stroke-width="1.2" fill="none" stroke-linecap="round"/>` : ''}`;
+    const fan = `<g transform="translate(20 22)" fill="none" stroke="${ink}" stroke-width="1.4" stroke-linejoin="round"><path d="M0 0 C-2 -5 -6 -7 -6 -2.5 Z"/><path d="M0 0 C5 -1.5 7 -5.5 2.6 -6 Z"/><path d="M0 0 C2 5 0 8 -3 5 Z" transform="rotate(10)"/><circle r="1.1" fill="${ink}"/></g>`;
+    const snow = `<g transform="translate(20 22)" stroke="${ink}" stroke-width="1.4" stroke-linecap="round" fill="none">${[0, 60, 120].map(a => `<g transform="rotate(${a})"><path d="M0 -9 V9 M-2.6 -6.6 L0 -4.4 L2.6 -6.6 M-2.6 6.6 L0 4.4 L2.6 6.6"/></g>`).join('')}</g>`;
+    switch (scr.k) {
+        case 'clean': {
+            const p = Math.max(0, Math.min(1, scr.p || 0)), C = 2 * Math.PI * 11;
+            return `<circle cx="20" cy="22" r="11" fill="none" stroke="#2A4A7A" stroke-width="2.4"/>
+                <circle cx="20" cy="22" r="11" fill="none" stroke="${ink}" stroke-width="2.4" stroke-dasharray="${C * p} ${C}" transform="rotate(-90 20 22)" stroke-linecap="round"/>
+                <g class="as-spin" style="transform-origin:20px 22px">${fan.replace('translate(20 22)', 'translate(20 22) scale(.75)')}</g>${label('Cleaning', '#fff', 6)}`;
+        }
+        case 'cleaned': return `<circle cx="20" cy="22" r="11" fill="none" stroke="${ink}" stroke-width="2.4"/><path d="M14.5 22.5 l4 4 l7.5 -8" fill="none" stroke="#5BE08A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>${label('Cleaning', '#fff', 6)}`;
+        case 'mode': return `<g class="${scr.ask ? 'as-ask' : ''}">${head(scr.wet)}${label(scr.wet ? 'Wet' : 'Dry')}</g>`;
+        case 'temp': return `<circle cx="20" cy="14" r="4" fill="#F0563E"/><text x="20" y="34" text-anchor="middle" font-family="Instrument Sans, Arial" font-weight="700" font-size="${scr.t === 'Boost' ? 10 : 11}" fill="#FF6A4D">${scr.t === 'Boost' ? 'Boost' : scr.t + '°F'}</text>${label(scr.wet ? 'wet' : 'dry', '#9FB8D8', 5.5)}`;
+        case 'fan': return `${fan}<rect x="10" y="35" width="9" height="2.4" rx="1" fill="${ink}"/><rect x="21" y="35" width="9" height="2.4" rx="1" fill="${scr.high ? ink : '#2A4A7A'}"/>${label(scr.high ? 'High' : 'Low')}`;
+        case 'cold': return `${snow}${scr.cold ? '' : `<path d="M10 33 L30 11" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>`}${label('Cold')}`;
+    }
+    return '';
+};
+window.AIRSTRAIT = (st = {}, uid = 'a') => {
+    const { open = 0, side = 'back', screen = { k: 'off' }, crop = false } = st;
+    const front = side === 'front', a = open * 8;
+    // one half: glossy plum from the hinge up to the shoulder, then (on the vented side) the matte blade, with a slanted tip
+    const half = s => {   // s = -1 left, 1 right
+        const xo = ASX + s * 13, xi = ASX + s * .5, xb = ASX + s * 12;
+        const glossy = `<path d="M${xi} ${AS_HINGE} V140 L${xo} 140 V${AS_HINGE - 4} Q${xo} ${AS_HINGE} ${xo - s * 3} ${AS_HINGE} Z" fill="url(#asg${uid})" stroke="#1E0F1A" stroke-width=".8"/>
+            <path d="M${ASX + s * 8.5} 143 V${AS_HINGE - 3}" stroke="#E7B9D4" stroke-width="1.1" opacity=".55"/>`;
+        if (!front) return `<g class="as-arm" style="transform-origin:${ASX}px ${AS_HINGE}px; transform: rotate(${s * a}deg)">
+            <path d="M${xi} 140 V${s < 0 ? 12 : 14} L${xo} ${s < 0 ? 6 : 8} V140 Z" fill="url(#asg${uid})" stroke="#1E0F1A" stroke-width=".8"/>
+            <path d="M${ASX + s * 8.5} ${s < 0 ? 11 : 13} V140" stroke="#E7B9D4" stroke-width="1.1" opacity=".55"/>
+            <path d="M${ASX + s * 3.5} 16 V138" stroke="#120810" stroke-width=".6" opacity=".6"/>${glossy}</g>`;
+        return `<g class="as-arm" style="transform-origin:${ASX}px ${AS_HINGE}px; transform: rotate(${s * a}deg)">
+            ${glossy}
+            <path d="M${xi} 146 V${s < 0 ? 12 : 14} L${xb} ${s < 0 ? 6 : 8} V136 L${xi} 146 Z" fill="url(#asm${uid})" stroke="#1E0F1A" stroke-width=".8"/>
+            ${open ? `<rect x="${s < 0 ? xi - 4 : xi}" y="16" width="4" height="122" fill="#141016"/>` : ''}
+            ${[...Array(13)].map((_, k) => `<rect x="${s < 0 ? xb + 1.2 : xb - 3.2}" y="${20 + k * 8.6}" width="2" height="4.6" rx=".4" fill="#1C1220" stroke="#4E3A54" stroke-width=".35"/>`).join('')}
+            <path d="M${xo} 150 Q${xo} 134 ${ASX + s * 6} 134 L${xi} 140 V150 Z" fill="url(#asm${uid})" stroke="#1E0F1A" stroke-width=".8"/>
+            <path d="M${ASX + s * 10} 146 Q${ASX + s * 10} 138 ${ASX + s * 6} 137.5" stroke="#8E7698" stroke-width=".9" fill="none" opacity=".7"/></g>`;
+    };
+    const holes = `${[...Array(7)].map((_, r) => [...Array(8)].map((_, c) => `<circle cx="${38.4 + c * 3.3 + (r % 2) * 1.6}" cy="${237 + r * 2.9}" r="1" fill="#4A3F46"/>`).join('')).join('')}`;
+    const backHoles = `${[...Array(7)].map((_, r) => [38.6, 41.6, 44.6, 55.4, 58.4, 61.4].map(x => `<circle cx="${x}" cy="${237 + r * 2.9}" r="1" fill="#4A3F46"/>`).join('') + `<circle cx="${47.6}" cy="${237 + r * 2.9}" r=".8" fill="none" stroke="#B48C88" stroke-width=".4"/><circle cx="${52.4}" cy="${237 + r * 2.9}" r=".8" fill="none" stroke="#B48C88" stroke-width=".4"/>`).join('')}`;
+    const lit = screen && screen.k !== 'off';
+    return `<svg viewBox="${crop ? '33 0 34 300' : '0 0 100 300'}" class="airstrait" role="img" aria-label="Dyson Airstrait, ${open ? 'open' : 'closed'}"><defs>
+        <linearGradient id="asg${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2E1828"/><stop offset=".3" stop-color="#5E3A55"/><stop offset=".5" stop-color="#A27895"/><stop offset=".62" stop-color="#6A4462"/><stop offset="1" stop-color="#2A1424"/></linearGradient>
+        <linearGradient id="asm${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2E2140"/><stop offset=".5" stop-color="#4A3860"/><stop offset="1" stop-color="#2A1E3A"/></linearGradient>
+        <linearGradient id="asp${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D8A69C"/><stop offset=".45" stop-color="#F6D2C9"/><stop offset="1" stop-color="#CE9C92"/></linearGradient></defs>
+    <path d="M50 270 C50 280 56 284 54 292 C53 296 48 298 44 300" fill="none" stroke="#1E1A1E" stroke-width="5" stroke-linecap="round"/>
+    ${open && front ? `<path d="M47 ${AS_HINGE - 2} L48.5 150 H51.5 L53 ${AS_HINGE - 2} Z" fill="#3E3B42"/><rect x="44" y="146" width="12" height="4" rx="1" fill="#3E3B42"/>` : ''}
+    ${half(-1)}${half(1)}
+    ${front ? `<rect x="47" y="208" width="6" height="15" rx="3" fill="#3E3B42" stroke="#1E1C20" stroke-width=".5"/><circle cx="50" cy="217.5" r="2.2" fill="#F2C3BA" stroke="#B88A82" stroke-width=".4"/>`
+        : `<g transform="rotate(${-a} ${ASX} ${AS_HINGE})"><path d="M44.5 143 H55.5 V170 L57 174 V${AS_HINGE - 4} Q57 ${AS_HINGE} 53 ${AS_HINGE} H47 Q43 ${AS_HINGE} 43 ${AS_HINGE - 4} V174 L44.5 170 Z" fill="#3A383E" stroke="#1E1C20" stroke-width=".5"/>
+            <rect x="44.5" y="143" width="11" height="26" rx=".8" fill="#060507"/><path d="M45.5 144.5 L49 144.5 L45.5 156 Z" fill="#fff" opacity=".08"/>
+            ${lit ? `<g class="as-scr"><rect x="45.5" y="145.5" width="9" height="13" rx="1.2" fill="#0B2A5C"/><svg x="45.5" y="145.5" width="9" height="13" viewBox="0 0 40 56">${window.AIRSTRAIT_SCREEN(screen)}</svg></g>` : ''}
+            ${['#F0703F', 'fan', '#3E72C8', 'drop', 'pow'].map((c, k) => `<circle cx="50" cy="${180 + k * 9.3}" r="2.9" fill="#F4CFC6" stroke="#C99B92" stroke-width=".4"/>${c.startsWith('#') ? `<circle cx="50" cy="${180 + k * 9.3}" r="1.1" fill="${c}"/>` : `<circle cx="50" cy="${180 + k * 9.3}" r="1.2" fill="none" stroke="#E0704C" stroke-width=".5"/>`}`).join('')}</g>`}
+    <path d="M37 228 H63 V258 Q63 262 58 262 H42 Q37 262 37 258 Z" fill="url(#asp${uid})" stroke="#9E6E66" stroke-width=".8"/>
+    <path d="M37 234 H63" stroke="#C8968D" stroke-width=".5"/>
+    ${front ? holes : `${backHoles}<path d="M50 228 V262" stroke="#B48C88" stroke-width=".6"/><path d="M46.5 230.5 v2.4 M46 232.2 l.5 .9 l.5 -.9 M53.5 230.5 v2.4 M53 232.2 l.5 .9 l.5 -.9" stroke="#7A6A6C" stroke-width=".4" fill="none"/>`}
+    <text x="50" y="260.6" text-anchor="middle" font-family="Instrument Sans, Arial" font-size="1.7" fill="#7A6A6C" letter-spacing=".5">FILTRE</text>
+    <path d="M42 262 H58 L55 272 H45 Z" fill="#1E1A1E"/>${[0, 1, 2, 3].map(k => `<path d="M${42.8 + k * .8} ${264 + k * 2.2} H${57.2 - k * .8}" stroke="#3A343A" stroke-width=".6"/>`).join('')}
 </svg>`;
+};
+// the screen and the five buttons, close up (what you actually press)
+window.AIRSTRAIT_PANEL = (st = {}) => {
+    const { screen = { k: 'off' }, on = false, pulse = '' } = st;
+    const lit = screen && screen.k !== 'off';
+    const BTN = [['temp', 'Temperature'], ['fan', 'Airflow'], ['cold', 'Cold'], ['mode', 'Wet or dry'], ['power', on ? 'Turn it off' : 'Turn it on']];
+    const icon = k => ({
+        temp: `<circle r="3.4" fill="#F0703F"/>`,
+        fan: `<g fill="none" stroke="#E0704C" stroke-width="1.1" stroke-linejoin="round"><path d="M0 0 C-1.4 -3.4 -4.2 -4.6 -4 -1.6 Z"/><path d="M0 0 C3.4 -1 4.8 -3.8 1.8 -4.2 Z"/><path d="M0 0 C1.4 3.4 0 5.4 -2 3.4 Z"/></g>`,
+        cold: `<circle r="3.4" fill="#3E72C8"/>`,
+        mode: `<path d="M-1.4 -4.4 Q1.8 -.6 1.8 1.4 A3.2 3.2 0 0 1 -4.6 1.4 Q-4.6 -.6 -1.4 -4.4Z" fill="#3E72C8"/><path d="M3.2 -3.6 v3 M1.7 -2.1 h3 M3.4 1.8 v2 M2.4 2.8 h2" stroke="#E0704C" stroke-width=".8" stroke-linecap="round"/>`,
+        power: `<path d="M-2.6 -2.4 A3.8 3.8 0 1 0 2.6 -2.4" fill="none" stroke="#E0704C" stroke-width="1.2" stroke-linecap="round"/><path d="M0 -4.6 V-.6" stroke="#E0704C" stroke-width="1.2" stroke-linecap="round"/>`
+    })[k];
+    return `<svg viewBox="0 0 80 214" class="as-panel"><defs>
+        <linearGradient id="aspg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2E1828"/><stop offset=".3" stop-color="#6A4462"/><stop offset=".5" stop-color="#A27895"/><stop offset=".7" stop-color="#5E3A55"/><stop offset="1" stop-color="#2A1424"/></linearGradient>
+        <linearGradient id="aspp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D8A69C"/><stop offset=".45" stop-color="#F6D2C9"/><stop offset="1" stop-color="#CE9C92"/></linearGradient></defs>
+    <rect x="0" y="0" width="39.5" height="196" fill="url(#aspg)"/><rect x="40.5" y="0" width="39.5" height="196" fill="url(#aspg)"/>
+    <path d="M18 0 H62 V76 L66 84 V184 Q66 194 56 194 H24 Q14 194 14 184 V84 L18 76 Z" fill="#3A383E"/>
+    <rect x="18" y="4" width="44" height="70" rx="2" fill="#050406"/>
+    <path d="M20 6 L32 6 L20 40 Z" fill="#fff" opacity=".07"/>
+    ${lit ? `<g class="as-scr"><rect x="22" y="10" width="36" height="58" rx="4" fill="#0B2A5C"/><rect x="22" y="10" width="36" height="58" rx="4" fill="none" stroke="#4A7FC0" stroke-width=".5" opacity=".6"/><svg x="22" y="11" width="36" height="56" viewBox="0 0 40 56">${window.AIRSTRAIT_SCREEN(screen)}</svg></g>` : ''}
+    ${BTN.map(([k, n], i) => { const y = 96 + i * 20 + (i === 4 ? 4 : 0); return `<g class="as-btn${pulse === k ? ' pulse' : ''}" data-as="${k}" role="button" tabindex="0" aria-label="${n}" transform="translate(40 ${y})"><circle r="8.6" fill="#F4CFC6" stroke="#C99B92" stroke-width=".8"/><circle r="7" fill="none" stroke="#fff" stroke-width=".5" opacity=".6"/>${icon(k)}</g>`; }).join('')}
+    <rect x="0" y="196" width="80" height="18" fill="url(#aspp)"/><path d="M40 196 V214" stroke="#B48C88" stroke-width=".8"/>
+    <path d="M28 202 v5 M26.6 205.6 l1.4 1.8 l1.4 -1.8 M52 202 v5 M50.6 205.6 l1.4 1.8 l1.4 -1.8" stroke="#7A6A6C" stroke-width=".8" fill="none"/>
+</svg>`;
+};
 
 /* Everything in my bag. Each thing has:
    id, name (the hover tag), where it lands once it falls out (l, t, w, r: left/top/width as % of the table, rotation),
@@ -519,13 +704,13 @@ window.ITEMS = [
         open: 'hairpony'
     },
     {
-        id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 15, r: -6,
-        get art() { return window.AIRSTRAIT(0, false, 'i'); },
+        id: 'airstrait', name: 'my dyson airstrait (jasper plum)', zip: 'front', l: 0, t: 0, w: 3.1, r: -6,
+        get art() { return window.AIRSTRAIT({ crop: true }, 'i'); },
         open: 'airstrait'
     },
     {
-        id: 'airwrap', name: 'my dyson airwrap (ceramic pink)', zip: 'front', l: 0, t: 0, w: 7.2, r: 5,
-        get art() { return window.AIRWRAP('curl', false, 'i'); },
+        id: 'airwrap', name: 'my dyson airwrap i.d. curl (ceramic pink)', zip: 'front', l: 0, t: 0, w: 3.95, r: 5,
+        get art() { return window.AIRWRAP('curl', { crop: true }); },
         open: 'airwrap'
     },
     {

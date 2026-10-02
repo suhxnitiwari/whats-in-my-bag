@@ -79,6 +79,25 @@ const SFX = (() => {
             const now = c.currentTime;
             burst(c, now, .3, 6500, .7, .12); burst(c, now + .02, .22, 9000, .9, .06);
         },
+        // an icon landing on the desktop
+        pop(k = 0) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, f = 480 + (k * 37 % 9) * 55;
+            tone(c, now, .08, f, f * 1.9, .06); burst(c, now, .025, 3200, 1, .025);
+        },
+        // a hair tool's motor: steady filtered air plus a high whine, ramped in and out
+        fan(dur = 1, vol = .1) {
+            const c = ac(); if (!c) return;
+            const now = c.currentTime, end = now + dur, up = Math.min(.3, dur / 3), down = Math.min(.5, dur / 3);
+            const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+            src.buffer = noise; src.loop = true; f.type = 'bandpass'; f.frequency.value = 1100; f.Q.value = .5;
+            g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(vol, now + up); g.gain.setValueAtTime(vol, end - down); g.gain.linearRampToValueAtTime(0, end);
+            src.connect(f).connect(g).connect(c.destination); src.start(now, Math.random() * .5); src.stop(end + .05);
+            const o = c.createOscillator(), og = c.createGain();
+            o.type = 'triangle'; o.frequency.setValueAtTime(320, now); o.frequency.linearRampToValueAtTime(880, now + up * 2);
+            og.gain.setValueAtTime(0, now); og.gain.linearRampToValueAtTime(vol * .12, now + up); og.gain.setValueAtTime(vol * .12, end - down); og.gain.linearRampToValueAtTime(0, end);
+            o.connect(og).connect(c.destination); o.start(now); o.stop(end + .05);
+        },
         // fabric: soft, uneven swishes of filtered noise, like nylon shifting
         rustle(dur = .6, vol = .09) {
             const c = ac(); if (!c) return;
@@ -1053,7 +1072,7 @@ const MORE_APPS = {
             <p class="cam-modes mono"><span>VIDEO</span><b>PHOTO</b><span>PORTRAIT</span></p>
             <div class="cam-bar"><img class="cam-thumb" id="cam-thumb" src="assets/img/me.jpg" alt=""><button type="button" class="cam-shutter" id="cam-shutter" aria-label="Take a photo"></button><span></span></div></div>`,
         after: () => {
-            const shots = ['cafe', 'dinner', 'book', 'grad', 'saree', 'lilies', 'gwc', 'me'];
+            const shots = ['dinner', 'book', 'grad', 'saree', 'lilies', 'gwc', 'me'];
             let i = 0;
             $('#cam-shutter').onclick = () => {
                 const f = $('#cam-flash'); f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
@@ -1195,7 +1214,7 @@ const openMoreApp = (k, view, home, back, backSel) => {
 };
 
 // my laptop desktop, folder by folder. files open on top of the laptop, so "back" lands in the same window
-const PHOTOS = ['cafe', 'me', 'book', 'gwc', 'dinner', 'grad', 'saree', 'lilies'];
+const PHOTOS = ['me', 'book', 'gwc', 'dinner', 'grad', 'saree', 'lilies'];
 const FOLDERS = [
     ['Job Applications', [
         ['Résumé.pdf', 'view', 'padfolio', '#E8453C'],
@@ -1217,7 +1236,7 @@ const FOLDERS = [
         ['What’s in my bag', 'self', '', '#F2C6C8'],
         ['suhanitiwari.com', 'link', 'https://suhanitiwari.com', '#76344E']
     ]],
-    ['Photographs', PHOTOS.map(f => [f + '.jpg', 'photo', f, 'img:' + f])],
+    ['Photographs', PHOTOS.map(f => [({ me: 'taxi' }[f] || f) + '.jpg', 'photo', f, 'img:' + f])],
     ['MIS', [
         ['RideFlow', 'link', 'https://suhanitiwari.com/home/work#mp-rideflow', '#1A73E8'],
         ['Bevo Taco Checkout', 'link', 'https://github.com/suhxnitiwari/Bevo_Taco-Checkout', '#BF5700'],
@@ -1227,12 +1246,43 @@ const FOLDERS = [
         ['Owala Marathon Series', 'view', 'owala', 'img:owala'],
         ['FuelFlow', 'view', 'fuelflow', 'img:fuelflow']
     ]],
-    ['PSY', []],
-    ['EDP', []]
+    ['PSY', [
+        ['PSY 301 Introduction to Psychology.txt', 'note', 'PSY 301 · Introduction to Psychology\n3 hours\n\nBasic problems and principles of human experience and behavior.', '#B9A3E8'],
+        ['PSY 309 Personality.txt', 'note', 'PSY 309 · Personality\n3 hours\n\nResearch and theory concerning personality structure, dynamics, development, and assessment.', '#B9A3E8']
+    ]],
+    ['EDP', [
+        ['EDP 304 Strategic Learning.txt', 'note', 'EDP 304 · Strategic Learning for the Twenty-First Century\n3 hours\n\nExplores a wide range of subjects in educational psychology that impact student learning, including theories of cognition and motivation, and applies them to academic work. Covers strategies to improve student academic performance.', '#8FC9B0'],
+        ['EDP 320 Cognition, Learning & Motivation.txt', 'note', 'EDP 320 · Cognition, Human Learning, and Motivation\n3 hours\n\nExplore current theories concerning learning and memory, retrieval, critical thinking, transfer, assessment, peer learning, and motivation; applying cognitive and socio-motivational psychological theories to educational and instructional practices.', '#8FC9B0'],
+        ['EDP 352K Mindfulness, Compassion & the Self.txt', 'note', 'EDP 352K · Mindfulness, Compassion, and the Self\n3 hours\n\nSubjects include mindfulness, self-compassion, well-being, and self-concept.', '#8FC9B0']
+    ]]
 ];
 const fileIcon = (n, ic) => ic.startsWith('img:')
     ? `<img src="assets/img/${ic.slice(4)}.jpg" alt="">`
     : `<svg viewBox="0 0 40 48" aria-hidden="true"><path d="M4 2 h22 l10 10 v34 h-32z" fill="#fff" stroke="#C9C6C2" stroke-width="1.5"/><path d="M26 2 v10 h10" fill="#EEE" stroke="#C9C6C2" stroke-width="1.5"/><rect x="4" y="30" width="32" height="10" fill="${ic}"/><text x="20" y="38" text-anchor="middle" font-size="7" font-family="system-ui" font-weight="700" fill="#fff">${(n.match(/\.(\w+)$/) || [, 'APP'])[1].toUpperCase()}</text></svg>`;
+
+const FOLDER_SVG = `<svg viewBox="0 0 100 78" aria-hidden="true"><path d="M4 12 a6 6 0 0 1 6 -6 h26 l8 8 h46 a6 6 0 0 1 6 6 v4 H4z" fill="#4E9BE0"/><rect x="4" y="18" width="92" height="56" rx="7" fill="#7EC4F5"/><rect x="4" y="18" width="92" height="56" rx="7" fill="none" stroke="#5FA9E6" stroke-width="1.2"/><path d="M8 66 h84 M8 69 h84" stroke="#6BB4EC" stroke-width="1"/></svg>`;
+// my real desktop is a mess: the real folders are in there, buried under everything else. [name, kind, file colour or photo]
+const CLUTTER = [
+    ['MIS Syllabuses', 'folder'], ['Week 1 - Intro.pdf', 'file', '#5B2C83'], ['hue-are-you', 'folder'], ['cake3updated', 'img', 'cake-lego'], ['Practice Survey.docx', 'file', '#2B579A'],
+    ['Personality', 'folder'], ['Midterm Guide.docx', 'file', '#2B579A'], ['survival-odds', 'folder'], ['Netflix.pdf', 'file', '#E50914'], ['period-tracker', 'folder'],
+    ['MIS COURSEWORK', 'folder'], ['Final Project.pdf', 'file', '#1E5E3A'], ['imageforsuhani', 'img', 'me-study'], ['favorites', 'folder'], ['Rise', 'folder'],
+    ['MKT 337', 'folder'], ['MIS 325', 'folder'], ['takeout-001.zip', 'file', '#8E8E93'], ['listening-history', 'folder'], ['HW3 photos', 'folder'],
+    ['Week 2 - Memory.pdf', 'file', '#5B2C83'], ['suhani-world', 'folder'], ['how-i-work', 'folder'], ['bunny-trails', 'folder'], ['cup-theory', 'folder'],
+    ['baby-name-maker', 'folder'], ['Austin Places', 'folder'], ['CUPCAKES', 'img', 'cupcakes'], ['RENDER_THIS.txt', 'file', '#8E8E93'], ['suhaiku', 'folder'],
+    ['Art Portfolio', 'folder'], ['Google Data', 'folder'], ['spotifymusic', 'img', 'me-study-headphones'], ['Lab1', 'folder'], ['PYTHON', 'folder'],
+    ['cisco-setup.dmg', 'file', '#5A5A5E'], ['RideFlow plus.pdf', 'file', '#1A73E8'], ['Brand Strategies', 'folder'], ['Screenshot 5.42 PM.png', 'file', '#34A853'], ['hangout-picker', 'folder']
+];
+const DESK = (() => {
+    let seed = 23; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const all = [...FOLDERS.map(([n], i) => ({ n, f: i })), ...CLUTTER.map(([n, t, x], c) => ({ n, t, x, c }))].map(d => [R(), d]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
+    const COLS = 10, ROWS = Math.ceil(all.length / COLS);
+    return all.map((d, k) => ({ ...d, px: Math.min(90, Math.max(0, (k % COLS) * 9.4 + (R() - .3) * 7)), py: Math.min(80, Math.max(0, Math.floor(k / COLS) * (82 / ROWS) + (R() - .3) * 10)) }));
+})();
+const deskIcon = (d, k) => {
+    const real = d.f !== undefined;
+    const ic = real || d.t === 'folder' ? FOLDER_SVG : d.t === 'img' ? `<img src="assets/img/${d.x}.jpg" alt="">` : fileIcon(d.n, d.x);
+    return `<button type="button" class="dfolder${real ? ' dreal' : ' dclut'}${!real && d.c >= 14 ? ' dmore' : ''}" ${real ? `data-f="${d.f}"` : 'data-clut'} style="left:${d.px.toFixed(1)}%; top:${d.py.toFixed(1)}%">${ic}<span>${d.n}</span></button>`;
+};
 
 // my skincare: what each one is, what it does when you tap it, its short label
 const SKIN = window.SKIN;
@@ -1667,17 +1717,22 @@ const VIEWS = {
         <p class="note">two of them, pink and brown.</p>
         <div class="solo">${ITEMS.find(i => i.id === 'scrunchies').art}</div>`,
     airwrap: () => `
-        <h2>My <em>Dyson Airwrap</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(ceramic pink)</span></h2>
-        <p class="note">the curls, the blowout, the whole personality. snap on an attachment and turn it on.</p>
-        <div class="as-stage aw-stage" id="aw-stage"><div class="aw-big" id="aw-big">${window.AIRWRAP('curl')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
-        <div class="aw-heads" role="group" aria-label="Attachments">${Object.entries(window.AIRWRAP_HEADS).map(([k, [n]]) => `<button type="button" class="aw-head" data-head="${k}" aria-label="${n}" title="${n}"><svg viewBox="12 0 36 120">${window.AIRWRAP_HEADS[k][1]}</svg></button>`).join('')}</div>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="aw-power">Turn it on</button></div>
-        <p class="hand pd-say" id="aw-say">the curling barrel’s on. it always is.</p>`,
+        <h2>My <em>Dyson Airwrap</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(i.d. curl, ceramic pink)</span></h2>
+        <p class="note">the curls, the blowout, the whole personality. snap on an attachment, then press the real buttons: power in the middle, airflow on the left, heat on the right.</p>
+        <div class="dy-row">
+            <div class="as-stage aw-stage" id="aw-stage"><div class="aw-big" id="aw-big">${window.AIRWRAP('curl')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
+            <div class="dy-zoom"><p class="mono dy-cap">the buttons, up close</p><div class="aw-zoom" id="aw-face">${window.AIRWRAP_FACE()}</div><p class="mono dy-read" id="aw-read">off</p></div>
+        </div>
+        <div class="aw-heads" role="group" aria-label="Attachments">${Object.entries(window.AIRWRAP_HEADS).map(([k, [n]]) => `<button type="button" class="aw-head" data-head="${k}" aria-label="${n}" title="${n}"><svg viewBox="6 0 52 106">${window.AW_DEFS}${window.AIRWRAP_HEADS[k][1]}</svg></button>`).join('')}</div>
+        <p class="hand pd-say" id="aw-say">the long barrel’s on. it always is.</p>`,
     airstrait: () => `
         <h2>My <em>Dyson Airstrait</em> <span class="mono" style="font-size:.7rem; color:var(--muted)">(jasper plum)</span></h2>
-        <p class="note">wet to dry, straight, in one step. with air, not hot plates. and i still somehow run late.</p>
-        <div class="as-stage" id="as-stage"><div class="as-big" id="as-big">${window.AIRSTRAIT(0, false, 'b')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
-        <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="as-power">Turn it on</button><button class="btn" type="button" id="as-open">Open it</button><button class="btn" type="button" id="as-mode">Mode: wet</button></div>
+        <p class="note">wet to dry, straight, in one step. with air, not hot plates. the screen side has five buttons: power’s the bottom one.</p>
+        <div class="dy-row">
+            <div class="as-stage" id="as-stage"><div class="as-big" id="as-big">${window.AIRSTRAIT({}, 'b')}</div><span class="as-air" aria-hidden="true">${'<i></i>'.repeat(9)}</span></div>
+            <div class="dy-zoom"><p class="mono dy-cap">the screen + buttons, up close</p><div class="as-zoom" id="as-panel">${window.AIRSTRAIT_PANEL()}</div></div>
+        </div>
+        <div class="row" style="justify-content:center"><button class="btn" type="button" id="as-open">Open it</button><button class="btn" type="button" id="as-flip">Flip it over</button></div>
         <p class="hand pd-say" id="as-say">it lives in my front pocket. yes, it fits. barely.</p>`,
     haircomb: () => `
         <h2>My <em>wide-tooth</em> comb</h2>
@@ -1942,14 +1997,12 @@ const VIEWS = {
         </div>
         <div class="mbp" id="mbp" hidden><div class="mbp-screen" id="mbp-screen"><div class="desktop" id="desktop">
             <div class="menubar mono"><span></span><span id="lap-clock"></span></div>
-            <div class="dfolders">${FOLDERS.map(([n], i) => `<button type="button" class="dfolder" data-f="${i}">
-                <svg viewBox="0 0 100 78" aria-hidden="true"><path d="M4 12 a6 6 0 0 1 6 -6 h26 l8 8 h46 a6 6 0 0 1 6 6 v4 H4z" fill="#4E9BE0"/><rect x="4" y="18" width="92" height="56" rx="7" fill="#7EC4F5"/><rect x="4" y="18" width="92" height="56" rx="7" fill="none" stroke="#5FA9E6" stroke-width="1.2"/><path d="M8 66 h84 M8 69 h84" stroke="#6BB4EC" stroke-width="1"/></svg>
-                <span>${n}</span></button>`).join('')}</div>
+            <div class="dfolders dmess" id="dmess">${DESK.map(deskIcon).join('')}</div>
             <div class="fwin" id="fwin" hidden>
                 <div class="fwin-bar"><span class="fwin-tl"><button type="button" id="fwin-x" aria-label="Close this window"></button><i></i><i></i></span><b id="fwin-title"></b></div>
                 <div class="fwin-body"><nav class="fwin-side">${FOLDERS.map(([n], i) => `<button type="button" data-side="${i}">${n}</button>`).join('')}</nav><div class="fwin-main" id="fwin-main"></div></div>
             </div>
-            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="the one helping me build this bag." aria-label="Claude" title="Claude"><span style="background:#D97757"><svg viewBox="0 0 40 40"><g stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M20 20 L29.0 20.0"/><path d="M20 20 L27.8 24.5"/><path d="M20 20 L24.5 27.8"/><path d="M20 20 L20.0 29.0"/><path d="M20 20 L15.5 27.8"/><path d="M20 20 L12.2 24.5"/><path d="M20 20 L11.0 20.0"/><path d="M20 20 L12.2 15.5"/><path d="M20 20 L15.5 12.2"/><path d="M20 20 L20.0 11.0"/><path d="M20 20 L24.5 12.2"/><path d="M20 20 L27.8 15.5"/></g></svg></span><i>Claude</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button></div>
+            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">WED</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">30</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
         </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
         <div class="row" style="justify-content:center; margin-top:14px"><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
 
@@ -2381,24 +2434,91 @@ const AFTER = {
         };
     },
     airwrap: () => {
-        const big = $('#aw-big'), stage = $('#aw-stage'), say = $('#aw-say');
-        let head = 'curl', on = false;
-        const LINES = { curl: 'the curling barrel. the air wraps the hair around it by itself. witchcraft.', wide: 'the wide barrel. big, bouncy, “i woke up like this” curls.', round: 'the round brush. volume. so much volume.', smooth: 'the smoothing brush. sleek. glossy. done.', dryer: 'the pre-styling dryer. step one, before anything else.', flyaway: 'the flyaway smoother. for the baby hairs that will not cooperate.' };
-        const draw = () => { big.innerHTML = window.AIRWRAP(head, on); stage.classList.toggle('blowing', on); sheetBody.querySelectorAll('[data-head]').forEach(b => b.classList.toggle('on', b.dataset.head === head)); };
+        // snap on an attachment; the close-up of the handle's face is what you press (the drawing follows along)
+        const big = $('#aw-big'), stage = $('#aw-stage'), say = $('#aw-say'), face = $('#aw-face'), read = $('#aw-read');
+        let head = 'curl';
+        const st = { on: false, fan: 0, heat: 1 };
+        const FAN = ['high', 'medium', 'low'], HEAT = ['very hot', 'hot', 'cold'];
+        const LINES = { curl: 'the long barrel. the air wraps the hair around it by itself. witchcraft.', tapered: 'the tapered barrel. tighter curls at the ends, looser at the roots.', round: 'the round brush. volume. so much volume.', smooth: 'the paddle brush. sleek. glossy. done.', coanda: 'the smoothing dryer. dries and smooths at the same time.', dryer: 'the pre-styling dryer. step one, before anything else.' };
+        const draw = () => {
+            big.innerHTML = window.AIRWRAP(head, st); face.innerHTML = window.AIRWRAP_FACE(st);
+            stage.classList.toggle('blowing', st.on); stage.dataset.heat = st.heat; stage.style.setProperty('--blow', [.55, .85, 1.25][st.fan] + 's');
+            read.textContent = st.on ? `${FAN[st.fan]} air · ${HEAT[st.heat]}` : 'off';
+            sheetBody.querySelectorAll('[data-head]').forEach(b => b.classList.toggle('on', b.dataset.head === head));
+        };
+        const press = k => {
+            SFX.tap();
+            if (k === 'power') { st.on = !st.on; if (st.on) SFX.fan(1.4, .1); say.textContent = st.on ? 'whooosh. curls in progress. don’t talk to me for 40 minutes.' : 'off. worth every single minute.'; }
+            if (k === 'fan') { st.fan = (st.fan + 1) % 3; say.textContent = `airflow: ${FAN[st.fan]}.`; }
+            if (k === 'heat') { st.heat = (st.heat + 1) % 3; say.textContent = ['very hot. for the stubborn sections.', 'hot. the everyday one.', 'cold shot. locks the curl in.'][st.heat]; }
+            if (st.on && k !== 'power') SFX.fan(.5, .05);
+            draw();
+            face.querySelector(`[data-aw="${k}"]`)?.focus();
+        };
+        face.addEventListener('click', e => { const b = e.target.closest('[data-aw]'); if (b) press(b.dataset.aw); });
+        face.addEventListener('keydown', e => { const b = e.target.closest('[data-aw]'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); press(b.dataset.aw); } });
         sheetBody.querySelectorAll('[data-head]').forEach(b => b.onclick = () => { head = b.dataset.head; SFX.tap(); big.classList.remove('snap'); void big.offsetWidth; big.classList.add('snap'); say.textContent = LINES[head]; draw(); });
-        $('#aw-power').onclick = () => { on = !on; SFX.tap(); if (on) SFX.rustle(.8, .06); $('#aw-power').textContent = on ? 'Turn it off' : 'Turn it on'; say.textContent = on ? 'whooosh. curls in progress. don’t talk to me for 40 minutes.' : 'off. worth every single minute.'; draw(); };
         draw();
     },
     airstrait: () => {
-        // power, open/close the arms, and cycle the modes. the screen lights up, the air blows when it's on and closed.
-        const big = $('#as-big'), stage = $('#as-stage'), say = $('#as-say');
-        let on = false, open = 1, mode = 0;
-        const MODES = [['wet', 'wet hair, straight from the shower. no blow dry first.'], ['dry', 'dry hair, quick touch up before class.'], ['cool', 'cool shot. locks it in. pretends it’s a salon blowout.']];
-        const draw = () => { big.innerHTML = window.AIRSTRAIT(open, on, 'b'); stage.classList.toggle('blowing', on && !open); };
-        $('#as-power').onclick = () => { on = !on; SFX.tap(); if (on) SFX.rustle(.6, .05); $('#as-power').textContent = on ? 'Turn it off' : 'Turn it on'; say.textContent = on ? 'on. the little screen lights up teal ♡ close it on a section.' : 'off. cooling down in the bag. (not really, i just throw it in.)'; draw(); };
-        $('#as-open').onclick = () => { open = open ? 0 : 1; SFX.tap(); $('#as-open').textContent = open ? 'Close it' : 'Open it'; if (on && !open) { SFX.rustle(.9, .06); say.textContent = 'whoooosh. that’s air, not plates. glass hair loading…'; } else say.textContent = open ? 'open. grab a section.' : 'closed. turn it on and it blows.'; draw(); };
-        $('#as-mode').onclick = () => { mode = (mode + 1) % MODES.length; SFX.tap(); $('#as-mode').textContent = `Mode: ${MODES[mode][0]}`; say.textContent = MODES[mode][1]; };
-        open = 1; $('#as-open').textContent = 'Close it'; draw();
+        // the real start up: power -> it cleans itself for 5 seconds (loud) -> asks wet or dry -> then temp (250, 285, boost), airflow (high/low), cold (on/off)
+        const big = $('#as-big'), stage = $('#as-stage'), say = $('#as-say'), panel = $('#as-panel');
+        const TEMPS = ['250', '285', 'Boost'];
+        const st = { on: false, phase: 'off', wet: false, temp: 0, high: true, cold: false, open: 0, side: 'back', screen: { k: 'off' }, pulse: '' };
+        let tick = null, back = null;
+        const alive = () => document.body.contains(big);
+        const stop = () => { clearInterval(tick); clearTimeout(back); tick = back = null; };
+        const home = () => ({ k: 'temp', t: TEMPS[st.temp], wet: st.wet });
+        const draw = () => {
+            big.innerHTML = window.AIRSTRAIT(st, 'b');
+            panel.innerHTML = window.AIRSTRAIT_PANEL(st);
+            const blowing = st.phase === 'clean' || (st.phase === 'ready' && !st.open);
+            stage.classList.toggle('blowing', blowing);
+            stage.dataset.heat = st.phase === 'clean' ? 1 : st.cold ? 2 : st.temp === 2 ? 0 : 1;
+            stage.style.setProperty('--blow', st.phase === 'clean' ? '.45s' : st.high ? '.6s' : '1.1s');
+        };
+        const flash = (scr, ms = 1800) => { st.screen = scr; clearTimeout(back); back = setTimeout(() => { if (!alive() || st.phase !== 'ready') return; st.screen = home(); draw(); }, ms); draw(); };
+        const ready = () => { st.phase = 'ready'; st.pulse = ''; st.screen = home(); clearTimeout(back); say.textContent = st.wet ? 'wet mode. straight from the shower, no blow dry first.' : 'dry mode. quick touch up before class.'; draw(); };
+        const ask = () => { st.phase = 'ask'; st.pulse = 'mode'; st.screen = { k: 'mode', wet: st.wet, ask: true }; say.textContent = 'dry or wet? (the droplet button switches. any other button says yes.)'; draw(); back = setTimeout(() => alive() && st.phase === 'ask' && ready(), 6000); };
+        const powerOn = () => {
+            st.on = true; st.phase = 'clean'; st.screen = { k: 'clean', p: 0 }; say.textContent = 'it cleans itself first. five seconds of LOUD.'; draw();
+            SFX.fan(5, .22);
+            const t0 = Date.now();
+            tick = setInterval(() => {
+                if (!alive()) return stop();
+                const p = (Date.now() - t0) / 5000;
+                if (p < 1) { st.screen = { k: 'clean', p }; draw(); return; }
+                clearInterval(tick); tick = null;
+                st.phase = 'cleaned'; st.screen = { k: 'cleaned' }; say.textContent = 'clean. ✓'; draw();
+                back = setTimeout(() => alive() && st.phase === 'cleaned' && ask(), 1200);
+            }, 100);
+        };
+        const press = k => {
+            SFX.tap();
+            if (k === 'power') {
+                if (st.on) { stop(); Object.assign(st, { on: false, phase: 'off', screen: { k: 'off' }, pulse: '' }); say.textContent = 'off. cooling down in the bag. (not really, i just throw it in.)'; draw(); }
+                else powerOn();
+                return;
+            }
+            if (!st.on) { say.textContent = 'it’s off. power is the bottom button.'; return; }
+            if (st.phase === 'clean' || st.phase === 'cleaned') { say.textContent = 'shh. it’s still cleaning.'; return; }
+            if (st.phase === 'ask') {
+                if (k === 'mode') { st.wet = !st.wet; st.screen = { k: 'mode', wet: st.wet, ask: true }; clearTimeout(back); back = setTimeout(() => alive() && st.phase === 'ask' && ready(), 6000); draw(); }
+                else ready();
+                return;
+            }
+            if (k === 'temp') { st.temp = (st.temp + 1) % 3; st.screen = home(); clearTimeout(back); say.textContent = ['250°F. the gentle one.', '285°F. the usual.', 'boost. i’m late.'][st.temp]; draw(); }
+            if (k === 'fan') { st.high = !st.high; say.textContent = st.high ? 'airflow: high.' : 'airflow: low.'; flash({ k: 'fan', high: st.high }); }
+            if (k === 'cold') { st.cold = !st.cold; say.textContent = st.cold ? 'cold. locks it in. pretends it’s a salon blowout.' : 'cold off. back to warm.'; flash({ k: 'cold', cold: st.cold }); }
+            if (k === 'mode') { st.wet = !st.wet; say.textContent = st.wet ? 'wet mode.' : 'dry mode.'; flash({ k: 'mode', wet: st.wet }); }
+            if (k === 'temp' || k === 'fan' || k === 'cold') SFX.fan(.4, .05);
+            panel.querySelector(`[data-as="${k}"]`)?.focus();
+        };
+        panel.addEventListener('click', e => { const b = e.target.closest('[data-as]'); if (b) press(b.dataset.as); });
+        panel.addEventListener('keydown', e => { const b = e.target.closest('[data-as]'); if (b && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); press(b.dataset.as); } });
+        $('#as-open').onclick = () => { st.open = st.open ? 0 : 1; SFX.tap(); $('#as-open').textContent = st.open ? 'Close it' : 'Open it'; say.textContent = st.open ? 'open. grab a section.' : st.phase === 'ready' ? 'whoooosh. that’s air, not plates. glass hair loading…' : 'closed.'; draw(); };
+        $('#as-flip').onclick = () => { st.side = st.side === 'back' ? 'front' : 'back'; SFX.tap(); say.textContent = st.side === 'front' ? 'the other side: the vents, and the little pink lock button.' : 'the screen side.'; draw(); };
+        draw();
     },
     haircomb: () => {
         // my hair, drawn strand by strand. every bit of it has its own tangle level; each stroke of the comb loosens whatever it passes through,
@@ -3024,7 +3144,7 @@ const AFTER = {
             if (openMoreApp(b.dataset.app, view, home, back, '#back')) return;
             if (b.dataset.app === 'photos') {
                 view.innerHTML = back + '<p class="mono apptitle">Recents</p><div class="grid">' +
-                    ['dinner', 'grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'cafe', 'me', 'book', 'gwc'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
+                    ['dinner', 'grad', 'saree', 'chalk-girl', 'navratri', 'classroom-hug', 'lilies', 'me', 'book', 'gwc'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('') + '</div>';
             } else if (b.dataset.app === 'spotify') {
                 view.innerHTML = back + `
                     <div class="sp">
@@ -3183,7 +3303,7 @@ const AFTER = {
                         <p class="ig-handle">hifromhani</p>
                         <div class="ig-top"><img src="assets/img/me.jpg" alt=""><span class="ig-name">hi from hani</span></div>
                         <a class="ig-btn" href="https://www.instagram.com/hifromhani/" target="_blank" rel="noopener">Open in Instagram</a>
-                        <div class="ig-grid">${['cafe', 'grad', 'book', 'saree', 'gwc', 'me'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
+                        <div class="ig-grid">${['grad', 'book', 'saree', 'gwc', 'me', 'lilies'].map(f => `<img src="assets/img/${f}.jpg" alt="">`).join('')}</div>
                     </div>`;
             }
             addQ(view, b.dataset.app);
@@ -3928,11 +4048,21 @@ const AFTER = {
     laptop: () => {
         const mbp = $('#mbp'), wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
         let busyLap = false;
+        // the desktop explodes into mess when the lid opens: every icon pops in, one after another, with a little pop
+        let popping = [];
+        const popDesk = () => {
+            popping.forEach(clearTimeout); popping = [];
+            const icons = [...sheetBody.querySelectorAll('#dmess .dfolder')];
+            icons.forEach(e => e.classList.remove('popped'));
+            if (reduce) return icons.forEach(e => e.classList.add('popped'));
+            icons.forEach((e, k) => popping.push(setTimeout(() => { e.classList.add('popped'); if (e.offsetParent) SFX.pop(k); }, 700 + k * 55)));
+        };
         const showDesk = async on => {
             if (busyLap) return; busyLap = true;
             if (on) {
                 $('#lap-closed').hidden = true; mbp.hidden = false; mbp.classList.remove('open'); void mbp.offsetWidth;
                 mbp.classList.add('open'); $('#lap-close').hidden = false;
+                popDesk();
                 await wait(1100);
             } else {
                 mbp.classList.remove('open'); $('#lap-close').hidden = true;
@@ -3940,7 +4070,7 @@ const AFTER = {
                 mbp.hidden = true; $('#lap-closed').hidden = false;
             }
             busyLap = false;
-            $('#lap-note').textContent = on ? 'my desktop. open a folder, any folder.' : 'the stickers are load-bearing. tap one, or open it up.';
+            $('#lap-note').textContent = on ? 'my desktop. it’s a mess. the real folders are in there somewhere.' : 'the stickers are load-bearing. tap one, or open it up.';
             if (on) $('#lap-clock').textContent = new Date().toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
         };
         $('#lap-open').onclick = () => showDesk(true);
@@ -3966,14 +4096,103 @@ const AFTER = {
                     fmain.querySelector('.fback').onclick = () => openFolder(i);
                 } else if (kind === 'photo') {
                     let k = PHOTOS.indexOf(t);
-                    const show = () => { fmain.innerHTML = `<div class="fql"><button type="button" class="fback mono">‹ ${name}</button><img src="assets/img/${PHOTOS[k]}.jpg" alt=""><div class="fql-nav"><button type="button" data-d="-1" aria-label="Previous">‹</button><span class="mono">${PHOTOS[k]}.jpg</span><button type="button" data-d="1" aria-label="Next">›</button></div></div>`;
+                    const show = () => { fmain.innerHTML = `<div class="fql"><button type="button" class="fback mono">‹ ${name}</button><img src="assets/img/${PHOTOS[k]}.jpg" alt=""><div class="fql-nav"><button type="button" data-d="-1" aria-label="Previous">‹</button><span class="mono">${({ me: 'taxi' }[PHOTOS[k]] || PHOTOS[k])}.jpg</span><button type="button" data-d="1" aria-label="Next">›</button></div></div>`;
                         fmain.querySelector('.fback').onclick = () => openFolder(i);
                         fmain.querySelectorAll('[data-d]').forEach(d => d.onclick = () => { k = (k + +d.dataset.d + PHOTOS.length) % PHOTOS.length; show(); }); };
                     show();
                 }
             });
         };
-        sheetBody.querySelectorAll('.dfolder').forEach(f => f.ondblclick = f.onclick = () => openFolder(+f.dataset.f));
+        // the laptop's Messages and Mail open in the same window. chats stay private; the inbox is order confirmations
+        const CHATS = [['Mumma', '#B9A3E8'], ['Papa', '#7FA7D9'], ['Amaira ♡', '#F4A6BE'], ['Hana', '#F3C27A'], ['Reese', '#8FC9B0'], ['Avery', '#E8A0A0']];
+        const ORDER = (n, c, why) => [n, 'Your order is confirmed', c, '<b>Thank you for your order.</b><br>It’s confirmed, and we’ll let you know when it ships.', why];
+        const MAIL = [
+            ['Duolingo', 'These reminders don’t seem to be working', '#58CC02', 'We’ll stop sending them for now. 🦉', 'he’s not mad. he’s disappointed.'],
+            ORDER('Aritzia', '#1E1E1E', 'the usual. i said i was just looking.'),
+            ['Uber Eats', 'Your order is on its way', '#06C167', 'Sent at 1:47 a.m.', 'studying is hungry work.'],
+            ['Sephora', 'You’re SO close to Rouge!', '#000000', 'Just a little more to go.', 'i know. i’m working on it.'],
+            ORDER('CHANEL', '#000000', 'yes, again.'),
+            ['Professor', 'Re: coffee chat request', '#BF5700', 'Approved ☕ Happy to chat.', 'networking era.'],
+            ['Apple', 'Your iCloud storage is full', '#8E8E93', 'Upgrade to keep backing up your photos.', 'it’s all photos of me. no regrets.'],
+            ORDER('Louis Vuitton', '#5A3E2B', 'the wallet’s little sibling.'),
+            ['Spotify', 'Your Wrapped is here', '#1DB954', 'See how you listened this year.', 'i made my own. <a href="https://listening-history.onrender.com/" target="_blank" rel="noopener">four years of it ↗</a>'],
+            ['Pinterest', 'Ideas you might love', '#E60023', 'Fresh pins picked for you.', 'i already pinned all of them.'],
+            ORDER('Intimissimi', '#B0365A', 'the softest things i own.'),
+            ['Amazon', 'Arriving today', '#FF9900', 'Your package is out for delivery.', 'third day in a row. no comment.']
+        ];
+        const REMINDERS = ['drink water (the stanley is watching)', 'call mumma', 'apply to three jobs', 'finish chapter one of the rom-com', 'sleep before 2 a.m.'];
+        const TRASH = ['other people’s opinions of me.pdf', 'what if i fail.docx', 'comparing myself to others.zip', 'imposter syndrome.exe', 'texts i shouldn’t have sent.txt', 'my old sleep schedule.ics'];
+        const openApp = app => {
+            fwin.hidden = false; $('#fwin-title').textContent = app;
+            fwin.querySelectorAll('[data-side]').forEach(b => b.classList.remove('on'));
+            if (app === 'Reminders') {
+                fmain.innerHTML = `<div class="lap-app"><p class="lap-h mono">Today</p>${REMINDERS.map((t, k) => `<label class="lap-rem"><input type="checkbox" data-rem="${k}"><span>${t}</span></label>`).join('')}</div>`;
+                fmain.querySelectorAll('[data-rem]').forEach(c => c.onchange = () => { SFX.tap(); if ([...fmain.querySelectorAll('[data-rem]')].every(x => x.checked)) toast('all done?? who even am i.'); });
+                return;
+            }
+            if (app === 'Trash') {
+                fmain.innerHTML = `<div class="fgrid">${TRASH.map(n => `<button type="button" class="ffile" data-trash>${fileIcon(n, '#B5BBC2')}<span>${n}</span></button>`).join('')}</div><p class="fcount mono">${TRASH.length} items · emptied: never. they just don’t get opened.</p>`;
+                fmain.querySelectorAll('[data-trash]').forEach(b => b.onclick = () => toast('nope. that one stays in the trash.'));
+                return;
+            }
+            if (app === 'Messages') {
+                fmain.innerHTML = `<div class="lap-app">${CHATS.map(([n, c], k) => `<button type="button" class="msg-row" data-chat="${k}"><span class="msg-av" style="background:${c}">${n[0]}</span><span><b>${n}</b><small class="blur">just us stuff just us stuff just us</small></span></button>`).join('')}<div class="msg-open" id="lap-chat" hidden></div></div>`;
+                fmain.querySelectorAll('[data-chat]').forEach(r => r.onclick = () => {
+                    const o = fmain.querySelector('#lap-chat'), [n] = CHATS[+r.dataset.chat];
+                    o.hidden = false;
+                    o.innerHTML = `<p><b>${n}</b></p><p>this chat is just for us ♡</p>${n.startsWith('Amaira') ? '<button type="button" class="msg-btn" data-go="cards">see the cards she made me →</button>' : ''}`;
+                    const go = o.querySelector('[data-go]'); if (go) go.onclick = () => grab('cards');
+                });
+            } else {
+                fmain.innerHTML = `<div class="lap-app"><p class="lap-h mono">Inbox · ${MAIL.length} unread (on purpose)</p>${MAIL.map(([n, sub, c], k) => `<button type="button" class="gm-row lap-mail" data-mail="${k}"><span class="gm-dot" style="background:${c}"></span><span><b>${n}</b><small>${sub}</small></span><em>•</em></button>`).join('')}<div class="msg-open lap-read" id="lap-mail" hidden></div></div>`;
+                fmain.querySelectorAll('[data-mail]').forEach(r => r.onclick = () => {
+                    const o = fmain.querySelector('#lap-mail'), [n, sub, , body, why] = MAIL[+r.dataset.mail];
+                    fmain.querySelectorAll('[data-mail]').forEach(x => x.classList.toggle('on', x === r));
+                    r.querySelector('em').textContent = '';
+                    o.hidden = false;
+                    o.innerHTML = `<p class="mono" style="font-size:.7rem; color:#8A8A8E">from ${n}</p><p><b>${sub}</b></p><p>${body}</p><p class="hand">${why}</p>`;
+                    o.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                });
+            }
+        };
+        // drag the folders around the desktop like a real one (a tap still opens it). where you leave them is remembered in this browser
+        const desk = $('#desktop'), FKEY = 'bag-folders';
+        const MESS = ['i’ll organize it later. (i won’t.)', 'don’t open that one.', 'that’s from sophomore year. i think.', 'it’s organized. in my head.', 'the real folders are the ones with class names.'];
+        let spots = {}; try { spots = JSON.parse(localStorage.getItem(FKEY)) || {}; } catch {}
+        sheetBody.querySelectorAll('.dfolder').forEach(f => {
+            const name = f.querySelector('span').textContent, at = spots[name];
+            if (at) f.style.translate = `${at[0]}px ${at[1]}px`;
+            let start = null, moved = false;
+            f.addEventListener('pointerdown', e => {
+                if (e.button) return;
+                const [x0, y0] = (f.style.translate || '0px 0px').split(' ').map(parseFloat);
+                start = { x: e.clientX, y: e.clientY, x0: x0 || 0, y0: y0 || 0 }; moved = false;
+                f.setPointerCapture(e.pointerId);
+            });
+            f.addEventListener('pointermove', e => {
+                if (!start) return;
+                let dx = e.clientX - start.x, dy = e.clientY - start.y;
+                if (!moved && Math.hypot(dx, dy) < 5) return;
+                moved = true; f.classList.add('dragging');
+                // keep it on the desktop
+                const d = desk.getBoundingClientRect(), r = f.getBoundingClientRect(), [cx, cy] = (f.style.translate || '0px 0px').split(' ').map(parseFloat);
+                const bx = r.left - (cx || 0), by = r.top - (cy || 0);
+                const x = Math.min(Math.max(start.x0 + dx, d.left - bx), d.right - r.width - bx), y = Math.min(Math.max(start.y0 + dy, d.top + 22 - by), d.bottom - r.height - by);
+                f.style.translate = `${x}px ${y}px`;
+            });
+            const end = () => {
+                if (!start) return; start = null; f.classList.remove('dragging');
+                if (!moved) return;
+                spots[name] = f.style.translate.split(' ').map(parseFloat);
+                try { localStorage.setItem(FKEY, JSON.stringify(spots)); } catch {}
+            };
+            f.addEventListener('pointerup', end); f.addEventListener('pointercancel', end);
+            f.onclick = f.ondblclick = e => {
+                if (moved) { moved = false; e.preventDefault(); return; }
+                if (f.dataset.f !== undefined) return openFolder(+f.dataset.f);
+                if (e.type === 'click') toast(MESS[Math.floor(Math.random() * MESS.length)]);
+            };
+        });
         fwin.querySelectorAll('[data-side]').forEach(b => b.onclick = () => openFolder(+b.dataset.side));
         $('#fwin-x').onclick = () => { fwin.hidden = true; };
         sheetBody.querySelectorAll('.dock-app').forEach(a => a.onclick = () => {
@@ -3982,6 +4201,10 @@ const AFTER = {
             if (app === 'Finder') return openFolder(1);
             if (app === 'Photos') return openFolder(2);
             if (app === 'Notes') { openFolder(0); fmain.querySelector('[data-file="1"]').click(); return; }
+            if (app === 'Messages') return openApp('Messages');
+            if (app === 'Mail') return openApp('Mail');
+            if (app === 'Reminders') return openApp('Reminders');
+            if (app === 'Trash') return openApp('Trash');
             toast(a.dataset.say);
         });
         const label = $('#stk-label');
