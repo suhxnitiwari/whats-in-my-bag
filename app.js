@@ -4931,6 +4931,179 @@ const AFTER = {
     }
 };
 
+/* ---------- personal branding 101, taught by my backpack ----------
+   four zippers, four lessons. each one: the principle, the proof from my bag, a quick check, and your turn.
+   then you pack your own bag. your answers stay in this browser */
+const LESSONS = [
+    { z: '①', pocket: 'the work', h: 'proof beats <em>claims.</em>',
+        rule: 'anyone can type “data-driven” on a résumé. (everyone does.) a brand is built from things people can check for themselves. show the thing, then let them decide what it means.',
+        ex: [['headphones', 'i don’t say “i love data.” i put four years of my spotify into a sql warehouse you can ask questions.'],
+            ['laptop', 'every sticker on it opens a real project. the laptop is the portfolio.'],
+            ['padfolio', 'résumés in the pocket, for when someone actually asks.']],
+        q: ['which line builds a stronger brand?', [['“i’m passionate about data.”', 0], ['“i turned four years of my spotify into a database you can query.”', 1]],
+            'the second one is a claim and its proof in the same sentence. people believe what they can see.'],
+        turn: [['claim', 'one thing you’d say about yourself', 'i’m creative'], ['proof', 'now the proof you could show instead', 'the zine i made for my club, 400 copies']] },
+    { z: '②', pocket: 'the mind', h: 'how you think <em>is the brand.</em>',
+        rule: 'anyone can learn what you know. how you see things is the part nobody else has. your habits give it away: how you take notes, what you notice, what bugs you that nobody else even sees.',
+        ex: [['pouch', 'all 25 mildliners, and every color is a class i took. that’s not note-taking, it’s data visualization.'],
+            ['penpouch', 'inkjoy gels only. i notice friction in my tools the same way i notice it in a product.'],
+            ['sketchbook', 'strathmore by hand, procreate on the ipad. analog and digital, same bag.']],
+        q: ['an interviewer asks how you’d grow a brand on campus. what sticks with them?', [['the textbook answer, said perfectly', 0], ['how you’d actually think about it, even if it’s a little specific to you', 1]],
+            'they’ve heard the textbook answer 30 times today. your way of seeing it is the only part they can’t get from anyone else.'],
+        turn: [['think', 'one habit that shows how you think', 'i make a spreadsheet before every trip']] },
+    { z: '③', pocket: 'the heart', h: 'people remember <em>why,</em> not what.',
+        rule: 'skills get you on the shortlist. values are what people repeat about you after you leave the room. the story behind what you carry is the part that sticks.',
+        ex: [['bear', 'T.D., the first gift i ever bought my little sister, amaira.'],
+            ['cards', 'every card amaira has ever made me. i keep all of them.'],
+            ['pads', 'i carry pads to hand out, not just for me. it’s also why i built cadence.']],
+        q: ['a recruiter meets 40 students at a career fair. what do they remember that night?', [['your gpa', 0], ['the story about why you do what you do', 1], ['the font on your résumé', 0]],
+            'facts blur together by student number 12. a reason, told well, is what they repeat to the hiring manager.'],
+        turn: [['why', 'one thing you carry for someone else, or because of someone', 'my grandma’s ring. she taught me to show up early.']] },
+    { z: '④', pocket: 'the look', h: 'your color, your cart, <em>your brand.</em>',
+        rule: 'every purchase is a tiny brand decision. the color you keep reaching for, the brands you stay loyal to, the hype you buy into (and the returns you never make) say who you are before you say a word. pick a palette and repeat it until people see your color and think of you.',
+        ex: [['palette', 'cream, black and burgundy. three colors, nothing extra. you’ve been looking at them this whole time. that’s on purpose.'],
+            ['makeup-pouch', 'no fifty drugstore products. a few westman atelier staples, and i commit.'],
+            ['wallet', 'a louis vuitton wallet holding a medici punch card. the high-low mix, and a loyalty loop i’m very much inside of.'],
+            ['stanley', 'yes, i bought the pink stanley. i study hype cycles by being in them.'],
+            ['giftcards', 'three gift cards, zero returns made on time. retail friction, from the customer side.']],
+        q: ['you’re building your linkedin, résumé and portfolio. what matters most?', [['a fresh creative look on each one', 0], ['the same color, photo and headline on all three', 1]],
+            'repetition is what makes you recognizable. someone who sees you twice should know it’s you before they read your name. (that’s why everything in here is pink.)'],
+        turn: [['w1', 'three words you want people to use about you', 'curious'], ['w2', '', 'warm'], ['w3', '', 'organized'], ['color', 'your color', '#76344E'], ['buy', 'the thing you always buy again', 'the same black tee, every restock'], ['confess', 'your honest buying habit, one line', 'add to cart at 2am, return window: missed']] }
+];
+const B101 = 'brand-101';
+const b101 = (() => { try { return JSON.parse(localStorage.getItem(B101)) || {}; } catch { return {}; } })();
+b101.a ||= {}; b101.q ||= {};
+const saveB101 = () => { try { localStorage.setItem(B101, JSON.stringify(b101)); } catch {} };
+const escB = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const SWATCHES = [['#FAF1EF', 'cream'], ['#1E1414', 'black'], ['#76344E', 'burgundy']];
+const b101Ex = ([id, why]) => {
+    if (id === 'palette') return `<div class="bl-ex bl-pal"><span class="bl-sw">${SWATCHES.map(([c, n]) => `<i style="background:${c}" title="${n}"></i>`).join('')}</span><span><b>my palette</b>${why}</span></div>`;
+    const it = ITEMS.find(i => i.id === id);
+    return `<button type="button" class="bl-ex" data-ex="${id}"><span class="bl-art">${it.art}</span><span><b>${it.name}</b>${why}</span><i class="mono">open it ›</i></button>`;
+};
+const b101Turn = (l, n) => {
+    const words = l.turn.filter(([k]) => /^w\d/.test(k)), rest = l.turn.filter(([k]) => !/^w\d/.test(k));
+    const field = ([k, label, ph]) => k === 'color'
+        ? `<label class="bl-f bl-col"><span class="hand">${label}</span><input type="color" data-a="color" value="${escB(b101.a.color || ph)}"></label>`
+        : `<label class="bl-f"><span class="hand">${label}</span><input type="text" data-a="${k}" maxlength="120" placeholder="${escB(ph)}" value="${escB(b101.a[k])}"></label>`;
+    return `<div class="bl-turn"><p class="mono bl-h">your turn</p>
+        ${words.length ? `<div class="bl-f"><span class="hand">${words[0][1]}</span><span class="bl-words">${words.map(([k, , ph]) => `<input type="text" data-a="${k}" maxlength="24" placeholder="${escB(ph)}" value="${escB(b101.a[k])}" aria-label="word">`).join('')}</span></div>` : ''}
+        ${rest.map(field).join('')}</div>`;
+};
+const b101Lesson = (l, n) => `<section class="bl-step" data-n="${n + 1}" hidden>
+    <p class="mono bl-k">lesson ${l.z} · the ${l.pocket.replace('the ', '')} zipper</p>
+    <h2>${l.h}</h2>
+    <p class="bl-rule">${l.rule}</p>
+    <p class="mono bl-h">the proof, from my bag</p>
+    <div class="bl-exs">${l.ex.map(b101Ex).join('')}</div>
+    <div class="bl-quiz" data-q="${n}"><p class="mono bl-h">quick check</p><p class="bl-qq">${l.q[0]}</p>
+        <div class="bl-opts">${l.q[1].map(([t, ok], k) => `<button type="button" class="bl-opt" data-ok="${ok}" data-k="${k}">${t}</button>`).join('')}</div>
+        <p class="bl-why" hidden>${l.q[2]}</p></div>
+    ${b101Turn(l, n)}
+</section>`;
+const dot = s => /[.!?)♡]$/.test(s) ? s : s + '.';
+const b101Card = () => {
+    const a = b101.a, w = [a.w1, a.w2, a.w3].filter(Boolean);
+    const words = w.length ? w.length > 1 ? `${w.slice(0, -1).join(', ')} and ${w[w.length - 1]}` : w[0] : '';
+    const lines = [
+        a.name ? `i’m ${escB(a.name)}.` : '',
+        words ? `people who know me would call me ${escB(words)}.` : '',
+        a.claim || a.proof ? `${a.claim ? `i’m ${escB(a.claim.replace(/^i(’|')?m\s+/i, ''))}, and ` : ''}${a.proof ? `don’t take my word for it: ${escB(dot(a.proof))}` : 'i can prove it.'}` : '',
+        a.think ? `how i think: ${escB(dot(a.think))}` : '',
+        a.why ? `the thing i carry: ${escB(dot(a.why))}` : '',
+        a.buy ? `i’ll always buy ${escB(dot(a.buy.replace(/^(i(’|')?ll\s+)?(always\s+)?(buy\s+)?/i, '')))}` : '',
+        a.confess ? `full honesty: ${escB(dot(a.confess))}` : ''
+    ].filter(Boolean);
+    const col = a.color || '#76344E';
+    return `<div class="bl-card" style="--me:${escB(col)}"><p class="mono bl-k"><i class="bl-me-sw" aria-hidden="true"></i>my personal brand, packed</p>
+        ${lines.length ? `<p class="bl-stmt">${lines.join(' ')}</p>` : '<p class="bl-stmt bl-empty">your bag is empty. go back through the four zippers and fill in “your turn.”</p>'}
+        <div class="bl-pockets">${[['①', 'proof', a.proof], ['②', 'how i think', a.think], ['③', 'why', a.why], ['④', 'look', [words, a.buy].filter(Boolean).join(' · ')]].map(([z, k, v]) => `<span class="${v ? 'in' : ''}"><b>${z} ${k}</b>${v ? escB(v) : 'empty'}</span>`).join('')}</div></div>`;
+};
+VIEWS.lesson = () => `<div class="bl" id="bl">
+    <nav class="bl-track" aria-label="Lessons">${['start', ...LESSONS.map(l => `${l.z} ${l.pocket.replace('the ', '')}`), '✦ pack'].map((t, n) => `<button type="button" class="bl-dot mono" data-go="${n}">${t}</button>`).join('')}</nav>
+    <section class="bl-step bl-cover" data-n="0" hidden>
+        <p class="mono bl-k">a lesson in four zippers</p>
+        <h2>personal branding, <em>taught by my backpack.</em></h2>
+        <p class="bl-rule">your personal brand is what people say about you when you’re not in the room. mine fits in a samsonite. four zippers, four tiny lessons, each one with proof from my bag (and a quick check, sorry, i’m a student). then you pack your own.</p>
+        <ol class="bl-map">${LESSONS.map((l, n) => `<li><button type="button" data-go="${n + 1}"><b>${l.z}</b><span class="mono">${l.pocket}</span>${l.h.replace(/<\/?em>/g, '')}</button></li>`).join('')}</ol>
+        <p class="hand bl-for">for students: steal all of it. for recruiters and employers: every lesson is also a proof point. for my friends: yes, this is really what’s in my bag.</p>
+    </section>
+    ${LESSONS.map(b101Lesson).join('')}
+    <section class="bl-step" data-n="${LESSONS.length + 1}" hidden>
+        <p class="mono bl-k">the final: pack your own bag</p>
+        <h2>now it’s <em>your</em> bag.</h2>
+        <p class="bl-rule">everything you wrote, packed into one brand statement, in your color. put it on linkedin, say it at a career fair, or just read it out loud once and notice which part sounds the most like you.</p>
+        <label class="bl-f"><span class="hand">your name, so it’s yours</span><input type="text" data-a="name" maxlength="40" placeholder="first name" value="${escB(b101.a.name)}"></label>
+        <div id="bl-card">${b101Card()}</div>
+        <div class="row bl-acts"><button type="button" class="btn solid" id="bl-copy">copy my brand statement</button><button type="button" class="btn" id="bl-reset">empty my bag</button></div>
+        <div class="bl-end"><p class="bl-one">a personal brand isn’t what you say about yourself. <em>it’s what you carry, every day, on purpose.</em></p>
+            <p class="bl-hire">if you’re hiring: this lesson was also my case. <a href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">my résumé ↗</a> · <button type="button" class="link" id="bl-deck">the strategy deck on my ipad</button> · <a href="mailto:suhanitiwari@utexas.edu">say hi ✉</a></p></div>
+    </section>
+    <div class="bl-nav"><button type="button" class="btn" id="bl-prev">‹ back</button><span class="mono" id="bl-n"></span><button type="button" class="btn solid" id="bl-next">next ›</button></div>
+</div>`;
+AFTER.lesson = () => {
+    const bl = $('#bl'), steps = [...bl.querySelectorAll('.bl-step')], dots = [...bl.querySelectorAll('.bl-dot')], last = steps.length - 1;
+    const show = n => {
+        n = Math.max(0, Math.min(last, n)); b101.at = n; saveB101();
+        steps.forEach((s, i) => { s.hidden = i !== n; });
+        dots.forEach((d, i) => { d.setAttribute('aria-current', i === n ? 'step' : 'false'); d.classList.toggle('done', i > 0 && i <= LESSONS.length && b101.q[i - 1] != null); });
+        $('#bl-prev').disabled = n === 0;
+        $('#bl-next').hidden = n === last;
+        $('#bl-next').textContent = n === 0 ? 'start with the work zipper ›' : n === LESSONS.length ? 'pack my own bag ›' : 'next zipper ›';
+        $('#bl-n').textContent = n === 0 ? 'intro' : n === last ? 'the final' : `lesson ${n} of ${LESSONS.length}`;
+        if (n === last) $('#bl-card').innerHTML = b101Card();
+        sheet.scrollTop = 0;
+    };
+    $('#bl-prev').onclick = () => { SFX.tap(); show(b101.at - 1); };
+    $('#bl-next').onclick = () => { SFX.tap(); show(b101.at + 1); };
+    dots.forEach((d, i) => d.onclick = () => { SFX.tap(); show(i); });
+    bl.querySelectorAll('.bl-map [data-go]').forEach(b => b.onclick = () => { SFX.tap(); show(+b.dataset.go); });
+    // the proof: open the real thing from my bag (with its brand teardown), "back" lands right here
+    bl.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => {
+        const it = ITEMS.find(i => i.id === b.dataset.ex), l = LESSONS[b101.at - 1]; if (!it || !l) return;
+        const why = l.ex.find(([id]) => id === it.id)[1];
+        goTo(it);
+        $('#nav-back')?.insertAdjacentHTML('afterend', `<aside class="brand-card" aria-label="Lesson note"><p class="mono bc-k">✦ personal branding 101 · lesson ${l.z}</p><p class="bc-sig"><span class="mono">the principle</span>${l.h.replace(/<\/?em>/g, '')}</p><p class="bc-body">${why}</p></aside>`);
+    });
+    // quick check: one try is enough to learn, so it shows the why either way
+    bl.querySelectorAll('.bl-quiz').forEach(q => {
+        const n = +q.dataset.q, opts = [...q.querySelectorAll('.bl-opt')], why = q.querySelector('.bl-why');
+        const mark = k => {
+            opts.forEach((o, i) => { o.classList.toggle('right', o.dataset.ok === '1'); o.classList.toggle('picked', i === k); o.disabled = true; });
+            why.hidden = false;
+        };
+        if (b101.q[n] != null) mark(b101.q[n]);
+        opts.forEach((o, k) => o.onclick = () => {
+            mark(k); b101.q[n] = k; saveB101();
+            dots[n + 1].classList.add('done');
+            if (o.dataset.ok === '1') { SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9); toast(['you already think like a strategist.', 'yes. exactly that.', 'correct, and now you’ll never unsee it.', 'that’s the one ♡'][n % 4]); }
+            else { SFX.tap(); toast('close. read the why, it’s the whole lesson.'); }
+        });
+    });
+    bl.addEventListener('input', e => {
+        const k = e.target.dataset.a; if (!k) return;
+        b101.a[k] = e.target.value.trim(); saveB101();
+        if (k === 'name') $('#bl-card').innerHTML = b101Card();
+    });
+    $('#bl-copy').onclick = async () => {
+        const t = $('#bl-card .bl-stmt');
+        if (!t || t.classList.contains('bl-empty')) return toast('nothing to copy yet. your bag is empty.');
+        try { await navigator.clipboard.writeText(t.textContent); toast('copied. go put it somewhere people will see it.'); }
+        catch { getSelection().selectAllChildren(t); toast('selected it for you. copy away.'); }
+    };
+    $('#bl-reset').onclick = () => {
+        b101.a = {}; b101.q = {}; saveB101();
+        bl.querySelectorAll('[data-a]').forEach(i => { i.value = i.type === 'color' ? '#76344E' : ''; });
+        bl.querySelectorAll('.bl-quiz').forEach(q => { q.querySelectorAll('.bl-opt').forEach(o => { o.disabled = false; o.classList.remove('right', 'picked'); }); q.querySelector('.bl-why').hidden = true; });
+        show(0); toast('bag emptied. fresh start.');
+    };
+    $('#bl-deck').onclick = () => { goTo(ITEMS.find(i => i.id === 'ipad')); setTimeout(() => sheetBody.querySelector('[data-ip="deck"]')?.click(), 0); };
+    show(b101.at || 0);
+};
+const openLesson = () => { SFX.tap(); if (sheet.open) goTo({ id: 'lesson', name: 'personal branding 101', open: 'lesson' }); else pickUp({ id: 'lesson', name: 'personal branding 101', open: 'lesson' }); };
+$('#brand-101').addEventListener('click', openLesson);
+$('#end-101')?.addEventListener('click', openLesson);
+
 /* ---------- little helpers ---------- */
 let ink = '#E63F7A';
 function setupPad() {

@@ -41,6 +41,17 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | McCombs keychain | Why McCombs |
 | Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
 
+## Personal branding 101, taught by my bag
+
+Tap **✦ personal branding 101** under the title. Four zippers, four lessons, each with proof from my bag, a quick check and a "your turn":
+
+1. **The work: proof beats claims.** My AirPods Max, MacBook and padfolio
+2. **The mind: how you think is the brand.** My Mildliners, InkJoy pens and sketchbook
+3. **The heart: people remember why, not what.** T.D., Amaira's cards and the pads
+4. **The look: your color, your cart, your brand.** Color and buying habits: my palette, my Westman staples, the LV wallet with a Medici punch card, the pink Stanley and the gift cards
+
+Then you pack your own bag: everything you wrote becomes one brand statement, in your color, that you can copy. Your answers stay in your browser.
+
 ## Built with
 
 Plain HTML, CSS and JavaScript. No framework, no build step. Every item is drawn as an SVG doodle, and each one lives in `items.js`, so adding something to my bag is one entry.
