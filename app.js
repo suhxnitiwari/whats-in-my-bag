@@ -2386,7 +2386,7 @@ const VIEWS = {
                 <div class="fwin-bar"><span class="fwin-tl"><button type="button" id="fwin-x" aria-label="Close this window"></button><i></i><i></i></span><b id="fwin-title"></b></div>
                 <div class="fwin-body"><nav class="fwin-side">${FOLDERS.map(([n], i) => `<button type="button" data-side="${i}">${n}</button>`).join('')}</nav><div class="fwin-main" id="fwin-main"></div></div>
             </div>
-            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="37 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">FRI</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">2</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="the real to-do list." aria-label="Google Docs" title="Google Docs"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><path d="M12 7 H24 L30 13 V33 H12Z" fill="#4285F4"/><path d="M24 7 V13 H30Z" fill="#A1C2FA"/><path d="M16 18 h10 M16 22 h10 M16 26 h10 M16 30 h6" stroke="#fff" stroke-width="1.8"/></svg></span><i>Google Docs</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
+            <div class="dock" aria-label="Apps on my laptop"><button type="button" class="dock-app" data-say="everything lives in a folder. allegedly." aria-label="Finder" title="Finder"><span style="background:#5AA9F0"><svg viewBox="0 0 40 40"><path d="M14 10 h12 v20 h-12z" fill="#fff" opacity=".9"/><path d="M20 10 v20" stroke="#2B6CB0" stroke-width="1.6"/><circle cx="16.5" cy="17" r="1.2" fill="#2B6CB0"/><circle cx="23.5" cy="17" r="1.2" fill="#2B6CB0"/><path d="M15 24 q5 3 10 0" fill="none" stroke="#2B6CB0" stroke-width="1.4"/></svg></span><i>Finder</i></button><button type="button" class="dock-app" data-say="74 tabs open. all of them important." aria-label="Chrome" title="Chrome"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="#E8453C"/><path d="M20 20 L31 20 A11 11 0 0 1 14.5 29.5Z" fill="#F7C344"/><path d="M20 20 L14.5 29.5 A11 11 0 0 1 9 20 A11 11 0 0 1 14.5 10.5Z" fill="#34A853"/><circle cx="20" cy="20" r="5" fill="#4285F4" stroke="#fff" stroke-width="2"/></svg></span><i>Chrome</i></button><button type="button" class="dock-app" data-say="screenshots of things i’ll “look at later.”" aria-label="Photos" title="Photos"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><g opacity=".9"><ellipse cx="20" cy="13" rx="4" ry="7" fill="#F7C344"/><ellipse cx="27" cy="20" rx="7" ry="4" fill="#E8453C"/><ellipse cx="20" cy="27" rx="4" ry="7" fill="#4285F4"/><ellipse cx="13" cy="20" rx="7" ry="4" fill="#34A853"/></g></svg></span><i>Photos</i></button><button type="button" class="dock-app" data-say="color-coded. every hour. yes, really." aria-label="Calendar" title="Calendar"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" rx="3" fill="#fff" stroke="#ddd"/><text x="20" y="15.5" text-anchor="middle" font-size="5" fill="#E8453C" font-family="system-ui">FRI</text><text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#222" font-family="system-ui">2</text></svg></span><i>Calendar</i></button><button type="button" class="dock-app" data-say="ideas at 2 a.m." aria-label="Notes" title="Notes"><span style="background:#FFD54F"><svg viewBox="0 0 40 40"><rect x="10" y="9" width="20" height="22" rx="3" fill="#fff"/><path d="M13 16 h14 M13 21 h14 M13 26 h9" stroke="#ccc" stroke-width="1.6"/></svg></span><i>Notes</i></button><button type="button" class="dock-app" data-say="the real to-do list." aria-label="Google Docs" title="Google Docs"><span style="background:#ffffff"><svg viewBox="0 0 40 40"><path d="M12 7 H24 L30 13 V33 H12Z" fill="#4285F4"/><path d="M24 7 V13 H30Z" fill="#A1C2FA"/><path d="M16 18 h10 M16 22 h10 M16 26 h10 M16 30 h6" stroke="#fff" stroke-width="1.8"/></svg></span><i>Google Docs</i></button><button type="button" class="dock-app" data-say="a list i will absolutely get to." aria-label="Reminders" title="Reminders"><span style="background:#fff"><svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="3" fill="#FF9500"/><circle cx="12" cy="20" r="3" fill="#007AFF"/><circle cx="12" cy="27" r="3" fill="#FF3B30"/><path d="M18 13 h12 M18 20 h12 M18 27 h12" stroke="#C7C7CC" stroke-width="1.6" stroke-linecap="round"/></svg></span><i>Reminders</i></button><button type="button" class="dock-app" data-say="where every case study deck is born." aria-label="Keynote" title="Keynote"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><path d="M13 28 h14 M20 28 v-5" stroke="#fff" stroke-width="2"/><rect x="11" y="11" width="18" height="12" rx="2" fill="#fff"/></svg></span><i>Keynote</i></button><button type="button" class="dock-app" data-say="where this website was built." aria-label="VS Code" title="VS Code"><span style="background:#2A7FD4"><svg viewBox="0 0 40 40"><path d="M27 10 L15 20 L27 30 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M15 20 L11 17 M15 20 L11 23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><i>VS Code</i></button><button type="button" class="dock-app" data-say="git push. pray." aria-label="Terminal" title="Terminal"><span style="background:#1E1E1E"><svg viewBox="0 0 40 40"><path d="M12 15 l5 5 -5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M19 26 h9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></span><i>Terminal</i></button><button type="button" class="dock-app" data-say="mostly amaira. and my mom. mostly amaira." aria-label="Messages" title="Messages"><span style="background:#34C759"><svg viewBox="0 0 40 40"><path d="M10 19 c0 -6 5 -9 10 -9 s10 3 10 9 -5 9 -10 9 c-1.5 0 -3 -.3 -4.2 -.8 L11 30 l1.4 -4 C11 24 10 21.6 10 19z" fill="#fff"/></svg></span><i>Messages</i></button><button type="button" class="dock-app" data-say="inbox zero is a myth." aria-label="Mail" title="Mail"><span style="background:#3D8BF0"><svg viewBox="0 0 40 40"><rect x="9" y="12" width="22" height="16" rx="2" fill="#fff"/><path d="M9 13 L20 22 L31 13" fill="none" stroke="#3D8BF0" stroke-width="1.8"/></svg></span><i>Mail</i></button><span class="dock-sep" aria-hidden="true"></span><button type="button" class="dock-app" data-say="" aria-label="Trash" title="Trash"><span style="background:linear-gradient(#F4F6F8,#D9DDE2)"><svg viewBox="0 0 40 40"><path d="M12 13 h16 l-1.6 18 a2 2 0 0 1 -2 1.8 h-8.8 a2 2 0 0 1 -2 -1.8z" fill="rgba(255,255,255,.7)" stroke="#9AA1A9" stroke-width="1.4"/><path d="M11 12.5 h18" stroke="#9AA1A9" stroke-width="1.8" stroke-linecap="round"/><path d="M16 16 l.6 13 M20 16 v13 M24 16 l-.6 13" stroke="#B5BBC2" stroke-width="1"/><path d="M15 21 q3 -3 6 0 t5 -1" stroke="#E8A0B4" stroke-width="1.6" fill="none"/></svg></span><i>Trash</i></button></div>
         </div></div><div class="mbp-base"><span class="mbp-notch"></span></div></div>
         <div class="row" style="justify-content:center; margin-top:14px"><button class="btn solid" type="button" id="lap-clean" hidden>help me clean it up 🧹</button><button class="btn" type="button" id="lap-close" hidden>Close the laptop</button></div>`,
 
@@ -4595,6 +4595,7 @@ const AFTER = {
                 await wait(1100);
             } else {
                 mbp.classList.remove('open'); $('#lap-close').hidden = true; clean.hidden = true;
+                hush(); sheetBody.querySelectorAll('.cwin').forEach(x => x.remove());
                 await wait(900);
                 mbp.hidden = true; $('#lap-closed').hidden = false;
             }
@@ -4729,6 +4730,92 @@ const AFTER = {
                 });
             }
         };
+        // chrome: 74 tabs across nine windows, and music is coming from one of them. no idea which. close windows until it stops
+        // (or spot the little speaker on its tab and tap that, like a pro). the song is an Apple Music preview, looked up on the spot
+        const TABS = [['Canvas – MIS 372T', '#E3412B', 'C'], ['Inbox (2,431) – Gmail', '#EA4335', 'M'], ['LinkedIn', '#0A66C2', 'in'], ['Aritzia – New Arrivals', '#1E1E1E', 'A'],
+            ['Pinterest – desk aesthetic', '#E60023', 'P'], ['Google Calendar', '#4285F4', '2'], ['to do ☆ – Google Docs', '#4285F4', 'D'], ['Sephora – Basket (6)', '#000000', 'S'],
+            ['how to network at a career fair', '#4285F4', 'G'], ['ChatGPT', '#10A37F', '◎'], ['Untitled spreadsheet', '#0F9D58', 'S'], ['Notion – case prep', '#1E1E1E', 'N'],
+            ['Instagram', '#E1306C', '◎'], ['Amazon.com: Cart', '#FF9900', 'a'], ['Netflix', '#E50914', 'N'], ['what to wear to a coffee chat', '#4285F4', 'G'],
+            ['UT Direct – Registration', '#BF5700', 'UT'], ['Quizlet – MKT 354 exam 2', '#4255FF', 'Q'], ['how to center a div', '#F48024', 'S'], ['GitHub – whats-in-my-bag', '#24292F', 'G'],
+            ['Uber Eats', '#06C167', 'U'], ['Google Flights', '#4285F4', '✈'], ['Big Five personality – Wikipedia', '#636466', 'W'], ['Canvas – EDP 352K', '#E3412B', 'C']];
+        const SONGS = [['espresso', 'sabrina carpenter'], ['cruel summer', 'taylor swift'], ['birds of a feather', 'billie eilish'], ['good luck, babe!', 'chappell roan'], ['we can’t be friends', 'ariana grande']];
+        let music = null;
+        const hush = () => { if (!music) return; music.stop(); music = null; $('#lap-clock').classList.remove('playing'); };
+        sheet.addEventListener('close', hush, { once: true });
+        // if no song can be found, a soft little loop made right here instead
+        const hum = () => {
+            const c = new (window.AudioContext || window.webkitAudioContext)(), g = c.createGain(); g.gain.value = .05; g.connect(c.destination);
+            const NOTES = [523.3, 659.3, 784, 987.8, 440, 523.3, 659.3, 784, 349.2, 440, 523.3, 659.3, 392, 493.9, 587.3, 784];
+            let k = 0; const id = setInterval(() => {
+                const o = c.createOscillator(), e = c.createGain(), t = c.currentTime;
+                o.type = 'triangle'; o.frequency.value = NOTES[k++ % NOTES.length];
+                e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(1, t + .02); e.gain.exponentialRampToValueAtTime(.001, t + .5);
+                o.connect(e).connect(g); o.start(t); o.stop(t + .55);
+            }, 260);
+            return { stop: () => { clearInterval(id); c.close(); } };
+        };
+        const play = async () => {
+            const [song, by] = SONGS[Math.floor(Math.random() * SONGS.length)];
+            if (!SFX.on) return { name: song, stop() {} };
+            try {
+                const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(by + ' ' + song)}&entity=song&limit=5`).then(r => r.json());
+                const t = r.results.find(x => x.previewUrl); if (!t) throw 0;
+                const a = new Audio(t.previewUrl); a.loop = true; a.volume = .6; await a.play();
+                return { name: t.trackName, stop: () => a.pause() };
+            } catch { return { name: 'a song i can’t even name', ...hum() }; }
+        };
+        const chromeChaos = async () => {
+            if (sheetBody.querySelector('.cwin')) return toast('they’re already open. all of them.');
+            hush(); fwin.hidden = true;
+            const N = 9, per = [...Array(N)].map(() => 8);
+            for (let i = 0; i < 74 - 8 * N; i++) per[Math.floor(Math.random() * N)]++;
+            const culprit = Math.floor(Math.random() * N), at = Math.floor(Math.random() * per[culprit]);
+            music = { stop() {} };
+            const tune = await play(), song = tune.name;
+            if (!music) return tune.stop();
+            music = tune; $('#lap-clock').classList.add('playing');
+            let left = N, z = 6;
+            const wins = per.map((n, w) => {
+                const tabs = [...Array(n)].map(() => TABS[Math.floor(Math.random() * TABS.length)]);
+                if (w === culprit) tabs[at] = [`${song} – YouTube`, '#FF0000', '▶', true];
+                const on = Math.floor(Math.random() * n), [title, col, ic] = tabs[on];
+                const el = document.createElement('div');
+                el.className = 'cwin';
+                el.style.cssText = `--x:${Math.random().toFixed(3)}; top:${7 + Math.random() * 22}%; z-index:${z++}`;
+                el.innerHTML = `<div class="cwin-top"><span class="fwin-tl"><button type="button" aria-label="Close this Chrome window"></button><i></i><i></i></span><div class="ctabs">${tabs.map(([t, c, i, snd], k) =>
+                    `<span class="ctab${k === on ? ' on' : ''}" title="${t}">${snd ? '<button type="button" class="csnd" aria-label="This tab is playing audio. Tap to mute it">🔊</button>' : `<i style="background:${c}">${i}</i>`}<b>${t}</b></span>`).join('')}</div></div>
+                    <div class="cwin-url mono">‹ › ↻ <span>${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.com</span></div>
+                    <div class="cwin-page"><i style="background:${col}">${ic}</i><b>${title}</b><p></p><p></p><p class="short"></p></div>`;
+                $('#desktop').appendChild(el);
+                if (!reduce && el.animate) el.animate([{ opacity: 0, scale: .6 }, { opacity: 1, scale: 1 }], { duration: 260, delay: w * 90, fill: 'backwards', easing: 'cubic-bezier(.3,1.4,.5,1)' });
+                setTimeout(() => SFX.pop(w), reduce ? 0 : w * 90);
+                el.addEventListener('pointerdown', () => { el.style.zIndex = z++; });
+                const gone = (cb = () => {}) => { if (reduce || !el.animate) { el.remove(); return cb(); } el.animate([{ opacity: 1, scale: 1 }, { opacity: 0, scale: .85 }], { duration: 180 }).onfinish = () => { el.remove(); cb(); }; };
+                const found = (how, rest) => {
+                    hush(); SFX.tink(1568, .04, .25, .9); SFX.tink(2093, .035, .4, .9);
+                    const msg = `${how} it was “${song}” the whole time.${rest ? ` the other ${rest} windows can go back to being ignored.` : ''}`;
+                    toast(msg); $('#lap-note').textContent = msg;
+                    setTimeout(() => wins.forEach(x => x.isConnected && x.gone()), reduce ? 0 : 1400);
+                };
+                el.querySelector('.fwin-tl button').onclick = () => {
+                    SFX.tap(); left--;
+                    gone();
+                    if (!music) return;
+                    if (w === culprit) found(left ? `found it in ${N - left}.` : 'the very last one, of course.', left);
+                    else toast(['nope. still playing.', 'not that one.', 'the music is mocking you.', 'it’s getting louder (it isn’t).', 'how many tabs is too many? (asking for me.)'][Math.floor(Math.random() * 5)]);
+                };
+                const s = el.querySelector('.csnd');
+                if (s) s.onclick = e => { e.stopPropagation(); if (music) found('the little speaker! smarter than me.', left - 1); };
+                return Object.assign(el, { gone });
+            });
+            toast(SFX.on ? 'something is playing. 74 tabs. no idea which one. close windows until it stops.' : 'your sound is off, so imagine a song. it’s loud. close windows until it stops.');
+            $('#lap-note').textContent = 'i have 74 tabs open and music is coming from one of them. close windows until it stops.';
+            // leaving the laptop (or closing it) stops the music
+            const watch = new MutationObserver(() => {
+                if (!$('#desktop')) { hush(); watch.disconnect(); } else if (!wins.some(x => x.isConnected)) watch.disconnect();
+            });
+            watch.observe(sheetBody, { childList: true, subtree: true });
+        };
         // drag the folders around the desktop like a real one (a tap still opens it). where you leave them is remembered in this browser
         const desk = $('#desktop'), FKEY = 'bag-folders';
         const MESS = ['i’ll organize it later. (i won’t.)', 'don’t open that one.', 'that’s from sophomore year. i think.', 'it’s organized. in my head.', 'the real folders are the ones with class names.'];
@@ -4773,6 +4860,7 @@ const AFTER = {
             a.classList.remove('bounce'); void a.offsetWidth; a.classList.add('bounce');
             const app = a.getAttribute('aria-label');
             if (app === 'Finder') return openFolder(1);
+            if (app === 'Chrome') return chromeChaos();
             if (app === 'Photos') return openApp('Photos');
             if (app === 'Notes') return openApp('Notes');
             if (app === 'Messages') return openApp('Messages');
