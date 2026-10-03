@@ -1,10 +1,39 @@
 # What's in my bag?
 
-**Everything I carry around, and what each thing says about me.**
+*Everything I carry around, and what each thing says about me.*
 
-**[Go through my bag →](https://suhxnitiwari.github.io/whats-in-my-bag/)**
+**Live:** [suhxnitiwari.github.io/whats-in-my-bag](https://suhxnitiwari.github.io/whats-in-my-bag/)
 
-Tap the backpack and everything falls out, stop-motion style. Tap anything that falls out and it opens:
+## What it is
+
+An interactive portrait told through my backpack. Pull a zipper and that pocket's things fall out onto the table,
+stop-motion style. Tap anything to pick it up and it opens into something about me: my Spotify data, my art, my
+classes, my desktop, my little sister's cards. Every object is hand-drawn, and most of them do something.
+
+## How it's built
+
+- **Everything is drawn in code.** Each item is an SVG illustration defined in `items.js`, many drawn from photos of the
+  real thing, so adding something to my bag is one entry.
+- **A real-size table.** Items are laid out at true physical scale (1 cm = 0.94% of the table width, the 32 cm backpack
+  is 30%), with rotated bounding boxes packed into centered rows around the bag. You can drag anything to rearrange it,
+  and a tap still picks it up.
+- **Sound with no audio files.** Every zipper, landing thud, spritz and sparkle is synthesized with the Web Audio API
+  from oscillators and a noise buffer, run through one master chain (low-pass filter, compressor, and a convolution reverb
+  built from a generated impulse response). The mute setting is remembered.
+- **Canvas drawing tools.** The pen pouch opens to a notebook page where you write in any of 20 gel-pen colors. Ink and
+  graphite live on separate canvas layers, so the eraser only ever erases pencil and the correction tape only covers ink.
+  The Apple Pencil opens a blank canvas.
+- **Live data.** The phone's lock screen shows Austin time and current weather from the Open-Meteo API (cached for 10
+  minutes), and music buttons fetch official 30-second song previews from the iTunes Search API on demand.
+- **Nested sheets.** Opening a sticker, app or link from inside another item stacks a new page on top and keeps the one
+  underneath exactly as it was, so back lands you where you left off. Focus returns to whatever you tapped.
+- **Accessible by default.** Hundreds of ARIA labels, live regions for toasts, keyboard support, focus management, and
+  `prefers-reduced-motion` honored throughout.
+- **No framework, no build step.** Plain HTML, CSS and JavaScript (~5,300 lines of JS, ~3,500 lines of CSS).
+
+## What falls out
+
+Tap anything that falls out and it opens:
 
 | In my bag | What it opens |
 |---|---|
@@ -39,7 +68,7 @@ Tap the backpack and everything falls out, stop-motion style. Tap anything that 
 | Two silk scrunchies and a wide-tooth comb | Try each one on; drag the comb down through my hair, frizz to smooth |
 | Pink Ralph Lauren cable knit sweater | Because I get cold easily |
 | McCombs keychain | Why McCombs |
-| Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Sitara, my AI guide, lives in it |
+| Bath & Body Works caramel frappuccino PocketBac holder (Cozy Vanilla Almond inside) | Clipped to the outside: sanitize your hands before you touch my stuff |
 
 ## Personal branding 101, taught by my bag
 
@@ -52,9 +81,9 @@ Tap **✦ personal branding 101** under the title. Four zippers, four lessons, e
 
 Then you pack your own bag: everything you wrote becomes one brand statement, in your color, that you can copy. Your answers stay in your browser.
 
-## Built with
+## Tech stack
 
-Plain HTML, CSS and JavaScript. No framework, no build step. Every item is drawn as an SVG doodle, and each one lives in `items.js`, so adding something to my bag is one entry.
+HTML · CSS · vanilla JavaScript · SVG · Canvas 2D · Web Audio API · Open-Meteo and iTunes Search APIs · GitHub Pages
 
 ## Run it
 
@@ -67,3 +96,5 @@ python3 -m http.server
 ## Ownership
 
 © 2026 Suhani Tiwari. All rights reserved. The code is public so you can see how I build, not so you can reuse it. Brand names describe things I own; the drawings are my own illustrations and aren't affiliated with any brand.
+
+Built by [Suhani Tiwari](https://suhanitiwari.com).
