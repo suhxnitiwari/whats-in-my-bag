@@ -12,8 +12,8 @@ classes, my desktop, my little sister's cards. Every object is hand-drawn, and m
 
 ## How it's built
 
-- **Everything is drawn in code.** Each item is an SVG illustration defined in `items.js`, many drawn from photos of the
-  real thing, so adding something to my bag is one entry.
+- **Everything is drawn in code.** Each item is an SVG illustration, many drawn from photos of the real
+  thing, and each one is a single entry in `items.js`, so adding something to my bag is one entry.
 - **A real-size table.** Items are laid out at true physical scale (1 cm = 0.94% of the table width, the 32 cm backpack
   is 30%), with rotated bounding boxes packed into centered rows around the bag. You can drag anything to rearrange it,
   and a tap still picks it up.
