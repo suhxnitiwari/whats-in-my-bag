@@ -4936,50 +4936,48 @@ const AFTER = {
    then you pack your own bag. your answers stay in this browser */
 const LESSONS = [
     { z: '①', pocket: 'the work', h: 'proof beats <em>claims.</em>',
-        rule: 'anyone can type “data-driven” on a résumé. (everyone does.) a brand is built from things people can check for themselves. show the thing, then let them decide what it means.',
-        ex: [['headphones', 'i don’t say “i love data.” i put four years of my spotify into a sql warehouse you can ask questions.'],
-            ['laptop', 'every sticker on it opens a real project. the laptop is the portfolio.'],
-            ['padfolio', 'résumés in the pocket, for when someone actually asks.']],
-        q: ['which line builds a stronger brand?', [['“i’m passionate about data.”', 0], ['“i turned four years of my spotify into a database you can query.”', 1]],
-            'the second one is a claim and its proof in the same sentence. people believe what they can see.'],
-        turn: [['claim', 'one thing you’d say about yourself', 'i’m creative'], ['proof', 'now the proof you could show instead', 'the zine i made for my club, 400 copies']] },
+        rule: 'don’t say it. show it.',
+        ex: [['headphones', 'spotify → a sql warehouse', 'i don’t say “i love data.” i put four years of my spotify into a sql warehouse you can ask questions.'],
+            ['laptop', 'every sticker is a project', 'every sticker on it opens a real project. the laptop is the portfolio.'],
+            ['padfolio', 'résumés, ready', 'résumés in the pocket, for when someone actually asks.']],
+        q: ['which builds a stronger brand?', [['“i’m passionate about data.”', 0], ['“i put 4 years of my spotify in a database.”', 1]],
+            'claim + proof in one line. people believe what they can see.'],
+        turn: [['proof', 'your proof, not your claim', 'the zine i made, 400 copies']] },
     { z: '②', pocket: 'the mind', h: 'how you think <em>is the brand.</em>',
-        rule: 'anyone can learn what you know. how you see things is the part nobody else has. your habits give it away: how you take notes, what you notice, what bugs you that nobody else even sees.',
-        ex: [['pouch', 'all 25 mildliners, and every color is a class i took. that’s not note-taking, it’s data visualization.'],
-            ['penpouch', 'inkjoy gels only. i notice friction in my tools the same way i notice it in a product.'],
-            ['sketchbook', 'strathmore by hand, procreate on the ipad. analog and digital, same bag.']],
-        q: ['an interviewer asks how you’d grow a brand on campus. what sticks with them?', [['the textbook answer, said perfectly', 0], ['how you’d actually think about it, even if it’s a little specific to you', 1]],
-            'they’ve heard the textbook answer 30 times today. your way of seeing it is the only part they can’t get from anyone else.'],
-        turn: [['think', 'one habit that shows how you think', 'i make a spreadsheet before every trip']] },
+        rule: 'your habits show how you see things.',
+        ex: [['pouch', '25 colors, 25 classes', 'all 25 mildliners, and every color is a class i took. that’s not note-taking, it’s data visualization.'],
+            ['penpouch', 'inkjoy gels only', 'inkjoy gels only. i notice friction in my tools the same way i notice it in a product.'],
+            ['sketchbook', 'paper + procreate', 'strathmore by hand, procreate on the ipad. analog and digital, same bag.']],
+        q: ['what sticks with an interviewer?', [['the textbook answer', 0], ['your own way of seeing it', 1]],
+            'they’ve heard the textbook answer 30 times today.'],
+        turn: [['think', 'one habit that shows how you think', 'a spreadsheet before every trip']] },
     { z: '③', pocket: 'the heart', h: 'people remember <em>why,</em> not what.',
-        rule: 'skills get you on the shortlist. values are what people repeat about you after you leave the room. the story behind what you carry is the part that sticks.',
-        ex: [['bear', 'T.D., the first gift i ever bought my little sister, amaira.'],
-            ['cards', 'every card amaira has ever made me. i keep all of them.'],
-            ['pads', 'i carry pads to hand out, not just for me. it’s also why i built cadence.']],
-        q: ['a recruiter meets 40 students at a career fair. what do they remember that night?', [['your gpa', 0], ['the story about why you do what you do', 1], ['the font on your résumé', 0]],
-            'facts blur together by student number 12. a reason, told well, is what they repeat to the hiring manager.'],
-        turn: [['why', 'one thing you carry for someone else, or because of someone', 'my grandma’s ring. she taught me to show up early.']] },
-    { z: '④', pocket: 'the look', h: 'your color, your cart, <em>your brand.</em>',
-        rule: 'every purchase is a tiny brand decision. the color you keep reaching for, the brands you stay loyal to, the hype you buy into (and the returns you never make) say who you are before you say a word. pick a palette and repeat it until people see your color and think of you.',
-        ex: [['palette', 'cream, black and burgundy. three colors, nothing extra. you’ve been looking at them this whole time. that’s on purpose.'],
-            ['makeup-pouch', 'no fifty drugstore products. a few westman atelier staples, and i commit.'],
-            ['wallet', 'a louis vuitton wallet holding a medici punch card. the high-low mix, and a loyalty loop i’m very much inside of.'],
-            ['stanley', 'yes, i bought the pink stanley. i study hype cycles by being in them.'],
-            ['giftcards', 'three gift cards, zero returns made on time. retail friction, from the customer side.']],
-        q: ['you’re building your linkedin, résumé and portfolio. what matters most?', [['a fresh creative look on each one', 0], ['the same color, photo and headline on all three', 1]],
-            'repetition is what makes you recognizable. someone who sees you twice should know it’s you before they read your name. (that’s why everything in here is pink.)'],
-        turn: [['w1', 'three words you want people to use about you', 'curious'], ['w2', '', 'warm'], ['w3', '', 'organized'], ['color', 'your color', '#76344E'], ['buy', 'the thing you always buy again', 'the same black tee, every restock'], ['confess', 'your honest buying habit, one line', 'add to cart at 2am, return window: missed']] }
+        rule: 'skills get you shortlisted. your why gets you remembered.',
+        ex: [['bear', 'my sister’s first gift', 'T.D., the first gift i ever bought my little sister, amaira.'],
+            ['cards', 'every card she’s made me', 'every card amaira has ever made me. i keep all of them.'],
+            ['pads', 'carried to hand out', 'i carry pads to hand out, not just for me. it’s also why i built cadence.']],
+        q: ['after 40 students, what does a recruiter remember?', [['your gpa', 0], ['your why', 1], ['your résumé font', 0]],
+            'facts blur by student 12. stories don’t.'],
+        turn: [['why', 'something you carry for someone', 'my grandma’s ring']] },
+    { z: '④', pocket: 'the look', h: 'your color, <em>everywhere.</em>',
+        rule: 'pick a palette. repeat it until it’s yours.',
+        ex: [['palette', 'cream, espresso, plum', 'three colors, nothing extra. you’ve been looking at them this whole time.'],
+            ['makeup-pouch', 'a few staples, fully committed', 'no fifty drugstore products. a few westman atelier staples, and i commit.'],
+            ['wallet', 'luxury + a coffee punch card', 'a louis vuitton wallet holding a medici punch card. the high-low mix, and a loyalty loop i’m very much inside of.']],
+        q: ['linkedin, résumé, portfolio. what matters most?', [['a new look on each', 0], ['same color, photo, headline', 1]],
+            'seen twice, known before they read your name.'],
+        turn: [['w1', 'three words for you', 'curious'], ['w2', '', 'warm'], ['w3', '', 'organized'], ['color', 'your color', '#76344E']] }
 ];
 const B101 = 'brand-101';
 const b101 = (() => { try { return JSON.parse(localStorage.getItem(B101)) || {}; } catch { return {}; } })();
 b101.a ||= {}; b101.q ||= {};
 const saveB101 = () => { try { localStorage.setItem(B101, JSON.stringify(b101)); } catch {} };
 const escB = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-const SWATCHES = [['#FAF1EF', 'cream'], ['#1E1414', 'black'], ['#76344E', 'burgundy']];
+const SWATCHES = [['#FAF1EF', 'cream'], ['#1E100A', 'espresso'], ['#76344E', 'plum']];
 const b101Ex = ([id, why]) => {
-    if (id === 'palette') return `<div class="bl-ex bl-pal"><span class="bl-sw">${SWATCHES.map(([c, n]) => `<i style="background:${c}" title="${n}"></i>`).join('')}</span><span><b>my palette</b>${why}</span></div>`;
+    if (id === 'palette') return `<div class="bl-ex bl-pal"><span class="bl-sw">${SWATCHES.map(([c, n]) => `<i style="background:${c}" title="${n}"></i>`).join('')}</span><span class="bl-cap">${why}</span></div>`;
     const it = ITEMS.find(i => i.id === id);
-    return `<button type="button" class="bl-ex" data-ex="${id}"><span class="bl-art">${it.art}</span><span><b>${it.name}</b>${why}</span><i class="mono">open it ›</i></button>`;
+    return `<button type="button" class="bl-ex" data-ex="${id}" aria-label="Open ${escB(it.name)}: ${why}"><span class="bl-art">${it.art}</span><span class="bl-cap">${why}</span></button>`;
 };
 const b101Turn = (l, n) => {
     const words = l.turn.filter(([k]) => /^w\d/.test(k)), rest = l.turn.filter(([k]) => !/^w\d/.test(k));
@@ -4994,7 +4992,7 @@ const b101Lesson = (l, n) => `<section class="bl-step" data-n="${n + 1}" hidden>
     <p class="mono bl-k">lesson ${l.z} · the ${l.pocket.replace('the ', '')} zipper</p>
     <h2>${l.h}</h2>
     <p class="bl-rule">${l.rule}</p>
-    <p class="mono bl-h">the proof, from my bag</p>
+    <p class="mono bl-h">the proof · tap one</p>
     <div class="bl-exs">${l.ex.map(b101Ex).join('')}</div>
     <div class="bl-quiz" data-q="${n}"><p class="mono bl-h">quick check</p><p class="bl-qq">${l.q[0]}</p>
         <div class="bl-opts">${l.q[1].map(([t, ok], k) => `<button type="button" class="bl-opt" data-ok="${ok}" data-k="${k}">${t}</button>`).join('')}</div>
@@ -5024,20 +5022,20 @@ VIEWS.lesson = () => `<div class="bl" id="bl">
     <section class="bl-step bl-cover" data-n="0" hidden>
         <p class="mono bl-k">a lesson in four zippers</p>
         <h2>personal branding, <em>taught by my backpack.</em></h2>
-        <p class="bl-rule">your personal brand is what people say about you when you’re not in the room. mine fits in a samsonite. four zippers, four tiny lessons, each one with proof from my bag (and a quick check, sorry, i’m a student). then you pack your own.</p>
+        <p class="bl-rule">your brand is what people say when you leave the room. four zippers, four lessons, then you pack your own.</p>
         <ol class="bl-map">${LESSONS.map((l, n) => `<li><button type="button" data-go="${n + 1}"><b>${l.z}</b><span class="mono">${l.pocket}</span>${l.h.replace(/<\/?em>/g, '')}</button></li>`).join('')}</ol>
-        <p class="hand bl-for">for students: steal all of it. for recruiters and employers: every lesson is also a proof point. for my friends: yes, this is really what’s in my bag.</p>
     </section>
     ${LESSONS.map(b101Lesson).join('')}
     <section class="bl-step" data-n="${LESSONS.length + 1}" hidden>
+// short on the page (one line each), the full story waits inside the item when you open it
         <p class="mono bl-k">the final: pack your own bag</p>
         <h2>now it’s <em>your</em> bag.</h2>
-        <p class="bl-rule">everything you wrote, packed into one brand statement, in your color. put it on linkedin, say it at a career fair, or just read it out loud once and notice which part sounds the most like you.</p>
+        <p class="bl-rule">your answers, packed into one line. copy it. use it.</p>
         <label class="bl-f"><span class="hand">your name, so it’s yours</span><input type="text" data-a="name" maxlength="40" placeholder="first name" value="${escB(b101.a.name)}"></label>
         <div id="bl-card">${b101Card()}</div>
         <div class="row bl-acts"><button type="button" class="btn solid" id="bl-copy">copy my brand statement</button><button type="button" class="btn" id="bl-reset">empty my bag</button></div>
         <div class="bl-end"><p class="bl-one">a personal brand isn’t what you say about yourself. <em>it’s what you carry, every day, on purpose.</em></p>
-            <p class="bl-hire">if you’re hiring: this lesson was also my case. <a href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">my résumé ↗</a> · <button type="button" class="link" id="bl-deck">the strategy deck on my ipad</button> · <a href="mailto:suhanitiwari@utexas.edu">say hi ✉</a></p></div>
+            <p class="bl-hire">hiring? this was my case. <a href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">my résumé ↗</a> · <button type="button" class="link" id="bl-deck">the strategy deck on my ipad</button> · <a href="mailto:suhanitiwari@utexas.edu">say hi ✉</a></p></div>
     </section>
     <div class="bl-nav"><button type="button" class="btn" id="bl-prev">‹ back</button><span class="mono" id="bl-n"></span><button type="button" class="btn solid" id="bl-next">next ›</button></div>
 </div>`;
@@ -5061,7 +5059,7 @@ AFTER.lesson = () => {
     // the proof: open the real thing from my bag (with its brand teardown), "back" lands right here
     bl.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => {
         const it = ITEMS.find(i => i.id === b.dataset.ex), l = LESSONS[b101.at - 1]; if (!it || !l) return;
-        const why = l.ex.find(([id]) => id === it.id)[1];
+        const why = l.ex.find(([id]) => id === it.id)[2];
         goTo(it);
         $('#nav-back')?.insertAdjacentHTML('afterend', `<aside class="brand-card" aria-label="Lesson note"><p class="mono bc-k">✦ personal branding 101 · lesson ${l.z}</p><p class="bc-sig"><span class="mono">the principle</span>${l.h.replace(/<\/?em>/g, '')}</p><p class="bc-body">${why}</p></aside>`);
     });
