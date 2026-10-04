@@ -19,7 +19,7 @@ Open `https://bag-contacts.<you>.workers.dev/contacts?key=<ADMIN_KEY>` for every
 
 ## what it does
 
-- Only accepts posts from suhanitiwari.com, onrender.com and localhost.
+- Only accepts posts from suhanitiwari.com, suhxnitiwari.github.io (where the bag lives), onrender.com and localhost.
 - A hidden field catches bots.
 - The same phone number within a day is saved once.
 - If the worker is ever down, the form falls back to opening email.

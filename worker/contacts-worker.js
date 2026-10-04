@@ -9,7 +9,7 @@
 //   ADMIN_KEY   secret: lets me read the list at /contacts?key=...
 // ============================================================
 
-const ALLOWED = [/^https:\/\/suhanitiwari\.com$/, /^https:\/\/(www\.)?suhanitiwari\.com$/, /^https:\/\/[a-z0-9-]+\.onrender\.com$/, /^http:\/\/localhost(:\d+)?$/];
+const ALLOWED = [/^https:\/\/(www\.)?suhanitiwari\.com$/, /^https:\/\/suhxnitiwari\.github\.io$/, /^https:\/\/[a-z0-9-]+\.onrender\.com$/, /^http:\/\/localhost(:\d+)?$/];
 
 const cors = origin => ({
   "Access-Control-Allow-Origin": ALLOWED.some(r => r.test(origin || "")) ? origin : "https://suhanitiwari.com",
