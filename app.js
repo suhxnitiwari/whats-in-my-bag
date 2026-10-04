@@ -1208,7 +1208,7 @@ const APP_Q = {
     youtube: 'what does she watch to grow?', netflix: 'what does she watch?', prime: 'what does she watch?', calendar: 'what does her life look like?',
     duolingo: 'what is she learning?', contacts: 'do you want to know her?', notes: 'what is she thinking about?',
     maps: 'where does she go?', messages: 'who matters to her?', gmail: 'what’s waiting on her?', camera: 'what catches her eye?',
-    clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', settings: 'how is she wired?',
+    clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', life360: 'who does she belong to?', settings: 'how is she wired?',
     pinterest: 'what does she want her world to look like?', procreate: 'what does she make?', safari: 'what is she curious about?',
     chatgpt: 'what rabbit hole is she in right now?', canvas: 'what is she studying?',
     deck: 'how does she think about strategy?'
@@ -1219,6 +1219,8 @@ const addQ = (view, k) => {
     const b = view.querySelector('.back'); b ? b.after(p) : view.prepend(p);
 };
 const GH = 'https://suhxnitiwari.github.io/';
+// the contacts worker (worker/contacts-worker.js). empty = the form falls back to email
+const CONTACT_API = '';
 const POCKET_NAME = { devices: 'pocket one (the work)', main: 'pocket two (the mind)', shades: 'pocket three (the heart)', front: 'pocket four (the look)', side: 'the side pocket', makeup: 'the makeup bag', attached: 'tucked into something else' };
 const grab = id => { const it = ITEMS.find(i => i.id === id); if (it) goTo(it); };
 
@@ -1282,6 +1284,74 @@ const CLASSES = [
 ];
 const hhmm = h => `${Math.floor(h) > 12 ? Math.floor(h) - 12 : Math.floor(h)}:${h % 1 ? '30' : '00'}`;
 
+// pinned up top, then family, then everyone else. a chat is a list of [who, text]: 'me' or 'them', 't' a timestamp,
+// 'note' a small gray line, 'v' a voice memo (its length), 'img' a photo. a ♡ after the text is a heart tapback
+const CHATS = [
+    { n: 'Hana 🥖', c: '#F4A6BE', pin: 1, time: '9:12 PM', msgs: [
+        ['t', 'Thursday 8:41 AM'], ['them', 'Awww hehe cutie patootie'], ['them', 'Miss you too'], ['them', 'We should plan when to meet up again ♡'],
+        ['t', 'Thursday 5:40 PM'], ['me', 'v:2:10'], ['me', 'v:0:47'], ['note', 'Hana 🥖 kept 2 audio messages from you.'],
+        ['t', 'Yesterday 6:02 PM'], ['them', 'v:1:32'], ['them', 'ok i listened to both TWICE. we need to catch up in person asap'],
+        ['me', 'medici?? saturday??'], ['them', 'MEDICI. 11?'], ['me', '11 ♡'], ['them', 'i’m getting the lavender latte again do not judge me'],
+        ['t', 'Today 10:58 AM'], ['me', 'img:medici'], ['me', 'saved us the window seat ☕'], ['them', 'v:0:21'],
+        ['t', 'Today 9:12 PM'], ['them', 'that was the best four hours. same time next week? ♡']] },
+    { n: 'Reese', c: '#8E8E93', pin: 1, time: '8:30 PM', msgs: [['t', 'Today 8:30 PM'], ['them', 'did you finish the 372T homework'], ['me', 'define finish'], ['them', 'lmaooo ok library tmrw']] },
+    { n: 'Avery', c: '#D9A07A', pin: 1, time: '7:02 PM', msgs: [['t', 'Today 7:02 PM'], ['them', 'that fit today?? 😍'], ['me', 'aritzia. i said i was just looking ♡']] },
+    { n: 'Mumma 💗', c: '#B9A3E8', time: '9:38 PM', msgs: [['t', 'Today 9:38 PM'], ['me', 'This is our family’s netflix data if you care about me and my work'],
+        ['me', 'link:https://suhxnitiwari.github.io/still-watching/'], ['them', 'Beta who watched 40 hours of kdramas 👀'], ['me', 'that’s confidential ♡']] },
+    { n: 'Amaira ♡', c: '#F4A6BE', time: '8:12 PM', msgs: [['t', 'Today 8:12 PM'], ['them', 'didi i made you another card'], ['me', 'adding it to the collection ♡'], ['them', 'you have SO many'], ['me', 'and i kept every single one']], cards: 1 },
+    { n: 'Papa 🙄', c: '#7FA7D9', time: '6:48 PM', msgs: [['t', 'Today 6:48 PM'], ['me', 'link:https://suhxnitiwari.github.io/listening-galaxy/'], ['note', 'Papa 🙄 questioned “listening-galaxy”'], ['them', 'Is this a planet'], ['me', 'it’s my music. every star is a song'], ['them', 'Very nice beta. Call your mother']] },
+    { n: 'Mumma 💗 & Papa 🙄', c: '#C9A3D0', time: 'Yesterday', msgs: [['t', 'Yesterday 7:15 PM'], ['me', 'Website: Heavy Rotation'], ['them', 'Forwarded to the whole family'], ['me', 'MUMMA']] },
+    { n: 'Priya', c: '#E8A0A0', time: 'Yesterday', msgs: [['t', 'Yesterday 1:20 PM'], ['them', 'are we still doing navratri garba this year'], ['me', 'obviously. i already have the chaniya choli picked out']] },
+    { n: 'MKT 354 group', c: '#8FC9B0', time: 'Thursday', msgs: [['t', 'Thursday 11:04 PM'], ['them', 'who’s doing the slides'], ['me', 'me. they’ll be pink.'], ['them', 'we expected nothing less']] },
+    { n: 'Jordan', c: '#A3B7E8', time: 'Thursday', msgs: [['t', 'Thursday 3:45 PM'], ['them', 'coffee chat went well?'], ['me', 'i think so!! sent the thank-you email already']] },
+    { n: 'Maya', c: '#F3C27A', time: 'Wednesday', msgs: [['t', 'Wednesday 9:10 PM'], ['them', 'pilates at 7am?'], ['me', 'i will be there in spirit']] }
+];
+// the same Messages on the laptop and the phone (the phone shows one screen at a time)
+const mountMessages = (root, phone) => {
+    const av = (c, sz) => `<span class="im-av${sz ? ' ' + sz : ''}" style="background:${c.c}">${c.n.match(/[A-Z]/g).slice(0, c.n.includes('&') ? 2 : 1).join('')}</span>`;
+    const last = c => { const m = [...c.msgs].reverse().find(([w]) => w === 'me' || w === 'them')[1]; return m.startsWith('v:') ? 'Audio Message' : m.startsWith('img:') ? 'Image' : m.replace(/^link:https:\/\//, '').replace(/ ♡$/, ''); };
+    const wave = n => [...Array(n)].map((_, k) => `<i style="height:${20 + Math.round(Math.abs(Math.sin(k * 1.7) * 60 + Math.sin(k * .6) * 20))}%"></i>`).join('');
+    const bubble = ([w, m]) => {
+        if (w === 't') return `<p class="im-t">${m}</p>`;
+        if (w === 'note') return `<p class="im-note">${m}</p>`;
+        const heart = m.endsWith(' ♡') && w === 'them' ? '<span class="im-tap">♥</span>' : '';
+        const t = heart ? m.slice(0, -2) : m;
+        if (t.startsWith('v:')) return `<div class="im-b ${w} im-voice"><button type="button" data-voice aria-label="Play audio message">▶</button><span class="im-wave">${wave(28)}</span><small>${t.slice(2)}</small></div>`;
+        if (t.startsWith('img:')) return `<div class="im-b ${w} im-img"><img src="assets/img/${t.slice(4)}.jpg" alt="Medici, the window seat"></div>`;
+        if (t.startsWith('link:')) { const u = t.slice(5); return `<a class="im-b ${w} im-link" href="${u}" target="_blank" rel="noopener"><b>${u.split('/').filter(Boolean).pop()}</b><small>${u.replace('https://', '').split('/')[0]}</small></a>`; }
+        return `<div class="im-b ${w}">${heart}${t}</div>`;
+    };
+    const row = (c, k) => `<button type="button" class="im-row" data-chat="${k}">${av(c)}<span><b>${c.n}</b><em>${c.time}</em><small>${last(c)}</small></span></button>`;
+    root.innerHTML = `<div class="imsg${phone ? ' phone' : ''}"><aside class="im-side"><div class="im-search">⌕ Search</div>
+        <div class="im-pins">${CHATS.map((c, k) => c.pin ? `<button type="button" class="im-pin" data-chat="${k}">${av(c, 'big')}<span>${c.n}</span></button>` : '').join('')}</div>
+        <div class="im-list">${CHATS.map((c, k) => c.pin ? '' : row(c, k)).join('')}</div></aside>
+        <section class="im-chat"><header><button type="button" class="im-back" aria-label="Back to chats">‹</button><span>To:</span><b id="im-to"></b></header><div class="im-log" id="im-log"></div>
+        <form class="im-in"><input type="text" placeholder="iMessage" aria-label="Message"></form></section></div>`;
+    const box = root.querySelector('.imsg'), log = root.querySelector('#im-log');
+    const open = k => {
+        const c = CHATS[k];
+        box.classList.add('chatting');
+        root.querySelectorAll('[data-chat]').forEach(b => b.classList.toggle('on', +b.dataset.chat === k));
+        root.querySelector('#im-to').textContent = c.n;
+        log.innerHTML = c.msgs.map(bubble).join('') + (c.cards ? '<button type="button" class="msg-btn im-cards" data-go="cards">see the cards she made me →</button>' : '');
+        log.scrollTop = log.scrollHeight;
+        const go = log.querySelector('[data-go]'); if (go) go.onclick = () => grab('cards');
+        log.querySelectorAll('[data-voice]').forEach(b => b.onclick = () => {
+            const v = b.parentElement; SFX.tap();
+            if (v.classList.toggle('playing')) { b.textContent = '❚❚'; toast(c.pin && k === 0 ? 'the audio stays between me and hana. it’s mostly us laughing.' : 'that one’s just for us.'); }
+            else b.textContent = '▶';
+        });
+    };
+    root.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => { SFX.tap(); open(+b.dataset.chat); });
+    root.querySelector('.im-back').onclick = () => box.classList.remove('chatting');
+    root.querySelector('.im-in').onsubmit = e => {
+        e.preventDefault(); const f = e.target.elements[0], t = f.value.trim(); if (!t) return;
+        log.insertAdjacentHTML('beforeend', `<div class="im-b me">${t.replace(/[&<>]/g, x => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[x])}</div><p class="im-note right">Delivered</p>`);
+        f.value = ''; log.scrollTop = log.scrollHeight;
+    };
+    if (!phone) open(0);
+    if (phone || matchMedia('(max-width: 760px)').matches) box.classList.remove('chatting');
+};
 const MORE_APPS = {
     deck: {
         html: () => `<div class="deck" id="deck" tabindex="0" aria-label="My strategy deck. Use the arrow keys or the buttons to move between slides">
@@ -1358,23 +1428,8 @@ const MORE_APPS = {
         }
     },
     messages: {
-        html: () => `<div class="msg">
-            <p class="msg-h">Messages</p>
-            <button type="button" class="msg-row" data-who="amaira"><span class="msg-av" style="background:#F4A6BE">A</span><span><b>Amaira ♡</b><small class="blur">sister stuff sister stuff sister stuff</small></span></button>
-            <button type="button" class="msg-row" data-who="mom"><span class="msg-av" style="background:#B9A3E8">M</span><span><b>Mom</b><small class="blur">mom stuff mom stuff mom stuff mom</small></span></button>
-            <button type="button" class="msg-row" data-who="you"><span class="msg-av" style="background:#34C759">+</span><span><b>you?</b><small>new message</small></span></button>
-            <div class="msg-open" id="msg-open" hidden></div>
-            <a class="msg-world" href="${GH}suhani-world/" target="_blank" rel="noopener">the people and places that made me ↗</a>
-        </div>`,
-        after: v => v.querySelectorAll('.msg-row').forEach(r => r.onclick = () => {
-            const o = $('#msg-open'), w = r.dataset.who;
-            if (w === 'you') { $('#back').click(); sheetBody.querySelector('[data-app="contacts"]').click(); return; }
-            o.hidden = false;
-            o.innerHTML = w === 'amaira'
-                ? `<p>this chat is just for us ♡</p><button type="button" class="msg-btn" data-go="cards">see the cards she made me →</button>`
-                : `<p>this chat is just for us ♡</p>`;
-            o.querySelector('[data-go]') && (o.querySelector('[data-go]').onclick = () => grab('cards'));
-        })
+        html: () => '<div class="imsg-host"></div>',
+        after: v => mountMessages(v.querySelector('.imsg-host'), true)
     },
     gmail: {
         html: () => `<div class="gm">
@@ -1440,6 +1495,39 @@ const MORE_APPS = {
         after: v => v.querySelectorAll('[data-find]').forEach(b => b.onclick = () => {
             if (b.dataset.find === 'keys') toast('*jingle jingle* found them. they were in the heart pocket, under T.D. again.');
             setTimeout(() => grab(b.dataset.find), b.dataset.find === 'keys' ? 900 : 0);
+        })
+    },
+    life360: {
+        // based on real events: saturday, 8:01 PM. the family circle is called starbucks lovers, and three of its four
+        // members are at cinemark north mckinney. i am 214 miles away, at medici, finding out on life360
+        html: () => {
+            const FAM = [['mumma', 'Mumma 💗', '#C0101A', '87%'], ['papa', 'Papa 🙄', '#0B3BBF', '41%'], ['amaira', 'Amaira ♡', '#7A0BC0', '100%']];
+            return `<div class="l3">
+                <div class="l3-map">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#26314A"/>
+                        <g fill="#3A4866">${[[6, 4, 30, 14], [42, 4, 22, 10], [70, 4, 26, 12], [16, 22, 74, 8], [12, 34, 70, 9], [26, 47, 26, 30], [56, 47, 18, 24], [78, 46, 18, 14], [78, 64, 18, 20], [6, 47, 16, 40], [28, 81, 40, 12], [72, 88, 24, 10]].map(([x, y, w, h]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2"/>`).join('')}</g>
+</svg>
+                    <span class="l3-zone"></span>
+                    <span class="l3-poi" style="left:20%; top:70%; color:#F0B37A">Pizza Hut<br>Express</span>
+                    <span class="l3-poi cine" style="left:62%; top:70%">🎬 Cinemark North<br>McKinney XD</span>
+                    <div class="l3-top"><button type="button" class="l3-circle" data-l3="circle">Starbucks Lovers <span>⌄</span></button></div>
+                    <button type="button" class="l3-pin" data-l3="papa" style="left:46%; top:50%"><img src="assets/img/l360-papa.jpg" alt="Papa"></button>
+                    <span class="l3-ago" style="left:56%; top:31%">29 min ago</span>
+                    <button type="button" class="l3-pin" data-l3="mumma" style="left:72%; top:60%"><img src="assets/img/l360-mumma.jpg" alt="Mumma"></button>
+                    <button type="button" class="l3-pin" data-l3="amaira" style="left:26%; top:62%"><img src="assets/img/l360-amaira.jpg" alt="Amaira"></button>
+                </div>
+                <div class="l3-sheet"><p class="l3-h">Starbucks Lovers <small>4 members</small></p>
+                    ${FAM.map(([k, n, c, bat]) => `<button type="button" class="l3-row" data-l3="${k}"><img src="assets/img/l360-${k}.jpg" alt="" style="--c:${c}"><span><b>${n}</b><small>Cinemark · 29 min ago</small></span><em>🔋 ${bat}</em></button>`).join('')}
+                    <button type="button" class="l3-row" data-l3="me"><img src="assets/img/me.jpg" alt="" style="--c:#E0567F"><span><b>Suhani (me)</b><small>Medici · 214 mi away</small></span><em>🔋 12%</em></button>
+                </div>
+                <p class="hand l3-note">they went to the movies without me.</p>
+            </div>`;
+        },
+        after: v => v.querySelectorAll('[data-l3]').forEach(b => b.onclick = () => {
+            SFX.tap();
+            toast({ circle: 'one circle. named after a taylor swift lyric we all got wrong.', mumma: 'mumma at cinemark. she’s on her phone during the trailers.',
+                papa: 'papa at cinemark. 29 minutes ago. 41% battery, as always.', amaira: 'amaira at cinemark. she got the large popcorn. i’m not mad. (i’m mad.)',
+                me: 'me, 214 miles away, finding out on life360.' }[b.dataset.l3]);
         })
     },
     settings: {
@@ -2566,6 +2654,7 @@ const VIEWS = {
                     <button type="button" class="papp" data-app="gmail"><span class="ic" style="background:#FFFFFF"><svg viewBox="0 0 40 40"><path d="M8 13 v15 h5 V18 l7 5.5 7 -5.5 v10 h5 V13 l-3 -2 -9 7 -9 -7z" fill="#EA4335"/><path d="M8 13 v15 h5 V18z" fill="#4285F4"/><path d="M27 18 v10 h5 V13z" fill="#34A853"/><path d="M29 11 l3 2 v0 l-5 4z" fill="#FBBC04"/></svg></span>Gmail</button>
                     <button type="button" class="papp" data-app="wallet"><span class="ic" style="background:#111111"><svg viewBox="0 0 40 40"><rect x="8" y="10" width="24" height="7" rx="2" fill="#4285F4"/><rect x="8" y="14" width="24" height="7" rx="2" fill="#F7C344"/><rect x="8" y="18" width="24" height="7" rx="2" fill="#34A853"/><path d="M7 22 h26 v8 a3 3 0 0 1 -3 3 h-20 a3 3 0 0 1 -3 -3z" fill="#E9E5DE"/></svg></span>Wallet</button>
                     <button type="button" class="papp" data-app="findmy"><span class="ic" style="background:#2BB24C"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="2.6" fill="#fff"/></svg></span>Find My</button>
+                    <button type="button" class="papp" data-app="life360"><span class="ic" style="background:#7B3FF2"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="4.5" fill="#fff"/></svg></span>Life360</button>
                     <button type="button" class="papp" data-app="settings"><span class="ic" style="background:#8E8E93"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="3.4 2.4"/><circle cx="20" cy="20" r="7.5" fill="#8E8E93" stroke="#fff" stroke-width="2.4"/><circle cx="20" cy="20" r="2.5" fill="#fff"/></svg></span>Settings</button>
                 </div>
                 <div class="app-view" id="app-view" hidden></div>
@@ -3682,20 +3771,34 @@ const AFTER = {
                             <label>Name<input name="name" required autocomplete="name" placeholder="first and last"></label>
                             <label>Phone<input name="phone" type="tel" required autocomplete="tel" placeholder="(512) 555-0123"></label>
                             <label>How we met <span>(optional)</span><input name="met" placeholder="coffee chat? class? career fair?"></label>
+                            <input name="website" class="ct-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
                             <button class="ct-add" type="submit">Add + send to Suhani</button>
                         </form>
-                        <p class="ct-fine">this opens your email so it comes straight to me. nothing’s saved on this site.</p>
+                        <p class="ct-fine">${CONTACT_API ? 'it comes straight to me, and only i can see it.' : 'this opens your email so it comes straight to me.'}</p>
                         <button type="button" class="ct-save" id="ct-save">or save me to your contacts ↓</button>
                     </div>`;
-                $('#ct-form').onsubmit = ev => {
+                $('#ct-form').onsubmit = async ev => {
                     ev.preventDefault();
                     const f = new FormData(ev.target), name = (f.get('name') || '').trim(), phone = (f.get('phone') || '').trim(), met = (f.get('met') || '').trim();
-                    const body = `Hi Suhani! Let's connect.\n\nName: ${name}\nPhone: ${phone}${met ? `\nHow we met: ${met}` : ''}\n\n(sent from your bag ♡)`;
-                    location.href = `mailto:suhanitiwari@utexas.edu?subject=${encodeURIComponent(`let's connect ♡ ${name}`)}&body=${encodeURIComponent(body)}`;
-                    toast('yay! your email app should pop up ♡');
+                    const mail = () => {
+                        const body = `Hi Suhani! Let's connect.\n\nName: ${name}\nPhone: ${phone}${met ? `\nHow we met: ${met}` : ''}\n\n(sent from your bag ♡)`;
+                        location.href = `mailto:suhanitiwari@utexas.edu?subject=${encodeURIComponent(`let's connect ♡ ${name}`)}&body=${encodeURIComponent(body)}`;
+                        toast('yay! your email app should pop up ♡');
+                    };
+                    // saved to my contacts database and my phone buzzes. if that's down, email still works
+                    if (!CONTACT_API) return mail();
+                    const btn = ev.target.querySelector('.ct-add'); btn.disabled = true; btn.textContent = 'sending…';
+                    try {
+                        const r = await fetch(CONTACT_API + '/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, phone, met, website: f.get('website') }) });
+                        if (!r.ok) throw new Error(r.status);
+                        ev.target.reset(); btn.textContent = 'sent ♡'; toast(`got it, ${name.split(' ')[0]}. i’ll text you ♡`);
+                    } catch { btn.disabled = false; btn.textContent = 'Add + send to Suhani'; mail(); }
                 };
-                $('#ct-save').onclick = () => {
-                    const vcf = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Tiwari;Suhani;;;', 'FN:Suhani Tiwari', 'ORG:The University of Texas at Austin', 'TITLE:MIS + Psychology', 'EMAIL;TYPE=INTERNET:suhanitiwari@utexas.edu', 'URL:https://suhanitiwari.com', 'URL:https://www.linkedin.com/in/suhxnitiwari', 'END:VCARD'].join('\r\n');
+                $('#ct-save').onclick = async () => {
+                    // just my name, my instagram and my photo. nothing else leaves the bag
+                    let photo = '';
+                    try { const r = await fetch('assets/img/me.jpg'); const b = new Uint8Array(await r.arrayBuffer()); let bin = ''; b.forEach(x => bin += String.fromCharCode(x)); photo = ('PHOTO;ENCODING=b;TYPE=JPEG:' + btoa(bin)).match(/.{1,74}/g).join('\r\n '); } catch {}
+                    const vcf = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Tiwari;Suhani;;;', 'FN:Suhani Tiwari', 'X-SOCIALPROFILE;TYPE=instagram:https://instagram.com/suhxnitiwari', 'URL;TYPE=Instagram:https://instagram.com/suhxnitiwari', 'NOTE:@suhxnitiwari on instagram', photo, 'END:VCARD'].filter(Boolean).join('\r\n');
                     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([vcf], { type: 'text/vcard' })); a.download = 'Suhani-Tiwari.vcf'; a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
                     toast('saved. now you have no excuse ♡');
@@ -4634,7 +4737,6 @@ const AFTER = {
             });
         };
         // the laptop's Messages and Mail open in the same window. chats stay private; the inbox is order confirmations
-        const CHATS = [['Mumma', '#B9A3E8'], ['Papa', '#7FA7D9'], ['Amaira ♡', '#F4A6BE'], ['Hana', '#F3C27A'], ['Reese', '#8FC9B0'], ['Avery', '#E8A0A0']];
         const ORDER = (n, c, why) => [n, 'Your order is confirmed', c, '<b>Thank you for your order.</b><br>It’s confirmed, and we’ll let you know when it ships.', why];
         const MAIL = [
             ['Duolingo', 'These reminders don’t seem to be working', '#58CC02', 'We’ll stop sending them for now. 🦉', 'he’s not mad. he’s disappointed.'],
@@ -4711,13 +4813,7 @@ const AFTER = {
                 return;
             }
             if (app === 'Messages') {
-                fmain.innerHTML = `<div class="lap-app">${CHATS.map(([n, c], k) => `<button type="button" class="msg-row" data-chat="${k}"><span class="msg-av" style="background:${c}">${n[0]}</span><span><b>${n}</b><small class="blur">just us stuff just us stuff just us</small></span></button>`).join('')}<div class="msg-open" id="lap-chat" hidden></div></div>`;
-                fmain.querySelectorAll('[data-chat]').forEach(r => r.onclick = () => {
-                    const o = fmain.querySelector('#lap-chat'), [n] = CHATS[+r.dataset.chat];
-                    o.hidden = false;
-                    o.innerHTML = `<p><b>${n}</b></p><p>this chat is just for us ♡</p>${n.startsWith('Amaira') ? '<button type="button" class="msg-btn" data-go="cards">see the cards she made me →</button>' : ''}`;
-                    const go = o.querySelector('[data-go]'); if (go) go.onclick = () => grab('cards');
-                });
+                mountMessages(fmain);
             } else {
                 fmain.innerHTML = `<div class="lap-app"><p class="lap-h mono">Inbox · ${MAIL.length} unread (on purpose)</p>${MAIL.map(([n, sub, c], k) => `<button type="button" class="gm-row lap-mail" data-mail="${k}"><span class="gm-dot" style="background:${c}"></span><span><b>${n}</b><small>${sub}</small></span><em>•</em></button>`).join('')}<div class="msg-open lap-read" id="lap-mail" hidden></div></div>`;
                 fmain.querySelectorAll('[data-mail]').forEach(r => r.onclick = () => {
@@ -4934,6 +5030,7 @@ const AFTER = {
 /* ---------- personal branding 101, taught by my backpack ----------
    four zippers, four lessons. each one: the principle, the proof from my bag, a quick check, and your turn.
    then you pack your own bag. your answers stay in this browser */
+// short on the page (one line each), the full story waits inside the item when you open it
 const LESSONS = [
     { z: '①', pocket: 'the work', h: 'proof beats <em>claims.</em>',
         rule: 'don’t say it. show it.',
@@ -5027,7 +5124,6 @@ VIEWS.lesson = () => `<div class="bl" id="bl">
     </section>
     ${LESSONS.map(b101Lesson).join('')}
     <section class="bl-step" data-n="${LESSONS.length + 1}" hidden>
-// short on the page (one line each), the full story waits inside the item when you open it
         <p class="mono bl-k">the final: pack your own bag</p>
         <h2>now it’s <em>your</em> bag.</h2>
         <p class="bl-rule">your answers, packed into one line. copy it. use it.</p>
