@@ -5222,6 +5222,90 @@ const openLesson = () => { SFX.tap(); if (sheet.open) goTo({ id: 'lesson', name:
 $('#brand-101').addEventListener('click', openLesson);
 $('#end-101')?.addEventListener('click', openLesson);
 
+/* ---------- the read: an outside take on the whole bag, as a brand ----------
+   third person on purpose: this is what the bag says about me, read back from across the room */
+const READ_STACK = [
+    ['airstrait', 'dyson', 'tech-beauty', 'Precision hardware and luxury product design in one tool. A 2-in-1, wet-to-dry workflow: engineering elegance she uses every morning.'],
+    ['makeup-pouch', 'westman atelier', 'clean luxury', 'Skin-first, “no-makeup makeup” favored by industry insiders. Quality formulation and effortless elegance over loud trends.'],
+    ['stanley', 'loveshackfancy', 'hyper-feminine fashion', 'Soft, ornate and unapologetically girly, grounded by the Ralph Lauren cable knit’s classic, Ivy League preppiness.'],
+    ['sunglasses', 'chanel', 'heritage luxury', 'Timeless prestige and structural design: square Chanel frames, next to a Louis Vuitton wallet.'],
+    ['wallet', 'medici', 'craft local', 'Not generic corporate coffee: an Austin specialty roaster, a vanilla latte and a punch card. Local craft, ambiance and ritual.']
+];
+const READ_PAIRS = [
+    ['sunglasses', 'Chanel sunglasses', 'ticket', 'a speeding ticket', 'I appreciate fine things, but I don’t take myself too seriously.'],
+    ['jewelry', 'a fine jewelry box', 'bear', 'T.D., from her sister', 'High aesthetic standards, with a heart anchored in family.'],
+    ['makeup-pouch', '“pretty both ways, right?”', 'skin-pouch', 'the bare-faced routine', 'I know how to curate polish, but I have nothing to hide.'],
+    ['binder', 'the strategy binder', 'keys', '“it’s the curb’s fault”', 'I execute complex work, and I can laugh at my daily chaos.']
+];
+const READ_SP = [
+    [['skin-pouch', '9-step night routine', 'Step-indexed: gel patches first, three Westman Atelier serums, La Mer, Sisley, then the eye mask. Every product has a sequence and a role.'],
+     ['laptop', '74 tabs, a buried desktop', 'Floating, unsorted folders (“the real folders are in there somewhere”), 74 open tabs and music playing from one of them.']],
+    [['makeup-pouch', 'labeled compartments', 'Macro over micro: a makeup pouch, a skincare pouch, a catch-all. The whole system is partitioned, even if each pouch is lived in.'],
+     ['chargers', 'every charger, one knot', 'MacBook, iPhone, old iPhone, headphones. Every cord she could need, always at the bottom, always one knot.']],
+    [['pads', 'friction turned into a product', 'Pads in the catch-all, and Cadence, the period app she built: no account, no ads, nothing leaves your phone.'],
+     ['ticket', 'the catch-all drawer', 'Old receipts, someday ideas, pads and a speeding ticket. A literal dump drawer for physical life.']]
+];
+const READ_ZIPS = [
+    ['laptop', 'tech & frameworks', 'the engine', 'I can do the heavy lifting, analyze the data and structure the system.'],
+    ['cards', 'keepsakes & family', 'the anchor', 'High EQ, loyalty and empathy: traits that make people want to lead and follow me.'],
+    ['catchall', 'the catch-all pouch', 'the disarmer', 'I don’t fake perfection. Confidence means owning the messy moments.'],
+    ['skin-pouch', 'skincare & aesthetics', 'the standard', 'I pay attention to process, iteration and presentation in everything I touch.']
+];
+const readArt = id => ITEMS.find(i => i.id === id)?.art || '';
+const readBtn = (id, label) => `<button type="button" class="rd-it" data-ex="${id}"><span class="bl-art">${readArt(id)}</span><span class="bl-cap">${label}</span></button>`;
+VIEWS.read = () => `<div class="bl rd" id="rd">
+    <p class="mono bl-k">an outside read · what this bag says about me</p>
+    <h2>subversive <em>precision.</em></h2>
+    <p class="bl-rule">At first glance it looks like a soft, hyper-aesthetic lifestyle piece. Look at how the four zippers interlock and it’s a blueprint built to solve the biggest problem in hiring: being memorable without being unapproachable.</p>
+
+    <p class="mono bl-h">① the strategy · hyper-feminine technocracy</p>
+    <p class="rd-p">The default aesthetic in product, UX and strategy is minimalist, clinical and unisex: tech beige, gray dashboards, dark mode. Women are subtly pressured to tone femininity down to be taken seriously as builders. Suhani rejects that default entirely: hard technical capability, wrapped in an unapologetically feminine world.</p>
+    <ol class="rd-flow">
+        <li><span class="mono">the disarming trap</span>A recruiter opens the page and sees a pink bag, makeup pouches and Chanel sunglasses. They expect a light, superficial portfolio.</li>
+        <li><span class="mono">the flex</span>They click inward: strategy binders, frameworks, data fluency, and a hand-built interactive site full of drags, flips and custom modals.</li>
+        <li><span class="mono">the result</span>The contrast makes the competence hit twice as hard. <em>“I don’t need to blend into corporate beige to outperform you.”</em></li>
+    </ol>
+    <div class="rd-vs">
+        <p><span class="mono">the pure corporate</span>Cold, technical, boring. Forgotten instantly.</p>
+        <p class="rd-me"><span class="mono">her positioning</span>The high-taste strategist with unfiltered humanity.</p>
+        <p><span class="mono">the pure influencer</span>Pretty visuals, zero substance. Not hired for strategy.</p>
+    </div>
+
+    <p class="mono bl-h">② taste as proof of skill · tap one</p>
+    <p class="rd-p">These aren’t expensive things thrown together. Quiet luxury meets romantic femininity, curated across distinct categories. She doesn’t buy luxury for status; she buys it for form, function and ritual. In brand strategy, that spread reads as someone who understands positioning and market tiering, because she navigates her whole life that way.</p>
+    <div class="rd-stack">${READ_STACK.map(([id, brand, cat, sig]) => `<button type="button" class="rd-row" data-ex="${id}"><span class="bl-art">${readArt(id)}</span><span class="rd-b"><b>${brand}</b><span class="mono">${cat}</span></span><span class="rd-sig">${sig}</span></button>`).join('')}</div>
+
+    <p class="mono bl-h">③ the speeding-ticket effect · tap either side</p>
+    <p class="rd-p">The biggest mistake high achievers make is an impenetrable shield of perfection. It creates distance and skepticism. Without the right-hand column, these brands would read as an unreachable influencer. With it, she’s human.</p>
+    <div class="rd-pairs">${READ_PAIRS.map(([a, al, b, bl, line]) => `<div class="rd-pair"><div class="rd-two">${readBtn(a, al)}<span class="rd-x" aria-hidden="true">vs.</span>${readBtn(b, bl)}</div><p class="rd-line">“${line}”</p></div>`).join('')}</div>
+    <p class="rd-p rd-after">Only someone secure in their technical caliber can show the speeding ticket and the messy pouch without losing credibility.</p>
+
+    <p class="mono bl-h">④ selective precision · tap one</p>
+    <p class="rd-p">She isn’t performing rigid corporate perfection, and she isn’t disorganized. She puts meticulous structure where it creates real value and lets the rest exist as natural, human friction.</p>
+    <p class="rd-p">The mess isn’t disorganization. 74 tabs, music in the background and a desktop full of live files are the footprint of a fast, multi-threaded worker processing a lot at once. She doesn’t spend energy on performative tidiness like untangling chargers; when a problem matters, she builds a system for it.</p>
+    <div class="rd-sp"><p class="mono rd-sp-h">hyper-structured</p><p class="mono rd-sp-h">embraced chaos</p>
+        ${READ_SP.map(row => row.map(([id, t, d]) => `<button type="button" class="rd-sp-it" data-ex="${id}"><span class="bl-art">${readArt(id)}</span><span><b>${t}</b>${d}</span></button>`).join('')).join('')}</div>
+    <p class="rd-verdict">“Obsessive structure where quality matters; <em>relatable friction where life happens.</em>”</p>
+    <ol class="rd-why">
+        <li><b>It humanizes high performance.</b> A 9-step routine, strategy skills and clean app design could feel intimidating. 74 open tabs disarm the viewer instantly.</li>
+        <li><b>Preparedness over perfection.</b> She would rather have every cord in a knot than be caught without power.</li>
+        <li><b>It’s how product builders actually work.</b> They thrive in chaotic, tab-heavy, fast-moving spaces, and build structured systems like Cadence to solve the chaos.</li>
+    </ol>
+
+    <p class="mono bl-h">⑤ the four zippers, read as a brand</p>
+    <div class="rd-zips">${READ_ZIPS.map(([id, what, role, line]) => `<button type="button" class="rd-row rd-zip" data-ex="${id}"><span class="bl-art">${readArt(id)}</span><span class="rd-b"><b>${role}</b><span class="mono">${what}</span></span><span class="rd-sig">“${line}”</span></button>`).join('')}</div>
+
+    <div class="bl-end"><p class="mono bl-k">if it were one sentence</p>
+        <p class="bl-one">Suhani Tiwari is proof that analytical rigor, elevated taste and human warmth don’t compete: <em>they amplify each other.</em> She builds strategy with the same precision she curates her personal world, intentionally, authentically and without apology.</p>
+        <p class="bl-hire">hiring? <a href="https://suhanitiwari.com/resume" target="_blank" rel="noopener">my résumé ↗</a> · <button type="button" class="link" id="rd-101">personal branding 101 →</button> · <a href="mailto:suhanitiwari@utexas.edu">say hi ✉</a></p></div>
+</div>`;
+AFTER.read = () => {
+    $('#rd').querySelectorAll('[data-ex]').forEach(b => b.onclick = () => { const it = ITEMS.find(i => i.id === b.dataset.ex); if (it) goTo(it); });
+    $('#rd-101').onclick = openLesson;
+};
+const openRead = () => { SFX.tap(); const r = { id: 'read', name: 'the read', open: 'read' }; if (sheet.open) goTo(r); else pickUp(r); };
+$('#brand-read').addEventListener('click', openRead);
+
 /* ---------- little helpers ---------- */
 let ink = '#E63F7A';
 function setupPad() {
