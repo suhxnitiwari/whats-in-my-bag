@@ -2124,6 +2124,15 @@ body.shades .tint { background: linear-gradient(180deg, rgba(244, 166, 190, .22)
 .ffile img[src$="/saree.jpg"] { object-position: 52% 16%; }
 .ffile svg { width: 36px; height: 44px; }
 .ffile span { font-size: .66rem; line-height: 1.2; word-break: break-word; }
+.ftrash-bar { display: flex; align-items: center; justify-content: space-between; margin: -10px -10px 10px; padding: 6px 10px; background: #F4F2F1; border-bottom: 1px solid #E2E0DE; }
+.ftrash-bar button { font: inherit; font-size: .7rem; padding: 2px 12px; border: 1px solid #C9C7C5; border-radius: 5px; background: #fff; cursor: pointer; }
+.ftrash-bar button:hover:not(:disabled) { background: #F0EEEC; } .ftrash-bar button:disabled { color: #B5B3B1; cursor: default; }
+.ftrash-ask { position: absolute; left: 50%; top: 34px; translate: -50% 0; z-index: 2; width: min(290px, 86%); padding: 14px 16px 12px; border-radius: 10px; background: #FBFAF9; box-shadow: 0 10px 30px rgba(0,0,0,.28); border: 1px solid rgba(0,0,0,.12); text-align: center; animation: fwin-in .2s ease-out; }
+.ftrash-ask p { margin: 0 0 6px; line-height: 1.35; } .ftrash-ask p + p { color: #6E6E73; font-size: .72rem; }
+.ftrash-ask div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.ftrash-ask button { font: inherit; font-size: .72rem; padding: 5px 0; border: 1px solid #C9C7C5; border-radius: 6px; background: #fff; cursor: pointer; }
+.ftrash-ask [data-yes] { background: #0A66D8; border-color: #0A66D8; color: #fff; }
+.dock-app.empty .trash-full { display: none; }
 .fcount { margin-top: 10px; text-align: center; color: #8A8A8E; font-size: .6rem; text-transform: none; }
 .fempty { margin: 40px 0; text-align: center; color: #8A8A8E; } .fempty .hand { font-size: 1.2rem; color: var(--plum); }
 .fback { border: 0; background: none; padding: 0 0 8px; color: #2E6FB7; cursor: pointer; text-transform: none; }
