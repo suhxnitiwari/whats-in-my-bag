@@ -1456,25 +1456,110 @@ const MORE_APPS = {
         }
     },
     clock: {
-        html: () => `<div class="clk">
-            <p class="clk-h">World Clock</p>
-            <div class="clk-row"><span><small>Today</small><b>Austin</b></span><em id="clk-atx"></em></div>
-            <div class="clk-row"><span><small>wherever the boarding pass says</small><b>???</b></span><em>--:--</em></div>
-            <p class="clk-h">Alarms <span class="clk-count">100</span></p>
-            <p class="clk-note">what time do i actually wake up? scroll.</p>
-            <div class="clk-alarms">${Array.from({ length: 100 }, (_, i) => {
-                // 9:00 am, then one more every minute. every single one is on.
-                const m = 9 * 60 + i, h = Math.floor(m / 60), mm = String(m % 60).padStart(2, '0');
-                const tag = { 0: 'wake up', 1: 'wake up (for real)', 5: 'seriously', 10: 'ok now', 15: 'class??', 20: 'just 5 more', 30: 'the latte won’t buy itself', 45: 'leave. NOW.', 60: 'it’s fine, i’ll email the professor', 75: 'who set all these', 90: 'running late is a personality', 99: 'final final FINAL alarm' }[i] || 'Alarm';
-                return `<div class="clk-al"><span><em>${h}:${mm}<small>AM</small></em><small>${tag}</small></span><button type="button" class="clk-tg" aria-pressed="true" aria-label="Alarm at ${h}:${mm} AM, on"></button></div>`;
-            }).join('')}</div>
-            <p class="clk-end">…and i still woke up at 10:41.</p>
-        </div>`,
+        html: () => {
+            const ic = {
+                world: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M4.5 7.5h15M4.5 16.5h15"/></svg>',
+                alarms: '<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="currentColor"/><path d="M12 8.5V13H9" stroke="#000" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M3.5 6.5l3-3M20.5 6.5l-3-3M7 20l-1.5 2M17 20l1.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+                stopwatch: '<svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="8.5" fill="currentColor"/><path d="M12 2.5v2.5M18.5 6.5l1.3-1.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 9v4.5" stroke="#000" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="13.8" r="1.2" fill="#000"/></svg>',
+                timers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-6.4 2.6"/><path d="M12 3v3M8 8l4 4"/></svg>'
+            };
+            const col = (n, unit, v) => `<div class="clk-col" data-unit="${unit}" data-v="${v}"><div class="clk-wheel">${Array.from({ length: n }, (_, i) => `<span>${i}</span>`).join('')}</div><b>${unit}</b></div>`;
+            return `<div class="clk">
+            <section class="clk-pane" data-pane="world">
+                <p class="clk-h">World Clock</p>
+                <div id="clk-world"></div>
+                <div class="clk-row"><span><small>wherever the boarding pass says</small><b>???</b></span><em>--:--</em></div>
+            </section>
+            <section class="clk-pane" data-pane="alarms" hidden>
+                <p class="clk-h">Alarms <span class="clk-count">13</span></p>
+                <p class="clk-note">what time do i actually wake up? scroll.</p>
+                <div class="clk-alarms">${Array.from({ length: 13 }, (_, i) => {
+                    // 7:00 am, then one more every ten minutes until 9:00. every single one is on.
+                    const m = 7 * 60 + i * 10, h = Math.floor(m / 60), mm = String(m % 60).padStart(2, '0');
+                    return `<div class="clk-al"><span><em>${h}:${mm}<small>AM</small></em><small>Alarm</small></span><button type="button" class="clk-tg" aria-pressed="true" aria-label="Alarm at ${h}:${mm} AM, on"></button></div>`;
+                }).join('')}</div>
+                <p class="clk-end">…and i still woke up at 10:41.</p>
+            </section>
+            <section class="clk-pane" data-pane="stopwatch" hidden>
+                <p class="clk-sw" id="clk-sw">00:00.00</p>
+                <div class="clk-btns"><button type="button" class="clk-cb gray" id="clk-lap" disabled>Lap</button><button type="button" class="clk-cb green" id="clk-go">Start</button></div>
+                <ol class="clk-laps" id="clk-laps"></ol>
+            </section>
+            <section class="clk-pane" data-pane="timers" hidden>
+                <p class="clk-h">Timers</p>
+                <div class="clk-pick" id="clk-pick">${col(24, 'hours', 0)}${col(60, 'min', 6)}${col(60, 'sec', 1)}</div>
+                <p class="clk-left" id="clk-left" hidden></p>
+                <div class="clk-btns"><button type="button" class="clk-cb gray" id="clk-cancel" disabled>Cancel</button><button type="button" class="clk-cb green" id="clk-start">Start</button></div>
+                <div class="clk-card"><p><span>Label</span><em>Timer</em></p><p><span>When Timer Ends</span><em>Radial ›</em></p></div>
+                <p class="clk-sub">Recents</p>
+                ${[[11, 1], [10, 1]].map(([m, sec]) => `<div class="clk-rec"><span><em>${m}:${String(sec).padStart(2, '0')}</em><small>${m} min, ${sec} sec</small></span><button type="button" class="clk-play" data-secs="${m * 60 + sec}" aria-label="Start a ${m} minute ${sec} second timer"></button></div>`).join('')}
+            </section>
+            <nav class="clk-tabs">${[['world', 'World Clock'], ['alarms', 'Alarms'], ['stopwatch', 'Stopwatch'], ['timers', 'Timers']].map(([k, t], i) => `<button type="button" data-tab="${k}"${i ? '' : ' class="on"'}>${ic[k]}<span>${t}</span></button>`).join('')}</nav>
+        </div>`;
+        },
         after: v => {
-            const t = () => { const e = $('#clk-atx'); if (e) { e.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' }); setTimeout(t, 15000); } }; t();
-            const nope = ['nope. that one’s load-bearing.', 'absolutely not. i need all 100.', 'you can’t turn that off. i tried.', 'that’s the one that actually works.'];
+            // world clock: every city against austin, like the real app does against wherever my phone is
+            const CITIES = [['New Delhi', 'Asia/Kolkata'], ['Miami', 'America/New_York'], ['New York', 'America/New_York'], ['Austin', 'America/Chicago'], ['San Francisco', 'America/Los_Angeles'], ['London', 'Europe/London'], ['Zurich', 'Europe/Zurich']];
+            const wall = (tz, d) => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }).formatToParts(d).map(x => [x.type, x.value])); return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) / 60000; };
+            const world = () => {
+                const el = v.querySelector('#clk-world'); if (!el) return;
+                const d = new Date(), home = wall('America/Chicago', d);
+                el.innerHTML = CITIES.map(([name, tz]) => {
+                    const here = wall(tz, d), off = here - home, dayDiff = Math.floor(here / 1440) - Math.floor(home / 1440);
+                    const day = dayDiff > 0 ? 'Tomorrow' : dayDiff < 0 ? 'Yesterday' : 'Today';
+                    const hrs = Math.abs(off) / 60, sign = off < 0 ? '-' : '+';
+                    const rel = off % 60 ? `${sign}${Math.floor(hrs)}:${String(Math.abs(off) % 60).padStart(2, '0')}` : `${sign}${hrs}${hrs === 1 ? 'HR' : 'HRS'}`;
+                    const [t, ap] = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: tz }).split(' ');
+                    return `<div class="clk-row"><span><small>${day}, ${rel}</small><b>${name}</b></span><em>${t}<small>${ap}</small></em></div>`;
+                }).join('');
+                setTimeout(world, 15000);
+            };
+            world();
+            // tabs
+            v.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+                v.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === b));
+                v.querySelectorAll('.clk-pane').forEach(p => p.hidden = p.dataset.pane !== b.dataset.tab);
+                v.closest('.app-view')?.scrollTo(0, 0);
+            });
+            // alarms: none of them turn off
+            const nope = ['nope. that one’s load-bearing.', 'absolutely not. i need all 13.', 'you can’t turn that off. i tried.', 'that’s the one that actually works.'];
             let n = 0;
             v.querySelectorAll('.clk-tg').forEach(b => b.onclick = () => { toast(nope[n++ % nope.length]); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); });
+            // stopwatch
+            const sw = v.querySelector('#clk-sw'), go = v.querySelector('#clk-go'), lap = v.querySelector('#clk-lap'), laps = v.querySelector('#clk-laps');
+            const fmt = ms => `${String(Math.floor(ms / 60000)).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}.${String(Math.floor(ms / 10) % 100).padStart(2, '0')}`;
+            let t0 = 0, acc = 0, run = false, lastLap = 0, nLap = 0;
+            const now = () => acc + (run ? performance.now() - t0 : 0);
+            const frame = () => { if (!run || !sw.isConnected) return; sw.textContent = fmt(now()); requestAnimationFrame(frame); };
+            go.onclick = () => {
+                run = !run;
+                if (run) { t0 = performance.now(); requestAnimationFrame(frame); } else acc += performance.now() - t0;
+                go.textContent = run ? 'Stop' : 'Start'; go.className = `clk-cb ${run ? 'red' : 'green'}`;
+                lap.textContent = run || !acc ? 'Lap' : 'Reset'; lap.disabled = false;
+            };
+            lap.onclick = () => {
+                if (run) { const t = now(); laps.insertAdjacentHTML('afterbegin', `<li><span>Lap ${++nLap}</span><span>${fmt(t - lastLap)}</span></li>`); lastLap = t; return; }
+                acc = 0; lastLap = 0; nLap = 0; laps.innerHTML = ''; sw.textContent = fmt(0); lap.textContent = 'Lap'; lap.disabled = true;
+            };
+            // timers: a real scroll wheel picker that counts down
+            const IH = 26, pick = v.querySelector('#clk-pick'), left = v.querySelector('#clk-left'), start = v.querySelector('#clk-start'), cancel = v.querySelector('#clk-cancel');
+            const wheels = [...v.querySelectorAll('.clk-wheel')];
+            // a hidden pane can't scroll, so the wheels land on 0h 6m 1s the first time the tab opens
+            let wheeled = false;
+            v.querySelector('[data-tab="timers"]').addEventListener('click', () => { if (wheeled) return; wheeled = true; wheels.forEach(w => { w.scrollTop = +w.parentNode.dataset.v * IH; }); });
+            const picked = () => wheels.map(w => Math.round(w.scrollTop / IH)).reduce((s, x, i) => s + x * [3600, 60, 1][i], 0);
+            let end = 0, rest = 0, tick = null;
+            const show = s => { const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, ss = String(s % 60).padStart(2, '0'); left.textContent = h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`; };
+            const stopTick = () => { clearInterval(tick); tick = null; };
+            const reset = () => { stopTick(); end = rest = 0; left.hidden = true; pick.hidden = false; cancel.disabled = true; start.textContent = 'Start'; start.className = 'clk-cb green'; };
+            const loop = () => { if (!left.isConnected) return stopTick(); const s = Math.max(0, Math.ceil((end - Date.now()) / 1000)); show(s); if (!s) { reset(); toast('timer’s done.'); } };
+            const begin = secs => { if (!secs) return; end = Date.now() + secs * 1000; pick.hidden = true; left.hidden = false; cancel.disabled = false; start.textContent = 'Pause'; start.className = 'clk-cb orange'; loop(); stopTick(); tick = setInterval(loop, 250); };
+            start.onclick = () => {
+                if (tick) { rest = Math.ceil((end - Date.now()) / 1000); stopTick(); start.textContent = 'Resume'; start.className = 'clk-cb green'; return; }
+                begin(rest || picked()); rest = 0;
+            };
+            cancel.onclick = reset;
+            v.querySelectorAll('.clk-play').forEach(b => b.onclick = () => { reset(); begin(+b.dataset.secs); });
         }
     },
     wallet: {
@@ -2010,7 +2095,7 @@ const VIEWS = {
         <div class="big-obj">${ITEMS.find(i => i.id === 'bear').art}</div>
         <p class="note">like teddy duncan from good luck charlie. he was the first gift i ever bought my little sister, amaira. now he rides around austin in my backpack.</p>
         <div class="row" style="justify-content:center"><button class="btn solid" type="button" id="hug">Give him a hug</button></div>
-        <figure class="td-pola"><img src="assets/img/td-amaira.jpg" alt="Amaira as a little girl, smiling and holding T.D. the teddy bear" loading="lazy"><figcaption class="hand">amaira &amp; T.D. ♡</figcaption></figure>`,
+        <figure class="td-pola"><img src="assets/img/td-amaira.jpg" alt="Amaira as a little girl, smiling and holding T.D. the teddy bear"><figcaption class="hand">amaira &amp; T.D. ♡</figcaption></figure>`,
     todo: () => `
         <h2>ideas for <em>someday</em></h2>
         <div class="crumple" id="crumple"><div class="cr-ball" role="button" tabindex="0" aria-label="A crumpled-up list. Smooth it out">${ITEMS.find(i => i.id === 'todo').art}</div>

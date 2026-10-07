@@ -2838,22 +2838,67 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 /* photo tiles: keep faces in frame. most of my photos are portraits with the face in the top third */
 .app-view .grid img, .ig-grid img, .cam-vf img, .cam-thumb { object-position: 50% 18%; }
 
-/* clock: 100 alarms, 9:00 to 10:39, all on, none of them work */
-.app-view:has(.clk) .clk-h { color: #fff; }
-.clk-row em { white-space: nowrap; }
+/* clock: the real iOS app, four tabs. 13 alarms, 7:00 to 9:00 every ten minutes, all on, none of them work */
+.app-view:has(.clk) { display: flex; flex-direction: column; padding-bottom: 0; }
+.clk { flex: 1; display: flex; flex-direction: column; }
+.clk-pane { flex: 1; padding-bottom: 12px; }
+.clk-pane[hidden] { display: none; }
+.app-view:has(.clk) .clk-h { margin: 4px 0 6px; color: #fff; font-size: 1.6rem; font-weight: 700; }
+.clk-row { padding: 9px 0 8px; border-bottom: 1px solid #2C2C2E; }
+.clk-row small { font-size: .72rem; }
+.clk-row b { font-size: 1rem; font-weight: 400; white-space: nowrap; }
+.clk-row em { white-space: nowrap; font-size: 1.75rem; font-weight: 200; line-height: 1; letter-spacing: -.02em; }
+.clk-row em small { margin-left: 1px; font-size: .85rem; font-weight: 300; color: #fff; letter-spacing: 0; }
 .clk-count { margin-left: 6px; padding: 1px 8px; border-radius: 99px; background: #F29B38; color: #000; font-size: .75rem; vertical-align: middle; }
 .clk-note { margin: -4px 0 6px; font-size: .72rem; color: #8A8A8E; }
-.clk-alarms { max-height: 280px; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid #333; }
-.clk-al { display: flex; justify-content: space-between; align-items: center; padding: 7px 2px; border-bottom: 1px solid #262628; }
+.clk-alarms { border-top: 1px solid #2C2C2E; }
+.clk-al { display: flex; justify-content: space-between; align-items: center; padding: 10px 2px 9px; border-bottom: 1px solid #2C2C2E; }
 .clk-al span { display: grid; }
-.clk-al em { font-style: normal; font-size: 1.6rem; font-weight: 300; line-height: 1.1; }
-.clk-al em small { margin-left: 3px; font-size: .9rem; }
-.clk-al > span > small { font-size: .7rem; color: #8A8A8E; }
-.clk-tg { position: relative; flex: none; width: 42px; height: 25px; padding: 0; border: 0; border-radius: 99px; background: #34C759; cursor: pointer; }
-.clk-tg::after { content: ""; position: absolute; top: 2px; right: 2px; width: 21px; height: 21px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.clk-al em { font-style: normal; font-size: 2.1rem; font-weight: 200; line-height: 1; letter-spacing: -.02em; color: #fff; }
+.clk-al em small { margin-left: 1px; font-size: 1rem; font-weight: 300; letter-spacing: 0; }
+.clk-al > span > small { margin-top: 3px; font-size: .8rem; color: #fff; }
+.clk-tg { position: relative; flex: none; width: 44px; height: 27px; padding: 0; border: 0; border-radius: 99px; background: #34C759; cursor: pointer; }
+.clk-tg::after { content: ""; position: absolute; top: 2px; right: 2px; width: 23px; height: 23px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .clk-tg.nope { animation: clk-nope .4s; }
 @keyframes clk-nope { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
 .clk-end { margin: 10px 0 4px; text-align: center; font-size: .72rem; color: #8A8A8E; }
+/* stopwatch + timers */
+.clk-sw, .clk-left { margin: 56px 0 44px; text-align: center; font-size: 2.35rem; font-weight: 200; font-variant-numeric: tabular-nums; letter-spacing: -.02em; color: #fff; }
+.clk-left { margin: 34px 0 30px; font-size: 2.6rem; }
+.clk-btns { display: flex; justify-content: space-between; padding: 0 2px 14px; border-bottom: 1px solid #1C1C1E; }
+.clk-cb { width: 58px; height: 58px; border-radius: 50%; border: 0; font-size: .95rem; cursor: pointer; }
+.clk-cb.gray { background: #333335; color: #fff; } .clk-cb.gray:disabled { background: #1C1C1E; color: #8A8A8E; cursor: default; }
+.clk-cb.green { background: #0F3A1A; color: #32D74B; }
+.clk-cb.red { background: #3A1210; color: #FF453A; }
+.clk-cb.orange { background: #3B2507; color: #FF9F0A; }
+.clk-laps { margin: 0; padding: 0; list-style: none; }
+.clk-laps li { display: flex; justify-content: space-between; padding: 9px 2px; border-bottom: 1px solid #2C2C2E; font-variant-numeric: tabular-nums; }
+.clk-pick { position: relative; display: flex; justify-content: center; gap: 4px; margin: 14px 0 18px; }
+.clk-pick[hidden] { display: none; }
+.clk-pick::before { content: ""; position: absolute; left: 4%; right: 4%; top: 52px; height: 26px; border-radius: 9px; background: #232325; }
+.clk-col { position: relative; display: flex; align-items: center; width: 31%; }
+.clk-col b { position: absolute; left: 50%; top: 52px; line-height: 26px; font-size: .72rem; font-weight: 600; pointer-events: none; }
+.clk-wheel { position: relative; width: 50%; height: 130px; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 52px 0; box-sizing: border-box; text-align: right;
+  -webkit-mask: linear-gradient(transparent, #000 35%, #000 65%, transparent); mask: linear-gradient(transparent, #000 35%, #000 65%, transparent); }
+.clk-wheel::-webkit-scrollbar { display: none; }
+.clk-wheel span { display: block; height: 26px; padding-right: 4px; line-height: 26px; font-size: 1rem; scroll-snap-align: center; }
+.clk-card { margin: 16px 0 6px; padding: 0 12px; border-radius: 14px; background: #1C1C1E; }
+.clk-card p { display: flex; justify-content: space-between; margin: 0; padding: 11px 0; }
+.clk-card p + p { border-top: 1px solid #38383A; }
+.clk-card em { font-style: normal; color: #8A8A8E; }
+.clk-sub { margin: 18px 0 2px; padding-bottom: 6px; border-bottom: 1px solid #2C2C2E; font-size: 1.1rem; font-weight: 700; }
+.clk-rec { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #2C2C2E; }
+.clk-rec span { display: grid; } .clk-rec em { font-style: normal; font-size: 1.9rem; font-weight: 200; line-height: 1; } .clk-rec small { color: #8A8A8E; }
+.clk-play { width: 40px; height: 40px; border: 0; border-radius: 50%; background: #0F3A1A; cursor: pointer; position: relative; }
+.clk-play::after { content: ""; position: absolute; left: 15px; top: 12px; border-left: 14px solid #32D74B; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+/* the sheet's paragraph color would grey out every line in here */
+.app-view .clk p { color: #fff; }
+.app-view .clk .clk-note, .app-view .clk .clk-end { color: #8A8A8E; }
+/* the floating tab bar */
+.clk-tabs { position: sticky; bottom: 8px; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 -6px 8px; padding: 3px; border-radius: 99px; background: rgba(30,30,32,.92); border: 1px solid #333; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.clk-tabs button { display: grid; justify-items: center; gap: 2px; padding: 5px 0 4px; border: 0; border-radius: 99px; background: none; color: #fff; font-size: .48rem; white-space: nowrap; cursor: pointer; }
+.clk-tabs svg { width: 17px; height: 17px; }
+.clk-tabs button.on { background: #3A3A3C; color: #F29B38; }
 
 /* gift cards: the hidden face must not catch touches, or the foil can't be scratched */
 
