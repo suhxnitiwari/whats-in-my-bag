@@ -925,7 +925,7 @@ function mediciHTML(n) {
 
 
 /* live weather (Open-Meteo: free, no API key, CORS-friendly). Austin, TX. */
-let clockTimer = null, wxCache = null;
+let clockTimer = null, wxCache = null, lowBatShown = false;
 const WX = c => c === 0 ? ['☀️', 'clear'] : c <= 2 ? ['🌤️', 'mostly sunny'] : c === 3 ? ['☁️', 'cloudy'] : c <= 48 ? ['🌫️', 'foggy'] : c <= 57 ? ['🌦️', 'drizzle'] : c <= 67 ? ['🌧️', 'rain'] : c <= 77 ? ['❄️', 'snow'] : c <= 82 ? ['🌦️', 'showers'] : ['⛈️', 'storms'];
 async function loadWeather() {
     if (wxCache && Date.now() - wxCache.at < 600000) return wxCache;
@@ -1208,7 +1208,7 @@ const APP_Q = {
     youtube: 'what does she watch to grow?', netflix: 'what does she watch?', prime: 'what does she watch?', calendar: 'what does her life look like?',
     duolingo: 'what is she learning?', contacts: 'do you want to know her?', notes: 'what is she thinking about?',
     maps: 'where does she go?', messages: 'who matters to her?', gmail: 'what’s waiting on her?', camera: 'what catches her eye?',
-    clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', life360: 'who does she belong to?', settings: 'how is she wired?',
+    clock: 'where is she headed next?', wallet: 'what does she carry?', findmy: 'where’s all her stuff?', settings: 'how is she wired?',
     pinterest: 'what does she want her world to look like?', procreate: 'what does she make?', safari: 'what is she curious about?',
     chatgpt: 'what rabbit hole is she in right now?', canvas: 'what is she studying?',
     deck: 'how does she think about strategy?'
@@ -2131,7 +2131,7 @@ const VIEWS = {
         <div class="ca" id="ca">
             <div class="ca-things">${[['pads', 'pads'], ['todo', 'someday ideas'], ['receipts', 'old receipts'], ['ticket', 'a speeding ticket']].map(([id, label], k) =>
                 `<button type="button" class="ca-thing" data-ca="${id}" style="--k:${k}" aria-label="${ITEMS.find(i => i.id === id).name}"><span class="ca-art">${ITEMS.find(i => i.id === id).art}</span><span class="hand">${label}</span></button>`).join('')}</div>
-            <div class="ca-pouch">${BAG.catchall}</div>
+            <div class="ca-pouch">${BAG.catchall.replace(/(id="|url\(#)ca-([bqc])(?=[")])/g, '$1cas-$2')}</div>
         </div>`,
     receipts: () => `
         <h2>old <em>receipts</em></h2>
@@ -2246,7 +2246,12 @@ const VIEWS = {
                 <button type="button" class="pf-curl" id="pf-next" aria-label="Flip this page up to the next one">flip ↑</button>
                 <button type="button" class="pf-prev mono" id="pf-prev" hidden>↓ last page</button>
             </div></div>
-        </div>`,
+        </div>
+        <form class="pf-mail" id="pf-mail" novalidate>
+            <p class="hand">take one. seriously ♡ mail it to yourself:</p>
+            <div class="pf-mail-row"><input type="email" id="pf-mail-to" placeholder="you@email.com" aria-label="Your email address" autocomplete="email" required><button type="submit" class="btn">mail it to me ✉</button></div>
+            <p class="pf-mail-fine">opens your email app with my résumé, addressed to you. just hit send.</p>
+        </form>`,
     cap: () => `
         <h2>My <em>cap</em></h2>
         <p class="note">a cap is a must.</p>
@@ -2596,8 +2601,8 @@ const VIEWS = {
             <defs><pattern id="cable2" width="40" height="28" patternUnits="userSpaceOnUse"><rect width="40" height="28" fill="#F3A9BB"/><path d="M6 0 C14 7 14 7 6 14 C14 21 14 21 6 28 M14 0 C6 7 6 7 14 14 C6 21 6 21 14 28" fill="none" stroke="#D9849C" stroke-width="2.6"/><path d="M30 0 L38 14 L30 28 M30 0 L22 14 L30 28" fill="none" stroke="#DE8CA2" stroke-width="2.2"/><path d="M19 0 v28" stroke="#E395A9" stroke-width="1.6" stroke-dasharray="2 2"/></pattern>
                 <pattern id="rib2" width="6" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#E996AB"/><path d="M3 0 v10" stroke="#D27C93" stroke-width="2"/></pattern></defs>
             <!-- sleeves and the bottom sit behind the front, so they fold under it, not over it -->
-            <g class="sl sl-l"><path d="M100 46 L100 126 L66 244 L36 236 L76 54 Q86 42 100 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M66 244 L36 236 L30 258 L60 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
-            <g class="sl sl-r"><path d="M260 46 L260 126 L294 244 L324 236 L284 54 Q274 42 260 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M294 244 L324 236 L330 258 L300 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+            <g class="swsl sl-l"><path d="M100 46 L100 126 L66 244 L36 236 L76 54 Q86 42 100 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M66 244 L36 236 L30 258 L60 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
+            <g class="swsl sl-r"><path d="M260 46 L260 126 L294 244 L324 236 L284 54 Q274 42 260 46 Z" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><path d="M294 244 L324 236 L330 258 L300 266 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
             <g class="bot"><path d="M100 164 V254 H260 V164" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/><rect x="100" y="250" width="160" height="24" rx="3" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2.4"/></g>
             <path class="top" d="M100 170 L100 46 Q100 30 116 28 L150 22 L180 72 L210 22 L244 28 Q260 30 260 46 L260 170" fill="url(#cable2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round"/>
             <path d="M150 22 L180 72 L210 22 L200 20 L180 56 L160 20 Z" fill="url(#rib2)" stroke="#3A2626" stroke-width="3" stroke-linejoin="round" stroke-width="2"/>
@@ -2632,18 +2637,29 @@ const VIEWS = {
 
     binder: () => `
         <h2>My <em>pink binder</em></h2>
-        <p class="note">case readings in the front, my own case studies in the back</p>
+        <p class="note">every case study from my marketing minor. tap one to open the deck.</p>
         <div class="binder-open">
             <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="bpages">${[
-                ['owala', 'Owala Marathon Series', 'Brand strategy', 'assets/img/owala.jpg'],
-                ['fuelflow', 'FuelFlow', 'Service concept', 'assets/img/fuelflow.jpg'],
-                ['acacia', 'Acacia Advisors', 'Go-to-market', '']
-            ].map(([k, n, t, img], i) => `<button type="button" class="bpage" data-case="${k}" style="--i:${i}">
+                // same order and cover lines as the Marketing page on suhanitiwari.com
+                ['glossier', 'Glossier', 'Brand Strategy', 'How Glossier <em>lost its cult.</em>'],
+                ['rhode', 'Rhode', 'Celebrity Brand', 'Rhode has a <em>Hailey problem.</em>'],
+                ['bollywood', 'Bollywood Beauty', 'Competitive Analysis', 'Same fame, <em>different fates.</em>'],
+                ['americaneagle', 'American Eagle', 'Campaign Strategy', '40 billion impressions. <em>1% growth.</em>'],
+                ['netflix', 'Netflix', 'Media Strategy', 'Netflix’s <em>$20B leak.</em>'],
+                ['primebookclub', 'Prime Book Club', 'Community Strategy', 'Prime Book Club is all hype, <em>no club.</em>'],
+                ['fuelflow', 'FuelFlow', 'Product Pitch', 'The help exists. Nobody walks to it. <em>So we put it where they already are.</em>'],
+                ['starbucks', 'Starbucks', 'Product Management', 'Starbucks’ app holds $12 billion a year. <em>It’s a glorified gift card.</em>'],
+                ['owala', 'Owala', 'Marketing Strategy', 'Nobody needs <em>a second Owala.</em>'],
+                ['wendys', 'Wendy’s', 'Competitive Strategy', 'Wendy’s: everything <em>ties back to the beef.</em>'],
+                ['crowdstrike', 'CrowdStrike', 'Industry Analysis', 'CrowdStrike, and the rival <em>in every force.</em>']
+            ].map(([k, n, t, h], i) => `<a class="bpage" href="https://suhanitiwari.com/marketing#mk-proj-${k}" target="_blank" rel="noopener" style="--i:${i % 4}" aria-label="${n}, ${t}: open the deck on suhanitiwari.com">
                     <span class="holes" aria-hidden="true"><i></i><i></i><i></i></span>
-                    <span class="mono" style="color:var(--plum)">Case ${i + 1} · ${t}</span>
-                    <b>${n}</b>${img ? `<img src="${img}" alt="">` : '<span class="bignum">+20%</span>'}
-                </button>`).join('')}</div>
+                    <span class="mono" style="color:var(--plum)">Case ${i + 1}: ${t}</span>
+                    <b>${n}</b>
+                    <span class="bpage-h">${h}</span>
+                    <span class="bpage-go">open the deck ↗</span>
+                </a>`).join('')}</div>
         </div>`,
 
     fuelflow: () => `
@@ -2717,6 +2733,7 @@ const VIEWS = {
         <p class="note">iphone 18 pro max in its pink case. lives in the heart pocket: everyone i love is in here.</p>
         <div class="phone-big">
             <div class="screen" id="screen">
+                <div class="sbar" aria-label="Battery 4%"><span class="sbar-sig" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sbar-5g" aria-hidden="true">5G</span><span class="sbar-bat" id="sbar-bat" aria-hidden="true"><b>4</b></span></div>
                 <p class="clock mono" id="clock"></p>
                 <p class="pdate" id="pdate"></p>
                 <div class="wx" id="wx" aria-live="polite"><span class="wx-ic">⛅</span><span class="wx-t">--°</span><span class="wx-d">Austin · checking the sky…</span></div>
@@ -3687,8 +3704,17 @@ const AFTER = {
         pad.addEventListener('pointerup', () => { fy = null; });
         show();
         const pf = sheetBody.querySelector('.pf'), res = $('#pf-resume');
-        const pull = e => { if (e.target.closest('.pf-open')) return; const out = pf.classList.toggle('res-out'); res.setAttribute('aria-label', out ? 'My résumé: tap to tuck it back in' : 'My résumé: tap to pull it out'); res.querySelector('.pf-take').textContent = out ? 'tuck it back ↓' : 'pull it out ↑'; if (out) toast('take one. seriously ♡'); };
+        const pull = e => { if (e.target.closest('.pf-open')) return; const out = pf.classList.toggle('res-out'); res.setAttribute('aria-label', out ? 'My résumé: tap to tuck it back in' : 'My résumé: tap to pull it out'); res.querySelector('.pf-take').textContent = out ? 'tuck it back ↓' : 'pull it out ↑'; if (out) setTimeout(() => $('#pf-mail')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 450); };
         res.onclick = pull; res.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pull(e); } };
+        // take one: a real email, from them, to them, with my résumé in it
+        $('#pf-mail').onsubmit = e => {
+            e.preventDefault();
+            const to = $('#pf-mail-to').value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { $('#pf-mail-to').focus(); return toast('that email doesn’t look right.'); }
+            const body = ['Suhani Tiwari', 'MIS + Psychology, UT Austin', '', 'Résumé: https://suhanitiwari.com/resume', 'LinkedIn: https://www.linkedin.com/in/suhxnitiwari', 'Email: suhanitiwari@utexas.edu', 'Portfolio: https://suhanitiwari.com', '', 'Found in her bag: https://suhxnitiwari.github.io/whats-in-my-bag/'].join('\n');
+            location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent('Suhani Tiwari’s résumé')}&body=${encodeURIComponent(body)}`;
+            toast('it’s in your email app. hit send ✉');
+        };
         const bc = $('#bc'); const flip = e => { if (e.target.closest('a')) return; const f = bc.classList.toggle('flip'); if (f) toast('tap a link ♡'); }; bc.onclick = flip; bc.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(e); } }; },
     cap: () => {
         let on = false;
@@ -3734,6 +3760,15 @@ const AFTER = {
             $('#pdate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'America/Chicago' });
         };
         clearInterval(clockTimer); tick(); clockTimer = setInterval(tick, 1000);
+        // my phone is always on low battery. iOS tells you so, once
+        if (!lowBatShown) {
+            lowBatShown = true;
+            setTimeout(() => {
+                const scr = $('#screen'); if (!scr || scr.querySelector('.lowbat')) return;
+                scr.insertAdjacentHTML('beforeend', `<div class="lowbat" role="alertdialog" aria-labelledby="lowbat-h"><div class="lowbat-box"><b id="lowbat-h">Low Battery</b><span>4% battery remaining</span><div><button type="button" data-lb="close">Close</button><button type="button" data-lb="lpm">Low Power Mode</button></div></div></div>`);
+                scr.querySelectorAll('[data-lb]').forEach(b => b.onclick = () => { if (b.dataset.lb === 'lpm') $('#sbar-bat')?.classList.add('lpm'); scr.querySelector('.lowbat')?.remove(); });
+            }, 1400);
+        }
         // live weather for Austin from Open-Meteo (free, no key), refreshed at most every 10 minutes
         loadWeather().then(w => {
             const el = $('#wx'); if (!el) return;
@@ -4419,7 +4454,7 @@ const AFTER = {
     },
 
     binder: () => {
-        sheetBody.querySelectorAll('.bpage').forEach(b => b.onclick = () => pickUp({ id: b.dataset.case, name: 'from my binder', open: b.dataset.case }));
+        // every page is a link to its deck on suhanitiwari.com
     },
 
     mildliners: () => pensAfter(PENS),

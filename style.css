@@ -306,11 +306,14 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 .rings { position: absolute; left: 18px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; }
 .rings i { width: 26px; height: 14px; border: 4px solid #B9BCC2; border-radius: 10px; background: transparent; }
 .bpages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.bpage { position: relative; display: flex; flex-direction: column; gap: 4px; text-align: left; padding: 14px 14px 14px 30px; border: 2px solid var(--ink); border-radius: 6px; background: #FFFDF9; cursor: pointer; transform: rotate(calc((var(--i) - 1.5) * .8deg)); transition: transform .3s var(--ease), box-shadow .3s; }
+.bpage { position: relative; display: flex; color: var(--ink); text-decoration: none; flex-direction: column; gap: 4px; text-align: left; padding: 14px 14px 14px 30px; border: 2px solid var(--ink); border-radius: 6px; background: #FFFDF9; cursor: pointer; transform: rotate(calc((var(--i) - 1.5) * .8deg)); transition: transform .3s var(--ease), box-shadow .3s; }
 .bpage:hover { transform: translateY(-4px) rotate(0); box-shadow: 4px 4px 0 var(--ink); }
 .bpage b { font-family: var(--serif); font-weight: 400; font-size: 1.2rem; line-height: 1.1; }
 .bpage img { margin-top: 6px; border-radius: 4px; aspect-ratio: 16 / 9; object-fit: cover; width: 100%; border: 1.5px solid var(--line); }
-.bpage .bignum { margin-top: 6px; font-family: var(--serif); font-size: 2.4rem; color: var(--plum); line-height: 1; }
+.bpage-h { margin-top: 4px; font-family: var(--serif); font-size: 1rem; line-height: 1.25; color: var(--ink-2); }
+.bpage-h em { color: var(--plum); }
+.bpage-go { margin-top: auto; padding-top: 8px; font: 500 .8rem var(--hand); color: var(--plum); }
+.bpage:focus-visible { outline: 3px solid var(--plum); outline-offset: 3px; }
 .bpage .holes { position: absolute; left: 9px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; }
 .bpage .holes i { width: 10px; height: 10px; border-radius: 50%; background: #F4C9D2; border: 1.5px solid var(--line); }
 @media (max-width: 760px) { .bpages { grid-template-columns: 1fr; } }
@@ -1436,13 +1439,13 @@ body.cozy::after { content: ""; position: fixed; inset: 0; pointer-events: none;
 
 /* sweater v2: one connected garment; fold = sleeves cross over the chest, then the bottom folds up */
 .sw2 { display: block; width: min(360px, 100%); margin: 10px auto 6px; overflow: visible; }
-.sw2 .sl, .sw2 .bot { transform-box: view-box; transition: transform .7s cubic-bezier(.45,.05,.25,1); }
+.sw2 .swsl, .sw2 .bot { transform-box: view-box; transition: transform .7s cubic-bezier(.45,.05,.25,1); }
 .sw2 .sl-l { transform-origin: 100px 54px; } .sw2 .sl-r { transform-origin: 260px 54px; }
 .sw2 .bot { transform-origin: 180px 167px; }
 .sw2.folded .sl-l { transform: rotate(-68deg) scale(.66); }
 .sw2.folded .sl-r { transform: rotate(68deg) scale(.66); }
 .sw2.folded .bot { transform: scaleY(-1); transition-delay: .6s; }
-.sw2:not(.folded) .sl { transition-delay: .6s; }
+.sw2:not(.folded) .swsl { transition-delay: .6s; }
 
 /* Mildliners: class names show on hover/tap, not on every pen */
 .pens.many .pen .lbl { opacity: 0; transition: opacity .2s; }
@@ -1763,7 +1766,7 @@ body.shades .tint { background: linear-gradient(180deg, rgba(244, 166, 190, .22)
 
 /* sweater: one fold per tap. 1 = left sleeve in, 2 = right sleeve in, 3 = bottom folded up */
 .sw2 { cursor: pointer; outline: none; }
-.sw2 .sl, .sw2 .bot { transition-delay: 0s !important; }
+.sw2 .swsl, .sw2 .bot { transition-delay: 0s !important; }
 .sw2[data-f="1"] .sl-l, .sw2[data-f="2"] .sl-l, .sw2[data-f="3"] .sl-l { transform: rotate(-68deg) scale(.66); }
 .sw2[data-f="2"] .sl-r, .sw2[data-f="3"] .sl-r { transform: rotate(68deg) scale(.66); }
 .sw2[data-f="3"] .bot { transform: scaleY(-1); }
@@ -3145,10 +3148,15 @@ dialog.sheet:has(.skin-layout) { width: min(1180px, calc(100vw - 24px)); }
 .rcpt .link { margin-top: 8px; font: 600 .78rem var(--mono); color: var(--plum); text-decoration: underline; background: none; border: 0; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .ca-thing { animation: none; } }
 .ca-pouch .ca-peek { display: none; }
-.ca { padding-top: 150px; }
-.ca-things { height: 236px; left: 4%; right: 4%; }
-.ca-thing .ca-art { width: 96px; }
-.ca-thing[data-ca="todo"] .ca-art { width: 84px; }
+/* everything is sized off the pouch's own width, so the things stay in proportion to it at any screen size */
+.ca { container-type: inline-size; padding-top: 0; }
+/* room for the things above the zipper, as a share of the pouch's width (a % on .ca itself would use its parent's width) */
+.ca::before { content: ""; display: block; padding-top: 30%; }
+.ca-things { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 1fr; align-items: end; justify-items: center; height: auto; aspect-ratio: 94 / 46; left: 3%; right: 3%; }
+.ca-thing { width: 100%; }
+.ca-thing .ca-art { width: 100%; }
+.ca-thing[data-ca="todo"] .ca-art { width: 86%; }
+.ca-thing .hand { font-size: clamp(.8rem, 3.4cqw, 1.1rem); }
 .rcpt span { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dotted var(--line); padding-bottom: 2px; }
 .rcpt span em { font-style: normal; } .rcpt span em + em { text-align: right; white-space: nowrap; }
 
@@ -3676,3 +3684,36 @@ button.bl-ex:hover .bl-cap { color: var(--acc); }
     .rd-sp-it { grid-template-columns: 1fr; font-size: .8rem; }
     .rd-sp-it .bl-art { justify-content: start; }
 }
+
+/* take one: mail my résumé to yourself. only there while the résumé is pulled out */
+.pf-mail { display: none; max-width: 640px; margin: 12px auto 4px; text-align: center; }
+.pf.res-out + .pf-mail { display: block; animation: pf-mail-in .4s var(--ease) both; }
+.pf-mail > p.hand { margin: 0 0 8px; font-size: 1.25rem; color: var(--plum); }
+.pf-mail-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.pf-mail input { flex: 1 1 200px; max-width: 280px; padding: 9px 14px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font: 500 .9rem var(--sans); color: var(--ink); }
+.pf-mail input:focus-visible { outline: 3px solid var(--rose); outline-offset: 2px; }
+.pf-mail .btn { margin: 0; }
+.pf-mail-fine { margin: 6px 0 0; font-size: .75rem; color: var(--ink-2); }
+@keyframes pf-mail-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .pf.res-out + .pf-mail { animation: none; } }
+
+/* phone status bar: always on low battery */
+.phone-big .screen { padding-top: 22px; }
+.sbar { position: absolute; top: 7px; left: 18px; right: 16px; display: flex; justify-content: flex-end; align-items: center; gap: 5px; font: 600 .6rem var(--sans); color: var(--ink); }
+.sbar-sig { display: flex; align-items: flex-end; gap: 1.5px; height: 8px; }
+.sbar-sig i { width: 2.5px; border-radius: 1px; background: currentColor; }
+.sbar-sig i:nth-child(1) { height: 3px; } .sbar-sig i:nth-child(2) { height: 4.5px; } .sbar-sig i:nth-child(3) { height: 6px; } .sbar-sig i:nth-child(4) { height: 8px; opacity: .3; }
+.sbar-bat { position: relative; display: grid; place-items: center; width: 22px; height: 11px; border-radius: 3.5px; background: rgba(58,38,38,.28); overflow: hidden; }
+.sbar-bat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18%; background: #FF3B30; }
+.sbar-bat::after { content: ""; position: absolute; right: -3px; top: 3.5px; width: 2px; height: 4px; border-radius: 0 1px 1px 0; background: rgba(58,38,38,.28); }
+.sbar-bat b { position: relative; font-size: .55rem; font-weight: 700; color: var(--ink); }
+.sbar-bat.lpm::before { background: #FFCC00; }
+.lowbat { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: rgba(0,0,0,.25); animation: lowbat-in .25s ease-out; }
+.lowbat-box { width: 76%; border-radius: 14px; background: rgba(242,242,247,.96); text-align: center; overflow: hidden; color: #000; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.lowbat-box b { display: block; padding: 14px 10px 2px; font: 600 .82rem var(--sans); }
+.lowbat-box span { display: block; padding: 0 10px 12px; font-size: .7rem; }
+.lowbat-box div { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #C6C6C8; }
+.lowbat-box button { padding: 9px 2px; border: 0; background: none; color: #007AFF; font: 400 .72rem var(--sans); cursor: pointer; }
+.lowbat-box button + button { border-left: 1px solid #C6C6C8; font-weight: 600; }
+@keyframes lowbat-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .lowbat { animation: none; } }
